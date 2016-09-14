@@ -30,9 +30,11 @@ use glib_ffi;
 use libc;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+use gtk::Widget;
+use gtk_sys::GtkWidget;
 
 glib_wrapper! {
-    pub struct WebView(Object<ffi::WebKitWebView>);
+    pub struct WebView(Object<ffi::WebKitWebView>): [ Widget => GtkWidget ];
 
     match fn {
         get_type => || ffi::webkit_web_view_get_type(),
@@ -40,9 +42,11 @@ glib_wrapper! {
 }
 
 impl WebView {
-    //pub fn new() -> WebView {
-    //    unsafe { TODO: call ffi::webkit_web_view_new() }
-    //}
+    pub fn new() -> WebView {
+       unsafe {
+           from_glib_none(ffi::webkit_web_view_new() as *mut ffi::WebKitWebView)
+       }
+    }
 
     //pub fn new_with_context(context: &WebContext) -> WebView {
     //    unsafe { TODO: call ffi::webkit_web_view_new_with_context() }
