@@ -1,0 +1,61 @@
+[options]
+gir_dir = "input"
+library = "WebKit2"
+version = "4.0"
+work_mode = "normal"
+external_libraries = [
+    "Gtk",
+]
+
+generate = [
+    "WebKit2.AuthenticationRequest",
+    "WebKit2.BackForwardList",
+    "WebKit2.BackForwardListItem",
+    "WebKit2.ColorChooserRequest",
+    "WebKit2.ContextMenu",
+    "WebKit2.ContextMenuItem",
+    "WebKit2.CookieManager",
+    "WebKit2.Download",
+    "WebKit2.EditorState",
+    "WebKit2.Error",
+    "WebKit2.FaviconDatabase",
+    "WebKit2.FindController",
+    "WebKit2.FormSubmissionRequest",
+    "WebKit2.GeolocationPermissionRequest",
+    "WebKit2.HitTestResult",
+    "WebKit2.InstallMissingMediaPluginsPermissionRequest",
+    "WebKit2.NavigationAction",
+    "WebKit2.NavigationPolicyDecision",
+    "WebKit2.Notification",
+    "WebKit2.NotificationPermissionRequest",
+    "WebKit2.PermissionRequest",
+    "WebKit2.Plugin",
+    "WebKit2.PolicyDecision",
+    "WebKit2.PrintOperation",
+    "WebKit2.ResponsePolicyDecision",
+    "WebKit2.SecurityManager",
+    "WebKit2.Settings",
+    "WebKit2.UserMediaPermissionRequest",
+    "WebKit2.Version",
+    "WebKit2.WebContext",
+    "WebKit2.WebInspector",
+    "WebKit2.WebResource",
+    "WebKit2.WebsiteDataManager",
+    "WebKit2.WebView",
+    "WebKit2.WindowProperties",
+]
+
+[[object]]
+name = "WebKit2.URISchemeRequest"
+status = "generate"
+module_name = "uri_scheme_request"
+
+[[object]]
+name = "WebKit2.URIRequest"
+status = "generate"
+module_name = "uri_request"
+
+[[object]]
+name = "WebKit2.URIResponse"
+status = "generate"
+module_name = "uri_response"
