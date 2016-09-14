@@ -1,6 +1,7 @@
 [package]
 name = "webkit2"
 version = "0.1.0"
+license = "MIT"
 
 [dependencies]
 glib = "^0.1"
