@@ -1,0 +1,15 @@
+[package]
+name = "webkit2"
+version = "0.1.0"
+
+[dependencies]
+glib = "^0.1"
+glib-sys = "^0.3"
+gobject-sys = "^0.3"
+gtk = "^0.1"
+gtk-sys = "^0.3"
+libc = "^0.2"
+
+[dependencies.webkit2-sys]
+git = "https://github.com/antoyo/webkit2-sys-rs"
+version = "^0.3"
