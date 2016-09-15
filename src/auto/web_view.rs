@@ -13,6 +13,7 @@ use EditorState;
 use FindController;
 use FormSubmissionRequest;
 use HitTestResult;
+#[cfg(feature = "v2_6")]
 use NavigationAction;
 #[cfg(feature = "v2_8")]
 use Notification;
@@ -436,6 +437,7 @@ impl WebView {
         }
     }
 
+    #[cfg(feature = "v2_6")]
     pub fn connect_create<F: Fn(&WebView, &NavigationAction) -> gtk::Widget + 'static>(&self, f: F) -> u64 {
         unsafe {
             let f: Box_<Box_<Fn(&WebView, &NavigationAction) -> gtk::Widget + 'static>> = Box_::new(Box_::new(f));
@@ -593,6 +595,7 @@ unsafe extern "C" fn context_menu_dismissed_trampoline(this: *mut ffi::WebKitWeb
     f(&from_glib_none(this))
 }
 
+#[cfg(feature = "v2_6")]
 unsafe extern "C" fn create_trampoline(this: *mut ffi::WebKitWebView, navigation_action: *mut ffi::WebKitNavigationAction, f: glib_ffi::gpointer) -> *mut gtk_ffi::GtkWidget {
     callback_guard!();
     let f: &Box_<Fn(&WebView, &NavigationAction) -> gtk::Widget + 'static> = transmute(f);

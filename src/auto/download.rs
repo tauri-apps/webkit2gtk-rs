@@ -11,7 +11,6 @@ use glib_ffi;
 use libc;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use u64;
 
 glib_wrapper! {
     pub struct Download(Object<ffi::WebKitDownload>);
