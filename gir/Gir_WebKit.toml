@@ -45,6 +45,12 @@ generate = [
     "WebKit2.WindowProperties",
 ]
 
+manual = [
+    "GObject.Object",
+    "Gtk.Container",
+    "Gtk.Widget",
+]
+
 [[object]]
 name = "WebKit2.URISchemeRequest"
 status = "generate"

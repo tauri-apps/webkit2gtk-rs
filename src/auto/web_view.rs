@@ -13,6 +13,7 @@ use EditorState;
 use FindController;
 use FormSubmissionRequest;
 use HitTestResult;
+use NavigationAction;
 #[cfg(feature = "v2_8")]
 use Notification;
 use PermissionRequest;
@@ -24,17 +25,21 @@ use WebInspector;
 use WebResource;
 use WindowProperties;
 use ffi;
+use glib::object::Downcast;
 use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
+use gtk;
+use gtk_ffi;
 use libc;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use gtk::Widget;
-use gtk_sys::GtkWidget;
 
 glib_wrapper! {
-    pub struct WebView(Object<ffi::WebKitWebView>): [ Widget => GtkWidget ];
+    pub struct WebView(Object<ffi::WebKitWebView>): [
+        gtk::Container => gtk_ffi::GtkContainer,
+        gtk::Widget => gtk_ffi::GtkWidget,
+    ];
 
     match fn {
         get_type => || ffi::webkit_web_view_get_type(),
@@ -43,19 +48,23 @@ glib_wrapper! {
 
 impl WebView {
     pub fn new() -> WebView {
-       unsafe {
-           from_glib_none(ffi::webkit_web_view_new() as *mut ffi::WebKitWebView)
-       }
+        unsafe {
+            gtk::Widget::from_glib_none(ffi::webkit_web_view_new()).downcast_unchecked()
+        }
     }
 
-    //pub fn new_with_context(context: &WebContext) -> WebView {
-    //    unsafe { TODO: call ffi::webkit_web_view_new_with_context() }
-    //}
+    pub fn new_with_context(context: &WebContext) -> WebView {
+        unsafe {
+            gtk::Widget::from_glib_none(ffi::webkit_web_view_new_with_context(context.to_glib_none().0)).downcast_unchecked()
+        }
+    }
 
-    //#[cfg(feature = "v2_6")]
-    //pub fn new_with_settings(settings: &Settings) -> WebView {
-    //    unsafe { TODO: call ffi::webkit_web_view_new_with_settings() }
-    //}
+    #[cfg(feature = "v2_6")]
+    pub fn new_with_settings(settings: &Settings) -> WebView {
+        unsafe {
+            gtk::Widget::from_glib_none(ffi::webkit_web_view_new_with_settings(settings.to_glib_none().0)).downcast_unchecked()
+        }
+    }
 
     //#[cfg(feature = "v2_6")]
     //pub fn new_with_user_content_manager(user_content_manager: /*Ignored*/&UserContentManager) -> WebView {
@@ -299,10 +308,12 @@ impl WebView {
         }
     }
 
-    //#[cfg(feature = "v2_4")]
-    //pub fn new_with_related_view(&self) -> /*Ignored*/Option<gtk::Widget> {
-    //    unsafe { TODO: call ffi::webkit_web_view_new_with_related_view() }
-    //}
+    #[cfg(feature = "v2_4")]
+    pub fn new_with_related_view(&self) -> Option<gtk::Widget> {
+        unsafe {
+            from_glib_full(ffi::webkit_web_view_new_with_related_view(self.to_glib_none().0))
+        }
+    }
 
     pub fn reload(&self) {
         unsafe {
@@ -425,9 +436,13 @@ impl WebView {
         }
     }
 
-    //pub fn connect_create<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored return value Gtk.Widget
-    //}
+    pub fn connect_create<F: Fn(&WebView, &NavigationAction) -> gtk::Widget + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&WebView, &NavigationAction) -> gtk::Widget + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "create",
+                transmute(create_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
     //pub fn connect_decide_policy<Unsupported or ignored types>(&self, f: F) -> u64 {
     //    Ignored decision_type: WebKit2.PolicyDecisionType
@@ -576,6 +591,12 @@ unsafe extern "C" fn context_menu_dismissed_trampoline(this: *mut ffi::WebKitWeb
     callback_guard!();
     let f: &Box_<Fn(&WebView) + 'static> = transmute(f);
     f(&from_glib_none(this))
+}
+
+unsafe extern "C" fn create_trampoline(this: *mut ffi::WebKitWebView, navigation_action: *mut ffi::WebKitNavigationAction, f: glib_ffi::gpointer) -> *mut gtk_ffi::GtkWidget {
+    callback_guard!();
+    let f: &Box_<Fn(&WebView, &NavigationAction) -> gtk::Widget + 'static> = transmute(f);
+    f(&from_glib_none(this), &from_glib_none(navigation_action)).to_glib_full()
 }
 
 unsafe extern "C" fn enter_fullscreen_trampoline(this: *mut ffi::WebKitWebView, f: glib_ffi::gpointer) -> glib_ffi::gboolean {

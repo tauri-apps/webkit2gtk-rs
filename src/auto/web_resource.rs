@@ -9,6 +9,7 @@ use glib::translate::*;
 use glib_ffi;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+use u64;
 
 glib_wrapper! {
     pub struct WebResource(Object<ffi::WebKitWebResource>);
