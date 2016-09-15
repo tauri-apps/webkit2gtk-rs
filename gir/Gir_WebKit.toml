@@ -3,6 +3,7 @@ gir_dir = "input"
 library = "WebKit2"
 version = "4.0"
 work_mode = "normal"
+generate_safety_asserts = true
 external_libraries = [
     "Gtk",
 ]
@@ -41,7 +42,6 @@ generate = [
     "WebKit2.WebInspector",
     "WebKit2.WebResource",
     "WebKit2.WebsiteDataManager",
-    "WebKit2.WebView",
     "WebKit2.WindowProperties",
 ]
 
@@ -65,3 +65,10 @@ module_name = "uri_request"
 name = "WebKit2.URIResponse"
 status = "generate"
 module_name = "uri_response"
+
+[[object]]
+name = "WebKit2.WebView"
+status = "generate"
+    [[object.signal]]
+    name = "create"
+    version = "2.6"

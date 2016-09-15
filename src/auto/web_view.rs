@@ -49,12 +49,14 @@ glib_wrapper! {
 
 impl WebView {
     pub fn new() -> WebView {
+        assert_initialized_main_thread!();
         unsafe {
             gtk::Widget::from_glib_none(ffi::webkit_web_view_new()).downcast_unchecked()
         }
     }
 
     pub fn new_with_context(context: &WebContext) -> WebView {
+        skip_assert_initialized!();
         unsafe {
             gtk::Widget::from_glib_none(ffi::webkit_web_view_new_with_context(context.to_glib_none().0)).downcast_unchecked()
         }
@@ -62,6 +64,7 @@ impl WebView {
 
     #[cfg(feature = "v2_6")]
     pub fn new_with_settings(settings: &Settings) -> WebView {
+        skip_assert_initialized!();
         unsafe {
             gtk::Widget::from_glib_none(ffi::webkit_web_view_new_with_settings(settings.to_glib_none().0)).downcast_unchecked()
         }
