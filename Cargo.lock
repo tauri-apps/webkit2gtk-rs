@@ -2,6 +2,7 @@
 name = "webkit2"
 version = "0.1.0"
 dependencies = [
+ "bitflags 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib-sys 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "gobject-sys 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -31,6 +32,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "bitflags"
 version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "bitflags"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -279,6 +285,7 @@ dependencies = [
 "checksum atk-sys 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)" = "52dba8b14510e6d21395f6176396993782f8d1097a7b56bda448213a745311fd"
 "checksum bitflags 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "8dead7461c1127cf637931a1e50934eb6eee8bff2f74433ac7909e9afcee04a3"
 "checksum bitflags 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)" = "4f67931368edf3a9a51d29886d245f1c3db2f1ef0dcc9e35ff70341b78c10d23"
+"checksum bitflags 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)" = "aad18937a628ec6abcd26d1489012cc0e18c21798210f491af69ded9b881106d"
 "checksum c_vec 1.0.12 (registry+https://github.com/rust-lang/crates.io-index)" = "aa9e1d9f7d49e289f36f19effbf3d5a5e30163ecf9c7a3c9be94d5374dec5b9a"
 "checksum cairo-rs 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7897ceda29077c3d87f2d46a0f23ed6c552e48e8d1943ac755f8956f81a8a20d"
 "checksum cairo-sys-rs 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)" = "e43dcd461d0b014b01443cbda24684e88060e462a757a732e30309bb5fa26c9e"
