@@ -401,7 +401,7 @@ impl FromGlib<ffi::WebKitDownloadError> for DownloadError {
 impl ErrorDomain for DownloadError {
     fn domain() -> glib_ffi::GQuark {
         skip_assert_initialized!();
-        unsafe { ffi::WebKitDownloadError() }
+        unsafe { ffi::webkit_download_error_quark() }
     }
 
     fn code(self) -> i32 {
@@ -457,7 +457,7 @@ impl FromGlib<ffi::WebKitFaviconDatabaseError> for FaviconDatabaseError {
 impl ErrorDomain for FaviconDatabaseError {
     fn domain() -> glib_ffi::GQuark {
         skip_assert_initialized!();
-        unsafe { ffi::WebKitFaviconDatabaseError() }
+        unsafe { ffi::webkit_favicon_database_error_quark() }
     }
 
     fn code(self) -> i32 {
@@ -540,7 +540,7 @@ impl FromGlib<ffi::WebKitJavascriptError> for JavascriptError {
 impl ErrorDomain for JavascriptError {
     fn domain() -> glib_ffi::GQuark {
         skip_assert_initialized!();
-        unsafe { ffi::WebKitJavascriptError() }
+        unsafe { ffi::webkit_javascript_error_quark() }
     }
 
     fn code(self) -> i32 {
@@ -682,7 +682,7 @@ impl FromGlib<ffi::WebKitNetworkError> for NetworkError {
 impl ErrorDomain for NetworkError {
     fn domain() -> glib_ffi::GQuark {
         skip_assert_initialized!();
-        unsafe { ffi::WebKitNetworkError() }
+        unsafe { ffi::webkit_network_error_quark() }
     }
 
     fn code(self) -> i32 {
@@ -749,7 +749,7 @@ impl FromGlib<ffi::WebKitPluginError> for PluginError {
 impl ErrorDomain for PluginError {
     fn domain() -> glib_ffi::GQuark {
         skip_assert_initialized!();
-        unsafe { ffi::WebKitPluginError() }
+        unsafe { ffi::webkit_plugin_error_quark() }
     }
 
     fn code(self) -> i32 {
@@ -849,7 +849,7 @@ impl FromGlib<ffi::WebKitPolicyError> for PolicyError {
 impl ErrorDomain for PolicyError {
     fn domain() -> glib_ffi::GQuark {
         skip_assert_initialized!();
-        unsafe { ffi::WebKitPolicyError() }
+        unsafe { ffi::webkit_policy_error_quark() }
     }
 
     fn code(self) -> i32 {
@@ -907,7 +907,7 @@ impl FromGlib<ffi::WebKitPrintError> for PrintError {
 impl ErrorDomain for PrintError {
     fn domain() -> glib_ffi::GQuark {
         skip_assert_initialized!();
-        unsafe { ffi::WebKitPrintError() }
+        unsafe { ffi::webkit_print_error_quark() }
     }
 
     fn code(self) -> i32 {
@@ -1093,7 +1093,7 @@ impl FromGlib<ffi::WebKitSnapshotError> for SnapshotError {
 impl ErrorDomain for SnapshotError {
     fn domain() -> glib_ffi::GQuark {
         skip_assert_initialized!();
-        unsafe { ffi::WebKitSnapshotError() }
+        unsafe { ffi::webkit_snapshot_error_quark() }
     }
 
     fn code(self) -> i32 {
