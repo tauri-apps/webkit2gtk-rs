@@ -3,6 +3,7 @@
 
 #[cfg(feature = "v2_6")]
 use NavigationAction;
+use NavigationType;
 use PolicyDecision;
 use URIRequest;
 use ffi;
@@ -42,9 +43,11 @@ impl NavigationPolicyDecision {
         }
     }
 
-    //pub fn get_navigation_type(&self) -> /*Ignored*/NavigationType {
-    //    unsafe { TODO: call ffi::webkit_navigation_policy_decision_get_navigation_type() }
-    //}
+    pub fn get_navigation_type(&self) -> NavigationType {
+        unsafe {
+            from_glib(ffi::webkit_navigation_policy_decision_get_navigation_type(self.to_glib_none().0))
+        }
+    }
 
     pub fn get_request(&self) -> Option<URIRequest> {
         unsafe {

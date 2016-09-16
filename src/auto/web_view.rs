@@ -13,11 +13,15 @@ use EditorState;
 use FindController;
 use FormSubmissionRequest;
 use HitTestResult;
+use InsecureContentEvent;
+use LoadEvent;
 #[cfg(feature = "v2_6")]
 use NavigationAction;
 #[cfg(feature = "v2_8")]
 use Notification;
 use PermissionRequest;
+use PolicyDecision;
+use PolicyDecisionType;
 use PrintOperation;
 use Settings;
 use URIRequest;
@@ -199,7 +203,7 @@ impl WebView {
         }
     }
 
-    //pub fn get_snapshot(&self, region: /*Ignored*/SnapshotRegion, options: /*Ignored*/SnapshotOptions, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //pub fn get_snapshot(&self, region: SnapshotRegion, options: SnapshotOptions, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::webkit_web_view_get_snapshot() }
     //}
 
@@ -352,7 +356,7 @@ impl WebView {
     //    unsafe { TODO: call ffi::webkit_web_view_run_javascript_from_gresource_finish() }
     //}
 
-    //pub fn save(&self, save_mode: /*Ignored*/SaveMode, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //pub fn save(&self, save_mode: SaveMode, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::webkit_web_view_save() }
     //}
 
@@ -360,7 +364,7 @@ impl WebView {
     //    unsafe { TODO: call ffi::webkit_web_view_save_finish() }
     //}
 
-    //pub fn save_to_file<T: IsA</*Ignored*/gio::File>>(&self, file: &T, save_mode: /*Ignored*/SaveMode, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //pub fn save_to_file<T: IsA</*Ignored*/gio::File>>(&self, file: &T, save_mode: SaveMode, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::webkit_web_view_save_to_file() }
     //}
 
@@ -449,9 +453,13 @@ impl WebView {
         }
     }
 
-    //pub fn connect_decide_policy<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored decision_type: WebKit2.PolicyDecisionType
-    //}
+    pub fn connect_decide_policy<F: Fn(&WebView, &PolicyDecision, PolicyDecisionType) -> bool + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&WebView, &PolicyDecision, PolicyDecisionType) -> bool + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "decide-policy",
+                transmute(decide_policy_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
     pub fn connect_enter_fullscreen<F: Fn(&WebView) -> bool + 'static>(&self, f: F) -> u64 {
         unsafe {
@@ -461,9 +469,13 @@ impl WebView {
         }
     }
 
-    //pub fn connect_insecure_content_detected<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored event: WebKit2.InsecureContentEvent
-    //}
+    pub fn connect_insecure_content_detected<F: Fn(&WebView, InsecureContentEvent) + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&WebView, InsecureContentEvent) + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "insecure-content-detected",
+                transmute(insecure_content_detected_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
     pub fn connect_leave_fullscreen<F: Fn(&WebView) -> bool + 'static>(&self, f: F) -> u64 {
         unsafe {
@@ -473,12 +485,15 @@ impl WebView {
         }
     }
 
-    //pub fn connect_load_changed<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored load_event: WebKit2.LoadEvent
-    //}
+    pub fn connect_load_changed<F: Fn(&WebView, LoadEvent) + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&WebView, LoadEvent) + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "load-changed",
+                transmute(load_changed_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
     //pub fn connect_load_failed<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored load_event: WebKit2.LoadEvent
     //    Ignored error: GLib.Error
     //}
 
@@ -605,16 +620,34 @@ unsafe extern "C" fn create_trampoline(this: *mut ffi::WebKitWebView, navigation
     f(&from_glib_none(this), &from_glib_none(navigation_action)).to_glib_full()
 }
 
+unsafe extern "C" fn decide_policy_trampoline(this: *mut ffi::WebKitWebView, decision: *mut ffi::WebKitPolicyDecision, decision_type: ffi::WebKitPolicyDecisionType, f: glib_ffi::gpointer) -> glib_ffi::gboolean {
+    callback_guard!();
+    let f: &Box_<Fn(&WebView, &PolicyDecision, PolicyDecisionType) -> bool + 'static> = transmute(f);
+    f(&from_glib_none(this), &from_glib_none(decision), from_glib(decision_type)).to_glib()
+}
+
 unsafe extern "C" fn enter_fullscreen_trampoline(this: *mut ffi::WebKitWebView, f: glib_ffi::gpointer) -> glib_ffi::gboolean {
     callback_guard!();
     let f: &Box_<Fn(&WebView) -> bool + 'static> = transmute(f);
     f(&from_glib_none(this)).to_glib()
 }
 
+unsafe extern "C" fn insecure_content_detected_trampoline(this: *mut ffi::WebKitWebView, event: ffi::WebKitInsecureContentEvent, f: glib_ffi::gpointer) {
+    callback_guard!();
+    let f: &Box_<Fn(&WebView, InsecureContentEvent) + 'static> = transmute(f);
+    f(&from_glib_none(this), from_glib(event))
+}
+
 unsafe extern "C" fn leave_fullscreen_trampoline(this: *mut ffi::WebKitWebView, f: glib_ffi::gpointer) -> glib_ffi::gboolean {
     callback_guard!();
     let f: &Box_<Fn(&WebView) -> bool + 'static> = transmute(f);
     f(&from_glib_none(this)).to_glib()
+}
+
+unsafe extern "C" fn load_changed_trampoline(this: *mut ffi::WebKitWebView, load_event: ffi::WebKitLoadEvent, f: glib_ffi::gpointer) {
+    callback_guard!();
+    let f: &Box_<Fn(&WebView, LoadEvent) + 'static> = transmute(f);
+    f(&from_glib_none(this), from_glib(load_event))
 }
 
 unsafe extern "C" fn mouse_target_changed_trampoline(this: *mut ffi::WebKitWebView, hit_test_result: *mut ffi::WebKitHitTestResult, modifiers: libc::c_uint, f: glib_ffi::gpointer) {

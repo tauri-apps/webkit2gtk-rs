@@ -6,3 +6,1275 @@ use glib_ffi;
 use glib::error::ErrorDomain;
 use glib::translate::*;
 
+#[cfg(feature = "v2_2")]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum AuthenticationScheme {
+    Default,
+    HttpBasic,
+    HttpDigest,
+    HtmlForm,
+    Ntlm,
+    Negotiate,
+    ClientCertificateRequested,
+    ServerTrustEvaluationRequested,
+    Unknown,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[cfg(feature = "v2_2")]
+#[doc(hidden)]
+impl ToGlib for AuthenticationScheme {
+    type GlibType = ffi::WebKitAuthenticationScheme;
+
+    fn to_glib(&self) -> ffi::WebKitAuthenticationScheme {
+        match *self {
+            AuthenticationScheme::Default => ffi::WEBKIT_AUTHENTICATION_SCHEME_DEFAULT,
+            AuthenticationScheme::HttpBasic => ffi::WEBKIT_AUTHENTICATION_SCHEME_HTTP_BASIC,
+            AuthenticationScheme::HttpDigest => ffi::WEBKIT_AUTHENTICATION_SCHEME_HTTP_DIGEST,
+            AuthenticationScheme::HtmlForm => ffi::WEBKIT_AUTHENTICATION_SCHEME_HTML_FORM,
+            AuthenticationScheme::Ntlm => ffi::WEBKIT_AUTHENTICATION_SCHEME_NTLM,
+            AuthenticationScheme::Negotiate => ffi::WEBKIT_AUTHENTICATION_SCHEME_NEGOTIATE,
+            AuthenticationScheme::ClientCertificateRequested => ffi::WEBKIT_AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE_REQUESTED,
+            AuthenticationScheme::ServerTrustEvaluationRequested => ffi::WEBKIT_AUTHENTICATION_SCHEME_SERVER_TRUST_EVALUATION_REQUESTED,
+            AuthenticationScheme::Unknown => ffi::WEBKIT_AUTHENTICATION_SCHEME_UNKNOWN,
+            AuthenticationScheme::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[cfg(feature = "v2_2")]
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitAuthenticationScheme> for AuthenticationScheme {
+    fn from_glib(value: ffi::WebKitAuthenticationScheme) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_AUTHENTICATION_SCHEME_DEFAULT => AuthenticationScheme::Default,
+            ffi::WEBKIT_AUTHENTICATION_SCHEME_HTTP_BASIC => AuthenticationScheme::HttpBasic,
+            ffi::WEBKIT_AUTHENTICATION_SCHEME_HTTP_DIGEST => AuthenticationScheme::HttpDigest,
+            ffi::WEBKIT_AUTHENTICATION_SCHEME_HTML_FORM => AuthenticationScheme::HtmlForm,
+            ffi::WEBKIT_AUTHENTICATION_SCHEME_NTLM => AuthenticationScheme::Ntlm,
+            ffi::WEBKIT_AUTHENTICATION_SCHEME_NEGOTIATE => AuthenticationScheme::Negotiate,
+            ffi::WEBKIT_AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE_REQUESTED => AuthenticationScheme::ClientCertificateRequested,
+            ffi::WEBKIT_AUTHENTICATION_SCHEME_SERVER_TRUST_EVALUATION_REQUESTED => AuthenticationScheme::ServerTrustEvaluationRequested,
+            ffi::WEBKIT_AUTHENTICATION_SCHEME_UNKNOWN => AuthenticationScheme::Unknown,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum CacheModel {
+    DocumentViewer,
+    WebBrowser,
+    DocumentBrowser,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for CacheModel {
+    type GlibType = ffi::WebKitCacheModel;
+
+    fn to_glib(&self) -> ffi::WebKitCacheModel {
+        match *self {
+            CacheModel::DocumentViewer => ffi::WEBKIT_CACHE_MODEL_DOCUMENT_VIEWER,
+            CacheModel::WebBrowser => ffi::WEBKIT_CACHE_MODEL_WEB_BROWSER,
+            CacheModel::DocumentBrowser => ffi::WEBKIT_CACHE_MODEL_DOCUMENT_BROWSER,
+            CacheModel::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitCacheModel> for CacheModel {
+    fn from_glib(value: ffi::WebKitCacheModel) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_CACHE_MODEL_DOCUMENT_VIEWER => CacheModel::DocumentViewer,
+            ffi::WEBKIT_CACHE_MODEL_WEB_BROWSER => CacheModel::WebBrowser,
+            ffi::WEBKIT_CACHE_MODEL_DOCUMENT_BROWSER => CacheModel::DocumentBrowser,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum ContextMenuAction {
+    NoAction,
+    OpenLink,
+    OpenLinkInNewWindow,
+    DownloadLinkToDisk,
+    CopyLinkToClipboard,
+    OpenImageInNewWindow,
+    DownloadImageToDisk,
+    CopyImageToClipboard,
+    CopyImageUrlToClipboard,
+    OpenFrameInNewWindow,
+    GoBack,
+    GoForward,
+    Stop,
+    Reload,
+    Copy,
+    Cut,
+    Paste,
+    Delete,
+    SelectAll,
+    InputMethods,
+    Unicode,
+    SpellingGuess,
+    NoGuessesFound,
+    IgnoreSpelling,
+    LearnSpelling,
+    IgnoreGrammar,
+    FontMenu,
+    Bold,
+    Italic,
+    Underline,
+    Outline,
+    InspectElement,
+    OpenVideoInNewWindow,
+    OpenAudioInNewWindow,
+    CopyVideoLinkToClipboard,
+    CopyAudioLinkToClipboard,
+    ToggleMediaControls,
+    ToggleMediaLoop,
+    EnterVideoFullscreen,
+    MediaPlay,
+    MediaPause,
+    MediaMute,
+    DownloadVideoToDisk,
+    DownloadAudioToDisk,
+    Custom,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for ContextMenuAction {
+    type GlibType = ffi::WebKitContextMenuAction;
+
+    fn to_glib(&self) -> ffi::WebKitContextMenuAction {
+        match *self {
+            ContextMenuAction::NoAction => ffi::WEBKIT_CONTEXT_MENU_ACTION_NO_ACTION,
+            ContextMenuAction::OpenLink => ffi::WEBKIT_CONTEXT_MENU_ACTION_OPEN_LINK,
+            ContextMenuAction::OpenLinkInNewWindow => ffi::WEBKIT_CONTEXT_MENU_ACTION_OPEN_LINK_IN_NEW_WINDOW,
+            ContextMenuAction::DownloadLinkToDisk => ffi::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_LINK_TO_DISK,
+            ContextMenuAction::CopyLinkToClipboard => ffi::WEBKIT_CONTEXT_MENU_ACTION_COPY_LINK_TO_CLIPBOARD,
+            ContextMenuAction::OpenImageInNewWindow => ffi::WEBKIT_CONTEXT_MENU_ACTION_OPEN_IMAGE_IN_NEW_WINDOW,
+            ContextMenuAction::DownloadImageToDisk => ffi::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_IMAGE_TO_DISK,
+            ContextMenuAction::CopyImageToClipboard => ffi::WEBKIT_CONTEXT_MENU_ACTION_COPY_IMAGE_TO_CLIPBOARD,
+            ContextMenuAction::CopyImageUrlToClipboard => ffi::WEBKIT_CONTEXT_MENU_ACTION_COPY_IMAGE_URL_TO_CLIPBOARD,
+            ContextMenuAction::OpenFrameInNewWindow => ffi::WEBKIT_CONTEXT_MENU_ACTION_OPEN_FRAME_IN_NEW_WINDOW,
+            ContextMenuAction::GoBack => ffi::WEBKIT_CONTEXT_MENU_ACTION_GO_BACK,
+            ContextMenuAction::GoForward => ffi::WEBKIT_CONTEXT_MENU_ACTION_GO_FORWARD,
+            ContextMenuAction::Stop => ffi::WEBKIT_CONTEXT_MENU_ACTION_STOP,
+            ContextMenuAction::Reload => ffi::WEBKIT_CONTEXT_MENU_ACTION_RELOAD,
+            ContextMenuAction::Copy => ffi::WEBKIT_CONTEXT_MENU_ACTION_COPY,
+            ContextMenuAction::Cut => ffi::WEBKIT_CONTEXT_MENU_ACTION_CUT,
+            ContextMenuAction::Paste => ffi::WEBKIT_CONTEXT_MENU_ACTION_PASTE,
+            ContextMenuAction::Delete => ffi::WEBKIT_CONTEXT_MENU_ACTION_DELETE,
+            ContextMenuAction::SelectAll => ffi::WEBKIT_CONTEXT_MENU_ACTION_SELECT_ALL,
+            ContextMenuAction::InputMethods => ffi::WEBKIT_CONTEXT_MENU_ACTION_INPUT_METHODS,
+            ContextMenuAction::Unicode => ffi::WEBKIT_CONTEXT_MENU_ACTION_UNICODE,
+            ContextMenuAction::SpellingGuess => ffi::WEBKIT_CONTEXT_MENU_ACTION_SPELLING_GUESS,
+            ContextMenuAction::NoGuessesFound => ffi::WEBKIT_CONTEXT_MENU_ACTION_NO_GUESSES_FOUND,
+            ContextMenuAction::IgnoreSpelling => ffi::WEBKIT_CONTEXT_MENU_ACTION_IGNORE_SPELLING,
+            ContextMenuAction::LearnSpelling => ffi::WEBKIT_CONTEXT_MENU_ACTION_LEARN_SPELLING,
+            ContextMenuAction::IgnoreGrammar => ffi::WEBKIT_CONTEXT_MENU_ACTION_IGNORE_GRAMMAR,
+            ContextMenuAction::FontMenu => ffi::WEBKIT_CONTEXT_MENU_ACTION_FONT_MENU,
+            ContextMenuAction::Bold => ffi::WEBKIT_CONTEXT_MENU_ACTION_BOLD,
+            ContextMenuAction::Italic => ffi::WEBKIT_CONTEXT_MENU_ACTION_ITALIC,
+            ContextMenuAction::Underline => ffi::WEBKIT_CONTEXT_MENU_ACTION_UNDERLINE,
+            ContextMenuAction::Outline => ffi::WEBKIT_CONTEXT_MENU_ACTION_OUTLINE,
+            ContextMenuAction::InspectElement => ffi::WEBKIT_CONTEXT_MENU_ACTION_INSPECT_ELEMENT,
+            ContextMenuAction::OpenVideoInNewWindow => ffi::WEBKIT_CONTEXT_MENU_ACTION_OPEN_VIDEO_IN_NEW_WINDOW,
+            ContextMenuAction::OpenAudioInNewWindow => ffi::WEBKIT_CONTEXT_MENU_ACTION_OPEN_AUDIO_IN_NEW_WINDOW,
+            ContextMenuAction::CopyVideoLinkToClipboard => ffi::WEBKIT_CONTEXT_MENU_ACTION_COPY_VIDEO_LINK_TO_CLIPBOARD,
+            ContextMenuAction::CopyAudioLinkToClipboard => ffi::WEBKIT_CONTEXT_MENU_ACTION_COPY_AUDIO_LINK_TO_CLIPBOARD,
+            ContextMenuAction::ToggleMediaControls => ffi::WEBKIT_CONTEXT_MENU_ACTION_TOGGLE_MEDIA_CONTROLS,
+            ContextMenuAction::ToggleMediaLoop => ffi::WEBKIT_CONTEXT_MENU_ACTION_TOGGLE_MEDIA_LOOP,
+            ContextMenuAction::EnterVideoFullscreen => ffi::WEBKIT_CONTEXT_MENU_ACTION_ENTER_VIDEO_FULLSCREEN,
+            ContextMenuAction::MediaPlay => ffi::WEBKIT_CONTEXT_MENU_ACTION_MEDIA_PLAY,
+            ContextMenuAction::MediaPause => ffi::WEBKIT_CONTEXT_MENU_ACTION_MEDIA_PAUSE,
+            ContextMenuAction::MediaMute => ffi::WEBKIT_CONTEXT_MENU_ACTION_MEDIA_MUTE,
+            ContextMenuAction::DownloadVideoToDisk => ffi::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_VIDEO_TO_DISK,
+            ContextMenuAction::DownloadAudioToDisk => ffi::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_AUDIO_TO_DISK,
+            ContextMenuAction::Custom => ffi::WEBKIT_CONTEXT_MENU_ACTION_CUSTOM,
+            ContextMenuAction::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitContextMenuAction> for ContextMenuAction {
+    fn from_glib(value: ffi::WebKitContextMenuAction) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_NO_ACTION => ContextMenuAction::NoAction,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_OPEN_LINK => ContextMenuAction::OpenLink,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_OPEN_LINK_IN_NEW_WINDOW => ContextMenuAction::OpenLinkInNewWindow,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_LINK_TO_DISK => ContextMenuAction::DownloadLinkToDisk,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_COPY_LINK_TO_CLIPBOARD => ContextMenuAction::CopyLinkToClipboard,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_OPEN_IMAGE_IN_NEW_WINDOW => ContextMenuAction::OpenImageInNewWindow,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_IMAGE_TO_DISK => ContextMenuAction::DownloadImageToDisk,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_COPY_IMAGE_TO_CLIPBOARD => ContextMenuAction::CopyImageToClipboard,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_COPY_IMAGE_URL_TO_CLIPBOARD => ContextMenuAction::CopyImageUrlToClipboard,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_OPEN_FRAME_IN_NEW_WINDOW => ContextMenuAction::OpenFrameInNewWindow,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_GO_BACK => ContextMenuAction::GoBack,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_GO_FORWARD => ContextMenuAction::GoForward,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_STOP => ContextMenuAction::Stop,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_RELOAD => ContextMenuAction::Reload,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_COPY => ContextMenuAction::Copy,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_CUT => ContextMenuAction::Cut,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_PASTE => ContextMenuAction::Paste,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_DELETE => ContextMenuAction::Delete,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_SELECT_ALL => ContextMenuAction::SelectAll,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_INPUT_METHODS => ContextMenuAction::InputMethods,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_UNICODE => ContextMenuAction::Unicode,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_SPELLING_GUESS => ContextMenuAction::SpellingGuess,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_NO_GUESSES_FOUND => ContextMenuAction::NoGuessesFound,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_IGNORE_SPELLING => ContextMenuAction::IgnoreSpelling,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_LEARN_SPELLING => ContextMenuAction::LearnSpelling,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_IGNORE_GRAMMAR => ContextMenuAction::IgnoreGrammar,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_FONT_MENU => ContextMenuAction::FontMenu,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_BOLD => ContextMenuAction::Bold,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_ITALIC => ContextMenuAction::Italic,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_UNDERLINE => ContextMenuAction::Underline,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_OUTLINE => ContextMenuAction::Outline,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_INSPECT_ELEMENT => ContextMenuAction::InspectElement,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_OPEN_VIDEO_IN_NEW_WINDOW => ContextMenuAction::OpenVideoInNewWindow,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_OPEN_AUDIO_IN_NEW_WINDOW => ContextMenuAction::OpenAudioInNewWindow,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_COPY_VIDEO_LINK_TO_CLIPBOARD => ContextMenuAction::CopyVideoLinkToClipboard,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_COPY_AUDIO_LINK_TO_CLIPBOARD => ContextMenuAction::CopyAudioLinkToClipboard,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_TOGGLE_MEDIA_CONTROLS => ContextMenuAction::ToggleMediaControls,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_TOGGLE_MEDIA_LOOP => ContextMenuAction::ToggleMediaLoop,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_ENTER_VIDEO_FULLSCREEN => ContextMenuAction::EnterVideoFullscreen,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_MEDIA_PLAY => ContextMenuAction::MediaPlay,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_MEDIA_PAUSE => ContextMenuAction::MediaPause,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_MEDIA_MUTE => ContextMenuAction::MediaMute,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_VIDEO_TO_DISK => ContextMenuAction::DownloadVideoToDisk,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_AUDIO_TO_DISK => ContextMenuAction::DownloadAudioToDisk,
+            ffi::WEBKIT_CONTEXT_MENU_ACTION_CUSTOM => ContextMenuAction::Custom,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum CookieAcceptPolicy {
+    Always,
+    Never,
+    NoThirdParty,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for CookieAcceptPolicy {
+    type GlibType = ffi::WebKitCookieAcceptPolicy;
+
+    fn to_glib(&self) -> ffi::WebKitCookieAcceptPolicy {
+        match *self {
+            CookieAcceptPolicy::Always => ffi::WEBKIT_COOKIE_POLICY_ACCEPT_ALWAYS,
+            CookieAcceptPolicy::Never => ffi::WEBKIT_COOKIE_POLICY_ACCEPT_NEVER,
+            CookieAcceptPolicy::NoThirdParty => ffi::WEBKIT_COOKIE_POLICY_ACCEPT_NO_THIRD_PARTY,
+            CookieAcceptPolicy::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitCookieAcceptPolicy> for CookieAcceptPolicy {
+    fn from_glib(value: ffi::WebKitCookieAcceptPolicy) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_COOKIE_POLICY_ACCEPT_ALWAYS => CookieAcceptPolicy::Always,
+            ffi::WEBKIT_COOKIE_POLICY_ACCEPT_NEVER => CookieAcceptPolicy::Never,
+            ffi::WEBKIT_COOKIE_POLICY_ACCEPT_NO_THIRD_PARTY => CookieAcceptPolicy::NoThirdParty,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum CookiePersistentStorage {
+    Text,
+    Sqlite,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for CookiePersistentStorage {
+    type GlibType = ffi::WebKitCookiePersistentStorage;
+
+    fn to_glib(&self) -> ffi::WebKitCookiePersistentStorage {
+        match *self {
+            CookiePersistentStorage::Text => ffi::WEBKIT_COOKIE_PERSISTENT_STORAGE_TEXT,
+            CookiePersistentStorage::Sqlite => ffi::WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE,
+            CookiePersistentStorage::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitCookiePersistentStorage> for CookiePersistentStorage {
+    fn from_glib(value: ffi::WebKitCookiePersistentStorage) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_COOKIE_PERSISTENT_STORAGE_TEXT => CookiePersistentStorage::Text,
+            ffi::WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE => CookiePersistentStorage::Sqlite,
+        }
+    }
+}
+
+#[cfg(feature = "v2_2")]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum CredentialPersistence {
+    None,
+    ForSession,
+    Permanent,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[cfg(feature = "v2_2")]
+#[doc(hidden)]
+impl ToGlib for CredentialPersistence {
+    type GlibType = ffi::WebKitCredentialPersistence;
+
+    fn to_glib(&self) -> ffi::WebKitCredentialPersistence {
+        match *self {
+            CredentialPersistence::None => ffi::WEBKIT_CREDENTIAL_PERSISTENCE_NONE,
+            CredentialPersistence::ForSession => ffi::WEBKIT_CREDENTIAL_PERSISTENCE_FOR_SESSION,
+            CredentialPersistence::Permanent => ffi::WEBKIT_CREDENTIAL_PERSISTENCE_PERMANENT,
+            CredentialPersistence::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[cfg(feature = "v2_2")]
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitCredentialPersistence> for CredentialPersistence {
+    fn from_glib(value: ffi::WebKitCredentialPersistence) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_CREDENTIAL_PERSISTENCE_NONE => CredentialPersistence::None,
+            ffi::WEBKIT_CREDENTIAL_PERSISTENCE_FOR_SESSION => CredentialPersistence::ForSession,
+            ffi::WEBKIT_CREDENTIAL_PERSISTENCE_PERMANENT => CredentialPersistence::Permanent,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum DownloadError {
+    Network,
+    CancelledByUser,
+    Destination,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for DownloadError {
+    type GlibType = ffi::WebKitDownloadError;
+
+    fn to_glib(&self) -> ffi::WebKitDownloadError {
+        match *self {
+            DownloadError::Network => ffi::WEBKIT_DOWNLOAD_ERROR_NETWORK,
+            DownloadError::CancelledByUser => ffi::WEBKIT_DOWNLOAD_ERROR_CANCELLED_BY_USER,
+            DownloadError::Destination => ffi::WEBKIT_DOWNLOAD_ERROR_DESTINATION,
+            DownloadError::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitDownloadError> for DownloadError {
+    fn from_glib(value: ffi::WebKitDownloadError) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_DOWNLOAD_ERROR_NETWORK => DownloadError::Network,
+            ffi::WEBKIT_DOWNLOAD_ERROR_CANCELLED_BY_USER => DownloadError::CancelledByUser,
+            ffi::WEBKIT_DOWNLOAD_ERROR_DESTINATION => DownloadError::Destination,
+        }
+    }
+}
+
+impl ErrorDomain for DownloadError {
+    fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
+        unsafe { ffi::WebKitDownloadError() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
+        match code {
+            x if x == ffi::WEBKIT_DOWNLOAD_ERROR_NETWORK as i32 => Some(DownloadError::Network),
+            x if x == ffi::WEBKIT_DOWNLOAD_ERROR_CANCELLED_BY_USER as i32 => Some(DownloadError::CancelledByUser),
+            x if x == ffi::WEBKIT_DOWNLOAD_ERROR_DESTINATION as i32 => Some(DownloadError::Destination),
+            _ => Some(DownloadError::__Nonexhaustive(())),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum FaviconDatabaseError {
+    NotInitialized,
+    FaviconNotFound,
+    FaviconUnknown,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for FaviconDatabaseError {
+    type GlibType = ffi::WebKitFaviconDatabaseError;
+
+    fn to_glib(&self) -> ffi::WebKitFaviconDatabaseError {
+        match *self {
+            FaviconDatabaseError::NotInitialized => ffi::WEBKIT_FAVICON_DATABASE_ERROR_NOT_INITIALIZED,
+            FaviconDatabaseError::FaviconNotFound => ffi::WEBKIT_FAVICON_DATABASE_ERROR_FAVICON_NOT_FOUND,
+            FaviconDatabaseError::FaviconUnknown => ffi::WEBKIT_FAVICON_DATABASE_ERROR_FAVICON_UNKNOWN,
+            FaviconDatabaseError::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitFaviconDatabaseError> for FaviconDatabaseError {
+    fn from_glib(value: ffi::WebKitFaviconDatabaseError) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_FAVICON_DATABASE_ERROR_NOT_INITIALIZED => FaviconDatabaseError::NotInitialized,
+            ffi::WEBKIT_FAVICON_DATABASE_ERROR_FAVICON_NOT_FOUND => FaviconDatabaseError::FaviconNotFound,
+            ffi::WEBKIT_FAVICON_DATABASE_ERROR_FAVICON_UNKNOWN => FaviconDatabaseError::FaviconUnknown,
+        }
+    }
+}
+
+impl ErrorDomain for FaviconDatabaseError {
+    fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
+        unsafe { ffi::WebKitFaviconDatabaseError() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
+        match code {
+            x if x == ffi::WEBKIT_FAVICON_DATABASE_ERROR_NOT_INITIALIZED as i32 => Some(FaviconDatabaseError::NotInitialized),
+            x if x == ffi::WEBKIT_FAVICON_DATABASE_ERROR_FAVICON_NOT_FOUND as i32 => Some(FaviconDatabaseError::FaviconNotFound),
+            x if x == ffi::WEBKIT_FAVICON_DATABASE_ERROR_FAVICON_UNKNOWN as i32 => Some(FaviconDatabaseError::FaviconUnknown),
+            _ => Some(FaviconDatabaseError::__Nonexhaustive(())),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum InsecureContentEvent {
+    Run,
+    Displayed,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for InsecureContentEvent {
+    type GlibType = ffi::WebKitInsecureContentEvent;
+
+    fn to_glib(&self) -> ffi::WebKitInsecureContentEvent {
+        match *self {
+            InsecureContentEvent::Run => ffi::WEBKIT_INSECURE_CONTENT_RUN,
+            InsecureContentEvent::Displayed => ffi::WEBKIT_INSECURE_CONTENT_DISPLAYED,
+            InsecureContentEvent::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitInsecureContentEvent> for InsecureContentEvent {
+    fn from_glib(value: ffi::WebKitInsecureContentEvent) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_INSECURE_CONTENT_RUN => InsecureContentEvent::Run,
+            ffi::WEBKIT_INSECURE_CONTENT_DISPLAYED => InsecureContentEvent::Displayed,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum JavascriptError {
+    Failed,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for JavascriptError {
+    type GlibType = ffi::WebKitJavascriptError;
+
+    fn to_glib(&self) -> ffi::WebKitJavascriptError {
+        match *self {
+            JavascriptError::Failed => ffi::WEBKIT_JAVASCRIPT_ERROR_SCRIPT_FAILED,
+            JavascriptError::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitJavascriptError> for JavascriptError {
+    fn from_glib(value: ffi::WebKitJavascriptError) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_JAVASCRIPT_ERROR_SCRIPT_FAILED => JavascriptError::Failed,
+            _ => JavascriptError::__Nonexhaustive(()),
+        }
+    }
+}
+
+impl ErrorDomain for JavascriptError {
+    fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
+        unsafe { ffi::WebKitJavascriptError() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
+        match code {
+            x if x == ffi::WEBKIT_JAVASCRIPT_ERROR_SCRIPT_FAILED as i32 => Some(JavascriptError::Failed),
+            _ => Some(JavascriptError::Failed),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum LoadEvent {
+    Started,
+    Redirected,
+    Committed,
+    Finished,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for LoadEvent {
+    type GlibType = ffi::WebKitLoadEvent;
+
+    fn to_glib(&self) -> ffi::WebKitLoadEvent {
+        match *self {
+            LoadEvent::Started => ffi::WEBKIT_LOAD_STARTED,
+            LoadEvent::Redirected => ffi::WEBKIT_LOAD_REDIRECTED,
+            LoadEvent::Committed => ffi::WEBKIT_LOAD_COMMITTED,
+            LoadEvent::Finished => ffi::WEBKIT_LOAD_FINISHED,
+            LoadEvent::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitLoadEvent> for LoadEvent {
+    fn from_glib(value: ffi::WebKitLoadEvent) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_LOAD_STARTED => LoadEvent::Started,
+            ffi::WEBKIT_LOAD_REDIRECTED => LoadEvent::Redirected,
+            ffi::WEBKIT_LOAD_COMMITTED => LoadEvent::Committed,
+            ffi::WEBKIT_LOAD_FINISHED => LoadEvent::Finished,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum NavigationType {
+    LinkClicked,
+    FormSubmitted,
+    BackForward,
+    Reload,
+    FormResubmitted,
+    Other,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for NavigationType {
+    type GlibType = ffi::WebKitNavigationType;
+
+    fn to_glib(&self) -> ffi::WebKitNavigationType {
+        match *self {
+            NavigationType::LinkClicked => ffi::WEBKIT_NAVIGATION_TYPE_LINK_CLICKED,
+            NavigationType::FormSubmitted => ffi::WEBKIT_NAVIGATION_TYPE_FORM_SUBMITTED,
+            NavigationType::BackForward => ffi::WEBKIT_NAVIGATION_TYPE_BACK_FORWARD,
+            NavigationType::Reload => ffi::WEBKIT_NAVIGATION_TYPE_RELOAD,
+            NavigationType::FormResubmitted => ffi::WEBKIT_NAVIGATION_TYPE_FORM_RESUBMITTED,
+            NavigationType::Other => ffi::WEBKIT_NAVIGATION_TYPE_OTHER,
+            NavigationType::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitNavigationType> for NavigationType {
+    fn from_glib(value: ffi::WebKitNavigationType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_NAVIGATION_TYPE_LINK_CLICKED => NavigationType::LinkClicked,
+            ffi::WEBKIT_NAVIGATION_TYPE_FORM_SUBMITTED => NavigationType::FormSubmitted,
+            ffi::WEBKIT_NAVIGATION_TYPE_BACK_FORWARD => NavigationType::BackForward,
+            ffi::WEBKIT_NAVIGATION_TYPE_RELOAD => NavigationType::Reload,
+            ffi::WEBKIT_NAVIGATION_TYPE_FORM_RESUBMITTED => NavigationType::FormResubmitted,
+            ffi::WEBKIT_NAVIGATION_TYPE_OTHER => NavigationType::Other,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum NetworkError {
+    Failed,
+    Transport,
+    UnknownProtocol,
+    Cancelled,
+    FileDoesNotExist,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for NetworkError {
+    type GlibType = ffi::WebKitNetworkError;
+
+    fn to_glib(&self) -> ffi::WebKitNetworkError {
+        match *self {
+            NetworkError::Failed => ffi::WEBKIT_NETWORK_ERROR_FAILED,
+            NetworkError::Transport => ffi::WEBKIT_NETWORK_ERROR_TRANSPORT,
+            NetworkError::UnknownProtocol => ffi::WEBKIT_NETWORK_ERROR_UNKNOWN_PROTOCOL,
+            NetworkError::Cancelled => ffi::WEBKIT_NETWORK_ERROR_CANCELLED,
+            NetworkError::FileDoesNotExist => ffi::WEBKIT_NETWORK_ERROR_FILE_DOES_NOT_EXIST,
+            NetworkError::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitNetworkError> for NetworkError {
+    fn from_glib(value: ffi::WebKitNetworkError) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_NETWORK_ERROR_FAILED => NetworkError::Failed,
+            ffi::WEBKIT_NETWORK_ERROR_TRANSPORT => NetworkError::Transport,
+            ffi::WEBKIT_NETWORK_ERROR_UNKNOWN_PROTOCOL => NetworkError::UnknownProtocol,
+            ffi::WEBKIT_NETWORK_ERROR_CANCELLED => NetworkError::Cancelled,
+            ffi::WEBKIT_NETWORK_ERROR_FILE_DOES_NOT_EXIST => NetworkError::FileDoesNotExist,
+        }
+    }
+}
+
+impl ErrorDomain for NetworkError {
+    fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
+        unsafe { ffi::WebKitNetworkError() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
+        match code {
+            x if x == ffi::WEBKIT_NETWORK_ERROR_FAILED as i32 => Some(NetworkError::Failed),
+            x if x == ffi::WEBKIT_NETWORK_ERROR_TRANSPORT as i32 => Some(NetworkError::Transport),
+            x if x == ffi::WEBKIT_NETWORK_ERROR_UNKNOWN_PROTOCOL as i32 => Some(NetworkError::UnknownProtocol),
+            x if x == ffi::WEBKIT_NETWORK_ERROR_CANCELLED as i32 => Some(NetworkError::Cancelled),
+            x if x == ffi::WEBKIT_NETWORK_ERROR_FILE_DOES_NOT_EXIST as i32 => Some(NetworkError::FileDoesNotExist),
+            _ => Some(NetworkError::Failed),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum PluginError {
+    Failed,
+    CannotFindPlugin,
+    CannotLoadPlugin,
+    JavaUnavailable,
+    ConnectionCancelled,
+    WillHandleLoad,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for PluginError {
+    type GlibType = ffi::WebKitPluginError;
+
+    fn to_glib(&self) -> ffi::WebKitPluginError {
+        match *self {
+            PluginError::Failed => ffi::WEBKIT_PLUGIN_ERROR_FAILED,
+            PluginError::CannotFindPlugin => ffi::WEBKIT_PLUGIN_ERROR_CANNOT_FIND_PLUGIN,
+            PluginError::CannotLoadPlugin => ffi::WEBKIT_PLUGIN_ERROR_CANNOT_LOAD_PLUGIN,
+            PluginError::JavaUnavailable => ffi::WEBKIT_PLUGIN_ERROR_JAVA_UNAVAILABLE,
+            PluginError::ConnectionCancelled => ffi::WEBKIT_PLUGIN_ERROR_CONNECTION_CANCELLED,
+            PluginError::WillHandleLoad => ffi::WEBKIT_PLUGIN_ERROR_WILL_HANDLE_LOAD,
+            PluginError::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitPluginError> for PluginError {
+    fn from_glib(value: ffi::WebKitPluginError) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_PLUGIN_ERROR_FAILED => PluginError::Failed,
+            ffi::WEBKIT_PLUGIN_ERROR_CANNOT_FIND_PLUGIN => PluginError::CannotFindPlugin,
+            ffi::WEBKIT_PLUGIN_ERROR_CANNOT_LOAD_PLUGIN => PluginError::CannotLoadPlugin,
+            ffi::WEBKIT_PLUGIN_ERROR_JAVA_UNAVAILABLE => PluginError::JavaUnavailable,
+            ffi::WEBKIT_PLUGIN_ERROR_CONNECTION_CANCELLED => PluginError::ConnectionCancelled,
+            ffi::WEBKIT_PLUGIN_ERROR_WILL_HANDLE_LOAD => PluginError::WillHandleLoad,
+        }
+    }
+}
+
+impl ErrorDomain for PluginError {
+    fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
+        unsafe { ffi::WebKitPluginError() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
+        match code {
+            x if x == ffi::WEBKIT_PLUGIN_ERROR_FAILED as i32 => Some(PluginError::Failed),
+            x if x == ffi::WEBKIT_PLUGIN_ERROR_CANNOT_FIND_PLUGIN as i32 => Some(PluginError::CannotFindPlugin),
+            x if x == ffi::WEBKIT_PLUGIN_ERROR_CANNOT_LOAD_PLUGIN as i32 => Some(PluginError::CannotLoadPlugin),
+            x if x == ffi::WEBKIT_PLUGIN_ERROR_JAVA_UNAVAILABLE as i32 => Some(PluginError::JavaUnavailable),
+            x if x == ffi::WEBKIT_PLUGIN_ERROR_CONNECTION_CANCELLED as i32 => Some(PluginError::ConnectionCancelled),
+            x if x == ffi::WEBKIT_PLUGIN_ERROR_WILL_HANDLE_LOAD as i32 => Some(PluginError::WillHandleLoad),
+            _ => Some(PluginError::Failed),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum PolicyDecisionType {
+    NavigationAction,
+    NewWindowAction,
+    Response,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for PolicyDecisionType {
+    type GlibType = ffi::WebKitPolicyDecisionType;
+
+    fn to_glib(&self) -> ffi::WebKitPolicyDecisionType {
+        match *self {
+            PolicyDecisionType::NavigationAction => ffi::WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION,
+            PolicyDecisionType::NewWindowAction => ffi::WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION,
+            PolicyDecisionType::Response => ffi::WEBKIT_POLICY_DECISION_TYPE_RESPONSE,
+            PolicyDecisionType::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitPolicyDecisionType> for PolicyDecisionType {
+    fn from_glib(value: ffi::WebKitPolicyDecisionType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION => PolicyDecisionType::NavigationAction,
+            ffi::WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION => PolicyDecisionType::NewWindowAction,
+            ffi::WEBKIT_POLICY_DECISION_TYPE_RESPONSE => PolicyDecisionType::Response,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum PolicyError {
+    Failed,
+    CannotShowMimeType,
+    CannotShowUri,
+    FrameLoadInterruptedByPolicyChange,
+    CannotUseRestrictedPort,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for PolicyError {
+    type GlibType = ffi::WebKitPolicyError;
+
+    fn to_glib(&self) -> ffi::WebKitPolicyError {
+        match *self {
+            PolicyError::Failed => ffi::WEBKIT_POLICY_ERROR_FAILED,
+            PolicyError::CannotShowMimeType => ffi::WEBKIT_POLICY_ERROR_CANNOT_SHOW_MIME_TYPE,
+            PolicyError::CannotShowUri => ffi::WEBKIT_POLICY_ERROR_CANNOT_SHOW_URI,
+            PolicyError::FrameLoadInterruptedByPolicyChange => ffi::WEBKIT_POLICY_ERROR_FRAME_LOAD_INTERRUPTED_BY_POLICY_CHANGE,
+            PolicyError::CannotUseRestrictedPort => ffi::WEBKIT_POLICY_ERROR_CANNOT_USE_RESTRICTED_PORT,
+            PolicyError::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitPolicyError> for PolicyError {
+    fn from_glib(value: ffi::WebKitPolicyError) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_POLICY_ERROR_FAILED => PolicyError::Failed,
+            ffi::WEBKIT_POLICY_ERROR_CANNOT_SHOW_MIME_TYPE => PolicyError::CannotShowMimeType,
+            ffi::WEBKIT_POLICY_ERROR_CANNOT_SHOW_URI => PolicyError::CannotShowUri,
+            ffi::WEBKIT_POLICY_ERROR_FRAME_LOAD_INTERRUPTED_BY_POLICY_CHANGE => PolicyError::FrameLoadInterruptedByPolicyChange,
+            ffi::WEBKIT_POLICY_ERROR_CANNOT_USE_RESTRICTED_PORT => PolicyError::CannotUseRestrictedPort,
+        }
+    }
+}
+
+impl ErrorDomain for PolicyError {
+    fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
+        unsafe { ffi::WebKitPolicyError() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
+        match code {
+            x if x == ffi::WEBKIT_POLICY_ERROR_FAILED as i32 => Some(PolicyError::Failed),
+            x if x == ffi::WEBKIT_POLICY_ERROR_CANNOT_SHOW_MIME_TYPE as i32 => Some(PolicyError::CannotShowMimeType),
+            x if x == ffi::WEBKIT_POLICY_ERROR_CANNOT_SHOW_URI as i32 => Some(PolicyError::CannotShowUri),
+            x if x == ffi::WEBKIT_POLICY_ERROR_FRAME_LOAD_INTERRUPTED_BY_POLICY_CHANGE as i32 => Some(PolicyError::FrameLoadInterruptedByPolicyChange),
+            x if x == ffi::WEBKIT_POLICY_ERROR_CANNOT_USE_RESTRICTED_PORT as i32 => Some(PolicyError::CannotUseRestrictedPort),
+            _ => Some(PolicyError::Failed),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum PrintError {
+    General,
+    PrinterNotFound,
+    InvalidPageRange,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for PrintError {
+    type GlibType = ffi::WebKitPrintError;
+
+    fn to_glib(&self) -> ffi::WebKitPrintError {
+        match *self {
+            PrintError::General => ffi::WEBKIT_PRINT_ERROR_GENERAL,
+            PrintError::PrinterNotFound => ffi::WEBKIT_PRINT_ERROR_PRINTER_NOT_FOUND,
+            PrintError::InvalidPageRange => ffi::WEBKIT_PRINT_ERROR_INVALID_PAGE_RANGE,
+            PrintError::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitPrintError> for PrintError {
+    fn from_glib(value: ffi::WebKitPrintError) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_PRINT_ERROR_GENERAL => PrintError::General,
+            ffi::WEBKIT_PRINT_ERROR_PRINTER_NOT_FOUND => PrintError::PrinterNotFound,
+            ffi::WEBKIT_PRINT_ERROR_INVALID_PAGE_RANGE => PrintError::InvalidPageRange,
+        }
+    }
+}
+
+impl ErrorDomain for PrintError {
+    fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
+        unsafe { ffi::WebKitPrintError() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
+        match code {
+            x if x == ffi::WEBKIT_PRINT_ERROR_GENERAL as i32 => Some(PrintError::General),
+            x if x == ffi::WEBKIT_PRINT_ERROR_PRINTER_NOT_FOUND as i32 => Some(PrintError::PrinterNotFound),
+            x if x == ffi::WEBKIT_PRINT_ERROR_INVALID_PAGE_RANGE as i32 => Some(PrintError::InvalidPageRange),
+            _ => Some(PrintError::__Nonexhaustive(())),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum PrintOperationResponse {
+    Print,
+    Cancel,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for PrintOperationResponse {
+    type GlibType = ffi::WebKitPrintOperationResponse;
+
+    fn to_glib(&self) -> ffi::WebKitPrintOperationResponse {
+        match *self {
+            PrintOperationResponse::Print => ffi::WEBKIT_PRINT_OPERATION_RESPONSE_PRINT,
+            PrintOperationResponse::Cancel => ffi::WEBKIT_PRINT_OPERATION_RESPONSE_CANCEL,
+            PrintOperationResponse::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitPrintOperationResponse> for PrintOperationResponse {
+    fn from_glib(value: ffi::WebKitPrintOperationResponse) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_PRINT_OPERATION_RESPONSE_PRINT => PrintOperationResponse::Print,
+            ffi::WEBKIT_PRINT_OPERATION_RESPONSE_CANCEL => PrintOperationResponse::Cancel,
+        }
+    }
+}
+
+#[cfg(feature = "v2_4")]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum ProcessModel {
+    SharedSecondaryProcess,
+    MultipleSecondaryProcesses,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[cfg(feature = "v2_4")]
+#[doc(hidden)]
+impl ToGlib for ProcessModel {
+    type GlibType = ffi::WebKitProcessModel;
+
+    fn to_glib(&self) -> ffi::WebKitProcessModel {
+        match *self {
+            ProcessModel::SharedSecondaryProcess => ffi::WEBKIT_PROCESS_MODEL_SHARED_SECONDARY_PROCESS,
+            ProcessModel::MultipleSecondaryProcesses => ffi::WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES,
+            ProcessModel::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[cfg(feature = "v2_4")]
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitProcessModel> for ProcessModel {
+    fn from_glib(value: ffi::WebKitProcessModel) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_PROCESS_MODEL_SHARED_SECONDARY_PROCESS => ProcessModel::SharedSecondaryProcess,
+            ffi::WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES => ProcessModel::MultipleSecondaryProcesses,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum SaveMode {
+    Mhtml,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for SaveMode {
+    type GlibType = ffi::WebKitSaveMode;
+
+    fn to_glib(&self) -> ffi::WebKitSaveMode {
+        match *self {
+            SaveMode::Mhtml => ffi::WEBKIT_SAVE_MODE_MHTML,
+            SaveMode::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitSaveMode> for SaveMode {
+    fn from_glib(value: ffi::WebKitSaveMode) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_SAVE_MODE_MHTML => SaveMode::Mhtml,
+            _ => SaveMode::__Nonexhaustive(()),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum ScriptDialogType {
+    Alert,
+    Confirm,
+    Prompt,
+    BeforeUnloadConfirm,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for ScriptDialogType {
+    type GlibType = ffi::WebKitScriptDialogType;
+
+    fn to_glib(&self) -> ffi::WebKitScriptDialogType {
+        match *self {
+            ScriptDialogType::Alert => ffi::WEBKIT_SCRIPT_DIALOG_ALERT,
+            ScriptDialogType::Confirm => ffi::WEBKIT_SCRIPT_DIALOG_CONFIRM,
+            ScriptDialogType::Prompt => ffi::WEBKIT_SCRIPT_DIALOG_PROMPT,
+            ScriptDialogType::BeforeUnloadConfirm => ffi::WEBKIT_SCRIPT_DIALOG_BEFORE_UNLOAD_CONFIRM,
+            ScriptDialogType::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitScriptDialogType> for ScriptDialogType {
+    fn from_glib(value: ffi::WebKitScriptDialogType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_SCRIPT_DIALOG_ALERT => ScriptDialogType::Alert,
+            ffi::WEBKIT_SCRIPT_DIALOG_CONFIRM => ScriptDialogType::Confirm,
+            ffi::WEBKIT_SCRIPT_DIALOG_PROMPT => ScriptDialogType::Prompt,
+            ffi::WEBKIT_SCRIPT_DIALOG_BEFORE_UNLOAD_CONFIRM => ScriptDialogType::BeforeUnloadConfirm,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum SnapshotError {
+    Create,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for SnapshotError {
+    type GlibType = ffi::WebKitSnapshotError;
+
+    fn to_glib(&self) -> ffi::WebKitSnapshotError {
+        match *self {
+            SnapshotError::Create => ffi::WEBKIT_SNAPSHOT_ERROR_FAILED_TO_CREATE,
+            SnapshotError::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitSnapshotError> for SnapshotError {
+    fn from_glib(value: ffi::WebKitSnapshotError) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_SNAPSHOT_ERROR_FAILED_TO_CREATE => SnapshotError::Create,
+            _ => SnapshotError::__Nonexhaustive(()),
+        }
+    }
+}
+
+impl ErrorDomain for SnapshotError {
+    fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
+        unsafe { ffi::WebKitSnapshotError() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
+        match code {
+            x if x == ffi::WEBKIT_SNAPSHOT_ERROR_FAILED_TO_CREATE as i32 => Some(SnapshotError::Create),
+            _ => Some(SnapshotError::__Nonexhaustive(())),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum SnapshotRegion {
+    Visible,
+    FullDocument,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for SnapshotRegion {
+    type GlibType = ffi::WebKitSnapshotRegion;
+
+    fn to_glib(&self) -> ffi::WebKitSnapshotRegion {
+        match *self {
+            SnapshotRegion::Visible => ffi::WEBKIT_SNAPSHOT_REGION_VISIBLE,
+            SnapshotRegion::FullDocument => ffi::WEBKIT_SNAPSHOT_REGION_FULL_DOCUMENT,
+            SnapshotRegion::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitSnapshotRegion> for SnapshotRegion {
+    fn from_glib(value: ffi::WebKitSnapshotRegion) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_SNAPSHOT_REGION_VISIBLE => SnapshotRegion::Visible,
+            ffi::WEBKIT_SNAPSHOT_REGION_FULL_DOCUMENT => SnapshotRegion::FullDocument,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum TLSErrorsPolicy {
+    Ignore,
+    Fail,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for TLSErrorsPolicy {
+    type GlibType = ffi::WebKitTLSErrorsPolicy;
+
+    fn to_glib(&self) -> ffi::WebKitTLSErrorsPolicy {
+        match *self {
+            TLSErrorsPolicy::Ignore => ffi::WEBKIT_TLS_ERRORS_POLICY_IGNORE,
+            TLSErrorsPolicy::Fail => ffi::WEBKIT_TLS_ERRORS_POLICY_FAIL,
+            TLSErrorsPolicy::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitTLSErrorsPolicy> for TLSErrorsPolicy {
+    fn from_glib(value: ffi::WebKitTLSErrorsPolicy) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_TLS_ERRORS_POLICY_IGNORE => TLSErrorsPolicy::Ignore,
+            ffi::WEBKIT_TLS_ERRORS_POLICY_FAIL => TLSErrorsPolicy::Fail,
+        }
+    }
+}
+
+#[cfg(feature = "v2_6")]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum UserContentInjectedFrames {
+    AllFrames,
+    TopFrame,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[cfg(feature = "v2_6")]
+#[doc(hidden)]
+impl ToGlib for UserContentInjectedFrames {
+    type GlibType = ffi::WebKitUserContentInjectedFrames;
+
+    fn to_glib(&self) -> ffi::WebKitUserContentInjectedFrames {
+        match *self {
+            UserContentInjectedFrames::AllFrames => ffi::WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES,
+            UserContentInjectedFrames::TopFrame => ffi::WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
+            UserContentInjectedFrames::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[cfg(feature = "v2_6")]
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitUserContentInjectedFrames> for UserContentInjectedFrames {
+    fn from_glib(value: ffi::WebKitUserContentInjectedFrames) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES => UserContentInjectedFrames::AllFrames,
+            ffi::WEBKIT_USER_CONTENT_INJECT_TOP_FRAME => UserContentInjectedFrames::TopFrame,
+        }
+    }
+}
+
+#[cfg(feature = "v2_6")]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum UserScriptInjectionTime {
+    Start,
+    End,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[cfg(feature = "v2_6")]
+#[doc(hidden)]
+impl ToGlib for UserScriptInjectionTime {
+    type GlibType = ffi::WebKitUserScriptInjectionTime;
+
+    fn to_glib(&self) -> ffi::WebKitUserScriptInjectionTime {
+        match *self {
+            UserScriptInjectionTime::Start => ffi::WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_START,
+            UserScriptInjectionTime::End => ffi::WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
+            UserScriptInjectionTime::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[cfg(feature = "v2_6")]
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitUserScriptInjectionTime> for UserScriptInjectionTime {
+    fn from_glib(value: ffi::WebKitUserScriptInjectionTime) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_START => UserScriptInjectionTime::Start,
+            ffi::WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END => UserScriptInjectionTime::End,
+        }
+    }
+}
+
+#[cfg(feature = "v2_6")]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum UserStyleLevel {
+    User,
+    Author,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[cfg(feature = "v2_6")]
+#[doc(hidden)]
+impl ToGlib for UserStyleLevel {
+    type GlibType = ffi::WebKitUserStyleLevel;
+
+    fn to_glib(&self) -> ffi::WebKitUserStyleLevel {
+        match *self {
+            UserStyleLevel::User => ffi::WEBKIT_USER_STYLE_LEVEL_USER,
+            UserStyleLevel::Author => ffi::WEBKIT_USER_STYLE_LEVEL_AUTHOR,
+            UserStyleLevel::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[cfg(feature = "v2_6")]
+#[doc(hidden)]
+impl FromGlib<ffi::WebKitUserStyleLevel> for UserStyleLevel {
+    fn from_glib(value: ffi::WebKitUserStyleLevel) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::WEBKIT_USER_STYLE_LEVEL_USER => UserStyleLevel::User,
+            ffi::WEBKIT_USER_STYLE_LEVEL_AUTHOR => UserStyleLevel::Author,
+        }
+    }
+}
+

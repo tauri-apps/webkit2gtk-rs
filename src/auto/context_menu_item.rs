@@ -2,6 +2,7 @@
 // DO NOT EDIT
 
 use ContextMenu;
+use ContextMenuAction;
 use ffi;
 use glib::translate::*;
 
@@ -18,13 +19,19 @@ impl ContextMenuItem {
     //    unsafe { TODO: call ffi::webkit_context_menu_item_new() }
     //}
 
-    //pub fn new_from_stock_action(action: /*Ignored*/ContextMenuAction) -> ContextMenuItem {
-    //    unsafe { TODO: call ffi::webkit_context_menu_item_new_from_stock_action() }
-    //}
+    pub fn new_from_stock_action(action: ContextMenuAction) -> ContextMenuItem {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::webkit_context_menu_item_new_from_stock_action(action.to_glib()))
+        }
+    }
 
-    //pub fn new_from_stock_action_with_label(action: /*Ignored*/ContextMenuAction, label: &str) -> ContextMenuItem {
-    //    unsafe { TODO: call ffi::webkit_context_menu_item_new_from_stock_action_with_label() }
-    //}
+    pub fn new_from_stock_action_with_label(action: ContextMenuAction, label: &str) -> ContextMenuItem {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::webkit_context_menu_item_new_from_stock_action_with_label(action.to_glib(), label.to_glib_none().0))
+        }
+    }
 
     pub fn new_separator() -> ContextMenuItem {
         assert_initialized_main_thread!();
@@ -44,9 +51,11 @@ impl ContextMenuItem {
     //    unsafe { TODO: call ffi::webkit_context_menu_item_get_action() }
     //}
 
-    //pub fn get_stock_action(&self) -> /*Ignored*/ContextMenuAction {
-    //    unsafe { TODO: call ffi::webkit_context_menu_item_get_stock_action() }
-    //}
+    pub fn get_stock_action(&self) -> ContextMenuAction {
+        unsafe {
+            from_glib(ffi::webkit_context_menu_item_get_stock_action(self.to_glib_none().0))
+        }
+    }
 
     pub fn get_submenu(&self) -> Option<ContextMenu> {
         unsafe {

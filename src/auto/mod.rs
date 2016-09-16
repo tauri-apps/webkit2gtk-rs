@@ -125,6 +125,74 @@ mod navigation_action;
 #[cfg(feature = "v2_6")]
 pub use self::navigation_action::NavigationAction;
 
+mod enums;
+#[cfg(feature = "v2_2")]
+pub use self::enums::AuthenticationScheme;
+pub use self::enums::CacheModel;
+pub use self::enums::ContextMenuAction;
+pub use self::enums::CookieAcceptPolicy;
+pub use self::enums::CookiePersistentStorage;
+#[cfg(feature = "v2_2")]
+pub use self::enums::CredentialPersistence;
+pub use self::enums::DownloadError;
+pub use self::enums::FaviconDatabaseError;
+pub use self::enums::InsecureContentEvent;
+pub use self::enums::JavascriptError;
+pub use self::enums::LoadEvent;
+pub use self::enums::NavigationType;
+pub use self::enums::NetworkError;
+pub use self::enums::PluginError;
+pub use self::enums::PolicyDecisionType;
+pub use self::enums::PolicyError;
+pub use self::enums::PrintError;
+pub use self::enums::PrintOperationResponse;
+#[cfg(feature = "v2_4")]
+pub use self::enums::ProcessModel;
+pub use self::enums::SaveMode;
+pub use self::enums::ScriptDialogType;
+pub use self::enums::SnapshotError;
+pub use self::enums::SnapshotRegion;
+pub use self::enums::TLSErrorsPolicy;
+#[cfg(feature = "v2_6")]
+pub use self::enums::UserContentInjectedFrames;
+#[cfg(feature = "v2_6")]
+pub use self::enums::UserScriptInjectionTime;
+#[cfg(feature = "v2_6")]
+pub use self::enums::UserStyleLevel;
+
+mod flags;
+#[cfg(feature = "v2_10")]
+pub use self::flags::EditorTypingAttributes;
+#[cfg(feature = "v2_10")]
+pub use self::flags::EDITOR_TYPING_ATTRIBUTE_NONE;
+#[cfg(feature = "v2_10")]
+pub use self::flags::EDITOR_TYPING_ATTRIBUTE_BOLD;
+#[cfg(feature = "v2_10")]
+pub use self::flags::EDITOR_TYPING_ATTRIBUTE_ITALIC;
+#[cfg(feature = "v2_10")]
+pub use self::flags::EDITOR_TYPING_ATTRIBUTE_UNDERLINE;
+#[cfg(feature = "v2_10")]
+pub use self::flags::EDITOR_TYPING_ATTRIBUTE_STRIKETHROUGH;
+pub use self::flags::FindOptions;
+pub use self::flags::FIND_OPTIONS_NONE;
+pub use self::flags::FIND_OPTIONS_CASE_INSENSITIVE;
+pub use self::flags::FIND_OPTIONS_AT_WORD_STARTS;
+pub use self::flags::FIND_OPTIONS_TREAT_MEDIAL_CAPITAL_AS_WORD_START;
+pub use self::flags::FIND_OPTIONS_BACKWARDS;
+pub use self::flags::FIND_OPTIONS_WRAP_AROUND;
+pub use self::flags::HitTestResultContext;
+pub use self::flags::HIT_TEST_RESULT_CONTEXT_DOCUMENT;
+pub use self::flags::HIT_TEST_RESULT_CONTEXT_LINK;
+pub use self::flags::HIT_TEST_RESULT_CONTEXT_IMAGE;
+pub use self::flags::HIT_TEST_RESULT_CONTEXT_MEDIA;
+pub use self::flags::HIT_TEST_RESULT_CONTEXT_EDITABLE;
+pub use self::flags::HIT_TEST_RESULT_CONTEXT_SCROLLBAR;
+pub use self::flags::HIT_TEST_RESULT_CONTEXT_SELECTION;
+pub use self::flags::SnapshotOptions;
+pub use self::flags::SNAPSHOT_OPTIONS_NONE;
+pub use self::flags::SNAPSHOT_OPTIONS_INCLUDE_SELECTION_HIGHLIGHTING;
+pub use self::flags::SNAPSHOT_OPTIONS_TRANSPARENT_BACKGROUND;
+
 #[doc(hidden)]
 pub mod traits {
     pub use super::PermissionRequestExt;

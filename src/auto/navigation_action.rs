@@ -2,6 +2,8 @@
 // DO NOT EDIT
 
 #[cfg(feature = "v2_6")]
+use NavigationType;
+#[cfg(feature = "v2_6")]
 use URIRequest;
 use ffi;
 use glib::translate::*;
@@ -31,10 +33,12 @@ impl NavigationAction {
         }
     }
 
-    //#[cfg(feature = "v2_6")]
-    //pub fn get_navigation_type(&mut self) -> /*Ignored*/NavigationType {
-    //    unsafe { TODO: call ffi::webkit_navigation_action_get_navigation_type() }
-    //}
+    #[cfg(feature = "v2_6")]
+    pub fn get_navigation_type(&mut self) -> NavigationType {
+        unsafe {
+            from_glib(ffi::webkit_navigation_action_get_navigation_type(self.to_glib_none_mut().0))
+        }
+    }
 
     #[cfg(feature = "v2_6")]
     pub fn get_request(&mut self) -> Option<URIRequest> {

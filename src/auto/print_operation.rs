@@ -39,7 +39,7 @@ impl PrintOperation {
         }
     }
 
-    //pub fn run_dialog<T: IsA</*Ignored*/gtk::Window>>(&self, parent: Option<&T>) -> /*Ignored*/PrintOperationResponse {
+    //pub fn run_dialog<T: IsA</*Ignored*/gtk::Window>>(&self, parent: Option<&T>) -> PrintOperationResponse {
     //    unsafe { TODO: call ffi::webkit_print_operation_run_dialog() }
     //}
 
