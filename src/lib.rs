@@ -2,6 +2,7 @@
 
 #[macro_use]
 extern crate bitflags;
+extern crate gio;
 extern crate gio_sys;
 #[macro_use]
 extern crate glib;
@@ -9,6 +10,7 @@ extern crate glib_sys as glib_ffi;
 extern crate gobject_sys as gobject_ffi;
 extern crate gtk;
 extern crate gtk_sys as gtk_ffi;
+extern crate javascriptcore as java_script_core;
 extern crate libc;
 
 extern crate webkit2_sys as ffi;

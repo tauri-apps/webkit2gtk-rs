@@ -5,6 +5,7 @@ version = "4.0"
 work_mode = "normal"
 generate_safety_asserts = true
 external_libraries = [
+    "Gio",
     "Gtk",
 ]
 
@@ -38,6 +39,7 @@ generate = [
     "WebKit2.InsecureContentEvent",
     "WebKit2.InstallMissingMediaPluginsPermissionRequest",
     "WebKit2.JavascriptError",
+    "WebKit2.JavascriptResult",
     "WebKit2.LoadEvent",
     "WebKit2.NavigationAction",
     "WebKit2.NavigationPolicyDecision",
@@ -77,6 +79,9 @@ generate = [
 ]
 
 manual = [
+    "Gio.AsyncResult",
+    "Gio.Cancellable",
+    "Glib.Error",
     "GObject.Object",
     "Gtk.Container",
     "Gtk.Widget",
