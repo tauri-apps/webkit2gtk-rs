@@ -2,6 +2,7 @@
 
 #[macro_use]
 extern crate bitflags;
+extern crate gio_sys;
 #[macro_use]
 extern crate glib;
 extern crate glib_sys as glib_ffi;
@@ -36,5 +37,7 @@ macro_rules! callback_guard {
 }
 
 mod auto;
+mod web_view;
 
 pub use auto::*;
+pub use web_view::*;

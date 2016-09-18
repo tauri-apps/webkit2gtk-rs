@@ -19,27 +19,21 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-extern crate gtk;
-extern crate webkit2;
+use std::ptr;
 
-use gtk::{ContainerExt, Inhibit, WidgetExt, Window, WindowType};
-use webkit2::{WebView, WebViewExt};
+use ffi;
+use gio_sys::GCancellable;
+use glib::IsA;
+use libc::c_void;
 
-fn main() {
-    gtk::init().unwrap();
+use super::WebView;
 
-    let window = Window::new(WindowType::Toplevel);
-    let webview = WebView::new();
-    webview.load_uri("https://crates.io/");
-    window.add(&webview);
-    window.show_all();
+pub trait WebViewExt {
+    fn run_javascript(&self, script: &str);
+}
 
-    webview.run_javascript("alert('Hello');");
-
-    window.connect_delete_event(|_, _| {
-        gtk::main_quit();
-        Inhibit(false)
-    });
-
-    gtk::main();
+impl<O: IsA<WebView>> WebViewExt for O {
+    fn run_javascript(&self, script: &str) {
+        unsafe { ffi::webkit_web_view_run_javascript(self.to_glib_none().0, script.as_ptr() as *const _, ptr::null_mut::<GCancellable>(), None, ptr::null_mut::<c_void>()) }
+    }
 }
