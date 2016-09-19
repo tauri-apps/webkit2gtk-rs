@@ -32,20 +32,27 @@ fn main() {
     let webview = WebView::new();
     webview.load_uri("https://crates.io/");
     window.add(&webview);
+
+    let settings = webview.get_settings().unwrap();
+    settings.set_enable_developer_extras(true);
+
+    /*let inspector = webview.get_inspector().unwrap();
+    inspector.show();*/
+
     window.show_all();
 
     webview.run_javascript("alert('Hello');");
     webview.run_javascript_with_callback("42", |result| {
-        if let Some(result) = result {
-            let context = result.get_global_context().unwrap();
-            let value = result.get_value().unwrap();
-            println!("is_boolean: {}", value.is_boolean(&context));
-            println!("is_number: {}", value.is_number(&context));
-            println!("{:?}", value.to_number(&context));
-            println!("{:?}", value.to_boolean(&context));
-        }
-        else {
-            println!("No result");
+        match result {
+            Ok(result) => {
+                let context = result.get_global_context().unwrap();
+                let value = result.get_value().unwrap();
+                println!("is_boolean: {}", value.is_boolean(&context));
+                println!("is_number: {}", value.is_number(&context));
+                println!("{:?}", value.to_number(&context));
+                println!("{:?}", value.to_boolean(&context));
+            },
+            Err(error) => println!("{}", error),
         }
     });
 
