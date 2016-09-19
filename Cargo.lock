@@ -3,7 +3,7 @@ name = "webkit2"
 version = "0.1.0"
 dependencies = [
  "bitflags 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "gio 0.1.0 (git+https://github.com/antoyo/gio)",
+ "gio 0.1.0 (git+https://github.com/gtk-rs/gio)",
  "gio-sys 0.3.1 (git+https://github.com/gtk-rs/sys)",
  "glib 0.1.0 (git+https://github.com/gtk-rs/glib)",
  "glib-sys 0.3.1 (git+https://github.com/gtk-rs/sys)",
@@ -120,19 +120,6 @@ dependencies = [
  "libc 0.2.16 (registry+https://github.com/rust-lang/crates.io-index)",
  "pango-sys 0.3.1 (git+https://github.com/gtk-rs/sys)",
  "pkg-config 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "gio"
-version = "0.1.0"
-source = "git+https://github.com/antoyo/gio#eb1d74367f98c0fb9d6af675548d66374a72cd4c"
-dependencies = [
- "bitflags 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "gio-sys 0.3.1 (git+https://github.com/gtk-rs/sys)",
- "glib 0.1.0 (git+https://github.com/gtk-rs/glib)",
- "glib-sys 0.3.1 (git+https://github.com/gtk-rs/sys)",
- "gobject-sys 0.3.1 (git+https://github.com/gtk-rs/sys)",
- "libc 0.2.16 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -327,7 +314,6 @@ dependencies = [
 "checksum gdk-pixbuf 0.1.0 (git+https://github.com/gtk-rs/gdk-pixbuf)" = "<none>"
 "checksum gdk-pixbuf-sys 0.3.1 (git+https://github.com/gtk-rs/sys)" = "<none>"
 "checksum gdk-sys 0.3.1 (git+https://github.com/gtk-rs/sys)" = "<none>"
-"checksum gio 0.1.0 (git+https://github.com/antoyo/gio)" = "<none>"
 "checksum gio 0.1.0 (git+https://github.com/gtk-rs/gio)" = "<none>"
 "checksum gio-sys 0.3.1 (git+https://github.com/gtk-rs/sys)" = "<none>"
 "checksum glib 0.1.0 (git+https://github.com/gtk-rs/glib)" = "<none>"

@@ -8,7 +8,7 @@ bitflags = "^0.7"
 libc = "^0.2"
 
 [dependencies.gio]
-git = "https://github.com/antoyo/gio"
+git = "https://github.com/gtk-rs/gio"
 version = "0.1.0"
 
 [dependencies.gio-sys]

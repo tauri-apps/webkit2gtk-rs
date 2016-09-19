@@ -25,7 +25,6 @@ use std::mem::transmute;
 use std::ptr;
 
 use ffi;
-use gio::AsyncResult;
 use gio_sys::{self, GCancellable};
 use glib::IsA;
 use glib::error;
@@ -69,6 +68,6 @@ unsafe extern "C" fn async_ready_trampoline(this: *mut gobject_ffi::GObject, res
         else {
             Ok(JavascriptResult::from_glib_none(javascript_result))
         };
-    let f: &Box_<Fn(Result<JavascriptResult, error::Error>) + 'static> = transmute(f);
+    let f: &Box_<Fn(Result<JavascriptResult, error::Error>) + 'static> = &*(f as *const _);
     f(value)
 }
