@@ -36,6 +36,7 @@ use glib::translate::*;
 use glib_ffi;
 use gtk;
 use gtk_ffi;
+use java_script_core;
 use libc;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
@@ -79,11 +80,11 @@ impl WebView {
     //    unsafe { TODO: call ffi::webkit_web_view_new_with_user_content_manager() }
     //}
 
-    //pub fn can_execute_editing_command(&self, command: &str, cancellable: Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //pub fn can_execute_editing_command(&self, command: &str, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::webkit_web_view_can_execute_editing_command() }
     //}
 
-    //pub fn can_execute_editing_command_finish<T: IsA<gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> bool {
+    //pub fn can_execute_editing_command_finish<T: IsA</*Ignored*/gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> bool {
     //    unsafe { TODO: call ffi::webkit_web_view_can_execute_editing_command_finish() }
     //}
 
@@ -176,9 +177,11 @@ impl WebView {
         }
     }
 
-    //pub fn get_javascript_global_context(&self) -> /*Ignored*/Option<java_script_core::GlobalContext> {
-    //    unsafe { TODO: call ffi::webkit_web_view_get_javascript_global_context() }
-    //}
+    pub fn get_javascript_global_context(&self) -> Option<java_script_core::GlobalContext> {
+        unsafe {
+            from_glib_full(ffi::webkit_web_view_get_javascript_global_context(self.to_glib_none().0))
+        }
+    }
 
     pub fn get_main_resource(&self) -> Option<WebResource> {
         unsafe {
@@ -203,11 +206,11 @@ impl WebView {
         }
     }
 
-    //pub fn get_snapshot(&self, region: SnapshotRegion, options: SnapshotOptions, cancellable: Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //pub fn get_snapshot(&self, region: SnapshotRegion, options: SnapshotOptions, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::webkit_web_view_get_snapshot() }
     //}
 
-    //pub fn get_snapshot_finish<T: IsA<gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> /*Ignored*/Option<cairo::Surface> {
+    //pub fn get_snapshot_finish<T: IsA</*Ignored*/gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> /*Ignored*/Option<cairo::Surface> {
     //    unsafe { TODO: call ffi::webkit_web_view_get_snapshot_finish() }
     //}
 
@@ -340,35 +343,35 @@ impl WebView {
     //    unsafe { TODO: call ffi::webkit_web_view_restore_session_state() }
     //}
 
-    //pub fn run_javascript(&self, script: &str, cancellable: Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //pub fn run_javascript(&self, script: &str, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::webkit_web_view_run_javascript() }
     //}
 
-    //pub fn run_javascript_finish<T: IsA<gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> Option<JavascriptResult> {
+    //pub fn run_javascript_finish<T: IsA</*Ignored*/gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> Option<JavascriptResult> {
     //    unsafe { TODO: call ffi::webkit_web_view_run_javascript_finish() }
     //}
 
-    //pub fn run_javascript_from_gresource(&self, resource: &str, cancellable: Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //pub fn run_javascript_from_gresource(&self, resource: &str, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::webkit_web_view_run_javascript_from_gresource() }
     //}
 
-    //pub fn run_javascript_from_gresource_finish<T: IsA<gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> Option<JavascriptResult> {
+    //pub fn run_javascript_from_gresource_finish<T: IsA</*Ignored*/gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> Option<JavascriptResult> {
     //    unsafe { TODO: call ffi::webkit_web_view_run_javascript_from_gresource_finish() }
     //}
 
-    //pub fn save(&self, save_mode: SaveMode, cancellable: Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //pub fn save(&self, save_mode: SaveMode, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::webkit_web_view_save() }
     //}
 
-    //pub fn save_finish<T: IsA<gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> /*Ignored*/Option<gio::InputStream> {
+    //pub fn save_finish<T: IsA</*Ignored*/gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> /*Ignored*/Option<gio::InputStream> {
     //    unsafe { TODO: call ffi::webkit_web_view_save_finish() }
     //}
 
-    //pub fn save_to_file<T: IsA</*Ignored*/gio::File>>(&self, file: &T, save_mode: SaveMode, cancellable: Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //pub fn save_to_file<T: IsA</*Ignored*/gio::File>>(&self, file: &T, save_mode: SaveMode, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::webkit_web_view_save_to_file() }
     //}
 
-    //pub fn save_to_file_finish<T: IsA<gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> bool {
+    //pub fn save_to_file_finish<T: IsA</*Ignored*/gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> bool {
     //    unsafe { TODO: call ffi::webkit_web_view_save_to_file_finish() }
     //}
 

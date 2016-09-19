@@ -3,6 +3,8 @@
 
 use ContextMenuItem;
 use ffi;
+#[cfg(feature = "v2_8")]
+use glib;
 use glib::translate::*;
 
 glib_wrapper! {
@@ -58,10 +60,12 @@ impl ContextMenu {
         }
     }
 
-    //#[cfg(feature = "v2_8")]
-    //pub fn get_user_data(&self) -> /*Ignored*/Option<glib::Variant> {
-    //    unsafe { TODO: call ffi::webkit_context_menu_get_user_data() }
-    //}
+    #[cfg(feature = "v2_8")]
+    pub fn get_user_data(&self) -> Option<glib::Variant> {
+        unsafe {
+            from_glib_none(ffi::webkit_context_menu_get_user_data(self.to_glib_none().0))
+        }
+    }
 
     pub fn insert(&self, item: &ContextMenuItem, position: i32) {
         unsafe {
@@ -99,8 +103,10 @@ impl ContextMenu {
         }
     }
 
-    //#[cfg(feature = "v2_8")]
-    //pub fn set_user_data(&self, user_data: /*Ignored*/&glib::Variant) {
-    //    unsafe { TODO: call ffi::webkit_context_menu_set_user_data() }
-    //}
+    #[cfg(feature = "v2_8")]
+    pub fn set_user_data(&self, user_data: &glib::Variant) {
+        unsafe {
+            ffi::webkit_context_menu_set_user_data(self.to_glib_none().0, user_data.to_glib_none().0);
+        }
+    }
 }

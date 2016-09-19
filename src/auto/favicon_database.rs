@@ -24,11 +24,11 @@ impl FaviconDatabase {
         }
     }
 
-    //pub fn get_favicon(&self, page_uri: &str, cancellable: Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //pub fn get_favicon(&self, page_uri: &str, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::webkit_favicon_database_get_favicon() }
     //}
 
-    //pub fn get_favicon_finish<T: IsA<gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> /*Ignored*/Option<cairo::Surface> {
+    //pub fn get_favicon_finish<T: IsA</*Ignored*/gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> /*Ignored*/Option<cairo::Surface> {
     //    unsafe { TODO: call ffi::webkit_favicon_database_get_favicon_finish() }
     //}
 

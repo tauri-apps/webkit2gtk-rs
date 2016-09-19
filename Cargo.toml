@@ -3,6 +3,14 @@ name = "webkit2"
 version = "0.1.0"
 license = "MIT"
 
+[features]
+v2_2 = ["webkit2-sys/v2_2"]
+v2_4 = ["v2_2", "webkit2-sys/v2_4"]
+v2_6 = ["v2_4", "webkit2-sys/v2_6"]
+v2_8 = ["v2_6", "webkit2-sys/v2_8"]
+v2_10 = ["v2_8", "webkit2-sys/v2_10"]
+v2_12 = ["v2_10", "webkit2-sys/v2_12"]
+
 [dependencies]
 bitflags = "^0.7"
 libc = "^0.2"

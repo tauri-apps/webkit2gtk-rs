@@ -19,11 +19,11 @@ glib_wrapper! {
 }
 
 impl WebResource {
-    //pub fn get_data(&self, cancellable: Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //pub fn get_data(&self, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::webkit_web_resource_get_data() }
     //}
 
-    //pub fn get_data_finish<T: IsA<gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> Result</*Unimplemented*/CArray TypeId { ns_id: 0, id: 3 }, /*Unimplemented*/Fundamental: Size, Error> {
+    //pub fn get_data_finish<T: IsA</*Ignored*/gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> Result</*Unimplemented*/CArray TypeId { ns_id: 0, id: 3 }, /*Unimplemented*/Fundamental: Size, Error> {
     //    unsafe { TODO: call ffi::webkit_web_resource_get_data_finish() }
     //}
 

@@ -7,6 +7,7 @@ generate_safety_asserts = true
 external_libraries = [
     "Gio",
     "Gtk",
+    "JavaScriptCore",
 ]
 
 generate = [
@@ -79,12 +80,13 @@ generate = [
 ]
 
 manual = [
-    "Gio.AsyncResult",
-    "Gio.Cancellable",
-    "Glib.Error",
+    #"GLib.Error",
+    "GLib.Variant",
     "GObject.Object",
     "Gtk.Container",
     "Gtk.Widget",
+    "JavaScriptCore.GlobalContext",
+    "JavaScriptCore.Value",
 ]
 
 [[object]]

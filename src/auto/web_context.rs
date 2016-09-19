@@ -12,6 +12,8 @@ use TLSErrorsPolicy;
 #[cfg(feature = "v2_10")]
 use WebsiteDataManager;
 use ffi;
+#[cfg(feature = "v2_4")]
+use glib;
 use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
@@ -84,11 +86,11 @@ impl WebContext {
         }
     }
 
-    //pub fn get_plugins(&self, cancellable: Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //pub fn get_plugins(&self, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::webkit_web_context_get_plugins() }
     //}
 
-    //pub fn get_plugins_finish<T: IsA<gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> Vec<Plugin> {
+    //pub fn get_plugins_finish<T: IsA</*Ignored*/gio::AsyncResult>>(&self, result: &T, error: /*Ignored*/Option<Error>) -> Vec<Plugin> {
     //    unsafe { TODO: call ffi::webkit_web_context_get_plugins_finish() }
     //}
 
@@ -208,10 +210,12 @@ impl WebContext {
         }
     }
 
-    //#[cfg(feature = "v2_4")]
-    //pub fn set_web_extensions_initialization_user_data(&self, user_data: /*Ignored*/&glib::Variant) {
-    //    unsafe { TODO: call ffi::webkit_web_context_set_web_extensions_initialization_user_data() }
-    //}
+    #[cfg(feature = "v2_4")]
+    pub fn set_web_extensions_initialization_user_data(&self, user_data: &glib::Variant) {
+        unsafe {
+            ffi::webkit_web_context_set_web_extensions_initialization_user_data(self.to_glib_none().0, user_data.to_glib_none().0);
+        }
+    }
 
     #[cfg(feature = "v2_10")]
     pub fn set_web_process_count_limit(&self, limit: u32) {
