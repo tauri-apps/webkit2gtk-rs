@@ -1,5 +1,5 @@
 [root]
-name = "webkit2"
+name = "webkit2gtk"
 version = "0.1.0"
 dependencies = [
  "bitflags 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -12,7 +12,7 @@ dependencies = [
  "gtk-sys 0.3.1 (git+https://github.com/gtk-rs/sys)",
  "javascriptcore 0.1.0 (git+https://github.com/antoyo/javascriptcore-rs)",
  "libc 0.2.16 (registry+https://github.com/rust-lang/crates.io-index)",
- "webkit2-sys 0.3.1 (git+https://github.com/antoyo/webkit2-sys-rs)",
+ "webkit2gtk-sys 0.3.1 (git+https://github.com/antoyo/webkit2gtk-sys-rs)",
 ]
 
 [[package]]
@@ -282,9 +282,9 @@ dependencies = [
 ]
 
 [[package]]
-name = "webkit2-sys"
+name = "webkit2gtk-sys"
 version = "0.3.1"
-source = "git+https://github.com/antoyo/webkit2-sys-rs#615ba80c3dab5f74f0587588415aa7af20d31337"
+source = "git+https://github.com/antoyo/webkit2gtk-sys-rs#ae0a8bc02f9cce27200d526f6d696e88de775a37"
 dependencies = [
  "atk-sys 0.3.1 (git+https://github.com/gtk-rs/sys)",
  "bitflags 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -328,4 +328,4 @@ dependencies = [
 "checksum pango-sys 0.3.1 (git+https://github.com/gtk-rs/sys)" = "<none>"
 "checksum pkg-config 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)" = "8cee804ecc7eaf201a4a207241472cc870e825206f6c031e3ee2a72fa425f2fa"
 "checksum soup-sys 0.3.1 (git+https://github.com/antoyo/soup-sys-rs)" = "<none>"
-"checksum webkit2-sys 0.3.1 (git+https://github.com/antoyo/webkit2-sys-rs)" = "<none>"
+"checksum webkit2gtk-sys 0.3.1 (git+https://github.com/antoyo/webkit2gtk-sys-rs)" = "<none>"

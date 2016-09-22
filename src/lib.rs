@@ -1,3 +1,7 @@
+/*
+ * TODO: WebView::connect_script_dialog.
+ */
+
 #![allow(unused_imports)]
 
 #[macro_use]
@@ -13,7 +17,7 @@ extern crate gtk_sys as gtk_ffi;
 extern crate javascriptcore as java_script_core;
 extern crate libc;
 
-extern crate webkit2_sys as ffi;
+extern crate webkit2gtk_sys as ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => (
