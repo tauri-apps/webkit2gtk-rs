@@ -97,6 +97,11 @@ pub use self::uri_response::URIResponse;
 mod uri_scheme_request;
 pub use self::uri_scheme_request::URISchemeRequest;
 
+#[cfg(feature = "v2_6")]
+mod user_content_manager;
+#[cfg(feature = "v2_6")]
+pub use self::user_content_manager::UserContentManager;
+
 mod user_media_permission_request;
 pub use self::user_media_permission_request::UserMediaPermissionRequest;
 
@@ -127,6 +132,16 @@ pub use self::javascript_result::JavascriptResult;
 mod navigation_action;
 #[cfg(feature = "v2_6")]
 pub use self::navigation_action::NavigationAction;
+
+#[cfg(feature = "v2_6")]
+mod user_script;
+#[cfg(feature = "v2_6")]
+pub use self::user_script::UserScript;
+
+#[cfg(feature = "v2_6")]
+mod user_style_sheet;
+#[cfg(feature = "v2_6")]
+pub use self::user_style_sheet::UserStyleSheet;
 
 mod enums;
 #[cfg(feature = "v2_2")]

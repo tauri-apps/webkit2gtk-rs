@@ -25,6 +25,8 @@ use PolicyDecisionType;
 use PrintOperation;
 use Settings;
 use URIRequest;
+#[cfg(feature = "v2_6")]
+use UserContentManager;
 use WebContext;
 use WebInspector;
 use WebResource;
@@ -75,10 +77,13 @@ impl WebView {
         }
     }
 
-    //#[cfg(feature = "v2_6")]
-    //pub fn new_with_user_content_manager(user_content_manager: /*Ignored*/&UserContentManager) -> WebView {
-    //    unsafe { TODO: call ffi::webkit_web_view_new_with_user_content_manager() }
-    //}
+    #[cfg(feature = "v2_6")]
+    pub fn new_with_user_content_manager(user_content_manager: &UserContentManager) -> WebView {
+        skip_assert_initialized!();
+        unsafe {
+            gtk::Widget::from_glib_none(ffi::webkit_web_view_new_with_user_content_manager(user_content_manager.to_glib_none().0)).downcast_unchecked()
+        }
+    }
 
     //pub fn can_execute_editing_command(&self, command: &str, cancellable: /*Ignored*/Option<&gio::Cancellable>, callback: /*Unknown conversion*//*Unimplemented*/AsyncReadyCallback, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::webkit_web_view_can_execute_editing_command() }
@@ -230,10 +235,12 @@ impl WebView {
         }
     }
 
-    //#[cfg(feature = "v2_6")]
-    //pub fn get_user_content_manager(&self) -> /*Ignored*/Option<UserContentManager> {
-    //    unsafe { TODO: call ffi::webkit_web_view_get_user_content_manager() }
-    //}
+    #[cfg(feature = "v2_6")]
+    pub fn get_user_content_manager(&self) -> Option<UserContentManager> {
+        unsafe {
+            from_glib_none(ffi::webkit_web_view_get_user_content_manager(self.to_glib_none().0))
+        }
+    }
 
     pub fn get_window_properties(&self) -> Option<WindowProperties> {
         unsafe {

@@ -21,30 +21,48 @@
 
 use std::boxed::Box as Box_;
 use std::error::Error;
+use std::ffi::CString;
 use std::mem::transmute;
 use std::ptr;
 
 use ffi;
 use gio_sys::{self, GCancellable};
-use glib::IsA;
-use glib::error;
+use glib::{IsA, StaticType, error};
 use glib::object::Downcast;
-use glib::translate::{FromGlibPtr, ToGlibPtr, from_glib_full};
+use glib::translate::{FromGlibPtr, ToGlib, ToGlibPtr, from_glib_full};
 use glib_ffi::{self, GError};
 use gobject_ffi;
+use gtk;
 use libc::c_void;
 
-use super::JavascriptResult;
-use super::WebView;
+use super::{JavascriptResult, WebContext, WebView};
+#[cfg(feature = "v2_6")]
+use super::UserContentManager;
 
 type AsyncCallback = Option<unsafe extern "C" fn(*mut gobject_ffi::GObject, *mut gio_sys::GAsyncResult, *mut c_void)>;
 
 pub trait WebViewExt {
+    #[cfg(feature = "v2_6")]
+    fn new_with_context_and_user_content_manager(context: &WebContext, user_content_manager: &UserContentManager) -> Self;
     fn run_javascript(&self, script: &str);
     fn run_javascript_with_callback<F: Fn(Result<JavascriptResult, error::Error>) + 'static>(&self, script: &str, callback: F);
 }
 
-impl<O: IsA<WebView>> WebViewExt for O {
+impl<O> WebViewExt for O
+    where O: IsA<gtk::Widget> + IsA<WebView>
+{
+    #[cfg(feature = "v2_6")]
+    fn new_with_context_and_user_content_manager(context: &WebContext, user_content_manager: &UserContentManager) -> Self {
+        let user_content_manager_property = CString::new("user-content-manager").unwrap();
+        let web_context_property = CString::new("web-context").unwrap();
+        let glib_user_content_manager: *mut gobject_ffi::GObject = user_content_manager.to_glib_none().0;
+        let glib_context: *mut gobject_ffi::GObject = context.to_glib_none().0;
+        let null: *mut gobject_ffi::GObject = ptr::null_mut();
+        unsafe {
+            gtk::Widget::from_glib_none(gobject_ffi::g_object_new(WebView::static_type().to_glib(), user_content_manager_property.as_ptr(), glib_user_content_manager, web_context_property.as_ptr(), glib_context, null) as *mut _).downcast_unchecked()
+        }
+    }
+
     fn run_javascript(&self, script: &str) {
         unsafe { ffi::webkit_web_view_run_javascript(self.to_glib_none().0, script.to_glib_none().0, ptr::null_mut::<GCancellable>(), None, ptr::null_mut::<c_void>()) }
     }
