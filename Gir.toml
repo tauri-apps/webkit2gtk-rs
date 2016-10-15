@@ -90,6 +90,7 @@ manual = [
     "Gtk.Widget",
     "JavaScriptCore.GlobalContext",
     "JavaScriptCore.Value",
+    "WebKit2.ScriptDialog",
 ]
 
 [[object]]

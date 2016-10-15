@@ -23,6 +23,7 @@ use PermissionRequest;
 use PolicyDecision;
 use PolicyDecisionType;
 use PrintOperation;
+use ScriptDialog;
 use Settings;
 use URIRequest;
 #[cfg(feature = "v2_6")]
@@ -574,9 +575,13 @@ impl WebView {
     //    Ignored request: WebKit2.FileChooserRequest
     //}
 
-    //pub fn connect_script_dialog<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored dialog: WebKit2.ScriptDialog
-    //}
+    pub fn connect_script_dialog<F: Fn(&WebView, &ScriptDialog) -> bool + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&WebView, &ScriptDialog) -> bool + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "script-dialog",
+                transmute(script_dialog_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
     #[cfg(feature = "v2_8")]
     pub fn connect_show_notification<F: Fn(&WebView, &Notification) -> bool + 'static>(&self, f: F) -> u64 {
@@ -701,6 +706,12 @@ unsafe extern "C" fn run_color_chooser_trampoline(this: *mut ffi::WebKitWebView,
     callback_guard!();
     let f: &Box_<Fn(&WebView, &ColorChooserRequest) -> bool + 'static> = transmute(f);
     f(&from_glib_none(this), &from_glib_none(request)).to_glib()
+}
+
+unsafe extern "C" fn script_dialog_trampoline(this: *mut ffi::WebKitWebView, dialog: *mut ffi::WebKitScriptDialog, f: glib_ffi::gpointer) -> glib_ffi::gboolean {
+    callback_guard!();
+    let f: &Box_<Fn(&WebView, &ScriptDialog) -> bool + 'static> = transmute(f);
+    f(&from_glib_none(this), &from_glib_none(dialog)).to_glib()
 }
 
 #[cfg(feature = "v2_8")]
