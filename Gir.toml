@@ -42,7 +42,6 @@ generate = [
     "WebKit2.JavascriptError",
     "WebKit2.JavascriptResult",
     "WebKit2.LoadEvent",
-    "WebKit2.NavigationAction",
     "WebKit2.NavigationPolicyDecision",
     "WebKit2.NavigationType",
     "WebKit2.NetworkError",
@@ -114,3 +113,32 @@ status = "generate"
     [[object.signal]]
     name = "create"
     version = "2.6"
+
+[[object]]
+name = "WebKit2.NavigationAction"
+status = "generate"
+    [[object.function]]
+    name = "get_modifiers"
+        [[object.function.parameter]]
+        name = "navigation"
+        const = true
+    [[object.function]]
+    name = "get_mouse_button"
+        [[object.function.parameter]]
+        name = "navigation"
+        const = true
+    [[object.function]]
+    name = "get_navigation_type"
+        [[object.function.parameter]]
+        name = "navigation"
+        const = true
+    [[object.function]]
+    name = "get_request"
+        [[object.function.parameter]]
+        name = "navigation"
+        const = true
+    [[object.function]]
+    name = "is_user_gesture"
+        [[object.function.parameter]]
+        name = "navigation"
+        const = true

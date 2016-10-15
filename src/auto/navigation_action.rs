@@ -20,37 +20,37 @@ glib_wrapper! {
 impl NavigationAction {
 
     #[cfg(feature = "v2_6")]
-    pub fn get_modifiers(&mut self) -> u32 {
+    pub fn get_modifiers(&self) -> u32 {
         unsafe {
-            ffi::webkit_navigation_action_get_modifiers(self.to_glib_none_mut().0)
+            ffi::webkit_navigation_action_get_modifiers(mut_override(self.to_glib_none().0))
         }
     }
 
     #[cfg(feature = "v2_6")]
-    pub fn get_mouse_button(&mut self) -> u32 {
+    pub fn get_mouse_button(&self) -> u32 {
         unsafe {
-            ffi::webkit_navigation_action_get_mouse_button(self.to_glib_none_mut().0)
+            ffi::webkit_navigation_action_get_mouse_button(mut_override(self.to_glib_none().0))
         }
     }
 
     #[cfg(feature = "v2_6")]
-    pub fn get_navigation_type(&mut self) -> NavigationType {
+    pub fn get_navigation_type(&self) -> NavigationType {
         unsafe {
-            from_glib(ffi::webkit_navigation_action_get_navigation_type(self.to_glib_none_mut().0))
+            from_glib(ffi::webkit_navigation_action_get_navigation_type(mut_override(self.to_glib_none().0)))
         }
     }
 
     #[cfg(feature = "v2_6")]
-    pub fn get_request(&mut self) -> Option<URIRequest> {
+    pub fn get_request(&self) -> Option<URIRequest> {
         unsafe {
-            from_glib_none(ffi::webkit_navigation_action_get_request(self.to_glib_none_mut().0))
+            from_glib_none(ffi::webkit_navigation_action_get_request(mut_override(self.to_glib_none().0)))
         }
     }
 
     #[cfg(feature = "v2_6")]
-    pub fn is_user_gesture(&mut self) -> bool {
+    pub fn is_user_gesture(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_navigation_action_is_user_gesture(self.to_glib_none_mut().0))
+            from_glib(ffi::webkit_navigation_action_is_user_gesture(mut_override(self.to_glib_none().0)))
         }
     }
 }

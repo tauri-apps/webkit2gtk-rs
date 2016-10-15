@@ -22,7 +22,7 @@
 use std::ffi::{CStr, CString};
 
 use ffi;
-use glib::translate::{ToGlib, ToGlibPtrMut, from_glib};
+use glib::translate::{ToGlib, ToGlibPtr, from_glib, mut_override};
 
 use super::ScriptDialogType;
 
@@ -36,29 +36,29 @@ glib_wrapper! {
 }
 
 impl ScriptDialog {
-    pub fn confirm_set_confirmed(&mut self, confirmed: bool) {
-        unsafe { ffi::webkit_script_dialog_confirm_set_confirmed(self.to_glib_none_mut().0, confirmed.to_glib()); }
+    pub fn confirm_set_confirmed(&self, confirmed: bool) {
+        unsafe { ffi::webkit_script_dialog_confirm_set_confirmed(mut_override(self.to_glib_none().0), confirmed.to_glib()); }
     }
 
-    pub fn get_dialog_type(&mut self) -> ScriptDialogType {
-        unsafe { from_glib(ffi::webkit_script_dialog_get_dialog_type(self.to_glib_none_mut().0)) }
+    pub fn get_dialog_type(&self) -> ScriptDialogType {
+        unsafe { from_glib(ffi::webkit_script_dialog_get_dialog_type(mut_override(self.to_glib_none().0))) }
     }
 
-    pub fn get_message(&mut self) -> &str {
-        let c_str = unsafe { ffi::webkit_script_dialog_get_message(self.to_glib_none_mut().0) };
+    pub fn get_message(&self) -> &str {
+        let c_str = unsafe { ffi::webkit_script_dialog_get_message(mut_override(self.to_glib_none().0)) };
         let c_str = unsafe { CStr::from_ptr(c_str) };
         c_str.to_str().unwrap()
     }
 
-    pub fn prompt_get_default_text(&mut self) -> &str {
-        let c_str = unsafe { ffi::webkit_script_dialog_prompt_get_default_text(self.to_glib_none_mut().0) };
+    pub fn prompt_get_default_text(&self) -> &str {
+        let c_str = unsafe { ffi::webkit_script_dialog_prompt_get_default_text(mut_override(self.to_glib_none().0)) };
         let c_str = unsafe { CStr::from_ptr(c_str) };
         c_str.to_str().unwrap()
     }
 
-    pub fn prompt_set_text(&mut self, text: &str) {
+    pub fn prompt_set_text(&self, text: &str) {
         let c_str = CString::new(text).unwrap();
-        unsafe { ffi::webkit_script_dialog_prompt_set_text(self.to_glib_none_mut().0, c_str.as_ptr()) };
+        unsafe { ffi::webkit_script_dialog_prompt_set_text(mut_override(self.to_glib_none().0), c_str.as_ptr()) };
     }
 }
 
