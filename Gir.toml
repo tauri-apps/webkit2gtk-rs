@@ -113,6 +113,8 @@ status = "generate"
     [[object.signal]]
     name = "create"
     version = "2.6"
+        [object.signal.return]
+        nullable = true
 
 [[object]]
 name = "WebKit2.NavigationAction"
