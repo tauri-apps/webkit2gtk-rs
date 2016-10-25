@@ -82,7 +82,7 @@ generate = [
 ]
 
 manual = [
-    #"GLib.Error",
+    "GLib.Error",
     "GLib.Variant",
     "GObject.Object",
     "Gtk.Container",
