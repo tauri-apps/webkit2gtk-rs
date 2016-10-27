@@ -31,6 +31,7 @@ generate = [
     "WebKit2.Error",
     "WebKit2.FaviconDatabase",
     "WebKit2.FaviconDatabaseError",
+    "WebKit2.FileChooserRequest",
     "WebKit2.FindController",
     "WebKit2.FindOptions",
     "WebKit2.FormSubmissionRequest",
