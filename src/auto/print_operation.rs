@@ -2,11 +2,14 @@
 // DO NOT EDIT
 
 use Error;
+use PrintOperationResponse;
 use WebView;
 use ffi;
+use glib::object::IsA;
 use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
+use gtk;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -26,13 +29,17 @@ impl PrintOperation {
         }
     }
 
-    //pub fn get_page_setup(&self) -> /*Ignored*/Option<gtk::PageSetup> {
-    //    unsafe { TODO: call ffi::webkit_print_operation_get_page_setup() }
-    //}
+    pub fn get_page_setup(&self) -> Option<gtk::PageSetup> {
+        unsafe {
+            from_glib_none(ffi::webkit_print_operation_get_page_setup(self.to_glib_none().0))
+        }
+    }
 
-    //pub fn get_print_settings(&self) -> /*Ignored*/Option<gtk::PrintSettings> {
-    //    unsafe { TODO: call ffi::webkit_print_operation_get_print_settings() }
-    //}
+    pub fn get_print_settings(&self) -> Option<gtk::PrintSettings> {
+        unsafe {
+            from_glib_none(ffi::webkit_print_operation_get_print_settings(self.to_glib_none().0))
+        }
+    }
 
     pub fn print(&self) {
         unsafe {
@@ -40,17 +47,23 @@ impl PrintOperation {
         }
     }
 
-    //pub fn run_dialog<T: IsA</*Ignored*/gtk::Window>>(&self, parent: Option<&T>) -> PrintOperationResponse {
-    //    unsafe { TODO: call ffi::webkit_print_operation_run_dialog() }
-    //}
+    pub fn run_dialog<T: IsA<gtk::Window>>(&self, parent: Option<&T>) -> PrintOperationResponse {
+        unsafe {
+            from_glib(ffi::webkit_print_operation_run_dialog(self.to_glib_none().0, parent.to_glib_none().0))
+        }
+    }
 
-    //pub fn set_page_setup(&self, page_setup: /*Ignored*/&gtk::PageSetup) {
-    //    unsafe { TODO: call ffi::webkit_print_operation_set_page_setup() }
-    //}
+    pub fn set_page_setup(&self, page_setup: &gtk::PageSetup) {
+        unsafe {
+            ffi::webkit_print_operation_set_page_setup(self.to_glib_none().0, page_setup.to_glib_none().0);
+        }
+    }
 
-    //pub fn set_print_settings(&self, print_settings: /*Ignored*/&gtk::PrintSettings) {
-    //    unsafe { TODO: call ffi::webkit_print_operation_set_print_settings() }
-    //}
+    pub fn set_print_settings(&self, print_settings: &gtk::PrintSettings) {
+        unsafe {
+            ffi::webkit_print_operation_set_print_settings(self.to_glib_none().0, print_settings.to_glib_none().0);
+        }
+    }
 
     pub fn connect_failed<F: Fn(&PrintOperation, &Error) + 'static>(&self, f: F) -> u64 {
         unsafe {
