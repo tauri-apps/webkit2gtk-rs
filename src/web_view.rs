@@ -29,6 +29,7 @@ use ffi;
 use gio_sys::{self, GCancellable};
 use glib::{IsA, StaticType, error};
 use glib::object::Downcast;
+use glib::signal::connect;
 use glib::translate::{FromGlibPtr, ToGlib, ToGlibPtr, from_glib_full};
 use glib_ffi::{self, GError};
 use gobject_ffi;
@@ -41,9 +42,19 @@ use super::UserContentManager;
 
 type AsyncCallback = Option<unsafe extern "C" fn(*mut gobject_ffi::GObject, *mut gio_sys::GAsyncResult, *mut c_void)>;
 
+fn connect_notify<F: Fn() + 'static, O: IsA<WebView>>(property_name: &str, view: &O, callback: F) {
+    let callback: Box<Box<Fn() + 'static>> = Box::new(Box::new(callback));
+    let this: *mut ffi::WebKitWebView = view.to_glib_none().0;
+    unsafe {
+        connect(this as *mut _, &format!("notify::{}", property_name), transmute(notify_trampoline as usize), Box::into_raw(callback) as *mut _);
+    }
+}
+
 pub trait WebViewExt {
     #[cfg(feature = "v2_6")]
     fn new_with_context_and_user_content_manager(context: &WebContext, user_content_manager: &UserContentManager) -> Self;
+    fn connect_title_changed<F: Fn() + 'static>(&self, callback: F);
+    fn connect_uri_changed<F: Fn() + 'static>(&self, callback: F);
     fn run_javascript(&self, script: &str);
     fn run_javascript_with_callback<F: Fn(Result<JavascriptResult, error::Error>) + 'static>(&self, script: &str, callback: F);
 }
@@ -61,6 +72,14 @@ impl<O> WebViewExt for O
         unsafe {
             gtk::Widget::from_glib_none(gobject_ffi::g_object_new(WebView::static_type().to_glib(), user_content_manager_property.as_ptr(), glib_user_content_manager, web_context_property.as_ptr(), glib_context, null) as *mut _).downcast_unchecked()
         }
+    }
+
+    fn connect_title_changed<F: Fn() + 'static>(&self, callback: F) {
+        connect_notify("title", self, callback);
+    }
+
+    fn connect_uri_changed<F: Fn() + 'static>(&self, callback: F) {
+        connect_notify("uri", self, callback);
     }
 
     fn run_javascript(&self, script: &str) {
@@ -88,4 +107,9 @@ unsafe extern "C" fn async_ready_trampoline(this: *mut gobject_ffi::GObject, res
         };
     let f: &Box_<Fn(Result<JavascriptResult, error::Error>) + 'static> = &*(f as *const _);
     f(value)
+}
+
+unsafe extern "C" fn notify_trampoline(_gobject: *mut ::gobject_ffi::GObject, _pspec: *mut ::gobject_ffi::GParamSpec, user_data: ::glib_ffi::gpointer) {
+    let callback: &Box<Fn() + 'static> = transmute(user_data);
+    callback();
 }
