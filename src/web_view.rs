@@ -30,7 +30,7 @@ use gio_sys::{self, GCancellable};
 use glib::{IsA, StaticType, error};
 use glib::object::Downcast;
 use glib::signal::connect;
-use glib::translate::{FromGlibPtr, ToGlib, ToGlibPtr, from_glib_full};
+use glib::translate::{FromGlibPtrNone, ToGlib, ToGlibPtr, from_glib_full};
 use glib_ffi::{self, GError};
 use gobject_ffi;
 use gtk;
