@@ -20,10 +20,10 @@
  */
 
 extern crate gtk;
-extern crate webkit2;
+extern crate webkit2gtk;
 
 use gtk::{ContainerExt, Inhibit, WidgetExt, Window, WindowType};
-use webkit2::{WebView, WebViewExt};
+use webkit2gtk::{WebView, WebViewExt};
 
 fn main() {
     gtk::init().unwrap();
