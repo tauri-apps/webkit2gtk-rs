@@ -33,7 +33,7 @@ fn main() {
     let window = Window::new(WindowType::Toplevel);
     let context = WebContext::get_default().unwrap();
     context.set_web_extensions_initialization_user_data(&"webkit".to_variant());
-    context.set_web_extensions_directory("../webkit2gtk-webextension/example/target/debug/");
+    context.set_web_extensions_directory("../webkit2gtk-webextension-rs/example/target/debug/");
     let webview = WebView::new_with_context_and_user_content_manager(&context, &UserContentManager::new());
     webview.load_uri("https://crates.io/");
     window.add(&webview);
