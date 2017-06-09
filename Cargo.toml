@@ -20,6 +20,7 @@ version = "0.1.0"
 
 [dependencies.webkit2gtk-sys]
 git = "https://github.com/antoyo/webkit2gtk-sys-rs"
+branch = "crate"
 version = "^0.3"
 
 [features]
