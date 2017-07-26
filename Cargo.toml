@@ -14,19 +14,20 @@ gtk = "^0.1.2"
 gtk-sys = "^0.3.3"
 libc = "^0.2"
 
+# TODO: regenerate the crate (not working with latest gir).
+# TODO: switch to the version published on crates.io.
 [dependencies.javascriptcore]
 git = "https://github.com/antoyo/javascriptcore-rs"
 version = "0.1.0"
 
+# TODO: switch to the version published on crates.io.
 [dependencies.webkit2gtk-sys]
-git = "https://github.com/antoyo/webkit2gtk-sys-rs"
+git = "https://github.com/antoyo/webkit2gtk-rs"
 branch = "crate"
 version = "^0.3"
 
 [features]
 v2_10 = ["v2_8", "webkit2gtk-sys/v2_10"]
 v2_12 = ["v2_10", "webkit2gtk-sys/v2_12"]
-v2_2 = ["webkit2gtk-sys/v2_2"]
-v2_4 = ["v2_2", "webkit2gtk-sys/v2_4"]
-v2_6 = ["v2_4", "webkit2gtk-sys/v2_6"]
+v2_6 = ["webkit2gtk-sys/v2_6"]
 v2_8 = ["v2_6", "webkit2gtk-sys/v2_8"]
