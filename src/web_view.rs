@@ -50,7 +50,7 @@ fn connect_notify<F: Fn() + 'static, O: IsA<WebView>>(property_name: &str, view:
     }
 }
 
-pub trait WebViewExt {
+pub trait WebViewExtManual {
     #[cfg(feature = "v2_6")]
     fn new_with_context_and_user_content_manager(context: &WebContext, user_content_manager: &UserContentManager) -> Self;
     fn connect_title_changed<F: Fn() + 'static>(&self, callback: F);
@@ -59,7 +59,7 @@ pub trait WebViewExt {
     fn run_javascript_with_callback<F: Fn(Result<JavascriptResult, error::Error>) + 'static>(&self, script: &str, callback: F);
 }
 
-impl<O> WebViewExt for O
+impl<O> WebViewExtManual for O
     where O: IsA<gtk::Widget> + IsA<WebView>
 {
     #[cfg(feature = "v2_6")]

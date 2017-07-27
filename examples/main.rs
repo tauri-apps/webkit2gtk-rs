@@ -25,7 +25,7 @@ extern crate webkit2gtk;
 
 use glib::ToVariant;
 use gtk::{ContainerExt, Inhibit, WidgetExt, Window, WindowType};
-use webkit2gtk::{UserContentManager, WebContext, WebView, WebViewExt};
+use webkit2gtk::{SettingsExt, UserContentManager, WebContext, WebContextExt, WebView, WebViewExt, WebViewExtManual};
 
 fn main() {
     gtk::init().unwrap();
@@ -38,7 +38,7 @@ fn main() {
     webview.load_uri("https://crates.io/");
     window.add(&webview);
 
-    let settings = webview.get_settings().unwrap();
+    let settings = WebViewExt::get_settings(&webview).unwrap();
     settings.set_enable_developer_extras(true);
 
     /*let inspector = webview.get_inspector().unwrap();
