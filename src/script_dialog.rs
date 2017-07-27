@@ -20,9 +20,12 @@
  */
 
 use std::ffi::{CStr, CString};
+use std::mem;
+use std::ptr;
 
 use ffi;
-use glib::translate::{ToGlib, ToGlibPtr, from_glib, mut_override};
+use glib::translate::{Stash, ToGlib, ToGlibPtr, from_glib, mut_override};
+use glib_ffi;
 
 use super::ScriptDialogType;
 
