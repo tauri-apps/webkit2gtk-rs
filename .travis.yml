@@ -1,4 +1,3 @@
-os: osx
 language: rust
 rust:
   - nightly
@@ -8,8 +7,8 @@ env:
   - GTK=3.4
   - GTK=3.18
 before_install:
-  - brew update
-  - brew install webkitgtk
+  - sudo apt-get dist-upgrade
+  - sudo apt-get install webkit2gtk-4.0
 script:
   - rustc --version
   - cargo test # --features embed-lgpl-docs
