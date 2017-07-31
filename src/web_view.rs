@@ -64,6 +64,7 @@ impl<O> WebViewExtManual for O
 {
     #[cfg(feature = "v2_6")]
     fn new_with_context_and_user_content_manager(context: &WebContext, user_content_manager: &UserContentManager) -> Self {
+        assert_initialized_main_thread!();
         let user_content_manager_property = CString::new("user-content-manager").unwrap();
         let web_context_property = CString::new("web-context").unwrap();
         let glib_user_content_manager: *mut gobject_ffi::GObject = user_content_manager.to_glib_none().0;
