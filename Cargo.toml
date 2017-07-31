@@ -1,7 +1,30 @@
 [package]
-license = "MIT"
 name = "webkit2gtk"
 version = "0.1.0"
+authors = ["The Gtk-rs Project Developers"]
+
+categories = ["api-bindings", "gui"]
+description = "Rust bindings for webkit-gtk library"
+repository = "https://github.com/gtk-rs/webkit2gtk-rs"
+license = "MIT"
+homepage = "http://gtk-rs.org/"
+documentation = "http://gtk-rs.org/docs/webkit2gtk"
+
+keywords = ["webkit", "gtk-rs", "gnome", "GUI"]
+
+[badges]
+travis-ci = { repository = "gtk-rs/webkit2gtk-rs" }
+
+[lib]
+name = "webkit2gtk"
+
+[features]
+v2_2 = []
+v2_4 = ["v2_2"]
+v2_6 = ["v2_4", "webkit2gtk-sys/v2_6"]
+v2_8 = ["v2_6", "webkit2gtk-sys/v2_8"]
+v2_10 = ["v2_8", "webkit2gtk-sys/v2_10"]
+v2_12 = ["v2_10", "webkit2gtk-sys/v2_12"]
 
 [dependencies]
 bitflags = "^0.9"
@@ -37,17 +60,9 @@ version = "^0.3.4"
 
 # TODO: regenerate the crate (not working with latest gir).
 [dependencies.javascriptcore]
-git = "https://github.com/antoyo/javascriptcore-rs"
+git = "https://github.com/guillaumegomez/javascriptcore-rs"
 version = "0.1.0"
 
 [dependencies.webkit2gtk-sys]
-git = "https://github.com/antoyo/webkit2gtk-rs"
+git = "https://github.com/guillaumegomez/webkit2gtk-rs"
 version = "^0.3"
-
-[features]
-v2_10 = ["v2_8", "webkit2gtk-sys/v2_10"]
-v2_12 = ["v2_10", "webkit2gtk-sys/v2_12"]
-v2_2 = []
-v2_4 = ["v2_2"]
-v2_6 = ["v2_4", "webkit2gtk-sys/v2_6"]
-v2_8 = ["v2_6", "webkit2gtk-sys/v2_8"]

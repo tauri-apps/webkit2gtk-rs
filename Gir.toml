@@ -1,8 +1,9 @@
 [options]
-gir_dir = "input"
+girs_dir = "gir-files"
 library = "WebKit2"
 version = "4.0"
 work_mode = "normal"
+target_path = "."
 generate_safety_asserts = true
 external_libraries = [
     "Gio",
