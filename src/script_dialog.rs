@@ -66,8 +66,10 @@ impl ScriptDialog {
 }
 
 fn webkit_script_dialog_copy(dialog: *const ffi::WebKitScriptDialog) -> *mut ffi::WebKitScriptDialog {
+    skip_assert_initialized!();
     dialog as *mut _
 }
 
 fn webkit_script_dialog_free(_dialog: *const ffi::WebKitScriptDialog) {
+    skip_assert_initialized!();
 }
