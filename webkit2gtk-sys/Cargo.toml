@@ -56,7 +56,7 @@ git = "https://github.com/gtk-rs/sys"
 version = "^0.3.4"
 
 [dependencies.javascriptcore-sys]
-git = "https://github.com/gtk-rs/javascriptcore-sys-rs"
+git = "https://github.com/gtk-rs/javascriptcore-rs"
 version = "0.1.0"
 
 [dependencies.pango-sys]
