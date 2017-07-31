@@ -1,12 +1,12 @@
-# gtk [![Build Status](https://travis-ci.org/gtk-rs/webkit2gtk-rs.png?branch=master)](https://travis-ci.org/gtk-rs/gtk) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/gtk-rs/webkit2gtk-rs)
+# webkit2gtk [![Build Status](https://travis-ci.org/gtk-rs/webkit2gtk-rs.png?branch=master)](https://travis-ci.org/gtk-rs/gtk) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/gtk-rs/gtk)
 
 [Project site](http://gtk-rs.org/) | [Online documentation](http://gtk-rs.org/docs/)
 
-__Rust__ bindings and wrappers for __webkit__.
+__Rust__ bindings and wrappers for __webkit2gtk__.
 
 ## Building
 
-__webkit2gtk-rs__ expects __GTK+__, __GLib__ and __webkit__ development files to be installed on your system.
+__webkit2gtk-rs__ expects __GTK+__, __GLib__ and __webkit2gtk__ development files to be installed on your system.
 See the [requirements page](http://gtk-rs.org/docs/requirements.html).
 
 ## Using
