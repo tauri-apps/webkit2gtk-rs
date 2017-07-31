@@ -60,7 +60,7 @@ version = "^0.3.4"
 
 # TODO: regenerate the crate (not working with latest gir).
 [dependencies.javascriptcore]
-git = "https://github.com/guillaumegomez/javascriptcore-rs"
+git = "https://github.com/gtk-rs/javascriptcore-rs"
 version = "0.1.0"
 
 [dependencies.webkit2gtk-sys]

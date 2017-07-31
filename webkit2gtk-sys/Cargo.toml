@@ -1,3 +1,21 @@
+[package]
+build = "build.rs"
+license = "MIT"
+links = "web_kit2"
+name = "webkit2gtk-sys"
+version = "0.3.1"
+
+[lib]
+name = "webkit2gtk_sys"
+
+[features]
+v2_6 = []
+v2_8 = ["v2_6"]
+v2_10 = ["v2_8"]
+v2_12 = ["v2_10"]
+v2_14 = ["v2_12"]
+v2_16 = ["v2_14"]
+
 [build-dependencies]
 pkg-config = "0.3.7"
 
@@ -38,7 +56,7 @@ git = "https://github.com/gtk-rs/sys"
 version = "^0.3.4"
 
 [dependencies.javascriptcore-sys]
-git = "https://github.com/antoyo/javascriptcore-sys-rs"
+git = "https://github.com/gtk-rs/javascriptcore-sys-rs"
 version = "0.1.0"
 
 [dependencies.pango-sys]
@@ -46,23 +64,5 @@ git = "https://github.com/gtk-rs/sys"
 version = "^0.3.4"
 
 [dependencies.soup-sys]
-git = "https://github.com/antoyo/soup-sys-rs"
+git = "https://github.com/gtk-rs/soup-sys-rs"
 version = "^0.3"
-
-[features]
-v2_10 = ["v2_8"]
-v2_12 = ["v2_10"]
-v2_14 = ["v2_12"]
-v2_16 = ["v2_14"]
-v2_6 = []
-v2_8 = ["v2_6"]
-
-[lib]
-name = "webkit2gtk_sys"
-
-[package]
-build = "build.rs"
-license = "MIT"
-links = "web_kit2"
-name = "webkit2gtk-sys"
-version = "0.3.1"
