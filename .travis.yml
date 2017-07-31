@@ -7,7 +7,7 @@ env:
   - GTK=3.4
   - GTK=3.18
 before_install:
-  - sudo apt-get dist-upgrade
+  - sudo do-release-upgrade
   - sudo apt-get install webkit2gtk-4.0
 script:
   - rustc --version
