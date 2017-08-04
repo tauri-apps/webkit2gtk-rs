@@ -27,7 +27,7 @@ v2_10 = ["v2_8", "webkit2gtk-sys/v2_10"]
 v2_12 = ["v2_10", "webkit2gtk-sys/v2_12"]
 
 [dependencies]
-bitflags = "^0.9"
+bitflags = "^0.7"
 libc = "^0.2"
 gio = "^0.1.2"
 gio-sys = "^0.3.3"
