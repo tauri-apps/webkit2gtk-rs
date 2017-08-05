@@ -59,7 +59,7 @@ git = "https://github.com/gtk-rs/sys"
 version = "^0.3.4"
 
 # TODO: regenerate the crate (not working with latest gir).
-[dependencies.javascriptcore]
+[dependencies.javascriptcore-rs]
 git = "https://github.com/gtk-rs/javascriptcore-rs"
 version = "0.1.0"
 
