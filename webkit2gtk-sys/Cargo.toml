@@ -55,7 +55,7 @@ version = "^0.3.4"
 git = "https://github.com/gtk-rs/sys"
 version = "^0.3.4"
 
-[dependencies.javascriptcore-sys]
+[dependencies.javascriptcore-rs-sys]
 git = "https://github.com/gtk-rs/javascriptcore-rs"
 version = "0.1.0"
 

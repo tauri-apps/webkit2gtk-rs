@@ -23,18 +23,25 @@ extern crate glib;
 extern crate gtk;
 extern crate webkit2gtk;
 
+#[cfg(feature = "v2_4")]
 use glib::ToVariant;
 use gtk::{ContainerExt, Inhibit, WidgetExt, Window, WindowType};
-use webkit2gtk::{SettingsExt, UserContentManager, WebContext, WebContextExt, WebView, WebViewExt, WebViewExtManual};
+use webkit2gtk::{SettingsExt, WebContext, WebContextExt, WebView, WebViewExt, WebViewExtManual};
+#[cfg(feature = "v2_6")]
+use webkit2gtk::UserContentManager;
 
 fn main() {
     gtk::init().unwrap();
 
     let window = Window::new(WindowType::Toplevel);
     let context = WebContext::get_default().unwrap();
+    #[cfg(feature = "v2_4")]
     context.set_web_extensions_initialization_user_data(&"webkit".to_variant());
     context.set_web_extensions_directory("../webkit2gtk-webextension-rs/example/target/debug/");
+    #[cfg(feature = "v2_6")]
     let webview = WebView::new_with_context_and_user_content_manager(&context, &UserContentManager::new());
+    #[cfg(not(feature = "v2_6"))]
+    let webview = WebView::new_with_context(&context);
     webview.load_uri("https://crates.io/");
     window.add(&webview);
 
