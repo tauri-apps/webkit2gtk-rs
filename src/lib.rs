@@ -7,7 +7,6 @@
 
 #[macro_use]
 extern crate bitflags;
-extern crate gio;
 extern crate gio_sys;
 #[macro_use]
 extern crate glib;
