@@ -26,7 +26,7 @@ use std::mem::transmute;
 use std::ptr;
 
 use ffi;
-use gio_sys::{self, GCancellable};
+use gio_ffi::{self, GCancellable};
 use glib::{IsA, StaticType, error};
 use glib::object::Downcast;
 use glib::signal::connect;
@@ -40,7 +40,7 @@ use super::{JavascriptResult, WebContext, WebView};
 #[cfg(feature = "v2_6")]
 use super::UserContentManager;
 
-type AsyncCallback = Option<unsafe extern "C" fn(*mut gobject_ffi::GObject, *mut gio_sys::GAsyncResult, *mut c_void)>;
+type AsyncCallback = Option<unsafe extern "C" fn(*mut gobject_ffi::GObject, *mut gio_ffi::GAsyncResult, *mut c_void)>;
 
 fn connect_notify<F: Fn() + 'static, O: IsA<WebView>>(property_name: &str, view: &O, callback: F) {
     let callback: Box<Box<Fn() + 'static>> = Box::new(Box::new(callback));
@@ -75,10 +75,12 @@ impl<O> WebViewExtManual for O
         }
     }
 
+    // TODO: remove in favor of connect_property_title_notify().
     fn connect_title_changed<F: Fn() + 'static>(&self, callback: F) {
         connect_notify("title", self, callback);
     }
 
+    // TODO: remove in favor of connect_property_uri_notify().
     fn connect_uri_changed<F: Fn() + 'static>(&self, callback: F) {
         connect_notify("uri", self, callback);
     }
@@ -95,7 +97,7 @@ impl<O> WebViewExtManual for O
     }
 }
 
-unsafe extern "C" fn async_ready_trampoline(this: *mut gobject_ffi::GObject, result: *mut gio_sys::GAsyncResult, f: glib_ffi::gpointer) {
+unsafe extern "C" fn async_ready_trampoline(this: *mut gobject_ffi::GObject, result: *mut gio_ffi::GAsyncResult, f: glib_ffi::gpointer) {
     callback_guard!();
     let mut error = ptr::null_mut();
     let javascript_result = ffi::webkit_web_view_run_javascript_finish(this as *mut _, result, &mut error);
