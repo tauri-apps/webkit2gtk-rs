@@ -7,7 +7,11 @@
 
 #[macro_use]
 extern crate bitflags;
-extern crate gio_sys;
+extern crate cairo;
+extern crate gdk;
+extern crate gdk_sys as gdk_ffi;
+extern crate gio;
+extern crate gio_sys as gio_ffi;
 #[macro_use]
 extern crate glib;
 extern crate glib_sys as glib_ffi;
