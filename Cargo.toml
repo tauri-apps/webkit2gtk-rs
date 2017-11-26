@@ -29,7 +29,7 @@ v2_14 = ["v2_12", "webkit2gtk-sys/v2_14"]
 v2_16 = ["v2_14", "webkit2gtk-sys/v2_16"]
 
 [dependencies]
-bitflags = "^0.9"
+bitflags = "^1.0"
 libc = "^0.2"
 
 [dependencies.cairo-rs]
@@ -78,5 +78,6 @@ git = "https://github.com/gtk-rs/javascriptcore-rs"
 version = "0.2.0"
 
 [dependencies.webkit2gtk-sys]
-git = "https://github.com/guillaumegomez/webkit2gtk-rs"
+#git = "https://github.com/guillaumegomez/webkit2gtk-rs"
+path = "./webkit2gtk-sys"
 version = "^0.4.0"
