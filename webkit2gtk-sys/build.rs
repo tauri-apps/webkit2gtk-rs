@@ -16,7 +16,9 @@ fn main() {
 fn find() -> Result<(), Error> {
     let package_name = "webkit2gtk-4.0";
     let shared_libs = ["webkit2gtk-4.0", "javascriptcoregtk-4.0"];
-    let version = if cfg!(feature = "v2_16") {
+    let version = if cfg!(feature = "v2_18") {
+        "2.18"
+    } else if cfg!(feature = "v2_16") {
         "2.16"
     } else if cfg!(feature = "v2_14") {
         "2.14"
