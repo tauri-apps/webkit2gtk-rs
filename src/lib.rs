@@ -40,6 +40,12 @@ macro_rules! skip_assert_initialized {
     () => ()
 }
 
+macro_rules! callback_guard {
+    () => (
+        let _guard = ::glib::CallbackGuard::new();
+    )
+}
+
 mod auto;
 mod script_dialog;
 mod web_view;
