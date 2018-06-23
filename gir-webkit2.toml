@@ -3,6 +3,8 @@ work_mode = "sys"
 min_cfg_version="2.4"
 library = "WebKit2"
 version = "4.0"
+single_version_file = "."
+
 external_libraries = [
    "Gtk",
    "GLib",
