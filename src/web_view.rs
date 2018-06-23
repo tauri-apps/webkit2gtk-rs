@@ -98,7 +98,6 @@ impl<O> WebViewExtManual for O
 }
 
 unsafe extern "C" fn async_ready_trampoline(this: *mut gobject_ffi::GObject, result: *mut gio_ffi::GAsyncResult, f: glib_ffi::gpointer) {
-    callback_guard!();
     let mut error = ptr::null_mut();
     let javascript_result = ffi::webkit_web_view_run_javascript_finish(this as *mut _, result, &mut error);
     let value =
