@@ -3,8 +3,6 @@
  * TODO: add all unstable methods.
  */
 
-#![allow(unused_imports)]
-
 #[macro_use]
 extern crate bitflags;
 extern crate cairo;

@@ -19,24 +19,10 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-use std::boxed::Box as Box_;
-use std::error::Error;
-use std::ffi::CString;
-use std::mem::transmute;
-use std::ptr;
-
-use ffi;
-use gio_ffi::{self, GCancellable};
-use glib::{IsA, StaticType, error};
-use glib::object::Downcast;
-use glib::signal::connect;
-use glib::translate::{FromGlibPtrNone, ToGlib, ToGlibPtr, from_glib_full};
-use glib_ffi::{self, GError};
-use gobject_ffi;
+use glib::IsA;
 use gtk;
-use libc::c_void;
 
-use super::{JavascriptResult, WebContext, WebView};
+use super::WebView;
 #[cfg(feature = "v2_6")]
 use super::UserContentManager;
 
