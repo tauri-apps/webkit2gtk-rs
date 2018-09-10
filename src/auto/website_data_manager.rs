@@ -137,12 +137,12 @@ impl<O: IsA<WebsiteDataManager> + IsA<glib::object::Object>> WebsiteDataManagerE
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
     //fn clear_future(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> {
         //use gio::GioFuture;
-        //use send_cell::SendCell;
+        //use fragile::Fragile;
 
         //GioFuture::new(self, move |obj, send| {
         //    let cancellable = gio::Cancellable::new();
-        //    let send = SendCell::new(send);
-        //    let obj_clone = SendCell::new(obj.clone());
+        //    let send = Fragile::new(send);
+        //    let obj_clone = Fragile::new(obj.clone());
         //    obj.clear(
         //         types,
         //         timespan,
@@ -167,12 +167,12 @@ impl<O: IsA<WebsiteDataManager> + IsA<glib::object::Object>> WebsiteDataManagerE
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
     //fn fetch_future(&self, types: WebsiteDataTypes) -> Box_<futures_core::Future<Item = (Self, /*Ignored*/Vec<WebsiteData>), Error = (Self, Error)>> {
         //use gio::GioFuture;
-        //use send_cell::SendCell;
+        //use fragile::Fragile;
 
         //GioFuture::new(self, move |obj, send| {
         //    let cancellable = gio::Cancellable::new();
-        //    let send = SendCell::new(send);
-        //    let obj_clone = SendCell::new(obj.clone());
+        //    let send = Fragile::new(send);
+        //    let obj_clone = Fragile::new(obj.clone());
         //    obj.fetch(
         //         types,
         //         Some(&cancellable),
@@ -259,13 +259,13 @@ impl<O: IsA<WebsiteDataManager> + IsA<glib::object::Object>> WebsiteDataManagerE
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
     //fn remove_future(&self, types: WebsiteDataTypes, website_data: /*Ignored*/&[&WebsiteData]) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> {
         //use gio::GioFuture;
-        //use send_cell::SendCell;
+        //use fragile::Fragile;
 
         //let website_data = website_data.clone();
         //GioFuture::new(self, move |obj, send| {
         //    let cancellable = gio::Cancellable::new();
-        //    let send = SendCell::new(send);
-        //    let obj_clone = SendCell::new(obj.clone());
+        //    let send = Fragile::new(send);
+        //    let obj_clone = Fragile::new(obj.clone());
         //    obj.remove(
         //         types,
         //         &website_data,

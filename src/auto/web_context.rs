@@ -256,12 +256,12 @@ impl<O: IsA<WebContext> + IsA<glib::object::Object> + Clone + 'static> WebContex
     #[cfg(feature = "futures")]
     fn get_plugins_future(&self) -> Box_<futures_core::Future<Item = (Self, Vec<Plugin>), Error = (Self, Error)>> {
         use gio::GioFuture;
-        use send_cell::SendCell;
+        use fragile::Fragile;
 
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = SendCell::new(send);
-            let obj_clone = SendCell::new(obj.clone());
+            let send = Fragile::new(send);
+            let obj_clone = Fragile::new(obj.clone());
             obj.get_plugins(
                  Some(&cancellable),
                  move |res| {

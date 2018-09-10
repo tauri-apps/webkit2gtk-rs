@@ -80,12 +80,12 @@ impl<O: IsA<WebResource> + IsA<glib::object::Object> + Clone + 'static> WebResou
     #[cfg(feature = "futures")]
     fn get_data_future(&self) -> Box_<futures_core::Future<Item = (Self, (Vec<u8>, usize)), Error = (Self, Error)>> {
         use gio::GioFuture;
-        use send_cell::SendCell;
+        use fragile::Fragile;
 
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = SendCell::new(send);
-            let obj_clone = SendCell::new(obj.clone());
+            let send = Fragile::new(send);
+            let obj_clone = Fragile::new(obj.clone());
             obj.get_data(
                  Some(&cancellable),
                  move |res| {
