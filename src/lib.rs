@@ -3,8 +3,6 @@
  * TODO: add all unstable methods.
  */
 
-#![allow(unused_imports)]
-
 #[macro_use]
 extern crate bitflags;
 extern crate cairo;
@@ -38,12 +36,6 @@ macro_rules! assert_initialized_main_thread {
 
 macro_rules! skip_assert_initialized {
     () => ()
-}
-
-macro_rules! callback_guard {
-    () => (
-        let _guard = ::glib::CallbackGuard::new();
-    )
 }
 
 mod auto;
