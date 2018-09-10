@@ -410,13 +410,13 @@ impl<O: IsA<WebView> + IsA<glib::object::Object> + Clone + 'static> WebViewExt f
     #[cfg(feature = "futures")]
     fn can_execute_editing_command_future(&self, command: &str) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> {
         use gio::GioFuture;
-        use send_cell::SendCell;
+        use fragile::Fragile;
 
         let command = String::from(command);
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = SendCell::new(send);
-            let obj_clone = SendCell::new(obj.clone());
+            let send = Fragile::new(send);
+            let obj_clone = Fragile::new(obj.clone());
             obj.can_execute_editing_command(
                  &command,
                  Some(&cancellable),
@@ -578,12 +578,12 @@ impl<O: IsA<WebView> + IsA<glib::object::Object> + Clone + 'static> WebViewExt f
     #[cfg(feature = "futures")]
     fn get_snapshot_future(&self, region: SnapshotRegion, options: SnapshotOptions) -> Box_<futures_core::Future<Item = (Self, cairo::Surface), Error = (Self, Error)>> {
         use gio::GioFuture;
-        use send_cell::SendCell;
+        use fragile::Fragile;
 
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = SendCell::new(send);
-            let obj_clone = SendCell::new(obj.clone());
+            let send = Fragile::new(send);
+            let obj_clone = Fragile::new(obj.clone());
             obj.get_snapshot(
                  region,
                  options,
@@ -784,13 +784,13 @@ impl<O: IsA<WebView> + IsA<glib::object::Object> + Clone + 'static> WebViewExt f
     #[cfg(feature = "futures")]
     fn run_javascript_future(&self, script: &str) -> Box_<futures_core::Future<Item = (Self, JavascriptResult), Error = (Self, Error)>> {
         use gio::GioFuture;
-        use send_cell::SendCell;
+        use fragile::Fragile;
 
         let script = String::from(script);
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = SendCell::new(send);
-            let obj_clone = SendCell::new(obj.clone());
+            let send = Fragile::new(send);
+            let obj_clone = Fragile::new(obj.clone());
             obj.run_javascript(
                  &script,
                  Some(&cancellable),
@@ -826,13 +826,13 @@ impl<O: IsA<WebView> + IsA<glib::object::Object> + Clone + 'static> WebViewExt f
     #[cfg(feature = "futures")]
     fn run_javascript_from_gresource_future(&self, resource: &str) -> Box_<futures_core::Future<Item = (Self, JavascriptResult), Error = (Self, Error)>> {
         use gio::GioFuture;
-        use send_cell::SendCell;
+        use fragile::Fragile;
 
         let resource = String::from(resource);
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = SendCell::new(send);
-            let obj_clone = SendCell::new(obj.clone());
+            let send = Fragile::new(send);
+            let obj_clone = Fragile::new(obj.clone());
             obj.run_javascript_from_gresource(
                  &resource,
                  Some(&cancellable),
@@ -854,12 +854,12 @@ impl<O: IsA<WebView> + IsA<glib::object::Object> + Clone + 'static> WebViewExt f
     //#[cfg(feature = "futures")]
     //fn save_future(&self, save_mode: SaveMode) -> Box_<futures_core::Future<Item = (Self, /*Ignored*/gio::InputStream), Error = (Self, Error)>> {
         //use gio::GioFuture;
-        //use send_cell::SendCell;
+        //use fragile::Fragile;
 
         //GioFuture::new(self, move |obj, send| {
         //    let cancellable = gio::Cancellable::new();
-        //    let send = SendCell::new(send);
-        //    let obj_clone = SendCell::new(obj.clone());
+        //    let send = Fragile::new(send);
+        //    let obj_clone = Fragile::new(obj.clone());
         //    obj.save(
         //         save_mode,
         //         Some(&cancellable),
@@ -881,13 +881,13 @@ impl<O: IsA<WebView> + IsA<glib::object::Object> + Clone + 'static> WebViewExt f
     //#[cfg(feature = "futures")]
     //fn save_to_file_future<P: IsA</*Ignored*/gio::File> + Clone + 'static>(&self, file: &P, save_mode: SaveMode) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> {
         //use gio::GioFuture;
-        //use send_cell::SendCell;
+        //use fragile::Fragile;
 
         //let file = file.clone();
         //GioFuture::new(self, move |obj, send| {
         //    let cancellable = gio::Cancellable::new();
-        //    let send = SendCell::new(send);
-        //    let obj_clone = SendCell::new(obj.clone());
+        //    let send = Fragile::new(send);
+        //    let obj_clone = Fragile::new(obj.clone());
         //    obj.save_to_file(
         //         &file,
         //         save_mode,

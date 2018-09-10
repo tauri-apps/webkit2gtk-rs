@@ -6,35 +6,35 @@ libc = "0.2"
 
 [dependencies.atk-sys]
 git = "https://github.com/gtk-rs/sys"
-version = "^0.6.0"
+version = "^0.7.0"
 
 [dependencies.cairo-sys-rs]
 git = "https://github.com/gtk-rs/cairo"
-version = "^0.6.0"
+version = "^0.7.0"
 
 [dependencies.gdk-pixbuf-sys]
 git = "https://github.com/gtk-rs/sys"
-version = "^0.6.0"
+version = "^0.7.0"
 
 [dependencies.gdk-sys]
 git = "https://github.com/gtk-rs/sys"
-version = "^0.6.0"
+version = "^0.7.0"
 
 [dependencies.gio-sys]
 git = "https://github.com/gtk-rs/sys"
-version = "^0.6.0"
+version = "^0.7.0"
 
 [dependencies.glib-sys]
 git = "https://github.com/gtk-rs/sys"
-version = "^0.6.0"
+version = "^0.7.0"
 
 [dependencies.gobject-sys]
 git = "https://github.com/gtk-rs/sys"
-version = "^0.6.0"
+version = "^0.7.0"
 
 [dependencies.gtk-sys]
 git = "https://github.com/gtk-rs/sys"
-version = "^0.6.0"
+version = "^0.7.0"
 
 [dependencies.javascriptcore-rs-sys]
 git = "https://github.com/gtk-rs/javascriptcore-rs"
@@ -42,7 +42,7 @@ version = "0.1.1"
 
 [dependencies.pango-sys]
 git = "https://github.com/gtk-rs/sys"
-version = "^0.6.0"
+version = "^0.7.0"
 
 [dependencies.soup-sys]
 git = "https://github.com/gtk-rs/soup-sys-rs"
@@ -71,4 +71,4 @@ build = "build.rs"
 license = "MIT"
 links = "web_kit2"
 name = "webkit2gtk-sys"
-version = "0.6.0"
+version = "0.7.0"

@@ -72,13 +72,13 @@ impl<O: IsA<FaviconDatabase> + IsA<glib::object::Object> + Clone + 'static> Favi
     #[cfg(feature = "futures")]
     fn get_favicon_future(&self, page_uri: &str) -> Box_<futures_core::Future<Item = (Self, cairo::Surface), Error = (Self, Error)>> {
         use gio::GioFuture;
-        use send_cell::SendCell;
+        use fragile::Fragile;
 
         let page_uri = String::from(page_uri);
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = SendCell::new(send);
-            let obj_clone = SendCell::new(obj.clone());
+            let send = Fragile::new(send);
+            let obj_clone = Fragile::new(obj.clone());
             obj.get_favicon(
                  &page_uri,
                  Some(&cancellable),

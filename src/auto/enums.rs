@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use ffi;
+use glib::Quark;
 use glib::StaticType;
 use glib::Type;
 use glib::error::ErrorDomain;
@@ -11,11 +12,11 @@ use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
-use glib_ffi;
 use gobject_ffi;
 
 #[cfg(any(feature = "v2_2", feature = "dox"))]
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum AuthenticationScheme {
     Default,
     HttpBasic,
@@ -99,7 +100,8 @@ impl SetValue for AuthenticationScheme {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum CacheModel {
     DocumentViewer,
     WebBrowser,
@@ -159,7 +161,8 @@ impl SetValue for CacheModel {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum ContextMenuAction {
     NoAction,
     OpenLink,
@@ -345,7 +348,8 @@ impl SetValue for ContextMenuAction {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum CookieAcceptPolicy {
     Always,
     Never,
@@ -405,7 +409,8 @@ impl SetValue for CookieAcceptPolicy {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum CookiePersistentStorage {
     Text,
     Sqlite,
@@ -463,7 +468,8 @@ impl SetValue for CookiePersistentStorage {
 }
 
 #[cfg(any(feature = "v2_2", feature = "dox"))]
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum CredentialPersistence {
     None,
     ForSession,
@@ -529,7 +535,8 @@ impl SetValue for CredentialPersistence {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum DownloadError {
     Network,
     CancelledByUser,
@@ -566,9 +573,9 @@ impl FromGlib<ffi::WebKitDownloadError> for DownloadError {
 }
 
 impl ErrorDomain for DownloadError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::webkit_download_error_quark() }
+        unsafe { from_glib(ffi::webkit_download_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -610,7 +617,8 @@ impl SetValue for DownloadError {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum FaviconDatabaseError {
     NotInitialized,
     FaviconNotFound,
@@ -647,9 +655,9 @@ impl FromGlib<ffi::WebKitFaviconDatabaseError> for FaviconDatabaseError {
 }
 
 impl ErrorDomain for FaviconDatabaseError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::webkit_favicon_database_error_quark() }
+        unsafe { from_glib(ffi::webkit_favicon_database_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -692,7 +700,8 @@ impl SetValue for FaviconDatabaseError {
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum HardwareAccelerationPolicy {
     OnDemand,
     Always,
@@ -758,7 +767,8 @@ impl SetValue for HardwareAccelerationPolicy {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum InsecureContentEvent {
     Run,
     Displayed,
@@ -815,7 +825,8 @@ impl SetValue for InsecureContentEvent {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum JavascriptError {
     Failed,
     #[doc(hidden)]
@@ -846,9 +857,9 @@ impl FromGlib<ffi::WebKitJavascriptError> for JavascriptError {
 }
 
 impl ErrorDomain for JavascriptError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::webkit_javascript_error_quark() }
+        unsafe { from_glib(ffi::webkit_javascript_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -888,7 +899,8 @@ impl SetValue for JavascriptError {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum LoadEvent {
     Started,
     Redirected,
@@ -951,7 +963,8 @@ impl SetValue for LoadEvent {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum NavigationType {
     LinkClicked,
     FormSubmitted,
@@ -1020,7 +1033,8 @@ impl SetValue for NavigationType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum NetworkError {
     Failed,
     Transport,
@@ -1063,9 +1077,9 @@ impl FromGlib<ffi::WebKitNetworkError> for NetworkError {
 }
 
 impl ErrorDomain for NetworkError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::webkit_network_error_quark() }
+        unsafe { from_glib(ffi::webkit_network_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -1110,7 +1124,8 @@ impl SetValue for NetworkError {
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum NetworkProxyMode {
     Default,
     NoProxy,
@@ -1176,7 +1191,8 @@ impl SetValue for NetworkProxyMode {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PluginError {
     Failed,
     CannotFindPlugin,
@@ -1222,9 +1238,9 @@ impl FromGlib<ffi::WebKitPluginError> for PluginError {
 }
 
 impl ErrorDomain for PluginError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::webkit_plugin_error_quark() }
+        unsafe { from_glib(ffi::webkit_plugin_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -1269,7 +1285,8 @@ impl SetValue for PluginError {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PolicyDecisionType {
     NavigationAction,
     NewWindowAction,
@@ -1329,7 +1346,8 @@ impl SetValue for PolicyDecisionType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PolicyError {
     Failed,
     CannotShowMimeType,
@@ -1372,9 +1390,9 @@ impl FromGlib<ffi::WebKitPolicyError> for PolicyError {
 }
 
 impl ErrorDomain for PolicyError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::webkit_policy_error_quark() }
+        unsafe { from_glib(ffi::webkit_policy_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -1418,7 +1436,8 @@ impl SetValue for PolicyError {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PrintError {
     General,
     PrinterNotFound,
@@ -1455,9 +1474,9 @@ impl FromGlib<ffi::WebKitPrintError> for PrintError {
 }
 
 impl ErrorDomain for PrintError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::webkit_print_error_quark() }
+        unsafe { from_glib(ffi::webkit_print_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -1499,7 +1518,8 @@ impl SetValue for PrintError {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PrintOperationResponse {
     Print,
     Cancel,
@@ -1557,7 +1577,8 @@ impl SetValue for PrintOperationResponse {
 }
 
 #[cfg(any(feature = "v2_4", feature = "dox"))]
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum ProcessModel {
     SharedSecondaryProcess,
     MultipleSecondaryProcesses,
@@ -1620,7 +1641,8 @@ impl SetValue for ProcessModel {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum SaveMode {
     Mhtml,
     #[doc(hidden)]
@@ -1674,7 +1696,8 @@ impl SetValue for SaveMode {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum ScriptDialogType {
     Alert,
     Confirm,
@@ -1737,7 +1760,8 @@ impl SetValue for ScriptDialogType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum SnapshotError {
     Create,
     #[doc(hidden)]
@@ -1768,9 +1792,9 @@ impl FromGlib<ffi::WebKitSnapshotError> for SnapshotError {
 }
 
 impl ErrorDomain for SnapshotError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::webkit_snapshot_error_quark() }
+        unsafe { from_glib(ffi::webkit_snapshot_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -1810,7 +1834,8 @@ impl SetValue for SnapshotError {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum SnapshotRegion {
     Visible,
     FullDocument,
@@ -1867,7 +1892,8 @@ impl SetValue for SnapshotRegion {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum TLSErrorsPolicy {
     Ignore,
     Fail,
@@ -1925,7 +1951,8 @@ impl SetValue for TLSErrorsPolicy {
 }
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum UserContentInjectedFrames {
     AllFrames,
     TopFrame,
@@ -1989,7 +2016,8 @@ impl SetValue for UserContentInjectedFrames {
 }
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum UserScriptInjectionTime {
     Start,
     End,
@@ -2053,7 +2081,8 @@ impl SetValue for UserScriptInjectionTime {
 }
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum UserStyleLevel {
     User,
     Author,

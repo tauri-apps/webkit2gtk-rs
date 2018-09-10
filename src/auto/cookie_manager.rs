@@ -88,13 +88,13 @@ impl<O: IsA<CookieManager> + IsA<glib::object::Object> + Clone + 'static> Cookie
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
     //fn add_cookie_future(&self, cookie: /*Ignored*/&mut soup::Cookie) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> {
         //use gio::GioFuture;
-        //use send_cell::SendCell;
+        //use fragile::Fragile;
 
         //let cookie = cookie.clone();
         //GioFuture::new(self, move |obj, send| {
         //    let cancellable = gio::Cancellable::new();
-        //    let send = SendCell::new(send);
-        //    let obj_clone = SendCell::new(obj.clone());
+        //    let send = Fragile::new(send);
+        //    let obj_clone = Fragile::new(obj.clone());
         //    obj.add_cookie(
         //         &cookie,
         //         Some(&cancellable),
@@ -124,13 +124,13 @@ impl<O: IsA<CookieManager> + IsA<glib::object::Object> + Clone + 'static> Cookie
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
     //fn delete_cookie_future(&self, cookie: /*Ignored*/&mut soup::Cookie) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> {
         //use gio::GioFuture;
-        //use send_cell::SendCell;
+        //use fragile::Fragile;
 
         //let cookie = cookie.clone();
         //GioFuture::new(self, move |obj, send| {
         //    let cancellable = gio::Cancellable::new();
-        //    let send = SendCell::new(send);
-        //    let obj_clone = SendCell::new(obj.clone());
+        //    let send = Fragile::new(send);
+        //    let obj_clone = Fragile::new(obj.clone());
         //    obj.delete_cookie(
         //         &cookie,
         //         Some(&cancellable),
@@ -172,12 +172,12 @@ impl<O: IsA<CookieManager> + IsA<glib::object::Object> + Clone + 'static> Cookie
     #[cfg(feature = "futures")]
     fn get_accept_policy_future(&self) -> Box_<futures_core::Future<Item = (Self, CookieAcceptPolicy), Error = (Self, Error)>> {
         use gio::GioFuture;
-        use send_cell::SendCell;
+        use fragile::Fragile;
 
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = SendCell::new(send);
-            let obj_clone = SendCell::new(obj.clone());
+            let send = Fragile::new(send);
+            let obj_clone = Fragile::new(obj.clone());
             obj.get_accept_policy(
                  Some(&cancellable),
                  move |res| {
@@ -200,13 +200,13 @@ impl<O: IsA<CookieManager> + IsA<glib::object::Object> + Clone + 'static> Cookie
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
     //fn get_cookies_future(&self, uri: &str) -> Box_<futures_core::Future<Item = (Self, /*Ignored*/Vec<soup::Cookie>), Error = (Self, Error)>> {
         //use gio::GioFuture;
-        //use send_cell::SendCell;
+        //use fragile::Fragile;
 
         //let uri = String::from(uri);
         //GioFuture::new(self, move |obj, send| {
         //    let cancellable = gio::Cancellable::new();
-        //    let send = SendCell::new(send);
-        //    let obj_clone = SendCell::new(obj.clone());
+        //    let send = Fragile::new(send);
+        //    let obj_clone = Fragile::new(obj.clone());
         //    obj.get_cookies(
         //         &uri,
         //         Some(&cancellable),
@@ -242,12 +242,12 @@ impl<O: IsA<CookieManager> + IsA<glib::object::Object> + Clone + 'static> Cookie
     #[cfg(feature = "futures")]
     fn get_domains_with_cookies_future(&self) -> Box_<futures_core::Future<Item = (Self, Vec<String>), Error = (Self, Error)>> {
         use gio::GioFuture;
-        use send_cell::SendCell;
+        use fragile::Fragile;
 
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = SendCell::new(send);
-            let obj_clone = SendCell::new(obj.clone());
+            let send = Fragile::new(send);
+            let obj_clone = Fragile::new(obj.clone());
             obj.get_domains_with_cookies(
                  Some(&cancellable),
                  move |res| {
