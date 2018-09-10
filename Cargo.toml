@@ -1,6 +1,6 @@
 [package]
 name = "webkit2gtk"
-version = "0.4.0"
+version = "0.5.0"
 authors = ["The Gtk-rs Project Developers"]
 
 categories = ["api-bindings", "gui"]
@@ -31,18 +31,18 @@ v2_16 = ["v2_14", "webkit2gtk-sys/v2_16"]
 [dependencies]
 bitflags = "^1.0"
 libc = "^0.2"
-cairo-rs = "^0.4.0"
-gdk = "^0.8.0"
-gdk-sys = "^0.6.0"
-gio = "^0.4.0"
-gio-sys = "^0.6.0"
-glib = "^0.5.0"
-glib-sys = "^0.6.0"
-gobject-sys = "^0.6.0"
-gtk = "^0.4.0"
-gtk-sys = "^0.6.0"
-javascriptcore-rs = "^0.4.0"
+cairo-rs = "^0.5.0"
+gdk = "^0.9.0"
+gdk-sys = "^0.7.0"
+gio = "^0.5.0"
+gio-sys = "^0.7.0"
+glib = "^0.6.0"
+glib-sys = "^0.7.0"
+gobject-sys = "^0.7.0"
+gtk = "^0.5.0"
+gtk-sys = "^0.7.0"
+javascriptcore-rs = "^0.5.0"
 
 [dependencies.webkit2gtk-sys]
 path = "./webkit2gtk-sys"
-version = "^0.6"
+version = "^0.7"
