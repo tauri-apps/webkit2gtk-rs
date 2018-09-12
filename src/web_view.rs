@@ -19,9 +19,24 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#[cfg(feature = "v2_6")]
+use std::ffi::CString;
+#[cfg(feature = "v2_6")]
+use std::ptr;
+
 use glib::IsA;
+#[cfg(feature = "v2_6")]
+use glib::object::Downcast;
+#[cfg(feature = "v2_6")]
+use glib::StaticType;
+#[cfg(feature = "v2_6")]
+use glib::translate::{FromGlibPtrNone, ToGlib, ToGlibPtr};
+#[cfg(feature = "v2_6")]
+use gobject_ffi;
 use gtk;
 
+#[cfg(feature = "v2_6")]
+use super::WebContext;
 use super::WebView;
 #[cfg(feature = "v2_6")]
 use super::UserContentManager;
