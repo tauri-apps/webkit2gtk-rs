@@ -359,19 +359,10 @@ pub trait WebViewExt: Sized {
 
     fn connect_property_favicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v2_18", feature = "dox"))]
-    fn connect_property_is_controlled_by_automation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v2_16", feature = "dox"))]
-    fn connect_property_is_ephemeral_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_is_loading_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_property_is_playing_audio_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v2_4", feature = "dox"))]
-    fn connect_property_related_view_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn connect_property_settings_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -379,11 +370,6 @@ pub trait WebViewExt: Sized {
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v2_6", feature = "dox"))]
-    fn connect_property_user_content_manager_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_web_context_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_zoom_level_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -1234,24 +1220,6 @@ impl<O: IsA<WebView> + IsA<glib::object::Object> + Clone + 'static> WebViewExt f
         }
     }
 
-    #[cfg(any(feature = "v2_18", feature = "dox"))]
-    fn connect_property_is_controlled_by_automation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::is-controlled-by-automation",
-                transmute(notify_is_controlled_by_automation_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v2_16", feature = "dox"))]
-    fn connect_property_is_ephemeral_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::is-ephemeral",
-                transmute(notify_is_ephemeral_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     fn connect_property_is_loading_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
@@ -1266,15 +1234,6 @@ impl<O: IsA<WebView> + IsA<glib::object::Object> + Clone + 'static> WebViewExt f
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "notify::is-playing-audio",
                 transmute(notify_is_playing_audio_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v2_4", feature = "dox"))]
-    fn connect_property_related_view_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::related-view",
-                transmute(notify_related_view_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
@@ -1300,23 +1259,6 @@ impl<O: IsA<WebView> + IsA<glib::object::Object> + Clone + 'static> WebViewExt f
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "notify::uri",
                 transmute(notify_uri_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v2_6", feature = "dox"))]
-    fn connect_property_user_content_manager_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::user-content-manager",
-                transmute(notify_user_content_manager_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    fn connect_property_web_context_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::web-context",
-                transmute(notify_web_context_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
@@ -1497,20 +1439,6 @@ where P: IsA<WebView> {
     f(&WebView::from_glib_borrow(this).downcast_unchecked())
 }
 
-#[cfg(any(feature = "v2_18", feature = "dox"))]
-unsafe extern "C" fn notify_is_controlled_by_automation_trampoline<P>(this: *mut ffi::WebKitWebView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<WebView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebView::from_glib_borrow(this).downcast_unchecked())
-}
-
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-unsafe extern "C" fn notify_is_ephemeral_trampoline<P>(this: *mut ffi::WebKitWebView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<WebView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebView::from_glib_borrow(this).downcast_unchecked())
-}
-
 unsafe extern "C" fn notify_is_loading_trampoline<P>(this: *mut ffi::WebKitWebView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<WebView> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
@@ -1519,13 +1447,6 @@ where P: IsA<WebView> {
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 unsafe extern "C" fn notify_is_playing_audio_trampoline<P>(this: *mut ffi::WebKitWebView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<WebView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebView::from_glib_borrow(this).downcast_unchecked())
-}
-
-#[cfg(any(feature = "v2_4", feature = "dox"))]
-unsafe extern "C" fn notify_related_view_trampoline<P>(this: *mut ffi::WebKitWebView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<WebView> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&WebView::from_glib_borrow(this).downcast_unchecked())
@@ -1545,19 +1466,6 @@ where P: IsA<WebView> {
 }
 
 unsafe extern "C" fn notify_uri_trampoline<P>(this: *mut ffi::WebKitWebView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<WebView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebView::from_glib_borrow(this).downcast_unchecked())
-}
-
-#[cfg(any(feature = "v2_6", feature = "dox"))]
-unsafe extern "C" fn notify_user_content_manager_trampoline<P>(this: *mut ffi::WebKitWebView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<WebView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebView::from_glib_borrow(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn notify_web_context_trampoline<P>(this: *mut ffi::WebKitWebView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<WebView> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&WebView::from_glib_borrow(this).downcast_unchecked())
