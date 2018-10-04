@@ -10,21 +10,11 @@ use glib;
 use glib::StaticType;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib::Value;
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-use glib::object::Downcast;
 use glib::object::IsA;
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-use glib::signal::SignalHandlerId;
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-use std::boxed::Box as Box_;
 use std::mem;
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
@@ -101,30 +91,6 @@ pub trait WebsiteDataManagerExt {
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_property_is_ephemeral(&self) -> bool;
-
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn connect_property_base_cache_directory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn connect_property_base_data_directory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn connect_property_disk_cache_directory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn connect_property_indexeddb_directory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v2_16", feature = "dox"))]
-    fn connect_property_is_ephemeral_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn connect_property_local_storage_directory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn connect_property_offline_application_cache_directory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn connect_property_websql_directory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<WebsiteDataManager> + IsA<glib::object::Object>> WebsiteDataManagerExt for O {
@@ -289,132 +255,4 @@ impl<O: IsA<WebsiteDataManager> + IsA<glib::object::Object>> WebsiteDataManagerE
             value.get().unwrap()
         }
     }
-
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn connect_property_base_cache_directory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::base-cache-directory",
-                transmute(notify_base_cache_directory_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn connect_property_base_data_directory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::base-data-directory",
-                transmute(notify_base_data_directory_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn connect_property_disk_cache_directory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::disk-cache-directory",
-                transmute(notify_disk_cache_directory_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn connect_property_indexeddb_directory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::indexeddb-directory",
-                transmute(notify_indexeddb_directory_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v2_16", feature = "dox"))]
-    fn connect_property_is_ephemeral_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::is-ephemeral",
-                transmute(notify_is_ephemeral_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn connect_property_local_storage_directory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::local-storage-directory",
-                transmute(notify_local_storage_directory_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn connect_property_offline_application_cache_directory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::offline-application-cache-directory",
-                transmute(notify_offline_application_cache_directory_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn connect_property_websql_directory_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::websql-directory",
-                transmute(notify_websql_directory_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-}
-
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-unsafe extern "C" fn notify_base_cache_directory_trampoline<P>(this: *mut ffi::WebKitWebsiteDataManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<WebsiteDataManager> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebsiteDataManager::from_glib_borrow(this).downcast_unchecked())
-}
-
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-unsafe extern "C" fn notify_base_data_directory_trampoline<P>(this: *mut ffi::WebKitWebsiteDataManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<WebsiteDataManager> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebsiteDataManager::from_glib_borrow(this).downcast_unchecked())
-}
-
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-unsafe extern "C" fn notify_disk_cache_directory_trampoline<P>(this: *mut ffi::WebKitWebsiteDataManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<WebsiteDataManager> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebsiteDataManager::from_glib_borrow(this).downcast_unchecked())
-}
-
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-unsafe extern "C" fn notify_indexeddb_directory_trampoline<P>(this: *mut ffi::WebKitWebsiteDataManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<WebsiteDataManager> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebsiteDataManager::from_glib_borrow(this).downcast_unchecked())
-}
-
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-unsafe extern "C" fn notify_is_ephemeral_trampoline<P>(this: *mut ffi::WebKitWebsiteDataManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<WebsiteDataManager> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebsiteDataManager::from_glib_borrow(this).downcast_unchecked())
-}
-
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-unsafe extern "C" fn notify_local_storage_directory_trampoline<P>(this: *mut ffi::WebKitWebsiteDataManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<WebsiteDataManager> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebsiteDataManager::from_glib_borrow(this).downcast_unchecked())
-}
-
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-unsafe extern "C" fn notify_offline_application_cache_directory_trampoline<P>(this: *mut ffi::WebKitWebsiteDataManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<WebsiteDataManager> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebsiteDataManager::from_glib_borrow(this).downcast_unchecked())
-}
-
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-unsafe extern "C" fn notify_websql_directory_trampoline<P>(this: *mut ffi::WebKitWebsiteDataManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<WebsiteDataManager> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebsiteDataManager::from_glib_borrow(this).downcast_unchecked())
 }
