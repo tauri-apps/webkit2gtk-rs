@@ -26,6 +26,7 @@ use std::ptr;
 use ffi;
 use glib::object::Downcast;
 use glib::signal::connect;
+use glib::StaticType;
 use glib::translate::{FromGlibPtrNone, ToGlib, ToGlibPtr, from_glib_full};
 use gobject_ffi;
 use gtk;
@@ -38,7 +39,7 @@ use UserContentManager;
 impl WebView
 {
     #[cfg(feature = "v2_6")]
-    fn new_with_context_and_user_content_manager(context: &WebContext, user_content_manager: &UserContentManager) -> Self {
+    pub fn new_with_context_and_user_content_manager(context: &WebContext, user_content_manager: &UserContentManager) -> Self {
         assert_initialized_main_thread!();
         let user_content_manager_property = CString::new("user-content-manager").unwrap();
         let web_context_property = CString::new("web-context").unwrap();
