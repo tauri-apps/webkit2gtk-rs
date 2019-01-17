@@ -26,7 +26,7 @@ extern crate webkit2gtk;
 #[cfg(feature = "v2_4")]
 use glib::ToVariant;
 use gtk::{ContainerExt, Inhibit, WidgetExt, Window, WindowType};
-use webkit2gtk::{SettingsExt, WebContext, WebContextExt, WebView, WebViewExt, WebViewExtManual};
+use webkit2gtk::{SettingsExt, WebContext, WebContextExt, WebView, WebViewExt};
 #[cfg(feature = "v2_6")]
 use webkit2gtk::UserContentManager;
 
@@ -53,8 +53,10 @@ fn main() {
 
     window.show_all();
 
-    webview.run_javascript("alert('Hello');");
-    webview.run_javascript_with_callback("42", |result| {
+    webview.run_javascript("alert('Hello');", None::<&gio::Cancellable>, |_result|{});
+
+    let cancellable = gio::Cancellable::new();
+    webview.run_javascript("42", Some(&cancellable), |result| {
         match result {
             Ok(result) => {
                 let context = result.get_global_context().unwrap();

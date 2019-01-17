@@ -13,6 +13,7 @@ use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
 use gobject_ffi;
+use std::fmt;
 
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
@@ -29,6 +30,24 @@ pub enum AuthenticationScheme {
     Unknown,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+#[cfg(any(feature = "v2_2", feature = "dox"))]
+impl fmt::Display for AuthenticationScheme {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "AuthenticationScheme::{}", match *self {
+            AuthenticationScheme::Default => "Default",
+            AuthenticationScheme::HttpBasic => "HttpBasic",
+            AuthenticationScheme::HttpDigest => "HttpDigest",
+            AuthenticationScheme::HtmlForm => "HtmlForm",
+            AuthenticationScheme::Ntlm => "Ntlm",
+            AuthenticationScheme::Negotiate => "Negotiate",
+            AuthenticationScheme::ClientCertificateRequested => "ClientCertificateRequested",
+            AuthenticationScheme::ServerTrustEvaluationRequested => "ServerTrustEvaluationRequested",
+            AuthenticationScheme::Unknown => "Unknown",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[cfg(any(feature = "v2_2", feature = "dox"))]
@@ -108,6 +127,17 @@ pub enum CacheModel {
     DocumentBrowser,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl fmt::Display for CacheModel {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "CacheModel::{}", match *self {
+            CacheModel::DocumentViewer => "DocumentViewer",
+            CacheModel::WebBrowser => "WebBrowser",
+            CacheModel::DocumentBrowser => "DocumentBrowser",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[doc(hidden)]
@@ -211,6 +241,59 @@ pub enum ContextMenuAction {
     Custom,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl fmt::Display for ContextMenuAction {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ContextMenuAction::{}", match *self {
+            ContextMenuAction::NoAction => "NoAction",
+            ContextMenuAction::OpenLink => "OpenLink",
+            ContextMenuAction::OpenLinkInNewWindow => "OpenLinkInNewWindow",
+            ContextMenuAction::DownloadLinkToDisk => "DownloadLinkToDisk",
+            ContextMenuAction::CopyLinkToClipboard => "CopyLinkToClipboard",
+            ContextMenuAction::OpenImageInNewWindow => "OpenImageInNewWindow",
+            ContextMenuAction::DownloadImageToDisk => "DownloadImageToDisk",
+            ContextMenuAction::CopyImageToClipboard => "CopyImageToClipboard",
+            ContextMenuAction::CopyImageUrlToClipboard => "CopyImageUrlToClipboard",
+            ContextMenuAction::OpenFrameInNewWindow => "OpenFrameInNewWindow",
+            ContextMenuAction::GoBack => "GoBack",
+            ContextMenuAction::GoForward => "GoForward",
+            ContextMenuAction::Stop => "Stop",
+            ContextMenuAction::Reload => "Reload",
+            ContextMenuAction::Copy => "Copy",
+            ContextMenuAction::Cut => "Cut",
+            ContextMenuAction::Paste => "Paste",
+            ContextMenuAction::Delete => "Delete",
+            ContextMenuAction::SelectAll => "SelectAll",
+            ContextMenuAction::InputMethods => "InputMethods",
+            ContextMenuAction::Unicode => "Unicode",
+            ContextMenuAction::SpellingGuess => "SpellingGuess",
+            ContextMenuAction::NoGuessesFound => "NoGuessesFound",
+            ContextMenuAction::IgnoreSpelling => "IgnoreSpelling",
+            ContextMenuAction::LearnSpelling => "LearnSpelling",
+            ContextMenuAction::IgnoreGrammar => "IgnoreGrammar",
+            ContextMenuAction::FontMenu => "FontMenu",
+            ContextMenuAction::Bold => "Bold",
+            ContextMenuAction::Italic => "Italic",
+            ContextMenuAction::Underline => "Underline",
+            ContextMenuAction::Outline => "Outline",
+            ContextMenuAction::InspectElement => "InspectElement",
+            ContextMenuAction::OpenVideoInNewWindow => "OpenVideoInNewWindow",
+            ContextMenuAction::OpenAudioInNewWindow => "OpenAudioInNewWindow",
+            ContextMenuAction::CopyVideoLinkToClipboard => "CopyVideoLinkToClipboard",
+            ContextMenuAction::CopyAudioLinkToClipboard => "CopyAudioLinkToClipboard",
+            ContextMenuAction::ToggleMediaControls => "ToggleMediaControls",
+            ContextMenuAction::ToggleMediaLoop => "ToggleMediaLoop",
+            ContextMenuAction::EnterVideoFullscreen => "EnterVideoFullscreen",
+            ContextMenuAction::MediaPlay => "MediaPlay",
+            ContextMenuAction::MediaPause => "MediaPause",
+            ContextMenuAction::MediaMute => "MediaMute",
+            ContextMenuAction::DownloadVideoToDisk => "DownloadVideoToDisk",
+            ContextMenuAction::DownloadAudioToDisk => "DownloadAudioToDisk",
+            ContextMenuAction::Custom => "Custom",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[doc(hidden)]
@@ -358,6 +441,17 @@ pub enum CookieAcceptPolicy {
     __Unknown(i32),
 }
 
+impl fmt::Display for CookieAcceptPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "CookieAcceptPolicy::{}", match *self {
+            CookieAcceptPolicy::Always => "Always",
+            CookieAcceptPolicy::Never => "Never",
+            CookieAcceptPolicy::NoThirdParty => "NoThirdParty",
+            _ => "Unknown",
+        })
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for CookieAcceptPolicy {
     type GlibType = ffi::WebKitCookieAcceptPolicy;
@@ -418,6 +512,16 @@ pub enum CookiePersistentStorage {
     __Unknown(i32),
 }
 
+impl fmt::Display for CookiePersistentStorage {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "CookiePersistentStorage::{}", match *self {
+            CookiePersistentStorage::Text => "Text",
+            CookiePersistentStorage::Sqlite => "Sqlite",
+            _ => "Unknown",
+        })
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for CookiePersistentStorage {
     type GlibType = ffi::WebKitCookiePersistentStorage;
@@ -476,6 +580,18 @@ pub enum CredentialPersistence {
     Permanent,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+#[cfg(any(feature = "v2_2", feature = "dox"))]
+impl fmt::Display for CredentialPersistence {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "CredentialPersistence::{}", match *self {
+            CredentialPersistence::None => "None",
+            CredentialPersistence::ForSession => "ForSession",
+            CredentialPersistence::Permanent => "Permanent",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[cfg(any(feature = "v2_2", feature = "dox"))]
@@ -543,6 +659,17 @@ pub enum DownloadError {
     Destination,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl fmt::Display for DownloadError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "DownloadError::{}", match *self {
+            DownloadError::Network => "Network",
+            DownloadError::CancelledByUser => "CancelledByUser",
+            DownloadError::Destination => "Destination",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[doc(hidden)]
@@ -625,6 +752,17 @@ pub enum FaviconDatabaseError {
     FaviconUnknown,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl fmt::Display for FaviconDatabaseError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "FaviconDatabaseError::{}", match *self {
+            FaviconDatabaseError::NotInitialized => "NotInitialized",
+            FaviconDatabaseError::FaviconNotFound => "FaviconNotFound",
+            FaviconDatabaseError::FaviconUnknown => "FaviconUnknown",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[doc(hidden)]
@@ -711,6 +849,18 @@ pub enum HardwareAccelerationPolicy {
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
+impl fmt::Display for HardwareAccelerationPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "HardwareAccelerationPolicy::{}", match *self {
+            HardwareAccelerationPolicy::OnDemand => "OnDemand",
+            HardwareAccelerationPolicy::Always => "Always",
+            HardwareAccelerationPolicy::Never => "Never",
+            _ => "Unknown",
+        })
+    }
+}
+
+#[cfg(any(feature = "v2_16", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for HardwareAccelerationPolicy {
     type GlibType = ffi::WebKitHardwareAccelerationPolicy;
@@ -776,6 +926,16 @@ pub enum InsecureContentEvent {
     __Unknown(i32),
 }
 
+impl fmt::Display for InsecureContentEvent {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "InsecureContentEvent::{}", match *self {
+            InsecureContentEvent::Run => "Run",
+            InsecureContentEvent::Displayed => "Displayed",
+            _ => "Unknown",
+        })
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for InsecureContentEvent {
     type GlibType = ffi::WebKitInsecureContentEvent;
@@ -831,6 +991,15 @@ pub enum JavascriptError {
     Failed,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl fmt::Display for JavascriptError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "JavascriptError::{}", match *self {
+            JavascriptError::Failed => "Failed",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[doc(hidden)]
@@ -910,6 +1079,18 @@ pub enum LoadEvent {
     __Unknown(i32),
 }
 
+impl fmt::Display for LoadEvent {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "LoadEvent::{}", match *self {
+            LoadEvent::Started => "Started",
+            LoadEvent::Redirected => "Redirected",
+            LoadEvent::Committed => "Committed",
+            LoadEvent::Finished => "Finished",
+            _ => "Unknown",
+        })
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for LoadEvent {
     type GlibType = ffi::WebKitLoadEvent;
@@ -974,6 +1155,20 @@ pub enum NavigationType {
     Other,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl fmt::Display for NavigationType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "NavigationType::{}", match *self {
+            NavigationType::LinkClicked => "LinkClicked",
+            NavigationType::FormSubmitted => "FormSubmitted",
+            NavigationType::BackForward => "BackForward",
+            NavigationType::Reload => "Reload",
+            NavigationType::FormResubmitted => "FormResubmitted",
+            NavigationType::Other => "Other",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[doc(hidden)]
@@ -1043,6 +1238,19 @@ pub enum NetworkError {
     FileDoesNotExist,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl fmt::Display for NetworkError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "NetworkError::{}", match *self {
+            NetworkError::Failed => "Failed",
+            NetworkError::Transport => "Transport",
+            NetworkError::UnknownProtocol => "UnknownProtocol",
+            NetworkError::Cancelled => "Cancelled",
+            NetworkError::FileDoesNotExist => "FileDoesNotExist",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[doc(hidden)]
@@ -1135,6 +1343,18 @@ pub enum NetworkProxyMode {
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
+impl fmt::Display for NetworkProxyMode {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "NetworkProxyMode::{}", match *self {
+            NetworkProxyMode::Default => "Default",
+            NetworkProxyMode::NoProxy => "NoProxy",
+            NetworkProxyMode::Custom => "Custom",
+            _ => "Unknown",
+        })
+    }
+}
+
+#[cfg(any(feature = "v2_16", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for NetworkProxyMode {
     type GlibType = ffi::WebKitNetworkProxyMode;
@@ -1202,6 +1422,20 @@ pub enum PluginError {
     WillHandleLoad,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl fmt::Display for PluginError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PluginError::{}", match *self {
+            PluginError::Failed => "Failed",
+            PluginError::CannotFindPlugin => "CannotFindPlugin",
+            PluginError::CannotLoadPlugin => "CannotLoadPlugin",
+            PluginError::JavaUnavailable => "JavaUnavailable",
+            PluginError::ConnectionCancelled => "ConnectionCancelled",
+            PluginError::WillHandleLoad => "WillHandleLoad",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[doc(hidden)]
@@ -1295,6 +1529,17 @@ pub enum PolicyDecisionType {
     __Unknown(i32),
 }
 
+impl fmt::Display for PolicyDecisionType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PolicyDecisionType::{}", match *self {
+            PolicyDecisionType::NavigationAction => "NavigationAction",
+            PolicyDecisionType::NewWindowAction => "NewWindowAction",
+            PolicyDecisionType::Response => "Response",
+            _ => "Unknown",
+        })
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for PolicyDecisionType {
     type GlibType = ffi::WebKitPolicyDecisionType;
@@ -1356,6 +1601,19 @@ pub enum PolicyError {
     CannotUseRestrictedPort,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl fmt::Display for PolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PolicyError::{}", match *self {
+            PolicyError::Failed => "Failed",
+            PolicyError::CannotShowMimeType => "CannotShowMimeType",
+            PolicyError::CannotShowUri => "CannotShowUri",
+            PolicyError::FrameLoadInterruptedByPolicyChange => "FrameLoadInterruptedByPolicyChange",
+            PolicyError::CannotUseRestrictedPort => "CannotUseRestrictedPort",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[doc(hidden)]
@@ -1446,6 +1704,17 @@ pub enum PrintError {
     __Unknown(i32),
 }
 
+impl fmt::Display for PrintError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PrintError::{}", match *self {
+            PrintError::General => "General",
+            PrintError::PrinterNotFound => "PrinterNotFound",
+            PrintError::InvalidPageRange => "InvalidPageRange",
+            _ => "Unknown",
+        })
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for PrintError {
     type GlibType = ffi::WebKitPrintError;
@@ -1527,6 +1796,16 @@ pub enum PrintOperationResponse {
     __Unknown(i32),
 }
 
+impl fmt::Display for PrintOperationResponse {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PrintOperationResponse::{}", match *self {
+            PrintOperationResponse::Print => "Print",
+            PrintOperationResponse::Cancel => "Cancel",
+            _ => "Unknown",
+        })
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for PrintOperationResponse {
     type GlibType = ffi::WebKitPrintOperationResponse;
@@ -1584,6 +1863,17 @@ pub enum ProcessModel {
     MultipleSecondaryProcesses,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+#[cfg(any(feature = "v2_4", feature = "dox"))]
+impl fmt::Display for ProcessModel {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ProcessModel::{}", match *self {
+            ProcessModel::SharedSecondaryProcess => "SharedSecondaryProcess",
+            ProcessModel::MultipleSecondaryProcesses => "MultipleSecondaryProcesses",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[cfg(any(feature = "v2_4", feature = "dox"))]
@@ -1649,6 +1939,15 @@ pub enum SaveMode {
     __Unknown(i32),
 }
 
+impl fmt::Display for SaveMode {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "SaveMode::{}", match *self {
+            SaveMode::Mhtml => "Mhtml",
+            _ => "Unknown",
+        })
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for SaveMode {
     type GlibType = ffi::WebKitSaveMode;
@@ -1705,6 +2004,18 @@ pub enum ScriptDialogType {
     BeforeUnloadConfirm,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl fmt::Display for ScriptDialogType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ScriptDialogType::{}", match *self {
+            ScriptDialogType::Alert => "Alert",
+            ScriptDialogType::Confirm => "Confirm",
+            ScriptDialogType::Prompt => "Prompt",
+            ScriptDialogType::BeforeUnloadConfirm => "BeforeUnloadConfirm",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[doc(hidden)]
@@ -1766,6 +2077,15 @@ pub enum SnapshotError {
     Create,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl fmt::Display for SnapshotError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "SnapshotError::{}", match *self {
+            SnapshotError::Create => "Create",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[doc(hidden)]
@@ -1843,6 +2163,16 @@ pub enum SnapshotRegion {
     __Unknown(i32),
 }
 
+impl fmt::Display for SnapshotRegion {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "SnapshotRegion::{}", match *self {
+            SnapshotRegion::Visible => "Visible",
+            SnapshotRegion::FullDocument => "FullDocument",
+            _ => "Unknown",
+        })
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for SnapshotRegion {
     type GlibType = ffi::WebKitSnapshotRegion;
@@ -1899,6 +2229,16 @@ pub enum TLSErrorsPolicy {
     Fail,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl fmt::Display for TLSErrorsPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "TLSErrorsPolicy::{}", match *self {
+            TLSErrorsPolicy::Ignore => "Ignore",
+            TLSErrorsPolicy::Fail => "Fail",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[doc(hidden)]
@@ -1958,6 +2298,17 @@ pub enum UserContentInjectedFrames {
     TopFrame,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+#[cfg(any(feature = "v2_6", feature = "dox"))]
+impl fmt::Display for UserContentInjectedFrames {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "UserContentInjectedFrames::{}", match *self {
+            UserContentInjectedFrames::AllFrames => "AllFrames",
+            UserContentInjectedFrames::TopFrame => "TopFrame",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
@@ -2026,6 +2377,17 @@ pub enum UserScriptInjectionTime {
 }
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
+impl fmt::Display for UserScriptInjectionTime {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "UserScriptInjectionTime::{}", match *self {
+            UserScriptInjectionTime::Start => "Start",
+            UserScriptInjectionTime::End => "End",
+            _ => "Unknown",
+        })
+    }
+}
+
+#[cfg(any(feature = "v2_6", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for UserScriptInjectionTime {
     type GlibType = ffi::WebKitUserScriptInjectionTime;
@@ -2088,6 +2450,17 @@ pub enum UserStyleLevel {
     Author,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+#[cfg(any(feature = "v2_6", feature = "dox"))]
+impl fmt::Display for UserStyleLevel {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "UserStyleLevel::{}", match *self {
+            UserStyleLevel::User => "User",
+            UserStyleLevel::Author => "Author",
+            _ => "Unknown",
+        })
+    }
 }
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]

@@ -8,24 +8,22 @@ use PrintCustomWidget;
 use PrintOperationResponse;
 use WebView;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gtk;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct PrintOperation(Object<ffi::WebKitPrintOperation, ffi::WebKitPrintOperationClass>);
+    pub struct PrintOperation(Object<ffi::WebKitPrintOperation, ffi::WebKitPrintOperationClass, PrintOperationClass>);
 
     match fn {
         get_type => || ffi::webkit_print_operation_get_type(),
@@ -33,15 +31,17 @@ glib_wrapper! {
 }
 
 impl PrintOperation {
-    pub fn new(web_view: &WebView) -> PrintOperation {
+    pub fn new<P: IsA<WebView>>(web_view: &P) -> PrintOperation {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::webkit_print_operation_new(web_view.to_glib_none().0))
+            from_glib_full(ffi::webkit_print_operation_new(web_view.as_ref().to_glib_none().0))
         }
     }
 }
 
-pub trait PrintOperationExt {
+pub const NONE_PRINT_OPERATION: Option<&PrintOperation> = None;
+
+pub trait PrintOperationExt: 'static {
     fn get_page_setup(&self) -> Option<gtk::PageSetup>;
 
     fn get_print_settings(&self) -> Option<gtk::PrintSettings>;
@@ -50,9 +50,9 @@ pub trait PrintOperationExt {
 
     fn run_dialog<'a, P: IsA<gtk::Window> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q) -> PrintOperationResponse;
 
-    fn set_page_setup(&self, page_setup: &gtk::PageSetup);
+    fn set_page_setup<P: IsA<gtk::PageSetup>>(&self, page_setup: &P);
 
-    fn set_print_settings(&self, print_settings: &gtk::PrintSettings);
+    fn set_print_settings<P: IsA<gtk::PrintSettings>>(&self, print_settings: &P);
 
     fn get_property_web_view(&self) -> Option<WebView>;
 
@@ -68,49 +68,48 @@ pub trait PrintOperationExt {
     fn connect_property_print_settings_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<PrintOperation> + IsA<glib::object::Object>> PrintOperationExt for O {
+impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     fn get_page_setup(&self) -> Option<gtk::PageSetup> {
         unsafe {
-            from_glib_none(ffi::webkit_print_operation_get_page_setup(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_print_operation_get_page_setup(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_print_settings(&self) -> Option<gtk::PrintSettings> {
         unsafe {
-            from_glib_none(ffi::webkit_print_operation_get_print_settings(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_print_operation_get_print_settings(self.as_ref().to_glib_none().0))
         }
     }
 
     fn print(&self) {
         unsafe {
-            ffi::webkit_print_operation_print(self.to_glib_none().0);
+            ffi::webkit_print_operation_print(self.as_ref().to_glib_none().0);
         }
     }
 
     fn run_dialog<'a, P: IsA<gtk::Window> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q) -> PrintOperationResponse {
         let parent = parent.into();
-        let parent = parent.to_glib_none();
         unsafe {
-            from_glib(ffi::webkit_print_operation_run_dialog(self.to_glib_none().0, parent.0))
+            from_glib(ffi::webkit_print_operation_run_dialog(self.as_ref().to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0))
         }
     }
 
-    fn set_page_setup(&self, page_setup: &gtk::PageSetup) {
+    fn set_page_setup<P: IsA<gtk::PageSetup>>(&self, page_setup: &P) {
         unsafe {
-            ffi::webkit_print_operation_set_page_setup(self.to_glib_none().0, page_setup.to_glib_none().0);
+            ffi::webkit_print_operation_set_page_setup(self.as_ref().to_glib_none().0, page_setup.as_ref().to_glib_none().0);
         }
     }
 
-    fn set_print_settings(&self, print_settings: &gtk::PrintSettings) {
+    fn set_print_settings<P: IsA<gtk::PrintSettings>>(&self, print_settings: &P) {
         unsafe {
-            ffi::webkit_print_operation_set_print_settings(self.to_glib_none().0, print_settings.to_glib_none().0);
+            ffi::webkit_print_operation_set_print_settings(self.as_ref().to_glib_none().0, print_settings.as_ref().to_glib_none().0);
         }
     }
 
     fn get_property_web_view(&self) -> Option<WebView> {
         unsafe {
             let mut value = Value::from_type(<WebView as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "web-view".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"web-view\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -119,7 +118,7 @@ impl<O: IsA<PrintOperation> + IsA<glib::object::Object>> PrintOperationExt for O
     fn connect_create_custom_widget<F: Fn(&Self) -> PrintCustomWidget + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> PrintCustomWidget + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "create-custom-widget",
+            connect_raw(self.as_ptr() as *mut _, b"create-custom-widget\0".as_ptr() as *const _,
                 transmute(create_custom_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -127,7 +126,7 @@ impl<O: IsA<PrintOperation> + IsA<glib::object::Object>> PrintOperationExt for O
     fn connect_failed<F: Fn(&Self, &Error) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Error) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "failed",
+            connect_raw(self.as_ptr() as *mut _, b"failed\0".as_ptr() as *const _,
                 transmute(failed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -135,7 +134,7 @@ impl<O: IsA<PrintOperation> + IsA<glib::object::Object>> PrintOperationExt for O
     fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "finished",
+            connect_raw(self.as_ptr() as *mut _, b"finished\0".as_ptr() as *const _,
                 transmute(finished_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -143,7 +142,7 @@ impl<O: IsA<PrintOperation> + IsA<glib::object::Object>> PrintOperationExt for O
     fn connect_property_page_setup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::page-setup",
+            connect_raw(self.as_ptr() as *mut _, b"notify::page-setup\0".as_ptr() as *const _,
                 transmute(notify_page_setup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -151,7 +150,7 @@ impl<O: IsA<PrintOperation> + IsA<glib::object::Object>> PrintOperationExt for O
     fn connect_property_print_settings_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::print-settings",
+            connect_raw(self.as_ptr() as *mut _, b"notify::print-settings\0".as_ptr() as *const _,
                 transmute(notify_print_settings_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -161,29 +160,35 @@ impl<O: IsA<PrintOperation> + IsA<glib::object::Object>> PrintOperationExt for O
 unsafe extern "C" fn create_custom_widget_trampoline<P>(this: *mut ffi::WebKitPrintOperation, f: glib_ffi::gpointer) -> *mut ffi::WebKitPrintCustomWidget
 where P: IsA<PrintOperation> {
     let f: &&(Fn(&P) -> PrintCustomWidget + 'static) = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).downcast_unchecked()).to_glib_full()
+    f(&PrintOperation::from_glib_borrow(this).unsafe_cast()).to_glib_full()
 }
 
 unsafe extern "C" fn failed_trampoline<P>(this: *mut ffi::WebKitPrintOperation, error: *mut glib_ffi::GError, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
     let f: &&(Fn(&P, &Error) + 'static) = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(error))
+    f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error))
 }
 
 unsafe extern "C" fn finished_trampoline<P>(this: *mut ffi::WebKitPrintOperation, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).downcast_unchecked())
+    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_page_setup_trampoline<P>(this: *mut ffi::WebKitPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).downcast_unchecked())
+    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_print_settings_trampoline<P>(this: *mut ffi::WebKitPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).downcast_unchecked())
+    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for PrintOperation {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PrintOperation")
+    }
 }

@@ -24,10 +24,11 @@ use std::ffi::CString;
 use std::ptr;
 
 use ffi;
-use glib::object::Downcast;
 use glib::signal::connect;
 use glib::StaticType;
 use glib::translate::{FromGlibPtrNone, ToGlib, ToGlibPtr, from_glib_full};
+use glib::object::Cast;
+use glib::object::IsA;
 use gobject_ffi;
 use gtk;
 use libc::c_void;
@@ -39,15 +40,15 @@ use UserContentManager;
 impl WebView
 {
     #[cfg(feature = "v2_6")]
-    pub fn new_with_context_and_user_content_manager(context: &WebContext, user_content_manager: &UserContentManager) -> Self {
+    pub fn new_with_context_and_user_content_manager<P: IsA<WebContext>, Q: IsA<UserContentManager>>(context: &P, user_content_manager: &Q) -> Self {
         assert_initialized_main_thread!();
         let user_content_manager_property = CString::new("user-content-manager").unwrap();
         let web_context_property = CString::new("web-context").unwrap();
-        let glib_user_content_manager: *mut gobject_ffi::GObject = user_content_manager.to_glib_none().0;
-        let glib_context: *mut gobject_ffi::GObject = context.to_glib_none().0;
+        let glib_user_content_manager: *mut ffi::WebKitUserContentManager = user_content_manager.as_ref().to_glib_none().0;
+        let glib_context: *mut ffi::WebKitWebContext = context.as_ref().to_glib_none().0;
         let null: *mut gobject_ffi::GObject = ptr::null_mut();
         unsafe {
-            gtk::Widget::from_glib_none(gobject_ffi::g_object_new(WebView::static_type().to_glib(), user_content_manager_property.as_ptr(), glib_user_content_manager, web_context_property.as_ptr(), glib_context, null) as *mut _).downcast_unchecked()
+            gtk::Widget::from_glib_none(gobject_ffi::g_object_new(WebView::static_type().to_glib(), user_content_manager_property.as_ptr(), glib_user_content_manager, web_context_property.as_ptr(), glib_context, null) as *mut _).unsafe_cast()
         }
     }
 }

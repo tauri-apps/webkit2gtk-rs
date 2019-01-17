@@ -5,11 +5,8 @@
 use ffi;
 #[cfg(any(feature = "v2_12", feature = "dox"))]
 use glib;
+#[cfg(any(feature = "v2_12", feature = "dox"))]
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]

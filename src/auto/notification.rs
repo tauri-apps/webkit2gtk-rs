@@ -3,33 +3,35 @@
 // DO NOT EDIT
 
 use ffi;
-use glib;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
-use glib::object::Downcast;
+use glib::GString;
+#[cfg(any(feature = "v2_8", feature = "dox"))]
+use glib::object::Cast;
 use glib::object::IsA;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v2_8", feature = "dox"))]
 use glib_ffi;
-use gobject_ffi;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct Notification(Object<ffi::WebKitNotification, ffi::WebKitNotificationClass>);
+    pub struct Notification(Object<ffi::WebKitNotification, ffi::WebKitNotificationClass, NotificationClass>);
 
     match fn {
         get_type => || ffi::webkit_notification_get_type(),
     }
 }
 
-pub trait NotificationExt {
+pub const NONE_NOTIFICATION: Option<&Notification> = None;
+
+pub trait NotificationExt: 'static {
     #[cfg(any(feature = "v2_12", feature = "dox"))]
     fn clicked(&self);
 
@@ -37,16 +39,16 @@ pub trait NotificationExt {
     fn close(&self);
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
-    fn get_body(&self) -> Option<String>;
+    fn get_body(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn get_id(&self) -> u64;
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
-    fn get_tag(&self) -> Option<String>;
+    fn get_tag(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
-    fn get_title(&self) -> Option<String>;
+    fn get_title(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v2_12", feature = "dox"))]
     fn connect_clicked<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -67,46 +69,46 @@ pub trait NotificationExt {
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Notification> + IsA<glib::object::Object>> NotificationExt for O {
+impl<O: IsA<Notification>> NotificationExt for O {
     #[cfg(any(feature = "v2_12", feature = "dox"))]
     fn clicked(&self) {
         unsafe {
-            ffi::webkit_notification_clicked(self.to_glib_none().0);
+            ffi::webkit_notification_clicked(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn close(&self) {
         unsafe {
-            ffi::webkit_notification_close(self.to_glib_none().0);
+            ffi::webkit_notification_close(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
-    fn get_body(&self) -> Option<String> {
+    fn get_body(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_notification_get_body(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_notification_get_body(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn get_id(&self) -> u64 {
         unsafe {
-            ffi::webkit_notification_get_id(self.to_glib_none().0)
+            ffi::webkit_notification_get_id(self.as_ref().to_glib_none().0)
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
-    fn get_tag(&self) -> Option<String> {
+    fn get_tag(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_notification_get_tag(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_notification_get_tag(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
-    fn get_title(&self) -> Option<String> {
+    fn get_title(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_notification_get_title(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_notification_get_title(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -114,7 +116,7 @@ impl<O: IsA<Notification> + IsA<glib::object::Object>> NotificationExt for O {
     fn connect_clicked<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "clicked",
+            connect_raw(self.as_ptr() as *mut _, b"clicked\0".as_ptr() as *const _,
                 transmute(clicked_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -123,7 +125,7 @@ impl<O: IsA<Notification> + IsA<glib::object::Object>> NotificationExt for O {
     fn connect_closed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "closed",
+            connect_raw(self.as_ptr() as *mut _, b"closed\0".as_ptr() as *const _,
                 transmute(closed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -132,7 +134,7 @@ impl<O: IsA<Notification> + IsA<glib::object::Object>> NotificationExt for O {
     fn connect_property_body_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::body",
+            connect_raw(self.as_ptr() as *mut _, b"notify::body\0".as_ptr() as *const _,
                 transmute(notify_body_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -141,7 +143,7 @@ impl<O: IsA<Notification> + IsA<glib::object::Object>> NotificationExt for O {
     fn connect_property_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::id",
+            connect_raw(self.as_ptr() as *mut _, b"notify::id\0".as_ptr() as *const _,
                 transmute(notify_id_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -150,7 +152,7 @@ impl<O: IsA<Notification> + IsA<glib::object::Object>> NotificationExt for O {
     fn connect_property_tag_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::tag",
+            connect_raw(self.as_ptr() as *mut _, b"notify::tag\0".as_ptr() as *const _,
                 transmute(notify_tag_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -159,7 +161,7 @@ impl<O: IsA<Notification> + IsA<glib::object::Object>> NotificationExt for O {
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::title",
+            connect_raw(self.as_ptr() as *mut _, b"notify::title\0".as_ptr() as *const _,
                 transmute(notify_title_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -169,40 +171,46 @@ impl<O: IsA<Notification> + IsA<glib::object::Object>> NotificationExt for O {
 unsafe extern "C" fn clicked_trampoline<P>(this: *mut ffi::WebKitNotification, f: glib_ffi::gpointer)
 where P: IsA<Notification> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Notification::from_glib_borrow(this).downcast_unchecked())
+    f(&Notification::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 unsafe extern "C" fn closed_trampoline<P>(this: *mut ffi::WebKitNotification, f: glib_ffi::gpointer)
 where P: IsA<Notification> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Notification::from_glib_borrow(this).downcast_unchecked())
+    f(&Notification::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 unsafe extern "C" fn notify_body_trampoline<P>(this: *mut ffi::WebKitNotification, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notification> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Notification::from_glib_borrow(this).downcast_unchecked())
+    f(&Notification::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 unsafe extern "C" fn notify_id_trampoline<P>(this: *mut ffi::WebKitNotification, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notification> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Notification::from_glib_borrow(this).downcast_unchecked())
+    f(&Notification::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 unsafe extern "C" fn notify_tag_trampoline<P>(this: *mut ffi::WebKitNotification, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notification> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Notification::from_glib_borrow(this).downcast_unchecked())
+    f(&Notification::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 unsafe extern "C" fn notify_title_trampoline<P>(this: *mut ffi::WebKitNotification, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notification> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Notification::from_glib_borrow(this).downcast_unchecked())
+    f(&Notification::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for Notification {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Notification")
+    }
 }

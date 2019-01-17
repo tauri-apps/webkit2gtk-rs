@@ -5,20 +5,19 @@
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct PolicyDecision(Object<ffi::WebKitPolicyDecision, ffi::WebKitPolicyDecisionClass>);
+    pub struct PolicyDecision(Object<ffi::WebKitPolicyDecision, ffi::WebKitPolicyDecisionClass, PolicyDecisionClass>);
 
     match fn {
         get_type => || ffi::webkit_policy_decision_get_type(),
     }
 }
 
-pub trait PolicyDecisionExt {
+pub const NONE_POLICY_DECISION: Option<&PolicyDecision> = None;
+
+pub trait PolicyDecisionExt: 'static {
     fn download(&self);
 
     fn ignore(&self);
@@ -29,19 +28,25 @@ pub trait PolicyDecisionExt {
 impl<O: IsA<PolicyDecision>> PolicyDecisionExt for O {
     fn download(&self) {
         unsafe {
-            ffi::webkit_policy_decision_download(self.to_glib_none().0);
+            ffi::webkit_policy_decision_download(self.as_ref().to_glib_none().0);
         }
     }
 
     fn ignore(&self) {
         unsafe {
-            ffi::webkit_policy_decision_ignore(self.to_glib_none().0);
+            ffi::webkit_policy_decision_ignore(self.as_ref().to_glib_none().0);
         }
     }
 
     fn use_(&self) {
         unsafe {
-            ffi::webkit_policy_decision_use(self.to_glib_none().0);
+            ffi::webkit_policy_decision_use(self.as_ref().to_glib_none().0);
         }
+    }
+}
+
+impl fmt::Display for PolicyDecision {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PolicyDecision")
     }
 }

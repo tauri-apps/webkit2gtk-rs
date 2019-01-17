@@ -3,33 +3,33 @@
 // DO NOT EDIT
 
 use ffi;
-use glib;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v2_10", feature = "dox"))]
 use glib_ffi;
-use gobject_ffi;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct EditorState(Object<ffi::WebKitEditorState, ffi::WebKitEditorStateClass>);
+    pub struct EditorState(Object<ffi::WebKitEditorState, ffi::WebKitEditorStateClass, EditorStateClass>);
 
     match fn {
         get_type => || ffi::webkit_editor_state_get_type(),
     }
 }
 
-pub trait EditorStateExt {
+pub const NONE_EDITOR_STATE: Option<&EditorState> = None;
+
+pub trait EditorStateExt: 'static {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_typing_attributes(&self) -> u32;
 
@@ -52,46 +52,46 @@ pub trait EditorStateExt {
     fn connect_property_typing_attributes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<EditorState> + IsA<glib::object::Object>> EditorStateExt for O {
+impl<O: IsA<EditorState>> EditorStateExt for O {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_typing_attributes(&self) -> u32 {
         unsafe {
-            ffi::webkit_editor_state_get_typing_attributes(self.to_glib_none().0)
+            ffi::webkit_editor_state_get_typing_attributes(self.as_ref().to_glib_none().0)
         }
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
     fn is_copy_available(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_editor_state_is_copy_available(self.to_glib_none().0))
+            from_glib(ffi::webkit_editor_state_is_copy_available(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
     fn is_cut_available(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_editor_state_is_cut_available(self.to_glib_none().0))
+            from_glib(ffi::webkit_editor_state_is_cut_available(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
     fn is_paste_available(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_editor_state_is_paste_available(self.to_glib_none().0))
+            from_glib(ffi::webkit_editor_state_is_paste_available(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
     fn is_redo_available(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_editor_state_is_redo_available(self.to_glib_none().0))
+            from_glib(ffi::webkit_editor_state_is_redo_available(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
     fn is_undo_available(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_editor_state_is_undo_available(self.to_glib_none().0))
+            from_glib(ffi::webkit_editor_state_is_undo_available(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -99,7 +99,7 @@ impl<O: IsA<EditorState> + IsA<glib::object::Object>> EditorStateExt for O {
     fn connect_property_typing_attributes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::typing-attributes",
+            connect_raw(self.as_ptr() as *mut _, b"notify::typing-attributes\0".as_ptr() as *const _,
                 transmute(notify_typing_attributes_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -109,5 +109,11 @@ impl<O: IsA<EditorState> + IsA<glib::object::Object>> EditorStateExt for O {
 unsafe extern "C" fn notify_typing_attributes_trampoline<P>(this: *mut ffi::WebKitEditorState, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<EditorState> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&EditorState::from_glib_borrow(this).downcast_unchecked())
+    f(&EditorState::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for EditorState {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "EditorState")
+    }
 }

@@ -5,13 +5,10 @@
 use PermissionRequest;
 use ffi;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct GeolocationPermissionRequest(Object<ffi::WebKitGeolocationPermissionRequest, ffi::WebKitGeolocationPermissionRequestClass>): PermissionRequest;
+    pub struct GeolocationPermissionRequest(Object<ffi::WebKitGeolocationPermissionRequest, ffi::WebKitGeolocationPermissionRequestClass, GeolocationPermissionRequestClass>) @implements PermissionRequest;
 
     match fn {
         get_type => || ffi::webkit_geolocation_permission_request_get_type(),
@@ -19,3 +16,11 @@ glib_wrapper! {
 }
 
 impl GeolocationPermissionRequest {}
+
+pub const NONE_GEOLOCATION_PERMISSION_REQUEST: Option<&GeolocationPermissionRequest> = None;
+
+impl fmt::Display for GeolocationPermissionRequest {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "GeolocationPermissionRequest")
+    }
+}

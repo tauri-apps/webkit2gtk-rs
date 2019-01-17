@@ -4,30 +4,30 @@
 
 use PermissionRequest;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct UserMediaPermissionRequest(Object<ffi::WebKitUserMediaPermissionRequest, ffi::WebKitUserMediaPermissionRequestClass>): PermissionRequest;
+    pub struct UserMediaPermissionRequest(Object<ffi::WebKitUserMediaPermissionRequest, ffi::WebKitUserMediaPermissionRequestClass, UserMediaPermissionRequestClass>) @implements PermissionRequest;
 
     match fn {
         get_type => || ffi::webkit_user_media_permission_request_get_type(),
     }
 }
 
-pub trait UserMediaPermissionRequestExt {
+pub const NONE_USER_MEDIA_PERMISSION_REQUEST: Option<&UserMediaPermissionRequest> = None;
+
+pub trait UserMediaPermissionRequestExt: 'static {
     fn get_property_is_for_audio_device(&self) -> bool;
 
     fn get_property_is_for_video_device(&self) -> bool;
@@ -37,11 +37,11 @@ pub trait UserMediaPermissionRequestExt {
     fn connect_property_is_for_video_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<UserMediaPermissionRequest> + IsA<glib::object::Object>> UserMediaPermissionRequestExt for O {
+impl<O: IsA<UserMediaPermissionRequest>> UserMediaPermissionRequestExt for O {
     fn get_property_is_for_audio_device(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "is-for-audio-device".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"is-for-audio-device\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -49,7 +49,7 @@ impl<O: IsA<UserMediaPermissionRequest> + IsA<glib::object::Object>> UserMediaPe
     fn get_property_is_for_video_device(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "is-for-video-device".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"is-for-video-device\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -57,7 +57,7 @@ impl<O: IsA<UserMediaPermissionRequest> + IsA<glib::object::Object>> UserMediaPe
     fn connect_property_is_for_audio_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::is-for-audio-device",
+            connect_raw(self.as_ptr() as *mut _, b"notify::is-for-audio-device\0".as_ptr() as *const _,
                 transmute(notify_is_for_audio_device_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -65,7 +65,7 @@ impl<O: IsA<UserMediaPermissionRequest> + IsA<glib::object::Object>> UserMediaPe
     fn connect_property_is_for_video_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::is-for-video-device",
+            connect_raw(self.as_ptr() as *mut _, b"notify::is-for-video-device\0".as_ptr() as *const _,
                 transmute(notify_is_for_video_device_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -74,11 +74,17 @@ impl<O: IsA<UserMediaPermissionRequest> + IsA<glib::object::Object>> UserMediaPe
 unsafe extern "C" fn notify_is_for_audio_device_trampoline<P>(this: *mut ffi::WebKitUserMediaPermissionRequest, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<UserMediaPermissionRequest> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&UserMediaPermissionRequest::from_glib_borrow(this).downcast_unchecked())
+    f(&UserMediaPermissionRequest::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_is_for_video_device_trampoline<P>(this: *mut ffi::WebKitUserMediaPermissionRequest, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<UserMediaPermissionRequest> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&UserMediaPermissionRequest::from_glib_borrow(this).downcast_unchecked())
+    f(&UserMediaPermissionRequest::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for UserMediaPermissionRequest {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "UserMediaPermissionRequest")
+    }
 }

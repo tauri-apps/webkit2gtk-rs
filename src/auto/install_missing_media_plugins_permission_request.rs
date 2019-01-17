@@ -4,31 +4,38 @@
 
 use PermissionRequest;
 use ffi;
+#[cfg(any(feature = "v2_10", feature = "dox"))]
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct InstallMissingMediaPluginsPermissionRequest(Object<ffi::WebKitInstallMissingMediaPluginsPermissionRequest, ffi::WebKitInstallMissingMediaPluginsPermissionRequestClass>): PermissionRequest;
+    pub struct InstallMissingMediaPluginsPermissionRequest(Object<ffi::WebKitInstallMissingMediaPluginsPermissionRequest, ffi::WebKitInstallMissingMediaPluginsPermissionRequestClass, InstallMissingMediaPluginsPermissionRequestClass>) @implements PermissionRequest;
 
     match fn {
         get_type => || ffi::webkit_install_missing_media_plugins_permission_request_get_type(),
     }
 }
 
-pub trait InstallMissingMediaPluginsPermissionRequestExt {
+pub const NONE_INSTALL_MISSING_MEDIA_PLUGINS_PERMISSION_REQUEST: Option<&InstallMissingMediaPluginsPermissionRequest> = None;
+
+pub trait InstallMissingMediaPluginsPermissionRequestExt: 'static {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn get_description(&self) -> Option<String>;
+    fn get_description(&self) -> Option<GString>;
 }
 
 impl<O: IsA<InstallMissingMediaPluginsPermissionRequest>> InstallMissingMediaPluginsPermissionRequestExt for O {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
-    fn get_description(&self) -> Option<String> {
+    fn get_description(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_install_missing_media_plugins_permission_request_get_description(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_install_missing_media_plugins_permission_request_get_description(self.as_ref().to_glib_none().0))
         }
+    }
+}
+
+impl fmt::Display for InstallMissingMediaPluginsPermissionRequest {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "InstallMissingMediaPluginsPermissionRequest")
     }
 }

@@ -3,12 +3,11 @@
 // DO NOT EDIT
 
 use ffi;
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+use glib::GString;
+#[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -39,7 +38,7 @@ impl SecurityOrigin {
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
-    pub fn get_host(&self) -> Option<String> {
+    pub fn get_host(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::webkit_security_origin_get_host(self.to_glib_none().0))
         }
@@ -53,7 +52,7 @@ impl SecurityOrigin {
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
-    pub fn get_protocol(&self) -> Option<String> {
+    pub fn get_protocol(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::webkit_security_origin_get_protocol(self.to_glib_none().0))
         }
@@ -67,7 +66,7 @@ impl SecurityOrigin {
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
-    fn to_string(&self) -> String {
+    fn to_string(&self) -> GString {
         unsafe {
             from_glib_full(ffi::webkit_security_origin_to_string(self.to_glib_none().0))
         }

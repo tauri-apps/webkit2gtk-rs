@@ -5,11 +5,10 @@
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 use CredentialPersistence;
 use ffi;
+#[cfg(any(feature = "v2_2", feature = "dox"))]
+use glib::GString;
+#[cfg(any(feature = "v2_2", feature = "dox"))]
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -32,7 +31,7 @@ impl Credential {
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
-    pub fn get_password(&mut self) -> Option<String> {
+    pub fn get_password(&mut self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::webkit_credential_get_password(self.to_glib_none_mut().0))
         }
@@ -46,7 +45,7 @@ impl Credential {
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
-    pub fn get_username(&mut self) -> Option<String> {
+    pub fn get_username(&mut self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::webkit_credential_get_username(self.to_glib_none_mut().0))
         }
