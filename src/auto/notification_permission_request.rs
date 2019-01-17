@@ -5,13 +5,10 @@
 use PermissionRequest;
 use ffi;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct NotificationPermissionRequest(Object<ffi::WebKitNotificationPermissionRequest, ffi::WebKitNotificationPermissionRequestClass>): PermissionRequest;
+    pub struct NotificationPermissionRequest(Object<ffi::WebKitNotificationPermissionRequest, ffi::WebKitNotificationPermissionRequestClass, NotificationPermissionRequestClass>) @implements PermissionRequest;
 
     match fn {
         get_type => || ffi::webkit_notification_permission_request_get_type(),
@@ -19,3 +16,11 @@ glib_wrapper! {
 }
 
 impl NotificationPermissionRequest {}
+
+pub const NONE_NOTIFICATION_PERMISSION_REQUEST: Option<&NotificationPermissionRequest> = None;
+
+impl fmt::Display for NotificationPermissionRequest {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "NotificationPermissionRequest")
+    }
+}

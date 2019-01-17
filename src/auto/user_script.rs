@@ -7,11 +7,10 @@ use UserContentInjectedFrames;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 use UserScriptInjectionTime;
 use ffi;
+#[cfg(any(feature = "v2_6", feature = "dox"))]
+use glib::GString;
+#[cfg(any(feature = "v2_6", feature = "dox"))]
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]

@@ -10,36 +10,38 @@ use ffi;
 use futures_core;
 use gio;
 use gio_ffi;
-use glib;
-use glib::object::Downcast;
+use glib::GString;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct WebResource(Object<ffi::WebKitWebResource, ffi::WebKitWebResourceClass>);
+    pub struct WebResource(Object<ffi::WebKitWebResource, ffi::WebKitWebResourceClass, WebResourceClass>);
 
     match fn {
         get_type => || ffi::webkit_web_resource_get_type(),
     }
 }
 
-pub trait WebResourceExt: Sized {
-    fn get_data<'a, P: Into<Option<&'a gio::Cancellable>>, Q: FnOnce(Result<(Vec<u8>, usize), Error>) + Send + 'static>(&self, cancellable: P, callback: Q);
+pub const NONE_WEB_RESOURCE: Option<&WebResource> = None;
+
+pub trait WebResourceExt: 'static {
+    fn get_data<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(Vec<u8>, usize), Error>) + Send + 'static>(&self, cancellable: Q, callback: R);
 
     #[cfg(feature = "futures")]
-    fn get_data_future(&self) -> Box_<futures_core::Future<Item = (Self, (Vec<u8>, usize)), Error = (Self, Error)>>;
+    fn get_data_future(&self) -> Box_<futures_core::Future<Item = (Self, (Vec<u8>, usize)), Error = (Self, Error)>> where Self: Sized + Clone;
 
     fn get_response(&self) -> Option<URIResponse>;
 
-    fn get_uri(&self) -> Option<String>;
+    fn get_uri(&self) -> Option<GString>;
 
     fn connect_failed<F: Fn(&Self, &Error) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -57,28 +59,27 @@ pub trait WebResourceExt: Sized {
     fn connect_property_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<WebResource> + IsA<glib::object::Object> + Clone + 'static> WebResourceExt for O {
-    fn get_data<'a, P: Into<Option<&'a gio::Cancellable>>, Q: FnOnce(Result<(Vec<u8>, usize), Error>) + Send + 'static>(&self, cancellable: P, callback: Q) {
+impl<O: IsA<WebResource>> WebResourceExt for O {
+    fn get_data<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(Vec<u8>, usize), Error>) + Send + 'static>(&self, cancellable: Q, callback: R) {
         let cancellable = cancellable.into();
-        let cancellable = cancellable.to_glib_none();
-        let user_data: Box<Box<Q>> = Box::new(Box::new(callback));
-        unsafe extern "C" fn get_data_trampoline<Q: FnOnce(Result<(Vec<u8>, usize), Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer)
+        let user_data: Box<Box<R>> = Box::new(Box::new(callback));
+        unsafe extern "C" fn get_data_trampoline<R: FnOnce(Result<(Vec<u8>, usize), Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer)
         {
             let mut error = ptr::null_mut();
-            let mut length = mem::uninitialized();
+            let mut length = ::std::mem::uninitialized();
             let ret = ffi::webkit_web_resource_get_data_finish(_source_object as *mut _, res, &mut length, &mut error);
             let result = if error.is_null() { Ok((FromGlibContainer::from_glib_full_num(ret, length as usize), length)) } else { Err(from_glib_full(error)) };
-            let callback: Box<Box<Q>> = Box::from_raw(user_data as *mut _);
+            let callback: Box<Box<R>> = Box::from_raw(user_data as *mut _);
             callback(result);
         }
-        let callback = get_data_trampoline::<Q>;
+        let callback = get_data_trampoline::<R>;
         unsafe {
-            ffi::webkit_web_resource_get_data(self.to_glib_none().0, cancellable.0, Some(callback), Box::into_raw(user_data) as *mut _);
+            ffi::webkit_web_resource_get_data(self.as_ref().to_glib_none().0, cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box::into_raw(user_data) as *mut _);
         }
     }
 
     #[cfg(feature = "futures")]
-    fn get_data_future(&self) -> Box_<futures_core::Future<Item = (Self, (Vec<u8>, usize)), Error = (Self, Error)>> {
+    fn get_data_future(&self) -> Box_<futures_core::Future<Item = (Self, (Vec<u8>, usize)), Error = (Self, Error)>> where Self: Sized + Clone {
         use gio::GioFuture;
         use fragile::Fragile;
 
@@ -101,20 +102,20 @@ impl<O: IsA<WebResource> + IsA<glib::object::Object> + Clone + 'static> WebResou
 
     fn get_response(&self) -> Option<URIResponse> {
         unsafe {
-            from_glib_none(ffi::webkit_web_resource_get_response(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_web_resource_get_response(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn get_uri(&self) -> Option<String> {
+    fn get_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_web_resource_get_uri(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_web_resource_get_uri(self.as_ref().to_glib_none().0))
         }
     }
 
     fn connect_failed<F: Fn(&Self, &Error) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Error) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "failed",
+            connect_raw(self.as_ptr() as *mut _, b"failed\0".as_ptr() as *const _,
                 transmute(failed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -123,7 +124,7 @@ impl<O: IsA<WebResource> + IsA<glib::object::Object> + Clone + 'static> WebResou
     fn connect_failed_with_tls_errors<F: Fn(&Self, &gio::TlsCertificate, gio::TlsCertificateFlags) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gio::TlsCertificate, gio::TlsCertificateFlags) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "failed-with-tls-errors",
+            connect_raw(self.as_ptr() as *mut _, b"failed-with-tls-errors\0".as_ptr() as *const _,
                 transmute(failed_with_tls_errors_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -131,7 +132,7 @@ impl<O: IsA<WebResource> + IsA<glib::object::Object> + Clone + 'static> WebResou
     fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "finished",
+            connect_raw(self.as_ptr() as *mut _, b"finished\0".as_ptr() as *const _,
                 transmute(finished_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -139,7 +140,7 @@ impl<O: IsA<WebResource> + IsA<glib::object::Object> + Clone + 'static> WebResou
     fn connect_received_data<F: Fn(&Self, u64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, u64) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "received-data",
+            connect_raw(self.as_ptr() as *mut _, b"received-data\0".as_ptr() as *const _,
                 transmute(received_data_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -147,7 +148,7 @@ impl<O: IsA<WebResource> + IsA<glib::object::Object> + Clone + 'static> WebResou
     fn connect_sent_request<F: Fn(&Self, &URIRequest, &URIResponse) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &URIRequest, &URIResponse) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "sent-request",
+            connect_raw(self.as_ptr() as *mut _, b"sent-request\0".as_ptr() as *const _,
                 transmute(sent_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -155,7 +156,7 @@ impl<O: IsA<WebResource> + IsA<glib::object::Object> + Clone + 'static> WebResou
     fn connect_property_response_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::response",
+            connect_raw(self.as_ptr() as *mut _, b"notify::response\0".as_ptr() as *const _,
                 transmute(notify_response_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -163,7 +164,7 @@ impl<O: IsA<WebResource> + IsA<glib::object::Object> + Clone + 'static> WebResou
     fn connect_property_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::uri",
+            connect_raw(self.as_ptr() as *mut _, b"notify::uri\0".as_ptr() as *const _,
                 transmute(notify_uri_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -172,42 +173,48 @@ impl<O: IsA<WebResource> + IsA<glib::object::Object> + Clone + 'static> WebResou
 unsafe extern "C" fn failed_trampoline<P>(this: *mut ffi::WebKitWebResource, error: *mut glib_ffi::GError, f: glib_ffi::gpointer)
 where P: IsA<WebResource> {
     let f: &&(Fn(&P, &Error) + 'static) = transmute(f);
-    f(&WebResource::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(error))
+    f(&WebResource::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error))
 }
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 unsafe extern "C" fn failed_with_tls_errors_trampoline<P>(this: *mut ffi::WebKitWebResource, certificate: *mut gio_ffi::GTlsCertificate, errors: gio_ffi::GTlsCertificateFlags, f: glib_ffi::gpointer)
 where P: IsA<WebResource> {
     let f: &&(Fn(&P, &gio::TlsCertificate, gio::TlsCertificateFlags) + 'static) = transmute(f);
-    f(&WebResource::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(certificate), from_glib(errors))
+    f(&WebResource::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(certificate), from_glib(errors))
 }
 
 unsafe extern "C" fn finished_trampoline<P>(this: *mut ffi::WebKitWebResource, f: glib_ffi::gpointer)
 where P: IsA<WebResource> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebResource::from_glib_borrow(this).downcast_unchecked())
+    f(&WebResource::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn received_data_trampoline<P>(this: *mut ffi::WebKitWebResource, data_length: u64, f: glib_ffi::gpointer)
 where P: IsA<WebResource> {
     let f: &&(Fn(&P, u64) + 'static) = transmute(f);
-    f(&WebResource::from_glib_borrow(this).downcast_unchecked(), data_length)
+    f(&WebResource::from_glib_borrow(this).unsafe_cast(), data_length)
 }
 
 unsafe extern "C" fn sent_request_trampoline<P>(this: *mut ffi::WebKitWebResource, request: *mut ffi::WebKitURIRequest, redirected_response: *mut ffi::WebKitURIResponse, f: glib_ffi::gpointer)
 where P: IsA<WebResource> {
     let f: &&(Fn(&P, &URIRequest, &URIResponse) + 'static) = transmute(f);
-    f(&WebResource::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(request), &from_glib_borrow(redirected_response))
+    f(&WebResource::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(request), &from_glib_borrow(redirected_response))
 }
 
 unsafe extern "C" fn notify_response_trampoline<P>(this: *mut ffi::WebKitWebResource, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<WebResource> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebResource::from_glib_borrow(this).downcast_unchecked())
+    f(&WebResource::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_uri_trampoline<P>(this: *mut ffi::WebKitWebResource, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<WebResource> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&WebResource::from_glib_borrow(this).downcast_unchecked())
+    f(&WebResource::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for WebResource {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "WebResource")
+    }
 }

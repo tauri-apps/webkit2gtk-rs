@@ -3,22 +3,22 @@
 // DO NOT EDIT
 
 use ffi;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct HitTestResult(Object<ffi::WebKitHitTestResult, ffi::WebKitHitTestResultClass>);
+    pub struct HitTestResult(Object<ffi::WebKitHitTestResult, ffi::WebKitHitTestResultClass, HitTestResultClass>);
 
     match fn {
         get_type => || ffi::webkit_hit_test_result_get_type(),
     }
 }
 
-pub trait HitTestResultExt {
+pub const NONE_HIT_TEST_RESULT: Option<&HitTestResult> = None;
+
+pub trait HitTestResultExt: 'static {
     fn context_is_editable(&self) -> bool;
 
     fn context_is_image(&self) -> bool;
@@ -34,88 +34,94 @@ pub trait HitTestResultExt {
 
     fn get_context(&self) -> u32;
 
-    fn get_image_uri(&self) -> Option<String>;
+    fn get_image_uri(&self) -> Option<GString>;
 
-    fn get_link_label(&self) -> Option<String>;
+    fn get_link_label(&self) -> Option<GString>;
 
-    fn get_link_title(&self) -> Option<String>;
+    fn get_link_title(&self) -> Option<GString>;
 
-    fn get_link_uri(&self) -> Option<String>;
+    fn get_link_uri(&self) -> Option<GString>;
 
-    fn get_media_uri(&self) -> Option<String>;
+    fn get_media_uri(&self) -> Option<GString>;
 }
 
 impl<O: IsA<HitTestResult>> HitTestResultExt for O {
     fn context_is_editable(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_hit_test_result_context_is_editable(self.to_glib_none().0))
+            from_glib(ffi::webkit_hit_test_result_context_is_editable(self.as_ref().to_glib_none().0))
         }
     }
 
     fn context_is_image(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_hit_test_result_context_is_image(self.to_glib_none().0))
+            from_glib(ffi::webkit_hit_test_result_context_is_image(self.as_ref().to_glib_none().0))
         }
     }
 
     fn context_is_link(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_hit_test_result_context_is_link(self.to_glib_none().0))
+            from_glib(ffi::webkit_hit_test_result_context_is_link(self.as_ref().to_glib_none().0))
         }
     }
 
     fn context_is_media(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_hit_test_result_context_is_media(self.to_glib_none().0))
+            from_glib(ffi::webkit_hit_test_result_context_is_media(self.as_ref().to_glib_none().0))
         }
     }
 
     fn context_is_scrollbar(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_hit_test_result_context_is_scrollbar(self.to_glib_none().0))
+            from_glib(ffi::webkit_hit_test_result_context_is_scrollbar(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn context_is_selection(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_hit_test_result_context_is_selection(self.to_glib_none().0))
+            from_glib(ffi::webkit_hit_test_result_context_is_selection(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_context(&self) -> u32 {
         unsafe {
-            ffi::webkit_hit_test_result_get_context(self.to_glib_none().0)
+            ffi::webkit_hit_test_result_get_context(self.as_ref().to_glib_none().0)
         }
     }
 
-    fn get_image_uri(&self) -> Option<String> {
+    fn get_image_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_hit_test_result_get_image_uri(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_hit_test_result_get_image_uri(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn get_link_label(&self) -> Option<String> {
+    fn get_link_label(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_hit_test_result_get_link_label(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_hit_test_result_get_link_label(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn get_link_title(&self) -> Option<String> {
+    fn get_link_title(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_hit_test_result_get_link_title(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_hit_test_result_get_link_title(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn get_link_uri(&self) -> Option<String> {
+    fn get_link_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_hit_test_result_get_link_uri(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_hit_test_result_get_link_uri(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn get_media_uri(&self) -> Option<String> {
+    fn get_media_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_hit_test_result_get_media_uri(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_hit_test_result_get_media_uri(self.as_ref().to_glib_none().0))
         }
+    }
+}
+
+impl fmt::Display for HitTestResult {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "HitTestResult")
     }
 }

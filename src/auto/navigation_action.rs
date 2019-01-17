@@ -7,11 +7,8 @@ use NavigationType;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 use URIRequest;
 use ffi;
+#[cfg(any(feature = "v2_6", feature = "dox"))]
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]

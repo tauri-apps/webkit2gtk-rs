@@ -4,18 +4,11 @@
 
 use ffi;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gtk;
-use gtk_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct WebViewBase(Object<ffi::WebKitWebViewBase, ffi::WebKitWebViewBaseClass>): [
-        gtk::Container => gtk_ffi::GtkContainer,
-        gtk::Widget => gtk_ffi::GtkWidget,
-    ];
+    pub struct WebViewBase(Object<ffi::WebKitWebViewBase, ffi::WebKitWebViewBaseClass, WebViewBaseClass>) @extends gtk::Container, gtk::Widget;
 
     match fn {
         get_type => || ffi::webkit_web_view_base_get_type(),
@@ -23,3 +16,11 @@ glib_wrapper! {
 }
 
 impl WebViewBase {}
+
+pub const NONE_WEB_VIEW_BASE: Option<&WebViewBase> = None;
+
+impl fmt::Display for WebViewBase {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "WebViewBase")
+    }
+}

@@ -5,20 +5,19 @@
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct PermissionRequest(Object<ffi::WebKitPermissionRequest, ffi::WebKitPermissionRequestIface>);
+    pub struct PermissionRequest(Interface<ffi::WebKitPermissionRequest>);
 
     match fn {
         get_type => || ffi::webkit_permission_request_get_type(),
     }
 }
 
-pub trait PermissionRequestExt {
+pub const NONE_PERMISSION_REQUEST: Option<&PermissionRequest> = None;
+
+pub trait PermissionRequestExt: 'static {
     fn allow(&self);
 
     fn deny(&self);
@@ -27,13 +26,19 @@ pub trait PermissionRequestExt {
 impl<O: IsA<PermissionRequest>> PermissionRequestExt for O {
     fn allow(&self) {
         unsafe {
-            ffi::webkit_permission_request_allow(self.to_glib_none().0);
+            ffi::webkit_permission_request_allow(self.as_ref().to_glib_none().0);
         }
     }
 
     fn deny(&self) {
         unsafe {
-            ffi::webkit_permission_request_deny(self.to_glib_none().0);
+            ffi::webkit_permission_request_deny(self.as_ref().to_glib_none().0);
         }
+    }
+}
+
+impl fmt::Display for PermissionRequest {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PermissionRequest")
     }
 }

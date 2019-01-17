@@ -6,20 +6,19 @@ use ffi;
 use gdk;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct WindowProperties(Object<ffi::WebKitWindowProperties, ffi::WebKitWindowPropertiesClass>);
+    pub struct WindowProperties(Object<ffi::WebKitWindowProperties, ffi::WebKitWindowPropertiesClass, WindowPropertiesClass>);
 
     match fn {
         get_type => || ffi::webkit_window_properties_get_type(),
     }
 }
 
-pub trait WindowPropertiesExt {
+pub const NONE_WINDOW_PROPERTIES: Option<&WindowProperties> = None;
+
+pub trait WindowPropertiesExt: 'static {
     fn get_fullscreen(&self) -> bool;
 
     fn get_geometry(&self) -> gdk::Rectangle;
@@ -40,51 +39,57 @@ pub trait WindowPropertiesExt {
 impl<O: IsA<WindowProperties>> WindowPropertiesExt for O {
     fn get_fullscreen(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_window_properties_get_fullscreen(self.to_glib_none().0))
+            from_glib(ffi::webkit_window_properties_get_fullscreen(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_geometry(&self) -> gdk::Rectangle {
         unsafe {
             let mut geometry = gdk::Rectangle::uninitialized();
-            ffi::webkit_window_properties_get_geometry(self.to_glib_none().0, geometry.to_glib_none_mut().0);
+            ffi::webkit_window_properties_get_geometry(self.as_ref().to_glib_none().0, geometry.to_glib_none_mut().0);
             geometry
         }
     }
 
     fn get_locationbar_visible(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_window_properties_get_locationbar_visible(self.to_glib_none().0))
+            from_glib(ffi::webkit_window_properties_get_locationbar_visible(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_menubar_visible(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_window_properties_get_menubar_visible(self.to_glib_none().0))
+            from_glib(ffi::webkit_window_properties_get_menubar_visible(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_resizable(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_window_properties_get_resizable(self.to_glib_none().0))
+            from_glib(ffi::webkit_window_properties_get_resizable(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_scrollbars_visible(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_window_properties_get_scrollbars_visible(self.to_glib_none().0))
+            from_glib(ffi::webkit_window_properties_get_scrollbars_visible(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_statusbar_visible(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_window_properties_get_statusbar_visible(self.to_glib_none().0))
+            from_glib(ffi::webkit_window_properties_get_statusbar_visible(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_toolbar_visible(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_window_properties_get_toolbar_visible(self.to_glib_none().0))
+            from_glib(ffi::webkit_window_properties_get_toolbar_visible(self.as_ref().to_glib_none().0))
         }
+    }
+}
+
+impl fmt::Display for WindowProperties {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "WindowProperties")
     }
 }

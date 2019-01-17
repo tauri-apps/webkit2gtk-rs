@@ -3,11 +3,8 @@
 // DO NOT EDIT
 
 use ffi;
+use glib::GString;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -21,19 +18,19 @@ glib_wrapper! {
 }
 
 impl MimeInfo {
-    pub fn get_description(&self) -> Option<String> {
+    pub fn get_description(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::webkit_mime_info_get_description(self.to_glib_none().0))
         }
     }
 
-    pub fn get_extensions(&self) -> Vec<String> {
+    pub fn get_extensions(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::webkit_mime_info_get_extensions(self.to_glib_none().0))
         }
     }
 
-    pub fn get_mime_type(&self) -> Option<String> {
+    pub fn get_mime_type(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::webkit_mime_info_get_mime_type(self.to_glib_none().0))
         }

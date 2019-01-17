@@ -3,45 +3,51 @@
 // DO NOT EDIT
 
 use ffi;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct BackForwardListItem(Object<ffi::WebKitBackForwardListItem, ffi::WebKitBackForwardListItemClass>);
+    pub struct BackForwardListItem(Object<ffi::WebKitBackForwardListItem, ffi::WebKitBackForwardListItemClass, BackForwardListItemClass>);
 
     match fn {
         get_type => || ffi::webkit_back_forward_list_item_get_type(),
     }
 }
 
-pub trait BackForwardListItemExt {
-    fn get_original_uri(&self) -> Option<String>;
+pub const NONE_BACK_FORWARD_LIST_ITEM: Option<&BackForwardListItem> = None;
 
-    fn get_title(&self) -> Option<String>;
+pub trait BackForwardListItemExt: 'static {
+    fn get_original_uri(&self) -> Option<GString>;
 
-    fn get_uri(&self) -> Option<String>;
+    fn get_title(&self) -> Option<GString>;
+
+    fn get_uri(&self) -> Option<GString>;
 }
 
 impl<O: IsA<BackForwardListItem>> BackForwardListItemExt for O {
-    fn get_original_uri(&self) -> Option<String> {
+    fn get_original_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_back_forward_list_item_get_original_uri(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_back_forward_list_item_get_original_uri(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn get_title(&self) -> Option<String> {
+    fn get_title(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_back_forward_list_item_get_title(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_back_forward_list_item_get_title(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn get_uri(&self) -> Option<String> {
+    fn get_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_back_forward_list_item_get_uri(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_back_forward_list_item_get_uri(self.as_ref().to_glib_none().0))
         }
+    }
+}
+
+impl fmt::Display for BackForwardListItem {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "BackForwardListItem")
     }
 }

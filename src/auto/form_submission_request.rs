@@ -5,20 +5,19 @@
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct FormSubmissionRequest(Object<ffi::WebKitFormSubmissionRequest, ffi::WebKitFormSubmissionRequestClass>);
+    pub struct FormSubmissionRequest(Object<ffi::WebKitFormSubmissionRequest, ffi::WebKitFormSubmissionRequestClass, FormSubmissionRequestClass>);
 
     match fn {
         get_type => || ffi::webkit_form_submission_request_get_type(),
     }
 }
 
-pub trait FormSubmissionRequestExt {
+pub const NONE_FORM_SUBMISSION_REQUEST: Option<&FormSubmissionRequest> = None;
+
+pub trait FormSubmissionRequestExt: 'static {
     //#[cfg_attr(feature = "v2_20", deprecated)]
     //fn get_text_fields(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 25 }/TypeId { ns_id: 0, id: 25 };
 
@@ -40,7 +39,13 @@ impl<O: IsA<FormSubmissionRequest>> FormSubmissionRequestExt for O {
 
     fn submit(&self) {
         unsafe {
-            ffi::webkit_form_submission_request_submit(self.to_glib_none().0);
+            ffi::webkit_form_submission_request_submit(self.as_ref().to_glib_none().0);
         }
+    }
+}
+
+impl fmt::Display for FormSubmissionRequest {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "FormSubmissionRequest")
     }
 }
