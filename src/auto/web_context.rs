@@ -14,6 +14,7 @@ use SecurityManager;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use SecurityOrigin;
 use TLSErrorsPolicy;
+use URISchemeRequest;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 use WebsiteDataManager;
 use ffi;
@@ -139,7 +140,7 @@ pub trait WebContextExt: 'static {
 
     fn prefetch_dns(&self, hostname: &str);
 
-    //fn register_uri_scheme(&self, scheme: &str, callback: /*Unknown conversion*//*Unimplemented*/URISchemeRequestCallback, user_data_destroy_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    fn register_uri_scheme<P: Fn(&URISchemeRequest) + 'static>(&self, scheme: &str, callback: P);
 
     fn set_additional_plugins_directory(&self, directory: &str);
 
@@ -235,8 +236,7 @@ impl<O: IsA<WebContext>> WebContextExt for O {
     fn get_plugins<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(&self, cancellable: Q, callback: R) {
         let cancellable = cancellable.into();
         let user_data: Box<Box<R>> = Box::new(Box::new(callback));
-        unsafe extern "C" fn get_plugins_trampoline<R: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer)
-        {
+        unsafe extern "C" fn get_plugins_trampoline<R: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer) {
             let mut error = ptr::null_mut();
             let ret = ffi::webkit_web_context_get_plugins_finish(_source_object as *mut _, res, &mut error);
             let result = if error.is_null() { Ok(FromGlibPtrContainer::from_glib_full(ret)) } else { Err(from_glib_full(error)) };
@@ -343,9 +343,27 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         }
     }
 
-    //fn register_uri_scheme(&self, scheme: &str, callback: /*Unknown conversion*//*Unimplemented*/URISchemeRequestCallback, user_data_destroy_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::webkit_web_context_register_uri_scheme() }
-    //}
+    fn register_uri_scheme<P: Fn(&URISchemeRequest) + 'static>(&self, scheme: &str, callback: P) {
+        let callback_data: Box_<Option<P>> = Box::new(callback.into());
+        unsafe extern "C" fn callback_func<P: Fn(&URISchemeRequest) + 'static>(request: *mut ffi::WebKitURISchemeRequest, user_data: glib_ffi::gpointer) {
+            let request = from_glib_borrow(request);
+            let callback: &Box_<Option<P>> = &*(user_data as *mut _);
+            if let Some(ref callback) = **callback {
+                callback(&request)
+            } else {
+                panic!("cannot get closure...")
+            };
+        }
+        let callback = if callback_data.is_some() { Some(callback_func::<P> as _) } else { None };
+        unsafe extern "C" fn user_data_destroy_func_func<P: Fn(&URISchemeRequest) + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call4 = Some(user_data_destroy_func_func::<P> as _);
+        let super_callback0: Box_<Option<P>> = callback_data;
+        unsafe {
+            ffi::webkit_web_context_register_uri_scheme(self.as_ref().to_glib_none().0, scheme.to_glib_none().0, callback, Box::into_raw(super_callback0) as *mut _, destroy_call4);
+        }
+    }
 
     fn set_additional_plugins_directory(&self, directory: &str) {
         unsafe {

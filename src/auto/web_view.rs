@@ -256,10 +256,10 @@ pub trait WebViewExt: 'static {
     //#[cfg(feature = "futures")]
     //fn save_future(&self, save_mode: SaveMode) -> Box_<futures_core::Future<Item = (Self, /*Ignored*/gio::InputStream), Error = (Self, Error)>> where Self: Sized + Clone;
 
-    //fn save_to_file<'a, P: IsA</*Ignored*/gio::File>, Q: IsA<gio::Cancellable> + 'a, R: Into<Option<&'a Q>>, S: FnOnce(Result<(), Error>) + Send + 'static>(&self, file: &P, save_mode: SaveMode, cancellable: R, callback: S);
+    //fn save_to_file<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(), Error>) + Send + 'static>(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode, cancellable: Q, callback: R);
 
     //#[cfg(feature = "futures")]
-    //fn save_to_file_future<P: IsA</*Ignored*/gio::File> + Clone + 'static>(&self, file: &P, save_mode: SaveMode) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> where Self: Sized + Clone;
+    //fn save_to_file_future(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> where Self: Sized + Clone;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn set_background_color(&self, rgba: &gdk::RGBA);
@@ -380,8 +380,7 @@ impl<O: IsA<WebView>> WebViewExt for O {
     fn can_execute_editing_command<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(), Error>) + Send + 'static>(&self, command: &str, cancellable: Q, callback: R) {
         let cancellable = cancellable.into();
         let user_data: Box<Box<R>> = Box::new(Box::new(callback));
-        unsafe extern "C" fn can_execute_editing_command_trampoline<R: FnOnce(Result<(), Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer)
-        {
+        unsafe extern "C" fn can_execute_editing_command_trampoline<R: FnOnce(Result<(), Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer) {
             let mut error = ptr::null_mut();
             let _ = ffi::webkit_web_view_can_execute_editing_command_finish(_source_object as *mut _, res, &mut error);
             let result = if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) };
@@ -547,8 +546,7 @@ impl<O: IsA<WebView>> WebViewExt for O {
     fn get_snapshot<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<cairo::Surface, Error>) + Send + 'static>(&self, region: SnapshotRegion, options: SnapshotOptions, cancellable: Q, callback: R) {
         let cancellable = cancellable.into();
         let user_data: Box<Box<R>> = Box::new(Box::new(callback));
-        unsafe extern "C" fn get_snapshot_trampoline<R: FnOnce(Result<cairo::Surface, Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer)
-        {
+        unsafe extern "C" fn get_snapshot_trampoline<R: FnOnce(Result<cairo::Surface, Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer) {
             let mut error = ptr::null_mut();
             let ret = ffi::webkit_web_view_get_snapshot_finish(_source_object as *mut _, res, &mut error);
             let result = if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) };
@@ -747,8 +745,7 @@ impl<O: IsA<WebView>> WebViewExt for O {
     fn run_javascript<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<JavascriptResult, Error>) + Send + 'static>(&self, script: &str, cancellable: Q, callback: R) {
         let cancellable = cancellable.into();
         let user_data: Box<Box<R>> = Box::new(Box::new(callback));
-        unsafe extern "C" fn run_javascript_trampoline<R: FnOnce(Result<JavascriptResult, Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer)
-        {
+        unsafe extern "C" fn run_javascript_trampoline<R: FnOnce(Result<JavascriptResult, Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer) {
             let mut error = ptr::null_mut();
             let ret = ffi::webkit_web_view_run_javascript_finish(_source_object as *mut _, res, &mut error);
             let result = if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) };
@@ -788,8 +785,7 @@ impl<O: IsA<WebView>> WebViewExt for O {
     fn run_javascript_from_gresource<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<JavascriptResult, Error>) + Send + 'static>(&self, resource: &str, cancellable: Q, callback: R) {
         let cancellable = cancellable.into();
         let user_data: Box<Box<R>> = Box::new(Box::new(callback));
-        unsafe extern "C" fn run_javascript_from_gresource_trampoline<R: FnOnce(Result<JavascriptResult, Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer)
-        {
+        unsafe extern "C" fn run_javascript_from_gresource_trampoline<R: FnOnce(Result<JavascriptResult, Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer) {
             let mut error = ptr::null_mut();
             let ret = ffi::webkit_web_view_run_javascript_from_gresource_finish(_source_object as *mut _, res, &mut error);
             let result = if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) };
@@ -853,12 +849,12 @@ impl<O: IsA<WebView>> WebViewExt for O {
         //})
     //}
 
-    //fn save_to_file<'a, P: IsA</*Ignored*/gio::File>, Q: IsA<gio::Cancellable> + 'a, R: Into<Option<&'a Q>>, S: FnOnce(Result<(), Error>) + Send + 'static>(&self, file: &P, save_mode: SaveMode, cancellable: R, callback: S) {
+    //fn save_to_file<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(), Error>) + Send + 'static>(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode, cancellable: Q, callback: R) {
     //    unsafe { TODO: call ffi::webkit_web_view_save_to_file() }
     //}
 
     //#[cfg(feature = "futures")]
-    //fn save_to_file_future<P: IsA</*Ignored*/gio::File> + Clone + 'static>(&self, file: &P, save_mode: SaveMode) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> where Self: Sized + Clone {
+    //fn save_to_file_future(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> where Self: Sized + Clone {
         //use gio::GioFuture;
         //use fragile::Fragile;
 

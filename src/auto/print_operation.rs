@@ -50,9 +50,9 @@ pub trait PrintOperationExt: 'static {
 
     fn run_dialog<'a, P: IsA<gtk::Window> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q) -> PrintOperationResponse;
 
-    fn set_page_setup<P: IsA<gtk::PageSetup>>(&self, page_setup: &P);
+    fn set_page_setup(&self, page_setup: &gtk::PageSetup);
 
-    fn set_print_settings<P: IsA<gtk::PrintSettings>>(&self, print_settings: &P);
+    fn set_print_settings(&self, print_settings: &gtk::PrintSettings);
 
     fn get_property_web_view(&self) -> Option<WebView>;
 
@@ -94,15 +94,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         }
     }
 
-    fn set_page_setup<P: IsA<gtk::PageSetup>>(&self, page_setup: &P) {
+    fn set_page_setup(&self, page_setup: &gtk::PageSetup) {
         unsafe {
-            ffi::webkit_print_operation_set_page_setup(self.as_ref().to_glib_none().0, page_setup.as_ref().to_glib_none().0);
+            ffi::webkit_print_operation_set_page_setup(self.as_ref().to_glib_none().0, page_setup.to_glib_none().0);
         }
     }
 
-    fn set_print_settings<P: IsA<gtk::PrintSettings>>(&self, print_settings: &P) {
+    fn set_print_settings(&self, print_settings: &gtk::PrintSettings) {
         unsafe {
-            ffi::webkit_print_operation_set_print_settings(self.as_ref().to_glib_none().0, print_settings.as_ref().to_glib_none().0);
+            ffi::webkit_print_operation_set_print_settings(self.as_ref().to_glib_none().0, print_settings.to_glib_none().0);
         }
     }
 

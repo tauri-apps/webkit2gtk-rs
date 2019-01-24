@@ -20,6 +20,7 @@ use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -63,10 +64,9 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
     fn get_data<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(Vec<u8>, usize), Error>) + Send + 'static>(&self, cancellable: Q, callback: R) {
         let cancellable = cancellable.into();
         let user_data: Box<Box<R>> = Box::new(Box::new(callback));
-        unsafe extern "C" fn get_data_trampoline<R: FnOnce(Result<(Vec<u8>, usize), Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer)
-        {
+        unsafe extern "C" fn get_data_trampoline<R: FnOnce(Result<(Vec<u8>, usize), Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer) {
             let mut error = ptr::null_mut();
-            let mut length = ::std::mem::uninitialized();
+            let mut length = mem::uninitialized();
             let ret = ffi::webkit_web_resource_get_data_finish(_source_object as *mut _, res, &mut length, &mut error);
             let result = if error.is_null() { Ok((FromGlibContainer::from_glib_full_num(ret, length as usize), length)) } else { Err(from_glib_full(error)) };
             let callback: Box<Box<R>> = Box::from_raw(user_data as *mut _);
