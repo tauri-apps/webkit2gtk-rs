@@ -85,11 +85,11 @@ pub trait WebsiteDataManagerExt: 'static {
     fn is_ephemeral(&self) -> bool;
 
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn remove<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, website_data: /*Ignored*/&[&WebsiteData], cancellable: Q, callback: R);
+    //fn remove<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Q, callback: R);
 
     //#[cfg(feature = "futures")]
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn remove_future(&self, types: WebsiteDataTypes, website_data: /*Ignored*/&[&WebsiteData]) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> where Self: Sized + Clone;
+    //fn remove_future(&self, types: WebsiteDataTypes) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> where Self: Sized + Clone;
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_property_is_ephemeral(&self) -> bool;
@@ -219,24 +219,22 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     }
 
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn remove<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, website_data: /*Ignored*/&[&WebsiteData], cancellable: Q, callback: R) {
+    //fn remove<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Q, callback: R) {
     //    unsafe { TODO: call ffi::webkit_website_data_manager_remove() }
     //}
 
     //#[cfg(feature = "futures")]
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn remove_future(&self, types: WebsiteDataTypes, website_data: /*Ignored*/&[&WebsiteData]) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> where Self: Sized + Clone {
+    //fn remove_future(&self, types: WebsiteDataTypes) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> where Self: Sized + Clone {
         //use gio::GioFuture;
         //use fragile::Fragile;
 
-        //let website_data = website_data.clone();
         //GioFuture::new(self, move |obj, send| {
         //    let cancellable = gio::Cancellable::new();
         //    let send = Fragile::new(send);
         //    let obj_clone = Fragile::new(obj.clone());
         //    obj.remove(
         //         types,
-        //         &website_data,
         //         Some(&cancellable),
         //         move |res| {
         //             let obj = obj_clone.into_inner();

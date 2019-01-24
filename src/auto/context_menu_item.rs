@@ -19,12 +19,12 @@ glib_wrapper! {
 
 impl ContextMenuItem {
     //#[cfg_attr(feature = "v2_18", deprecated)]
-    //pub fn new<P: IsA</*Ignored*/gtk::Action>>(action: &P) -> ContextMenuItem {
+    //pub fn new(action: /*Ignored*/&gtk::Action) -> ContextMenuItem {
     //    unsafe { TODO: call ffi::webkit_context_menu_item_new() }
     //}
 
     //#[cfg(any(feature = "v2_18", feature = "dox"))]
-    //pub fn new_from_gaction<'a, P: IsA</*Ignored*/gio::Action>, Q: Into<Option<&'a glib::Variant>>>(action: &P, label: &str, target: Q) -> ContextMenuItem {
+    //pub fn new_from_gaction<'a, P: Into<Option<&'a glib::Variant>>>(action: /*Ignored*/&gio::Action, label: &str, target: P) -> ContextMenuItem {
     //    unsafe { TODO: call ffi::webkit_context_menu_item_new_from_gaction() }
     //}
 

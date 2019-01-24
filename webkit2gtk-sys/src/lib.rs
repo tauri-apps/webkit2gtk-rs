@@ -3,7 +3,7 @@
 // DO NOT EDIT
 
 #![allow(non_camel_case_types, non_upper_case_globals, non_snake_case)]
-#![cfg_attr(feature = "cargo-clippy", allow(approx_constant, type_complexity, unreadable_literal))]
+#![allow(clippy::approx_constant, clippy::type_complexity, clippy::unreadable_literal)]
 
 extern crate libc;
 extern crate gtk_sys as gtk;
@@ -123,9 +123,8 @@ pub type WebKitInsecureContentEvent = c_int;
 pub const WEBKIT_INSECURE_CONTENT_RUN: WebKitInsecureContentEvent = 0;
 pub const WEBKIT_INSECURE_CONTENT_DISPLAYED: WebKitInsecureContentEvent = 1;
 
-pub type JavascriptError = c_int;
-pub const WEBKIT_JAVASCRIPT_ERROR_SCRIPT_FAILED: JavascriptError = 699;
-pub type WebKitJavascriptError = JavascriptError;
+pub type WebKitJavascriptError = c_int;
+pub const WEBKIT_JAVASCRIPT_ERROR_SCRIPT_FAILED: WebKitJavascriptError = 699;
 
 pub type WebKitLoadEvent = c_int;
 pub const WEBKIT_LOAD_STARTED: WebKitLoadEvent = 0;
@@ -186,9 +185,8 @@ pub type WebKitProcessModel = c_int;
 pub const WEBKIT_PROCESS_MODEL_SHARED_SECONDARY_PROCESS: WebKitProcessModel = 0;
 pub const WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES: WebKitProcessModel = 1;
 
-pub type SaveMode = c_int;
-pub const WEBKIT_SAVE_MODE_MHTML: SaveMode = 0;
-pub type WebKitSaveMode = SaveMode;
+pub type WebKitSaveMode = c_int;
+pub const WEBKIT_SAVE_MODE_MHTML: WebKitSaveMode = 0;
 
 pub type WebKitScriptDialogType = c_int;
 pub const WEBKIT_SCRIPT_DIALOG_ALERT: WebKitScriptDialogType = 0;
@@ -196,9 +194,8 @@ pub const WEBKIT_SCRIPT_DIALOG_CONFIRM: WebKitScriptDialogType = 1;
 pub const WEBKIT_SCRIPT_DIALOG_PROMPT: WebKitScriptDialogType = 2;
 pub const WEBKIT_SCRIPT_DIALOG_BEFORE_UNLOAD_CONFIRM: WebKitScriptDialogType = 3;
 
-pub type SnapshotError = c_int;
-pub const WEBKIT_SNAPSHOT_ERROR_FAILED_TO_CREATE: SnapshotError = 799;
-pub type WebKitSnapshotError = SnapshotError;
+pub type WebKitSnapshotError = c_int;
+pub const WEBKIT_SNAPSHOT_ERROR_FAILED_TO_CREATE: WebKitSnapshotError = 799;
 
 pub type WebKitSnapshotRegion = c_int;
 pub const WEBKIT_SNAPSHOT_REGION_VISIBLE: WebKitSnapshotRegion = 0;
@@ -1566,14 +1563,23 @@ impl ::std::fmt::Debug for WebKitWebResourcePrivate {
 }
 
 #[repr(C)]
+#[derive(Copy, Clone)]
 pub struct WebKitWebViewBaseClass {
-    _truncated_record_marker: c_void,
-    // /*Ignored*/field parentClass has incomplete type
+    pub parentClass: gtk::GtkContainerClass,
+    pub _webkit_reserved0: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved1: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved2: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved3: Option<unsafe extern "C" fn()>,
 }
 
 impl ::std::fmt::Debug for WebKitWebViewBaseClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("WebKitWebViewBaseClass @ {:?}", self as *const _))
+         .field("parentClass", &self.parentClass)
+         .field("_webkit_reserved0", &self._webkit_reserved0)
+         .field("_webkit_reserved1", &self._webkit_reserved1)
+         .field("_webkit_reserved2", &self._webkit_reserved2)
+         .field("_webkit_reserved3", &self._webkit_reserved3)
          .finish()
     }
 }
@@ -1589,14 +1595,71 @@ impl ::std::fmt::Debug for WebKitWebViewBasePrivate {
 }
 
 #[repr(C)]
+#[derive(Copy, Clone)]
 pub struct WebKitWebViewClass {
-    _truncated_record_marker: c_void,
-    // /*Ignored*/field parent has incomplete type
+    pub parent: WebKitWebViewBaseClass,
+    pub load_changed: Option<unsafe extern "C" fn(*mut WebKitWebView, WebKitLoadEvent)>,
+    pub load_failed: Option<unsafe extern "C" fn(*mut WebKitWebView, WebKitLoadEvent, *const c_char, *mut glib::GError) -> gboolean>,
+    pub create: Option<unsafe extern "C" fn(*mut WebKitWebView, *mut WebKitNavigationAction) -> *mut gtk::GtkWidget>,
+    pub ready_to_show: Option<unsafe extern "C" fn(*mut WebKitWebView)>,
+    pub run_as_modal: Option<unsafe extern "C" fn(*mut WebKitWebView)>,
+    pub close: Option<unsafe extern "C" fn(*mut WebKitWebView)>,
+    pub script_dialog: Option<unsafe extern "C" fn(*mut WebKitWebView, *mut WebKitScriptDialog) -> gboolean>,
+    pub decide_policy: Option<unsafe extern "C" fn(*mut WebKitWebView, *mut WebKitPolicyDecision, WebKitPolicyDecisionType) -> gboolean>,
+    pub permission_request: Option<unsafe extern "C" fn(*mut WebKitWebView, *mut WebKitPermissionRequest) -> gboolean>,
+    pub mouse_target_changed: Option<unsafe extern "C" fn(*mut WebKitWebView, *mut WebKitHitTestResult, c_uint)>,
+    pub print: Option<unsafe extern "C" fn(*mut WebKitWebView, *mut WebKitPrintOperation) -> gboolean>,
+    pub resource_load_started: Option<unsafe extern "C" fn(*mut WebKitWebView, *mut WebKitWebResource, *mut WebKitURIRequest)>,
+    pub enter_fullscreen: Option<unsafe extern "C" fn(*mut WebKitWebView) -> gboolean>,
+    pub leave_fullscreen: Option<unsafe extern "C" fn(*mut WebKitWebView) -> gboolean>,
+    pub run_file_chooser: Option<unsafe extern "C" fn(*mut WebKitWebView, *mut WebKitFileChooserRequest) -> gboolean>,
+    pub context_menu: Option<unsafe extern "C" fn(*mut WebKitWebView, *mut WebKitContextMenu, *mut gdk::GdkEvent, *mut WebKitHitTestResult) -> gboolean>,
+    pub context_menu_dismissed: Option<unsafe extern "C" fn(*mut WebKitWebView)>,
+    pub submit_form: Option<unsafe extern "C" fn(*mut WebKitWebView, *mut WebKitFormSubmissionRequest)>,
+    pub insecure_content_detected: Option<unsafe extern "C" fn(*mut WebKitWebView, WebKitInsecureContentEvent)>,
+    pub web_process_crashed: Option<unsafe extern "C" fn(*mut WebKitWebView) -> gboolean>,
+    pub authenticate: Option<unsafe extern "C" fn(*mut WebKitWebView, *mut WebKitAuthenticationRequest) -> gboolean>,
+    pub load_failed_with_tls_errors: Option<unsafe extern "C" fn(*mut WebKitWebView, *const c_char, *mut gio::GTlsCertificate, gio::GTlsCertificateFlags) -> gboolean>,
+    pub show_notification: Option<unsafe extern "C" fn(*mut WebKitWebView, *mut WebKitNotification) -> gboolean>,
+    pub run_color_chooser: Option<unsafe extern "C" fn(*mut WebKitWebView, *mut WebKitColorChooserRequest) -> gboolean>,
+    pub show_option_menu: Option<unsafe extern "C" fn(*mut WebKitWebView, *mut gdk::GdkRectangle, *mut WebKitOptionMenu) -> gboolean>,
+    pub web_process_terminated: Option<unsafe extern "C" fn(*mut WebKitWebView, WebKitWebProcessTerminationReason)>,
+    pub _webkit_reserved0: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved1: Option<unsafe extern "C" fn()>,
 }
 
 impl ::std::fmt::Debug for WebKitWebViewClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("WebKitWebViewClass @ {:?}", self as *const _))
+         .field("parent", &self.parent)
+         .field("load_changed", &self.load_changed)
+         .field("load_failed", &self.load_failed)
+         .field("create", &self.create)
+         .field("ready_to_show", &self.ready_to_show)
+         .field("run_as_modal", &self.run_as_modal)
+         .field("close", &self.close)
+         .field("script_dialog", &self.script_dialog)
+         .field("decide_policy", &self.decide_policy)
+         .field("permission_request", &self.permission_request)
+         .field("mouse_target_changed", &self.mouse_target_changed)
+         .field("print", &self.print)
+         .field("resource_load_started", &self.resource_load_started)
+         .field("enter_fullscreen", &self.enter_fullscreen)
+         .field("leave_fullscreen", &self.leave_fullscreen)
+         .field("run_file_chooser", &self.run_file_chooser)
+         .field("context_menu", &self.context_menu)
+         .field("context_menu_dismissed", &self.context_menu_dismissed)
+         .field("submit_form", &self.submit_form)
+         .field("insecure_content_detected", &self.insecure_content_detected)
+         .field("web_process_crashed", &self.web_process_crashed)
+         .field("authenticate", &self.authenticate)
+         .field("load_failed_with_tls_errors", &self.load_failed_with_tls_errors)
+         .field("show_notification", &self.show_notification)
+         .field("run_color_chooser", &self.run_color_chooser)
+         .field("show_option_menu", &self.show_option_menu)
+         .field("web_process_terminated", &self.web_process_terminated)
+         .field("_webkit_reserved0", &self._webkit_reserved0)
+         .field("_webkit_reserved1", &self._webkit_reserved1)
          .finish()
     }
 }
