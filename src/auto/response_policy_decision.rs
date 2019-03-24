@@ -5,22 +5,22 @@
 use PolicyDecision;
 use URIRequest;
 use URIResponse;
-use ffi;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct ResponsePolicyDecision(Object<ffi::WebKitResponsePolicyDecision, ffi::WebKitResponsePolicyDecisionClass, ResponsePolicyDecisionClass>) @extends PolicyDecision;
+    pub struct ResponsePolicyDecision(Object<webkit2_sys::WebKitResponsePolicyDecision, webkit2_sys::WebKitResponsePolicyDecisionClass, ResponsePolicyDecisionClass>) @extends PolicyDecision;
 
     match fn {
-        get_type => || ffi::webkit_response_policy_decision_get_type(),
+        get_type => || webkit2_sys::webkit_response_policy_decision_get_type(),
     }
 }
 
@@ -42,20 +42,20 @@ pub trait ResponsePolicyDecisionExt: 'static {
 impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
     fn get_request(&self) -> Option<URIRequest> {
         unsafe {
-            from_glib_none(ffi::webkit_response_policy_decision_get_request(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_response_policy_decision_get_request(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_response(&self) -> Option<URIResponse> {
         unsafe {
-            from_glib_none(ffi::webkit_response_policy_decision_get_response(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_response_policy_decision_get_response(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn is_mime_type_supported(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_response_policy_decision_is_mime_type_supported(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_response_policy_decision_is_mime_type_supported(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -76,13 +76,13 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
     }
 }
 
-unsafe extern "C" fn notify_request_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitResponsePolicyDecision, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_request_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitResponsePolicyDecision, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<ResponsePolicyDecision> {
     let f: &F = &*(f as *const F);
     f(&ResponsePolicyDecision::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_response_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitResponsePolicyDecision, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_response_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitResponsePolicyDecision, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<ResponsePolicyDecision> {
     let f: &F = &*(f as *const F);
     f(&ResponsePolicyDecision::from_glib_borrow(this).unsafe_cast())

@@ -8,7 +8,6 @@ use JavascriptResult;
 use UserScript;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 use UserStyleSheet;
-use ffi;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 use glib::object::Cast;
 use glib::object::IsA;
@@ -18,18 +17,19 @@ use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
-use glib_ffi;
+use glib_sys;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 use std::mem::transmute;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct UserContentManager(Object<ffi::WebKitUserContentManager, ffi::WebKitUserContentManagerClass, UserContentManagerClass>);
+    pub struct UserContentManager(Object<webkit2_sys::WebKitUserContentManager, webkit2_sys::WebKitUserContentManagerClass, UserContentManagerClass>);
 
     match fn {
-        get_type => || ffi::webkit_user_content_manager_get_type(),
+        get_type => || webkit2_sys::webkit_user_content_manager_get_type(),
     }
 }
 
@@ -38,7 +38,7 @@ impl UserContentManager {
     pub fn new() -> UserContentManager {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::webkit_user_content_manager_new())
+            from_glib_full(webkit2_sys::webkit_user_content_manager_new())
         }
     }
 }
@@ -85,56 +85,56 @@ impl<O: IsA<UserContentManager>> UserContentManagerExt for O {
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn add_script(&self, script: &UserScript) {
         unsafe {
-            ffi::webkit_user_content_manager_add_script(self.as_ref().to_glib_none().0, script.to_glib_none().0);
+            webkit2_sys::webkit_user_content_manager_add_script(self.as_ref().to_glib_none().0, script.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn add_style_sheet(&self, stylesheet: &UserStyleSheet) {
         unsafe {
-            ffi::webkit_user_content_manager_add_style_sheet(self.as_ref().to_glib_none().0, stylesheet.to_glib_none().0);
+            webkit2_sys::webkit_user_content_manager_add_style_sheet(self.as_ref().to_glib_none().0, stylesheet.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn register_script_message_handler(&self, name: &str) -> bool {
         unsafe {
-            from_glib(ffi::webkit_user_content_manager_register_script_message_handler(self.as_ref().to_glib_none().0, name.to_glib_none().0))
+            from_glib(webkit2_sys::webkit_user_content_manager_register_script_message_handler(self.as_ref().to_glib_none().0, name.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     fn register_script_message_handler_in_world(&self, name: &str, world_name: &str) -> bool {
         unsafe {
-            from_glib(ffi::webkit_user_content_manager_register_script_message_handler_in_world(self.as_ref().to_glib_none().0, name.to_glib_none().0, world_name.to_glib_none().0))
+            from_glib(webkit2_sys::webkit_user_content_manager_register_script_message_handler_in_world(self.as_ref().to_glib_none().0, name.to_glib_none().0, world_name.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn remove_all_scripts(&self) {
         unsafe {
-            ffi::webkit_user_content_manager_remove_all_scripts(self.as_ref().to_glib_none().0);
+            webkit2_sys::webkit_user_content_manager_remove_all_scripts(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn remove_all_style_sheets(&self) {
         unsafe {
-            ffi::webkit_user_content_manager_remove_all_style_sheets(self.as_ref().to_glib_none().0);
+            webkit2_sys::webkit_user_content_manager_remove_all_style_sheets(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn unregister_script_message_handler(&self, name: &str) {
         unsafe {
-            ffi::webkit_user_content_manager_unregister_script_message_handler(self.as_ref().to_glib_none().0, name.to_glib_none().0);
+            webkit2_sys::webkit_user_content_manager_unregister_script_message_handler(self.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     fn unregister_script_message_handler_in_world(&self, name: &str, world_name: &str) {
         unsafe {
-            ffi::webkit_user_content_manager_unregister_script_message_handler_in_world(self.as_ref().to_glib_none().0, name.to_glib_none().0, world_name.to_glib_none().0);
+            webkit2_sys::webkit_user_content_manager_unregister_script_message_handler_in_world(self.as_ref().to_glib_none().0, name.to_glib_none().0, world_name.to_glib_none().0);
         }
     }
 
@@ -149,7 +149,7 @@ impl<O: IsA<UserContentManager>> UserContentManagerExt for O {
 }
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
-unsafe extern "C" fn script_message_received_trampoline<P, F: Fn(&P, &JavascriptResult) + 'static>(this: *mut ffi::WebKitUserContentManager, js_result: *mut ffi::WebKitJavascriptResult, f: glib_ffi::gpointer)
+unsafe extern "C" fn script_message_received_trampoline<P, F: Fn(&P, &JavascriptResult) + 'static>(this: *mut webkit2_sys::WebKitUserContentManager, js_result: *mut webkit2_sys::WebKitJavascriptResult, f: glib_sys::gpointer)
 where P: IsA<UserContentManager> {
     let f: &F = &*(f as *const F);
     f(&UserContentManager::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(js_result))

@@ -3,18 +3,18 @@
 // DO NOT EDIT
 
 use PermissionRequest;
-use ffi;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct InstallMissingMediaPluginsPermissionRequest(Object<ffi::WebKitInstallMissingMediaPluginsPermissionRequest, ffi::WebKitInstallMissingMediaPluginsPermissionRequestClass, InstallMissingMediaPluginsPermissionRequestClass>) @implements PermissionRequest;
+    pub struct InstallMissingMediaPluginsPermissionRequest(Object<webkit2_sys::WebKitInstallMissingMediaPluginsPermissionRequest, webkit2_sys::WebKitInstallMissingMediaPluginsPermissionRequestClass, InstallMissingMediaPluginsPermissionRequestClass>) @implements PermissionRequest;
 
     match fn {
-        get_type => || ffi::webkit_install_missing_media_plugins_permission_request_get_type(),
+        get_type => || webkit2_sys::webkit_install_missing_media_plugins_permission_request_get_type(),
     }
 }
 
@@ -29,7 +29,7 @@ impl<O: IsA<InstallMissingMediaPluginsPermissionRequest>> InstallMissingMediaPlu
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_description(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_install_missing_media_plugins_permission_request_get_description(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_install_missing_media_plugins_permission_request_get_description(self.as_ref().to_glib_none().0))
         }
     }
 }

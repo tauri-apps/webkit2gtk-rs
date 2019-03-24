@@ -5,30 +5,30 @@
 use Error;
 use URIRequest;
 use URIResponse;
-use ffi;
 #[cfg(feature = "futures")]
 use futures_core;
 use gio;
-use gio_ffi;
+use gio_sys;
 use glib::GString;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct WebResource(Object<ffi::WebKitWebResource, ffi::WebKitWebResourceClass, WebResourceClass>);
+    pub struct WebResource(Object<webkit2_sys::WebKitWebResource, webkit2_sys::WebKitWebResourceClass, WebResourceClass>);
 
     match fn {
-        get_type => || ffi::webkit_web_resource_get_type(),
+        get_type => || webkit2_sys::webkit_web_resource_get_type(),
     }
 }
 
@@ -63,17 +63,17 @@ pub trait WebResourceExt: 'static {
 impl<O: IsA<WebResource>> WebResourceExt for O {
     fn get_data<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(Vec<u8>, usize), Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q) {
         let user_data: Box<Q> = Box::new(callback);
-        unsafe extern "C" fn get_data_trampoline<Q: FnOnce(Result<(Vec<u8>, usize), Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer) {
+        unsafe extern "C" fn get_data_trampoline<Q: FnOnce(Result<(Vec<u8>, usize), Error>) + Send + 'static>(_source_object: *mut gobject_sys::GObject, res: *mut gio_sys::GAsyncResult, user_data: glib_sys::gpointer) {
             let mut error = ptr::null_mut();
             let mut length = mem::uninitialized();
-            let ret = ffi::webkit_web_resource_get_data_finish(_source_object as *mut _, res, &mut length, &mut error);
+            let ret = webkit2_sys::webkit_web_resource_get_data_finish(_source_object as *mut _, res, &mut length, &mut error);
             let result = if error.is_null() { Ok((FromGlibContainer::from_glib_full_num(ret, length as usize), length)) } else { Err(from_glib_full(error)) };
             let callback: Box<Q> = Box::from_raw(user_data as *mut _);
             callback(result);
         }
         let callback = get_data_trampoline::<Q>;
         unsafe {
-            ffi::webkit_web_resource_get_data(self.as_ref().to_glib_none().0, cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box::into_raw(user_data) as *mut _);
+            webkit2_sys::webkit_web_resource_get_data(self.as_ref().to_glib_none().0, cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box::into_raw(user_data) as *mut _);
         }
     }
 
@@ -101,13 +101,13 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
 
     fn get_response(&self) -> Option<URIResponse> {
         unsafe {
-            from_glib_none(ffi::webkit_web_resource_get_response(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_web_resource_get_response(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_web_resource_get_uri(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_web_resource_get_uri(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -169,44 +169,44 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
     }
 }
 
-unsafe extern "C" fn failed_trampoline<P, F: Fn(&P, &Error) + 'static>(this: *mut ffi::WebKitWebResource, error: *mut glib_ffi::GError, f: glib_ffi::gpointer)
+unsafe extern "C" fn failed_trampoline<P, F: Fn(&P, &Error) + 'static>(this: *mut webkit2_sys::WebKitWebResource, error: *mut glib_sys::GError, f: glib_sys::gpointer)
 where P: IsA<WebResource> {
     let f: &F = &*(f as *const F);
     f(&WebResource::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error))
 }
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
-unsafe extern "C" fn failed_with_tls_errors_trampoline<P, F: Fn(&P, &gio::TlsCertificate, gio::TlsCertificateFlags) + 'static>(this: *mut ffi::WebKitWebResource, certificate: *mut gio_ffi::GTlsCertificate, errors: gio_ffi::GTlsCertificateFlags, f: glib_ffi::gpointer)
+unsafe extern "C" fn failed_with_tls_errors_trampoline<P, F: Fn(&P, &gio::TlsCertificate, gio::TlsCertificateFlags) + 'static>(this: *mut webkit2_sys::WebKitWebResource, certificate: *mut gio_sys::GTlsCertificate, errors: gio_sys::GTlsCertificateFlags, f: glib_sys::gpointer)
 where P: IsA<WebResource> {
     let f: &F = &*(f as *const F);
     f(&WebResource::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(certificate), from_glib(errors))
 }
 
-unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitWebResource, f: glib_ffi::gpointer)
+unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebResource, f: glib_sys::gpointer)
 where P: IsA<WebResource> {
     let f: &F = &*(f as *const F);
     f(&WebResource::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn received_data_trampoline<P, F: Fn(&P, u64) + 'static>(this: *mut ffi::WebKitWebResource, data_length: u64, f: glib_ffi::gpointer)
+unsafe extern "C" fn received_data_trampoline<P, F: Fn(&P, u64) + 'static>(this: *mut webkit2_sys::WebKitWebResource, data_length: u64, f: glib_sys::gpointer)
 where P: IsA<WebResource> {
     let f: &F = &*(f as *const F);
     f(&WebResource::from_glib_borrow(this).unsafe_cast(), data_length)
 }
 
-unsafe extern "C" fn sent_request_trampoline<P, F: Fn(&P, &URIRequest, &URIResponse) + 'static>(this: *mut ffi::WebKitWebResource, request: *mut ffi::WebKitURIRequest, redirected_response: *mut ffi::WebKitURIResponse, f: glib_ffi::gpointer)
+unsafe extern "C" fn sent_request_trampoline<P, F: Fn(&P, &URIRequest, &URIResponse) + 'static>(this: *mut webkit2_sys::WebKitWebResource, request: *mut webkit2_sys::WebKitURIRequest, redirected_response: *mut webkit2_sys::WebKitURIResponse, f: glib_sys::gpointer)
 where P: IsA<WebResource> {
     let f: &F = &*(f as *const F);
     f(&WebResource::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(request), &from_glib_borrow(redirected_response))
 }
 
-unsafe extern "C" fn notify_response_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitWebResource, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_response_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebResource, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<WebResource> {
     let f: &F = &*(f as *const F);
     f(&WebResource::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_uri_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitWebResource, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_uri_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebResource, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<WebResource> {
     let f: &F = &*(f as *const F);
     f(&WebResource::from_glib_borrow(this).unsafe_cast())

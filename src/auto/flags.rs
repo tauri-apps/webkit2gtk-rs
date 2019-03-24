@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::StaticType;
 use glib::Type;
 use glib::translate::*;
@@ -10,7 +9,8 @@ use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
-use gobject_ffi;
+use gobject_sys;
+use webkit2_sys;
 
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 bitflags! {
@@ -26,17 +26,17 @@ bitflags! {
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for EditorTypingAttributes {
-    type GlibType = ffi::WebKitEditorTypingAttributes;
+    type GlibType = webkit2_sys::WebKitEditorTypingAttributes;
 
-    fn to_glib(&self) -> ffi::WebKitEditorTypingAttributes {
+    fn to_glib(&self) -> webkit2_sys::WebKitEditorTypingAttributes {
         self.bits()
     }
 }
 
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 #[doc(hidden)]
-impl FromGlib<ffi::WebKitEditorTypingAttributes> for EditorTypingAttributes {
-    fn from_glib(value: ffi::WebKitEditorTypingAttributes) -> EditorTypingAttributes {
+impl FromGlib<webkit2_sys::WebKitEditorTypingAttributes> for EditorTypingAttributes {
+    fn from_glib(value: webkit2_sys::WebKitEditorTypingAttributes) -> EditorTypingAttributes {
         skip_assert_initialized!();
         EditorTypingAttributes::from_bits_truncate(value)
     }
@@ -45,7 +45,7 @@ impl FromGlib<ffi::WebKitEditorTypingAttributes> for EditorTypingAttributes {
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 impl StaticType for EditorTypingAttributes {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::webkit_editor_typing_attributes_get_type()) }
+        unsafe { from_glib(webkit2_sys::webkit_editor_typing_attributes_get_type()) }
     }
 }
 
@@ -59,14 +59,14 @@ impl<'a> FromValueOptional<'a> for EditorTypingAttributes {
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 impl<'a> FromValue<'a> for EditorTypingAttributes {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 impl SetValue for EditorTypingAttributes {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -83,16 +83,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for FindOptions {
-    type GlibType = ffi::WebKitFindOptions;
+    type GlibType = webkit2_sys::WebKitFindOptions;
 
-    fn to_glib(&self) -> ffi::WebKitFindOptions {
+    fn to_glib(&self) -> webkit2_sys::WebKitFindOptions {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::WebKitFindOptions> for FindOptions {
-    fn from_glib(value: ffi::WebKitFindOptions) -> FindOptions {
+impl FromGlib<webkit2_sys::WebKitFindOptions> for FindOptions {
+    fn from_glib(value: webkit2_sys::WebKitFindOptions) -> FindOptions {
         skip_assert_initialized!();
         FindOptions::from_bits_truncate(value)
     }
@@ -100,7 +100,7 @@ impl FromGlib<ffi::WebKitFindOptions> for FindOptions {
 
 impl StaticType for FindOptions {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::webkit_find_options_get_type()) }
+        unsafe { from_glib(webkit2_sys::webkit_find_options_get_type()) }
     }
 }
 
@@ -112,13 +112,13 @@ impl<'a> FromValueOptional<'a> for FindOptions {
 
 impl<'a> FromValue<'a> for FindOptions {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for FindOptions {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -136,16 +136,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for HitTestResultContext {
-    type GlibType = ffi::WebKitHitTestResultContext;
+    type GlibType = webkit2_sys::WebKitHitTestResultContext;
 
-    fn to_glib(&self) -> ffi::WebKitHitTestResultContext {
+    fn to_glib(&self) -> webkit2_sys::WebKitHitTestResultContext {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::WebKitHitTestResultContext> for HitTestResultContext {
-    fn from_glib(value: ffi::WebKitHitTestResultContext) -> HitTestResultContext {
+impl FromGlib<webkit2_sys::WebKitHitTestResultContext> for HitTestResultContext {
+    fn from_glib(value: webkit2_sys::WebKitHitTestResultContext) -> HitTestResultContext {
         skip_assert_initialized!();
         HitTestResultContext::from_bits_truncate(value)
     }
@@ -153,7 +153,7 @@ impl FromGlib<ffi::WebKitHitTestResultContext> for HitTestResultContext {
 
 impl StaticType for HitTestResultContext {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::webkit_hit_test_result_context_get_type()) }
+        unsafe { from_glib(webkit2_sys::webkit_hit_test_result_context_get_type()) }
     }
 }
 
@@ -165,13 +165,13 @@ impl<'a> FromValueOptional<'a> for HitTestResultContext {
 
 impl<'a> FromValue<'a> for HitTestResultContext {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for HitTestResultContext {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -185,16 +185,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for SnapshotOptions {
-    type GlibType = ffi::WebKitSnapshotOptions;
+    type GlibType = webkit2_sys::WebKitSnapshotOptions;
 
-    fn to_glib(&self) -> ffi::WebKitSnapshotOptions {
+    fn to_glib(&self) -> webkit2_sys::WebKitSnapshotOptions {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::WebKitSnapshotOptions> for SnapshotOptions {
-    fn from_glib(value: ffi::WebKitSnapshotOptions) -> SnapshotOptions {
+impl FromGlib<webkit2_sys::WebKitSnapshotOptions> for SnapshotOptions {
+    fn from_glib(value: webkit2_sys::WebKitSnapshotOptions) -> SnapshotOptions {
         skip_assert_initialized!();
         SnapshotOptions::from_bits_truncate(value)
     }
@@ -202,7 +202,7 @@ impl FromGlib<ffi::WebKitSnapshotOptions> for SnapshotOptions {
 
 impl StaticType for SnapshotOptions {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::webkit_snapshot_options_get_type()) }
+        unsafe { from_glib(webkit2_sys::webkit_snapshot_options_get_type()) }
     }
 }
 
@@ -214,13 +214,13 @@ impl<'a> FromValueOptional<'a> for SnapshotOptions {
 
 impl<'a> FromValue<'a> for SnapshotOptions {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for SnapshotOptions {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -243,17 +243,17 @@ bitflags! {
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for WebsiteDataTypes {
-    type GlibType = ffi::WebKitWebsiteDataTypes;
+    type GlibType = webkit2_sys::WebKitWebsiteDataTypes;
 
-    fn to_glib(&self) -> ffi::WebKitWebsiteDataTypes {
+    fn to_glib(&self) -> webkit2_sys::WebKitWebsiteDataTypes {
         self.bits()
     }
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 #[doc(hidden)]
-impl FromGlib<ffi::WebKitWebsiteDataTypes> for WebsiteDataTypes {
-    fn from_glib(value: ffi::WebKitWebsiteDataTypes) -> WebsiteDataTypes {
+impl FromGlib<webkit2_sys::WebKitWebsiteDataTypes> for WebsiteDataTypes {
+    fn from_glib(value: webkit2_sys::WebKitWebsiteDataTypes) -> WebsiteDataTypes {
         skip_assert_initialized!();
         WebsiteDataTypes::from_bits_truncate(value)
     }
@@ -262,7 +262,7 @@ impl FromGlib<ffi::WebKitWebsiteDataTypes> for WebsiteDataTypes {
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 impl StaticType for WebsiteDataTypes {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::webkit_website_data_types_get_type()) }
+        unsafe { from_glib(webkit2_sys::webkit_website_data_types_get_type()) }
     }
 }
 
@@ -276,14 +276,14 @@ impl<'a> FromValueOptional<'a> for WebsiteDataTypes {
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 impl<'a> FromValue<'a> for WebsiteDataTypes {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 impl SetValue for WebsiteDataTypes {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 

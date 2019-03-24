@@ -4,7 +4,6 @@
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use CookieManager;
-use ffi;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 use glib::GString;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
@@ -14,28 +13,29 @@ use glib::Value;
 use glib::object::IsA;
 use glib::translate::*;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-use gobject_ffi;
+use gobject_sys;
 use std::fmt;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct WebsiteDataManager(Object<ffi::WebKitWebsiteDataManager, ffi::WebKitWebsiteDataManagerClass, WebsiteDataManagerClass>);
+    pub struct WebsiteDataManager(Object<webkit2_sys::WebKitWebsiteDataManager, webkit2_sys::WebKitWebsiteDataManagerClass, WebsiteDataManagerClass>);
 
     match fn {
-        get_type => || ffi::webkit_website_data_manager_get_type(),
+        get_type => || webkit2_sys::webkit_website_data_manager_get_type(),
     }
 }
 
 impl WebsiteDataManager {
     //#[cfg(any(feature = "v2_10", feature = "dox"))]
     //pub fn new(first_option_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> WebsiteDataManager {
-    //    unsafe { TODO: call ffi::webkit_website_data_manager_new() }
+    //    unsafe { TODO: call webkit2_sys:webkit_website_data_manager_new() }
     //}
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     pub fn new_ephemeral() -> WebsiteDataManager {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::webkit_website_data_manager_new_ephemeral())
+            from_glib_full(webkit2_sys::webkit_website_data_manager_new_ephemeral())
         }
     }
 }
@@ -98,7 +98,7 @@ pub trait WebsiteDataManagerExt: 'static {
 impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
     //fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call ffi::webkit_website_data_manager_clear() }
+    //    unsafe { TODO: call webkit2_sys:webkit_website_data_manager_clear() }
     //}
 
     //#[cfg(feature = "futures")]
@@ -128,7 +128,7 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
 
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
     //fn fetch<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/Vec<WebsiteData>, Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call ffi::webkit_website_data_manager_fetch() }
+    //    unsafe { TODO: call webkit2_sys:webkit_website_data_manager_fetch() }
     //}
 
     //#[cfg(feature = "futures")]
@@ -158,69 +158,69 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_base_cache_directory(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_base_cache_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_website_data_manager_get_base_cache_directory(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_base_data_directory(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_base_data_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_website_data_manager_get_base_data_directory(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_cookie_manager(&self) -> Option<CookieManager> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_cookie_manager(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_website_data_manager_get_cookie_manager(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_disk_cache_directory(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_disk_cache_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_website_data_manager_get_disk_cache_directory(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_indexeddb_directory(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_indexeddb_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_website_data_manager_get_indexeddb_directory(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_local_storage_directory(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_local_storage_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_website_data_manager_get_local_storage_directory(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_offline_application_cache_directory(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_offline_application_cache_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_website_data_manager_get_offline_application_cache_directory(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_websql_directory(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_websql_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_website_data_manager_get_websql_directory(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn is_ephemeral(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_website_data_manager_is_ephemeral(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_website_data_manager_is_ephemeral(self.as_ref().to_glib_none().0))
         }
     }
 
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
     //fn remove<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call ffi::webkit_website_data_manager_remove() }
+    //    unsafe { TODO: call webkit2_sys:webkit_website_data_manager_remove() }
     //}
 
     //#[cfg(feature = "futures")]
@@ -251,7 +251,7 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     fn get_property_is_ephemeral(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"is-ephemeral\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"is-ephemeral\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }

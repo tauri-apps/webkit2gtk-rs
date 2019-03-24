@@ -6,24 +6,24 @@ use Error;
 use URIRequest;
 use URIResponse;
 use WebView;
-use ffi;
 use glib::GString;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct Download(Object<ffi::WebKitDownload, ffi::WebKitDownloadClass, DownloadClass>);
+    pub struct Download(Object<webkit2_sys::WebKitDownload, webkit2_sys::WebKitDownloadClass, DownloadClass>);
 
     match fn {
-        get_type => || ffi::webkit_download_get_type(),
+        get_type => || webkit2_sys::webkit_download_get_type(),
     }
 }
 
@@ -77,69 +77,69 @@ pub trait DownloadExt: 'static {
 impl<O: IsA<Download>> DownloadExt for O {
     fn cancel(&self) {
         unsafe {
-            ffi::webkit_download_cancel(self.as_ref().to_glib_none().0);
+            webkit2_sys::webkit_download_cancel(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn get_allow_overwrite(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_download_get_allow_overwrite(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_download_get_allow_overwrite(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_destination(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_download_get_destination(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_download_get_destination(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_elapsed_time(&self) -> f64 {
         unsafe {
-            ffi::webkit_download_get_elapsed_time(self.as_ref().to_glib_none().0)
+            webkit2_sys::webkit_download_get_elapsed_time(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_estimated_progress(&self) -> f64 {
         unsafe {
-            ffi::webkit_download_get_estimated_progress(self.as_ref().to_glib_none().0)
+            webkit2_sys::webkit_download_get_estimated_progress(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_received_data_length(&self) -> u64 {
         unsafe {
-            ffi::webkit_download_get_received_data_length(self.as_ref().to_glib_none().0)
+            webkit2_sys::webkit_download_get_received_data_length(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_request(&self) -> Option<URIRequest> {
         unsafe {
-            from_glib_none(ffi::webkit_download_get_request(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_download_get_request(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_response(&self) -> Option<URIResponse> {
         unsafe {
-            from_glib_none(ffi::webkit_download_get_response(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_download_get_response(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_web_view(&self) -> Option<WebView> {
         unsafe {
-            from_glib_none(ffi::webkit_download_get_web_view(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_download_get_web_view(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn set_allow_overwrite(&self, allowed: bool) {
         unsafe {
-            ffi::webkit_download_set_allow_overwrite(self.as_ref().to_glib_none().0, allowed.to_glib());
+            webkit2_sys::webkit_download_set_allow_overwrite(self.as_ref().to_glib_none().0, allowed.to_glib());
         }
     }
 
     fn set_destination(&self, uri: &str) {
         unsafe {
-            ffi::webkit_download_set_destination(self.as_ref().to_glib_none().0, uri.to_glib_none().0);
+            webkit2_sys::webkit_download_set_destination(self.as_ref().to_glib_none().0, uri.to_glib_none().0);
         }
     }
 
@@ -217,56 +217,56 @@ impl<O: IsA<Download>> DownloadExt for O {
     }
 }
 
-unsafe extern "C" fn created_destination_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut ffi::WebKitDownload, destination: *mut libc::c_char, f: glib_ffi::gpointer)
+unsafe extern "C" fn created_destination_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut webkit2_sys::WebKitDownload, destination: *mut libc::c_char, f: glib_sys::gpointer)
 where P: IsA<Download> {
     let f: &F = &*(f as *const F);
     f(&Download::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(destination))
 }
 
-unsafe extern "C" fn decide_destination_trampoline<P, F: Fn(&P, &str) -> bool + 'static>(this: *mut ffi::WebKitDownload, suggested_filename: *mut libc::c_char, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn decide_destination_trampoline<P, F: Fn(&P, &str) -> bool + 'static>(this: *mut webkit2_sys::WebKitDownload, suggested_filename: *mut libc::c_char, f: glib_sys::gpointer) -> glib_sys::gboolean
 where P: IsA<Download> {
     let f: &F = &*(f as *const F);
     f(&Download::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(suggested_filename)).to_glib()
 }
 
-unsafe extern "C" fn failed_trampoline<P, F: Fn(&P, &Error) + 'static>(this: *mut ffi::WebKitDownload, error: *mut glib_ffi::GError, f: glib_ffi::gpointer)
+unsafe extern "C" fn failed_trampoline<P, F: Fn(&P, &Error) + 'static>(this: *mut webkit2_sys::WebKitDownload, error: *mut glib_sys::GError, f: glib_sys::gpointer)
 where P: IsA<Download> {
     let f: &F = &*(f as *const F);
     f(&Download::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error))
 }
 
-unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitDownload, f: glib_ffi::gpointer)
+unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, f: glib_sys::gpointer)
 where P: IsA<Download> {
     let f: &F = &*(f as *const F);
     f(&Download::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn received_data_trampoline<P, F: Fn(&P, u64) + 'static>(this: *mut ffi::WebKitDownload, data_length: u64, f: glib_ffi::gpointer)
+unsafe extern "C" fn received_data_trampoline<P, F: Fn(&P, u64) + 'static>(this: *mut webkit2_sys::WebKitDownload, data_length: u64, f: glib_sys::gpointer)
 where P: IsA<Download> {
     let f: &F = &*(f as *const F);
     f(&Download::from_glib_borrow(this).unsafe_cast(), data_length)
 }
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
-unsafe extern "C" fn notify_allow_overwrite_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitDownload, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_allow_overwrite_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Download> {
     let f: &F = &*(f as *const F);
     f(&Download::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_destination_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitDownload, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_destination_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Download> {
     let f: &F = &*(f as *const F);
     f(&Download::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_estimated_progress_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitDownload, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_estimated_progress_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Download> {
     let f: &F = &*(f as *const F);
     f(&Download::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_response_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitDownload, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_response_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Download> {
     let f: &F = &*(f as *const F);
     f(&Download::from_glib_borrow(this).unsafe_cast())

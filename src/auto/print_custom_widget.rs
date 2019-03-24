@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib::GString;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
@@ -14,22 +13,23 @@ use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-use glib_ffi;
+use glib_sys;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use gtk;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-use gtk_ffi;
+use gtk_sys;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use std::mem::transmute;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct PrintCustomWidget(Object<ffi::WebKitPrintCustomWidget, ffi::WebKitPrintCustomWidgetClass, PrintCustomWidgetClass>);
+    pub struct PrintCustomWidget(Object<webkit2_sys::WebKitPrintCustomWidget, webkit2_sys::WebKitPrintCustomWidgetClass, PrintCustomWidgetClass>);
 
     match fn {
-        get_type => || ffi::webkit_print_custom_widget_get_type(),
+        get_type => || webkit2_sys::webkit_print_custom_widget_get_type(),
     }
 }
 
@@ -38,7 +38,7 @@ impl PrintCustomWidget {
     pub fn new<P: IsA<gtk::Widget>>(widget: &P, title: &str) -> PrintCustomWidget {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::webkit_print_custom_widget_new(widget.as_ref().to_glib_none().0, title.to_glib_none().0))
+            from_glib_full(webkit2_sys::webkit_print_custom_widget_new(widget.as_ref().to_glib_none().0, title.to_glib_none().0))
         }
     }
 }
@@ -63,14 +63,14 @@ impl<O: IsA<PrintCustomWidget>> PrintCustomWidgetExt for O {
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_title(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_print_custom_widget_get_title(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_print_custom_widget_get_title(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_widget(&self) -> Option<gtk::Widget> {
         unsafe {
-            from_glib_none(ffi::webkit_print_custom_widget_get_widget(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_print_custom_widget_get_widget(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -94,14 +94,14 @@ impl<O: IsA<PrintCustomWidget>> PrintCustomWidgetExt for O {
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-unsafe extern "C" fn apply_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitPrintCustomWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn apply_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitPrintCustomWidget, f: glib_sys::gpointer)
 where P: IsA<PrintCustomWidget> {
     let f: &F = &*(f as *const F);
     f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-unsafe extern "C" fn update_trampoline<P, F: Fn(&P, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(this: *mut ffi::WebKitPrintCustomWidget, page_setup: *mut gtk_ffi::GtkPageSetup, print_settings: *mut gtk_ffi::GtkPrintSettings, f: glib_ffi::gpointer)
+unsafe extern "C" fn update_trampoline<P, F: Fn(&P, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(this: *mut webkit2_sys::WebKitPrintCustomWidget, page_setup: *mut gtk_sys::GtkPageSetup, print_settings: *mut gtk_sys::GtkPrintSettings, f: glib_sys::gpointer)
 where P: IsA<PrintCustomWidget> {
     let f: &F = &*(f as *const F);
     f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(page_setup), &from_glib_borrow(print_settings))

@@ -2,16 +2,16 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct FormSubmissionRequest(Object<ffi::WebKitFormSubmissionRequest, ffi::WebKitFormSubmissionRequestClass, FormSubmissionRequestClass>);
+    pub struct FormSubmissionRequest(Object<webkit2_sys::WebKitFormSubmissionRequest, webkit2_sys::WebKitFormSubmissionRequestClass, FormSubmissionRequestClass>);
 
     match fn {
-        get_type => || ffi::webkit_form_submission_request_get_type(),
+        get_type => || webkit2_sys::webkit_form_submission_request_get_type(),
     }
 }
 
@@ -29,17 +29,17 @@ pub trait FormSubmissionRequestExt: 'static {
 
 impl<O: IsA<FormSubmissionRequest>> FormSubmissionRequestExt for O {
     //fn get_text_fields(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 25 }/TypeId { ns_id: 0, id: 25 } {
-    //    unsafe { TODO: call ffi::webkit_form_submission_request_get_text_fields() }
+    //    unsafe { TODO: call webkit2_sys:webkit_form_submission_request_get_text_fields() }
     //}
 
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
     //fn list_text_fields(&self, field_names: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 0, id: 28 }, field_values: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 0, id: 28 }) -> bool {
-    //    unsafe { TODO: call ffi::webkit_form_submission_request_list_text_fields() }
+    //    unsafe { TODO: call webkit2_sys:webkit_form_submission_request_list_text_fields() }
     //}
 
     fn submit(&self) {
         unsafe {
-            ffi::webkit_form_submission_request_submit(self.as_ref().to_glib_none().0);
+            webkit2_sys::webkit_form_submission_request_submit(self.as_ref().to_glib_none().0);
         }
     }
 }

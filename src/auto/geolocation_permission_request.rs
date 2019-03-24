@@ -3,15 +3,15 @@
 // DO NOT EDIT
 
 use PermissionRequest;
-use ffi;
 use glib::translate::*;
 use std::fmt;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct GeolocationPermissionRequest(Object<ffi::WebKitGeolocationPermissionRequest, ffi::WebKitGeolocationPermissionRequestClass, GeolocationPermissionRequestClass>) @implements PermissionRequest;
+    pub struct GeolocationPermissionRequest(Object<webkit2_sys::WebKitGeolocationPermissionRequest, webkit2_sys::WebKitGeolocationPermissionRequestClass, GeolocationPermissionRequestClass>) @implements PermissionRequest;
 
     match fn {
-        get_type => || ffi::webkit_geolocation_permission_request_get_type(),
+        get_type => || webkit2_sys::webkit_geolocation_permission_request_get_type(),
     }
 }
 
