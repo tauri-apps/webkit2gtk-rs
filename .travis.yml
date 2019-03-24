@@ -15,6 +15,9 @@ addons:
     - libmount-dev
 script:
   - rustc --version
+  - if [ "$TRAVIS_RUST_VERSION" == "nightly" ]; then
+    make regen_check;
+    fi
   - ./check_init_asserts
   - cargo build
   - cargo build --features="v2_20"
