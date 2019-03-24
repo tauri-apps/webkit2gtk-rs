@@ -18,15 +18,24 @@ glib_wrapper! {
 }
 
 impl JavascriptResult {
-    pub fn get_global_context(&self) -> Option<java_script_core::GlobalContext> {
+    #[cfg_attr(feature = "v2_22", deprecated)]
+    pub fn get_global_context(&self) -> Option<java_script_core::GlobalContextRef> {
         unsafe {
-            from_glib_full(ffi::webkit_javascript_result_get_global_context(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_javascript_result_get_global_context(self.to_glib_none().0))
         }
     }
 
-    pub fn get_value(&self) -> Option<java_script_core::Value> {
+    #[cfg(any(feature = "v2_22", feature = "dox"))]
+    pub fn get_js_value(&self) -> Option<java_script_core::Value> {
         unsafe {
-            from_glib_full(ffi::webkit_javascript_result_get_value(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_javascript_result_get_js_value(self.to_glib_none().0))
+        }
+    }
+
+    #[cfg_attr(feature = "v2_22", deprecated)]
+    pub fn get_value(&self) -> Option<java_script_core::ValueRef> {
+        unsafe {
+            from_glib_none(ffi::webkit_javascript_result_get_value(self.to_glib_none().0))
         }
     }
 }

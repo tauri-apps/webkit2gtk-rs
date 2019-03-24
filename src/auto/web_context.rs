@@ -107,7 +107,7 @@ pub trait WebContextExt: 'static {
 
     fn get_favicon_database_directory(&self) -> Option<GString>;
 
-    fn get_plugins<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(&self, cancellable: Q, callback: R);
+    fn get_plugins<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q);
 
     #[cfg(feature = "futures")]
     fn get_plugins_future(&self) -> Box_<futures_core::Future<Item = (Self, Vec<Plugin>), Error = (Self, Error)>> where Self: Sized + Clone;
@@ -152,7 +152,7 @@ pub trait WebContextExt: 'static {
     #[cfg_attr(feature = "v2_10", deprecated)]
     fn set_disk_cache_directory(&self, directory: &str);
 
-    fn set_favicon_database_directory<'a, P: Into<Option<&'a str>>>(&self, path: P);
+    fn set_favicon_database_directory(&self, path: Option<&str>);
 
     fn set_preferred_languages(&self, languages: &[&str]);
 
@@ -233,17 +233,16 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         }
     }
 
-    fn get_plugins<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(&self, cancellable: Q, callback: R) {
-        let cancellable = cancellable.into();
-        let user_data: Box<Box<R>> = Box::new(Box::new(callback));
-        unsafe extern "C" fn get_plugins_trampoline<R: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer) {
+    fn get_plugins<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q) {
+        let user_data: Box<Q> = Box::new(callback);
+        unsafe extern "C" fn get_plugins_trampoline<Q: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer) {
             let mut error = ptr::null_mut();
             let ret = ffi::webkit_web_context_get_plugins_finish(_source_object as *mut _, res, &mut error);
             let result = if error.is_null() { Ok(FromGlibPtrContainer::from_glib_full(ret)) } else { Err(from_glib_full(error)) };
-            let callback: Box<Box<R>> = Box::from_raw(user_data as *mut _);
+            let callback: Box<Q> = Box::from_raw(user_data as *mut _);
             callback(result);
         }
-        let callback = get_plugins_trampoline::<R>;
+        let callback = get_plugins_trampoline::<Q>;
         unsafe {
             ffi::webkit_web_context_get_plugins(self.as_ref().to_glib_none().0, cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box::into_raw(user_data) as *mut _);
         }
@@ -259,12 +258,12 @@ impl<O: IsA<WebContext>> WebContextExt for O {
             let send = Fragile::new(send);
             let obj_clone = Fragile::new(obj.clone());
             obj.get_plugins(
-                 Some(&cancellable),
-                 move |res| {
-                     let obj = obj_clone.into_inner();
-                     let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
-                     let _ = send.into_inner().send(res);
-                 },
+                Some(&cancellable),
+                move |res| {
+                    let obj = obj_clone.into_inner();
+                    let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
+                    let _ = send.into_inner().send(res);
+                },
             );
 
             cancellable
@@ -344,22 +343,18 @@ impl<O: IsA<WebContext>> WebContextExt for O {
     }
 
     fn register_uri_scheme<P: Fn(&URISchemeRequest) + 'static>(&self, scheme: &str, callback: P) {
-        let callback_data: Box_<Option<P>> = Box::new(callback.into());
+        let callback_data: Box_<P> = Box::new(callback);
         unsafe extern "C" fn callback_func<P: Fn(&URISchemeRequest) + 'static>(request: *mut ffi::WebKitURISchemeRequest, user_data: glib_ffi::gpointer) {
             let request = from_glib_borrow(request);
-            let callback: &Box_<Option<P>> = &*(user_data as *mut _);
-            if let Some(ref callback) = **callback {
-                callback(&request)
-            } else {
-                panic!("cannot get closure...")
-            };
+            let callback: &P = &*(user_data as *mut _);
+            (*callback)(&request);
         }
-        let callback = if callback_data.is_some() { Some(callback_func::<P> as _) } else { None };
+        let callback = Some(callback_func::<P> as _);
         unsafe extern "C" fn user_data_destroy_func_func<P: Fn(&URISchemeRequest) + 'static>(data: glib_ffi::gpointer) {
-            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
         }
         let destroy_call4 = Some(user_data_destroy_func_func::<P> as _);
-        let super_callback0: Box_<Option<P>> = callback_data;
+        let super_callback0: Box_<P> = callback_data;
         unsafe {
             ffi::webkit_web_context_register_uri_scheme(self.as_ref().to_glib_none().0, scheme.to_glib_none().0, callback, Box::into_raw(super_callback0) as *mut _, destroy_call4);
         }
@@ -390,8 +385,7 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         }
     }
 
-    fn set_favicon_database_directory<'a, P: Into<Option<&'a str>>>(&self, path: P) {
-        let path = path.into();
+    fn set_favicon_database_directory(&self, path: Option<&str>) {
         unsafe {
             ffi::webkit_web_context_set_favicon_database_directory(self.as_ref().to_glib_none().0, path.to_glib_none().0);
         }
@@ -464,48 +458,48 @@ impl<O: IsA<WebContext>> WebContextExt for O {
 
     fn connect_download_started<F: Fn(&Self, &Download) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Download) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"download-started\0".as_ptr() as *const _,
-                transmute(download_started_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(download_started_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn connect_initialize_notification_permissions<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"initialize-notification-permissions\0".as_ptr() as *const _,
-                transmute(initialize_notification_permissions_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(initialize_notification_permissions_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn connect_initialize_web_extensions<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"initialize-web-extensions\0".as_ptr() as *const _,
-                transmute(initialize_web_extensions_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(initialize_web_extensions_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn download_started_trampoline<P>(this: *mut ffi::WebKitWebContext, download: *mut ffi::WebKitDownload, f: glib_ffi::gpointer)
+unsafe extern "C" fn download_started_trampoline<P, F: Fn(&P, &Download) + 'static>(this: *mut ffi::WebKitWebContext, download: *mut ffi::WebKitDownload, f: glib_ffi::gpointer)
 where P: IsA<WebContext> {
-    let f: &&(Fn(&P, &Download) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&WebContext::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(download))
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-unsafe extern "C" fn initialize_notification_permissions_trampoline<P>(this: *mut ffi::WebKitWebContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn initialize_notification_permissions_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitWebContext, f: glib_ffi::gpointer)
 where P: IsA<WebContext> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&WebContext::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_4", feature = "dox"))]
-unsafe extern "C" fn initialize_web_extensions_trampoline<P>(this: *mut ffi::WebKitWebContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn initialize_web_extensions_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitWebContext, f: glib_ffi::gpointer)
 where P: IsA<WebContext> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&WebContext::from_glib_borrow(this).unsafe_cast())
 }
 

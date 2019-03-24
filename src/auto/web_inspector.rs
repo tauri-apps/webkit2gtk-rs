@@ -121,116 +121,116 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
 
     fn connect_attach<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"attach\0".as_ptr() as *const _,
-                transmute(attach_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(attach_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_bring_to_front<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"bring-to-front\0".as_ptr() as *const _,
-                transmute(bring_to_front_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(bring_to_front_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_closed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"closed\0".as_ptr() as *const _,
-                transmute(closed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(closed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_detach<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"detach\0".as_ptr() as *const _,
-                transmute(detach_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(detach_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_open_window<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"open-window\0".as_ptr() as *const _,
-                transmute(open_window_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(open_window_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_attached_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::attached-height\0".as_ptr() as *const _,
-                transmute(notify_attached_height_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_attached_height_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_property_can_attach_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::can-attach\0".as_ptr() as *const _,
-                transmute(notify_can_attach_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_can_attach_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_inspected_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::inspected-uri\0".as_ptr() as *const _,
-                transmute(notify_inspected_uri_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_inspected_uri_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn attach_trampoline<P>(this: *mut ffi::WebKitWebInspector, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn attach_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::WebKitWebInspector, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<WebInspector> {
-    let f: &&(Fn(&P) -> bool + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&WebInspector::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
-unsafe extern "C" fn bring_to_front_trampoline<P>(this: *mut ffi::WebKitWebInspector, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn bring_to_front_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::WebKitWebInspector, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<WebInspector> {
-    let f: &&(Fn(&P) -> bool + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&WebInspector::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
-unsafe extern "C" fn closed_trampoline<P>(this: *mut ffi::WebKitWebInspector, f: glib_ffi::gpointer)
+unsafe extern "C" fn closed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitWebInspector, f: glib_ffi::gpointer)
 where P: IsA<WebInspector> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&WebInspector::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn detach_trampoline<P>(this: *mut ffi::WebKitWebInspector, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn detach_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::WebKitWebInspector, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<WebInspector> {
-    let f: &&(Fn(&P) -> bool + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&WebInspector::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
-unsafe extern "C" fn open_window_trampoline<P>(this: *mut ffi::WebKitWebInspector, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn open_window_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::WebKitWebInspector, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<WebInspector> {
-    let f: &&(Fn(&P) -> bool + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&WebInspector::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
-unsafe extern "C" fn notify_attached_height_trampoline<P>(this: *mut ffi::WebKitWebInspector, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_attached_height_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitWebInspector, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<WebInspector> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&WebInspector::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
-unsafe extern "C" fn notify_can_attach_trampoline<P>(this: *mut ffi::WebKitWebInspector, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_can_attach_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitWebInspector, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<WebInspector> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&WebInspector::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_inspected_uri_trampoline<P>(this: *mut ffi::WebKitWebInspector, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_inspected_uri_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitWebInspector, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<WebInspector> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&WebInspector::from_glib_borrow(this).unsafe_cast())
 }
 

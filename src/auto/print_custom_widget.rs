@@ -77,33 +77,33 @@ impl<O: IsA<PrintCustomWidget>> PrintCustomWidgetExt for O {
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn connect_apply<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"apply\0".as_ptr() as *const _,
-                transmute(apply_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(apply_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn connect_update<F: Fn(&Self, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gtk::PageSetup, &gtk::PrintSettings) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"update\0".as_ptr() as *const _,
-                transmute(update_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(update_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-unsafe extern "C" fn apply_trampoline<P>(this: *mut ffi::WebKitPrintCustomWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn apply_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitPrintCustomWidget, f: glib_ffi::gpointer)
 where P: IsA<PrintCustomWidget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-unsafe extern "C" fn update_trampoline<P>(this: *mut ffi::WebKitPrintCustomWidget, page_setup: *mut gtk_ffi::GtkPageSetup, print_settings: *mut gtk_ffi::GtkPrintSettings, f: glib_ffi::gpointer)
+unsafe extern "C" fn update_trampoline<P, F: Fn(&P, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(this: *mut ffi::WebKitPrintCustomWidget, page_setup: *mut gtk_ffi::GtkPageSetup, print_settings: *mut gtk_ffi::GtkPrintSettings, f: glib_ffi::gpointer)
 where P: IsA<PrintCustomWidget> {
-    let f: &&(Fn(&P, &gtk::PageSetup, &gtk::PrintSettings) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(page_setup), &from_glib_borrow(print_settings))
 }
 

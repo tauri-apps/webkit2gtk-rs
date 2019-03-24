@@ -24,7 +24,7 @@ impl ContextMenuItem {
     //}
 
     //#[cfg(any(feature = "v2_18", feature = "dox"))]
-    //pub fn new_from_gaction<'a, P: Into<Option<&'a glib::Variant>>>(action: /*Ignored*/&gio::Action, label: &str, target: P) -> ContextMenuItem {
+    //pub fn new_from_gaction(action: /*Ignored*/&gio::Action, label: &str, target: Option<&glib::Variant>) -> ContextMenuItem {
     //    unsafe { TODO: call ffi::webkit_context_menu_item_new_from_gaction() }
     //}
 
@@ -72,7 +72,7 @@ pub trait ContextMenuItemExt: 'static {
 
     fn is_separator(&self) -> bool;
 
-    fn set_submenu<'a, P: IsA<ContextMenu> + 'a, Q: Into<Option<&'a P>>>(&self, submenu: Q);
+    fn set_submenu<P: IsA<ContextMenu>>(&self, submenu: Option<&P>);
 }
 
 impl<O: IsA<ContextMenuItem>> ContextMenuItemExt for O {
@@ -103,8 +103,7 @@ impl<O: IsA<ContextMenuItem>> ContextMenuItemExt for O {
         }
     }
 
-    fn set_submenu<'a, P: IsA<ContextMenu> + 'a, Q: Into<Option<&'a P>>>(&self, submenu: Q) {
-        let submenu = submenu.into();
+    fn set_submenu<P: IsA<ContextMenu>>(&self, submenu: Option<&P>) {
         unsafe {
             ffi::webkit_context_menu_item_set_submenu(self.as_ref().to_glib_none().0, submenu.map(|p| p.as_ref()).to_glib_none().0);
         }

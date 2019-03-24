@@ -110,8 +110,9 @@ manual = [
     "Gtk.PrintSettings",
     "Gtk.Widget",
     "Gtk.Window",
-    "JavaScriptCore.GlobalContext",
+    "JavaScriptCore.GlobalContextRef",
     "JavaScriptCore.Value",
+    "JavaScriptCore.ValueRef",
     "WebKit2.ScriptDialog",
 ]
 

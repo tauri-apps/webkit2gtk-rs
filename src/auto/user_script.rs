@@ -31,4 +31,12 @@ impl UserScript {
             from_glib_full(ffi::webkit_user_script_new(source.to_glib_none().0, injected_frames.to_glib(), injection_time.to_glib(), whitelist.to_glib_none().0, blacklist.to_glib_none().0))
         }
     }
+
+    #[cfg(any(feature = "v2_22", feature = "dox"))]
+    pub fn new_for_world(source: &str, injected_frames: UserContentInjectedFrames, injection_time: UserScriptInjectionTime, world_name: &str, whitelist: &[&str], blacklist: &[&str]) -> UserScript {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_full(ffi::webkit_user_script_new_for_world(source.to_glib_none().0, injected_frames.to_glib(), injection_time.to_glib(), world_name.to_glib_none().0, whitelist.to_glib_none().0, blacklist.to_glib_none().0))
+        }
+    }
 }

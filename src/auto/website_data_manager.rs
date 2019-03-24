@@ -44,14 +44,14 @@ pub const NONE_WEBSITE_DATA_MANAGER: Option<&WebsiteDataManager> = None;
 
 pub trait WebsiteDataManagerExt: 'static {
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn clear<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan, cancellable: Q, callback: R);
+    //fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan, cancellable: Option<&P>, callback: Q);
 
     //#[cfg(feature = "futures")]
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
     //fn clear_future(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> where Self: Sized + Clone;
 
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn fetch<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result</*Ignored*/Vec<WebsiteData>, Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Q, callback: R);
+    //fn fetch<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/Vec<WebsiteData>, Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q);
 
     //#[cfg(feature = "futures")]
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
@@ -85,7 +85,7 @@ pub trait WebsiteDataManagerExt: 'static {
     fn is_ephemeral(&self) -> bool;
 
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn remove<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Q, callback: R);
+    //fn remove<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q);
 
     //#[cfg(feature = "futures")]
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
@@ -97,7 +97,7 @@ pub trait WebsiteDataManagerExt: 'static {
 
 impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn clear<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan, cancellable: Q, callback: R) {
+    //fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan, cancellable: Option<&P>, callback: Q) {
     //    unsafe { TODO: call ffi::webkit_website_data_manager_clear() }
     //}
 
@@ -112,14 +112,14 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
         //    let send = Fragile::new(send);
         //    let obj_clone = Fragile::new(obj.clone());
         //    obj.clear(
-        //         types,
-        //         timespan,
-        //         Some(&cancellable),
-        //         move |res| {
-        //             let obj = obj_clone.into_inner();
-        //             let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
-        //             let _ = send.into_inner().send(res);
-        //         },
+        //        types,
+        //        timespan,
+        //        Some(&cancellable),
+        //        move |res| {
+        //            let obj = obj_clone.into_inner();
+        //            let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
+        //            let _ = send.into_inner().send(res);
+        //        },
         //    );
 
         //    cancellable
@@ -127,7 +127,7 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     //}
 
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn fetch<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result</*Ignored*/Vec<WebsiteData>, Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Q, callback: R) {
+    //fn fetch<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/Vec<WebsiteData>, Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q) {
     //    unsafe { TODO: call ffi::webkit_website_data_manager_fetch() }
     //}
 
@@ -142,13 +142,13 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
         //    let send = Fragile::new(send);
         //    let obj_clone = Fragile::new(obj.clone());
         //    obj.fetch(
-        //         types,
-        //         Some(&cancellable),
-        //         move |res| {
-        //             let obj = obj_clone.into_inner();
-        //             let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
-        //             let _ = send.into_inner().send(res);
-        //         },
+        //        types,
+        //        Some(&cancellable),
+        //        move |res| {
+        //            let obj = obj_clone.into_inner();
+        //            let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
+        //            let _ = send.into_inner().send(res);
+        //        },
         //    );
 
         //    cancellable
@@ -219,7 +219,7 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     }
 
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn remove<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Q, callback: R) {
+    //fn remove<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q) {
     //    unsafe { TODO: call ffi::webkit_website_data_manager_remove() }
     //}
 
@@ -234,13 +234,13 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
         //    let send = Fragile::new(send);
         //    let obj_clone = Fragile::new(obj.clone());
         //    obj.remove(
-        //         types,
-        //         Some(&cancellable),
-        //         move |res| {
-        //             let obj = obj_clone.into_inner();
-        //             let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
-        //             let _ = send.into_inner().send(res);
-        //         },
+        //        types,
+        //        Some(&cancellable),
+        //        move |res| {
+        //            let obj = obj_clone.into_inner();
+        //            let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
+        //            let _ = send.into_inner().send(res);
+        //        },
         //    );
 
         //    cancellable

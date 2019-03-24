@@ -22,7 +22,7 @@ glib_wrapper! {
 pub const NONE_URI_SCHEME_REQUEST: Option<&URISchemeRequest> = None;
 
 pub trait URISchemeRequestExt: 'static {
-    //fn finish<'a, P: Into<Option<&'a str>>>(&self, stream: /*Ignored*/&gio::InputStream, stream_length: i64, mime_type: P);
+    //fn finish(&self, stream: /*Ignored*/&gio::InputStream, stream_length: i64, mime_type: Option<&str>);
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     fn finish_error(&self, error: &mut Error);
@@ -37,7 +37,7 @@ pub trait URISchemeRequestExt: 'static {
 }
 
 impl<O: IsA<URISchemeRequest>> URISchemeRequestExt for O {
-    //fn finish<'a, P: Into<Option<&'a str>>>(&self, stream: /*Ignored*/&gio::InputStream, stream_length: i64, mime_type: P) {
+    //fn finish(&self, stream: /*Ignored*/&gio::InputStream, stream_length: i64, mime_type: Option<&str>) {
     //    unsafe { TODO: call ffi::webkit_uri_scheme_request_finish() }
     //}
 

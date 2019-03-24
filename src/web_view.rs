@@ -24,7 +24,6 @@ use std::ffi::CString;
 use std::ptr;
 
 use ffi;
-use glib::signal::connect;
 use glib::StaticType;
 use glib::translate::{FromGlibPtrNone, ToGlib, ToGlibPtr, from_glib_full};
 use glib::object::Cast;
