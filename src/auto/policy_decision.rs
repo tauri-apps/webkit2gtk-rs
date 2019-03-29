@@ -2,16 +2,16 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct PolicyDecision(Object<ffi::WebKitPolicyDecision, ffi::WebKitPolicyDecisionClass, PolicyDecisionClass>);
+    pub struct PolicyDecision(Object<webkit2_sys::WebKitPolicyDecision, webkit2_sys::WebKitPolicyDecisionClass, PolicyDecisionClass>);
 
     match fn {
-        get_type => || ffi::webkit_policy_decision_get_type(),
+        get_type => || webkit2_sys::webkit_policy_decision_get_type(),
     }
 }
 
@@ -28,19 +28,19 @@ pub trait PolicyDecisionExt: 'static {
 impl<O: IsA<PolicyDecision>> PolicyDecisionExt for O {
     fn download(&self) {
         unsafe {
-            ffi::webkit_policy_decision_download(self.as_ref().to_glib_none().0);
+            webkit2_sys::webkit_policy_decision_download(self.as_ref().to_glib_none().0);
         }
     }
 
     fn ignore(&self) {
         unsafe {
-            ffi::webkit_policy_decision_ignore(self.as_ref().to_glib_none().0);
+            webkit2_sys::webkit_policy_decision_ignore(self.as_ref().to_glib_none().0);
         }
     }
 
     fn use_(&self) {
         unsafe {
-            ffi::webkit_policy_decision_use(self.as_ref().to_glib_none().0);
+            webkit2_sys::webkit_policy_decision_use(self.as_ref().to_glib_none().0);
         }
     }
 }

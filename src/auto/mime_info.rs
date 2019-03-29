@@ -2,37 +2,37 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::GString;
 use glib::translate::*;
+use webkit2_sys;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct MimeInfo(Shared<ffi::WebKitMimeInfo>);
+    pub struct MimeInfo(Shared<webkit2_sys::WebKitMimeInfo>);
 
     match fn {
-        ref => |ptr| ffi::webkit_mime_info_ref(ptr),
-        unref => |ptr| ffi::webkit_mime_info_unref(ptr),
-        get_type => || ffi::webkit_mime_info_get_type(),
+        ref => |ptr| webkit2_sys::webkit_mime_info_ref(ptr),
+        unref => |ptr| webkit2_sys::webkit_mime_info_unref(ptr),
+        get_type => || webkit2_sys::webkit_mime_info_get_type(),
     }
 }
 
 impl MimeInfo {
     pub fn get_description(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_mime_info_get_description(self.to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_mime_info_get_description(self.to_glib_none().0))
         }
     }
 
     pub fn get_extensions(&self) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::webkit_mime_info_get_extensions(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(webkit2_sys::webkit_mime_info_get_extensions(self.to_glib_none().0))
         }
     }
 
     pub fn get_mime_type(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_mime_info_get_mime_type(self.to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_mime_info_get_mime_type(self.to_glib_none().0))
         }
     }
 }

@@ -2,16 +2,16 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct SecurityManager(Object<ffi::WebKitSecurityManager, ffi::WebKitSecurityManagerClass, SecurityManagerClass>);
+    pub struct SecurityManager(Object<webkit2_sys::WebKitSecurityManager, webkit2_sys::WebKitSecurityManagerClass, SecurityManagerClass>);
 
     match fn {
-        get_type => || ffi::webkit_security_manager_get_type(),
+        get_type => || webkit2_sys::webkit_security_manager_get_type(),
     }
 }
 
@@ -46,73 +46,73 @@ pub trait SecurityManagerExt: 'static {
 impl<O: IsA<SecurityManager>> SecurityManagerExt for O {
     fn register_uri_scheme_as_cors_enabled(&self, scheme: &str) {
         unsafe {
-            ffi::webkit_security_manager_register_uri_scheme_as_cors_enabled(self.as_ref().to_glib_none().0, scheme.to_glib_none().0);
+            webkit2_sys::webkit_security_manager_register_uri_scheme_as_cors_enabled(self.as_ref().to_glib_none().0, scheme.to_glib_none().0);
         }
     }
 
     fn register_uri_scheme_as_display_isolated(&self, scheme: &str) {
         unsafe {
-            ffi::webkit_security_manager_register_uri_scheme_as_display_isolated(self.as_ref().to_glib_none().0, scheme.to_glib_none().0);
+            webkit2_sys::webkit_security_manager_register_uri_scheme_as_display_isolated(self.as_ref().to_glib_none().0, scheme.to_glib_none().0);
         }
     }
 
     fn register_uri_scheme_as_empty_document(&self, scheme: &str) {
         unsafe {
-            ffi::webkit_security_manager_register_uri_scheme_as_empty_document(self.as_ref().to_glib_none().0, scheme.to_glib_none().0);
+            webkit2_sys::webkit_security_manager_register_uri_scheme_as_empty_document(self.as_ref().to_glib_none().0, scheme.to_glib_none().0);
         }
     }
 
     fn register_uri_scheme_as_local(&self, scheme: &str) {
         unsafe {
-            ffi::webkit_security_manager_register_uri_scheme_as_local(self.as_ref().to_glib_none().0, scheme.to_glib_none().0);
+            webkit2_sys::webkit_security_manager_register_uri_scheme_as_local(self.as_ref().to_glib_none().0, scheme.to_glib_none().0);
         }
     }
 
     fn register_uri_scheme_as_no_access(&self, scheme: &str) {
         unsafe {
-            ffi::webkit_security_manager_register_uri_scheme_as_no_access(self.as_ref().to_glib_none().0, scheme.to_glib_none().0);
+            webkit2_sys::webkit_security_manager_register_uri_scheme_as_no_access(self.as_ref().to_glib_none().0, scheme.to_glib_none().0);
         }
     }
 
     fn register_uri_scheme_as_secure(&self, scheme: &str) {
         unsafe {
-            ffi::webkit_security_manager_register_uri_scheme_as_secure(self.as_ref().to_glib_none().0, scheme.to_glib_none().0);
+            webkit2_sys::webkit_security_manager_register_uri_scheme_as_secure(self.as_ref().to_glib_none().0, scheme.to_glib_none().0);
         }
     }
 
     fn uri_scheme_is_cors_enabled(&self, scheme: &str) -> bool {
         unsafe {
-            from_glib(ffi::webkit_security_manager_uri_scheme_is_cors_enabled(self.as_ref().to_glib_none().0, scheme.to_glib_none().0))
+            from_glib(webkit2_sys::webkit_security_manager_uri_scheme_is_cors_enabled(self.as_ref().to_glib_none().0, scheme.to_glib_none().0))
         }
     }
 
     fn uri_scheme_is_display_isolated(&self, scheme: &str) -> bool {
         unsafe {
-            from_glib(ffi::webkit_security_manager_uri_scheme_is_display_isolated(self.as_ref().to_glib_none().0, scheme.to_glib_none().0))
+            from_glib(webkit2_sys::webkit_security_manager_uri_scheme_is_display_isolated(self.as_ref().to_glib_none().0, scheme.to_glib_none().0))
         }
     }
 
     fn uri_scheme_is_empty_document(&self, scheme: &str) -> bool {
         unsafe {
-            from_glib(ffi::webkit_security_manager_uri_scheme_is_empty_document(self.as_ref().to_glib_none().0, scheme.to_glib_none().0))
+            from_glib(webkit2_sys::webkit_security_manager_uri_scheme_is_empty_document(self.as_ref().to_glib_none().0, scheme.to_glib_none().0))
         }
     }
 
     fn uri_scheme_is_local(&self, scheme: &str) -> bool {
         unsafe {
-            from_glib(ffi::webkit_security_manager_uri_scheme_is_local(self.as_ref().to_glib_none().0, scheme.to_glib_none().0))
+            from_glib(webkit2_sys::webkit_security_manager_uri_scheme_is_local(self.as_ref().to_glib_none().0, scheme.to_glib_none().0))
         }
     }
 
     fn uri_scheme_is_no_access(&self, scheme: &str) -> bool {
         unsafe {
-            from_glib(ffi::webkit_security_manager_uri_scheme_is_no_access(self.as_ref().to_glib_none().0, scheme.to_glib_none().0))
+            from_glib(webkit2_sys::webkit_security_manager_uri_scheme_is_no_access(self.as_ref().to_glib_none().0, scheme.to_glib_none().0))
         }
     }
 
     fn uri_scheme_is_secure(&self, scheme: &str) -> bool {
         unsafe {
-            from_glib(ffi::webkit_security_manager_uri_scheme_is_secure(self.as_ref().to_glib_none().0, scheme.to_glib_none().0))
+            from_glib(webkit2_sys::webkit_security_manager_uri_scheme_is_secure(self.as_ref().to_glib_none().0, scheme.to_glib_none().0))
         }
     }
 }

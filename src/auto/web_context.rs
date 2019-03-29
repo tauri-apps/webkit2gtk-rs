@@ -17,11 +17,10 @@ use TLSErrorsPolicy;
 use URISchemeRequest;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 use WebsiteDataManager;
-use ffi;
 #[cfg(feature = "futures")]
 use futures_core;
 use gio;
-use gio_ffi;
+use gio_sys;
 #[cfg(any(feature = "v2_4", feature = "dox"))]
 use glib;
 use glib::GString;
@@ -34,18 +33,19 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 use std::ptr;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct WebContext(Object<ffi::WebKitWebContext, ffi::WebKitWebContextClass, WebContextClass>);
+    pub struct WebContext(Object<webkit2_sys::WebKitWebContext, webkit2_sys::WebKitWebContextClass, WebContextClass>);
 
     match fn {
-        get_type => || ffi::webkit_web_context_get_type(),
+        get_type => || webkit2_sys::webkit_web_context_get_type(),
     }
 }
 
@@ -54,7 +54,7 @@ impl WebContext {
     pub fn new() -> WebContext {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::webkit_web_context_new())
+            from_glib_full(webkit2_sys::webkit_web_context_new())
         }
     }
 
@@ -62,7 +62,7 @@ impl WebContext {
     pub fn new_ephemeral() -> WebContext {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::webkit_web_context_new_ephemeral())
+            from_glib_full(webkit2_sys::webkit_web_context_new_ephemeral())
         }
     }
 
@@ -70,14 +70,14 @@ impl WebContext {
     pub fn new_with_website_data_manager<P: IsA<WebsiteDataManager>>(manager: &P) -> WebContext {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::webkit_web_context_new_with_website_data_manager(manager.as_ref().to_glib_none().0))
+            from_glib_full(webkit2_sys::webkit_web_context_new_with_website_data_manager(manager.as_ref().to_glib_none().0))
         }
     }
 
     pub fn get_default() -> Option<WebContext> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::webkit_web_context_get_default())
+            from_glib_none(webkit2_sys::webkit_web_context_get_default())
         }
     }
 }
@@ -107,7 +107,7 @@ pub trait WebContextExt: 'static {
 
     fn get_favicon_database_directory(&self) -> Option<GString>;
 
-    fn get_plugins<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(&self, cancellable: Q, callback: R);
+    fn get_plugins<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q);
 
     #[cfg(feature = "futures")]
     fn get_plugins_future(&self) -> Box_<futures_core::Future<Item = (Self, Vec<Plugin>), Error = (Self, Error)>> where Self: Sized + Clone;
@@ -152,7 +152,7 @@ pub trait WebContextExt: 'static {
     #[cfg_attr(feature = "v2_10", deprecated)]
     fn set_disk_cache_directory(&self, directory: &str);
 
-    fn set_favicon_database_directory<'a, P: Into<Option<&'a str>>>(&self, path: P);
+    fn set_favicon_database_directory(&self, path: Option<&str>);
 
     fn set_preferred_languages(&self, languages: &[&str]);
 
@@ -193,59 +193,58 @@ impl<O: IsA<WebContext>> WebContextExt for O {
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn allow_tls_certificate_for_host<P: IsA<gio::TlsCertificate>>(&self, certificate: &P, host: &str) {
         unsafe {
-            ffi::webkit_web_context_allow_tls_certificate_for_host(self.as_ref().to_glib_none().0, certificate.as_ref().to_glib_none().0, host.to_glib_none().0);
+            webkit2_sys::webkit_web_context_allow_tls_certificate_for_host(self.as_ref().to_glib_none().0, certificate.as_ref().to_glib_none().0, host.to_glib_none().0);
         }
     }
 
     fn clear_cache(&self) {
         unsafe {
-            ffi::webkit_web_context_clear_cache(self.as_ref().to_glib_none().0);
+            webkit2_sys::webkit_web_context_clear_cache(self.as_ref().to_glib_none().0);
         }
     }
 
     fn download_uri(&self, uri: &str) -> Option<Download> {
         unsafe {
-            from_glib_full(ffi::webkit_web_context_download_uri(self.as_ref().to_glib_none().0, uri.to_glib_none().0))
+            from_glib_full(webkit2_sys::webkit_web_context_download_uri(self.as_ref().to_glib_none().0, uri.to_glib_none().0))
         }
     }
 
     fn get_cache_model(&self) -> CacheModel {
         unsafe {
-            from_glib(ffi::webkit_web_context_get_cache_model(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_web_context_get_cache_model(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_cookie_manager(&self) -> Option<CookieManager> {
         unsafe {
-            from_glib_none(ffi::webkit_web_context_get_cookie_manager(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_web_context_get_cookie_manager(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_favicon_database(&self) -> Option<FaviconDatabase> {
         unsafe {
-            from_glib_none(ffi::webkit_web_context_get_favicon_database(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_web_context_get_favicon_database(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_favicon_database_directory(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_web_context_get_favicon_database_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_web_context_get_favicon_database_directory(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn get_plugins<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(&self, cancellable: Q, callback: R) {
-        let cancellable = cancellable.into();
-        let user_data: Box<Box<R>> = Box::new(Box::new(callback));
-        unsafe extern "C" fn get_plugins_trampoline<R: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer) {
+    fn get_plugins<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q) {
+        let user_data: Box<Q> = Box::new(callback);
+        unsafe extern "C" fn get_plugins_trampoline<Q: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(_source_object: *mut gobject_sys::GObject, res: *mut gio_sys::GAsyncResult, user_data: glib_sys::gpointer) {
             let mut error = ptr::null_mut();
-            let ret = ffi::webkit_web_context_get_plugins_finish(_source_object as *mut _, res, &mut error);
+            let ret = webkit2_sys::webkit_web_context_get_plugins_finish(_source_object as *mut _, res, &mut error);
             let result = if error.is_null() { Ok(FromGlibPtrContainer::from_glib_full(ret)) } else { Err(from_glib_full(error)) };
-            let callback: Box<Box<R>> = Box::from_raw(user_data as *mut _);
+            let callback: Box<Q> = Box::from_raw(user_data as *mut _);
             callback(result);
         }
-        let callback = get_plugins_trampoline::<R>;
+        let callback = get_plugins_trampoline::<Q>;
         unsafe {
-            ffi::webkit_web_context_get_plugins(self.as_ref().to_glib_none().0, cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box::into_raw(user_data) as *mut _);
+            webkit2_sys::webkit_web_context_get_plugins(self.as_ref().to_glib_none().0, cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box::into_raw(user_data) as *mut _);
         }
     }
 
@@ -259,12 +258,12 @@ impl<O: IsA<WebContext>> WebContextExt for O {
             let send = Fragile::new(send);
             let obj_clone = Fragile::new(obj.clone());
             obj.get_plugins(
-                 Some(&cancellable),
-                 move |res| {
-                     let obj = obj_clone.into_inner();
-                     let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
-                     let _ = send.into_inner().send(res);
-                 },
+                Some(&cancellable),
+                move |res| {
+                    let obj = obj_clone.into_inner();
+                    let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
+                    let _ = send.into_inner().send(res);
+                },
             );
 
             cancellable
@@ -274,177 +273,172 @@ impl<O: IsA<WebContext>> WebContextExt for O {
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn get_process_model(&self) -> ProcessModel {
         unsafe {
-            from_glib(ffi::webkit_web_context_get_process_model(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_web_context_get_process_model(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_security_manager(&self) -> Option<SecurityManager> {
         unsafe {
-            from_glib_none(ffi::webkit_web_context_get_security_manager(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_web_context_get_security_manager(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_spell_checking_enabled(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_web_context_get_spell_checking_enabled(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_web_context_get_spell_checking_enabled(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_spell_checking_languages(&self) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::webkit_web_context_get_spell_checking_languages(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(webkit2_sys::webkit_web_context_get_spell_checking_languages(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_tls_errors_policy(&self) -> TLSErrorsPolicy {
         unsafe {
-            from_glib(ffi::webkit_web_context_get_tls_errors_policy(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_web_context_get_tls_errors_policy(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_web_process_count_limit(&self) -> u32 {
         unsafe {
-            ffi::webkit_web_context_get_web_process_count_limit(self.as_ref().to_glib_none().0)
+            webkit2_sys::webkit_web_context_get_web_process_count_limit(self.as_ref().to_glib_none().0)
         }
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_website_data_manager(&self) -> Option<WebsiteDataManager> {
         unsafe {
-            from_glib_none(ffi::webkit_web_context_get_website_data_manager(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_web_context_get_website_data_manager(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn initialize_notification_permissions(&self, allowed_origins: &[&SecurityOrigin], disallowed_origins: &[&SecurityOrigin]) {
         unsafe {
-            ffi::webkit_web_context_initialize_notification_permissions(self.as_ref().to_glib_none().0, allowed_origins.to_glib_none().0, disallowed_origins.to_glib_none().0);
+            webkit2_sys::webkit_web_context_initialize_notification_permissions(self.as_ref().to_glib_none().0, allowed_origins.to_glib_none().0, disallowed_origins.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_18", feature = "dox"))]
     fn is_automation_allowed(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_web_context_is_automation_allowed(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_web_context_is_automation_allowed(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn is_ephemeral(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_web_context_is_ephemeral(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_web_context_is_ephemeral(self.as_ref().to_glib_none().0))
         }
     }
 
     fn prefetch_dns(&self, hostname: &str) {
         unsafe {
-            ffi::webkit_web_context_prefetch_dns(self.as_ref().to_glib_none().0, hostname.to_glib_none().0);
+            webkit2_sys::webkit_web_context_prefetch_dns(self.as_ref().to_glib_none().0, hostname.to_glib_none().0);
         }
     }
 
     fn register_uri_scheme<P: Fn(&URISchemeRequest) + 'static>(&self, scheme: &str, callback: P) {
-        let callback_data: Box_<Option<P>> = Box::new(callback.into());
-        unsafe extern "C" fn callback_func<P: Fn(&URISchemeRequest) + 'static>(request: *mut ffi::WebKitURISchemeRequest, user_data: glib_ffi::gpointer) {
+        let callback_data: Box_<P> = Box::new(callback);
+        unsafe extern "C" fn callback_func<P: Fn(&URISchemeRequest) + 'static>(request: *mut webkit2_sys::WebKitURISchemeRequest, user_data: glib_sys::gpointer) {
             let request = from_glib_borrow(request);
-            let callback: &Box_<Option<P>> = &*(user_data as *mut _);
-            if let Some(ref callback) = **callback {
-                callback(&request)
-            } else {
-                panic!("cannot get closure...")
-            };
+            let callback: &P = &*(user_data as *mut _);
+            (*callback)(&request);
         }
-        let callback = if callback_data.is_some() { Some(callback_func::<P> as _) } else { None };
-        unsafe extern "C" fn user_data_destroy_func_func<P: Fn(&URISchemeRequest) + 'static>(data: glib_ffi::gpointer) {
-            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        let callback = Some(callback_func::<P> as _);
+        unsafe extern "C" fn user_data_destroy_func_func<P: Fn(&URISchemeRequest) + 'static>(data: glib_sys::gpointer) {
+            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
         }
         let destroy_call4 = Some(user_data_destroy_func_func::<P> as _);
-        let super_callback0: Box_<Option<P>> = callback_data;
+        let super_callback0: Box_<P> = callback_data;
         unsafe {
-            ffi::webkit_web_context_register_uri_scheme(self.as_ref().to_glib_none().0, scheme.to_glib_none().0, callback, Box::into_raw(super_callback0) as *mut _, destroy_call4);
+            webkit2_sys::webkit_web_context_register_uri_scheme(self.as_ref().to_glib_none().0, scheme.to_glib_none().0, callback, Box::into_raw(super_callback0) as *mut _, destroy_call4);
         }
     }
 
     fn set_additional_plugins_directory(&self, directory: &str) {
         unsafe {
-            ffi::webkit_web_context_set_additional_plugins_directory(self.as_ref().to_glib_none().0, directory.to_glib_none().0);
+            webkit2_sys::webkit_web_context_set_additional_plugins_directory(self.as_ref().to_glib_none().0, directory.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_18", feature = "dox"))]
     fn set_automation_allowed(&self, allowed: bool) {
         unsafe {
-            ffi::webkit_web_context_set_automation_allowed(self.as_ref().to_glib_none().0, allowed.to_glib());
+            webkit2_sys::webkit_web_context_set_automation_allowed(self.as_ref().to_glib_none().0, allowed.to_glib());
         }
     }
 
     fn set_cache_model(&self, cache_model: CacheModel) {
         unsafe {
-            ffi::webkit_web_context_set_cache_model(self.as_ref().to_glib_none().0, cache_model.to_glib());
+            webkit2_sys::webkit_web_context_set_cache_model(self.as_ref().to_glib_none().0, cache_model.to_glib());
         }
     }
 
     fn set_disk_cache_directory(&self, directory: &str) {
         unsafe {
-            ffi::webkit_web_context_set_disk_cache_directory(self.as_ref().to_glib_none().0, directory.to_glib_none().0);
+            webkit2_sys::webkit_web_context_set_disk_cache_directory(self.as_ref().to_glib_none().0, directory.to_glib_none().0);
         }
     }
 
-    fn set_favicon_database_directory<'a, P: Into<Option<&'a str>>>(&self, path: P) {
-        let path = path.into();
+    fn set_favicon_database_directory(&self, path: Option<&str>) {
         unsafe {
-            ffi::webkit_web_context_set_favicon_database_directory(self.as_ref().to_glib_none().0, path.to_glib_none().0);
+            webkit2_sys::webkit_web_context_set_favicon_database_directory(self.as_ref().to_glib_none().0, path.to_glib_none().0);
         }
     }
 
     fn set_preferred_languages(&self, languages: &[&str]) {
         unsafe {
-            ffi::webkit_web_context_set_preferred_languages(self.as_ref().to_glib_none().0, languages.to_glib_none().0);
+            webkit2_sys::webkit_web_context_set_preferred_languages(self.as_ref().to_glib_none().0, languages.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn set_process_model(&self, process_model: ProcessModel) {
         unsafe {
-            ffi::webkit_web_context_set_process_model(self.as_ref().to_glib_none().0, process_model.to_glib());
+            webkit2_sys::webkit_web_context_set_process_model(self.as_ref().to_glib_none().0, process_model.to_glib());
         }
     }
 
     fn set_spell_checking_enabled(&self, enabled: bool) {
         unsafe {
-            ffi::webkit_web_context_set_spell_checking_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
+            webkit2_sys::webkit_web_context_set_spell_checking_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
         }
     }
 
     fn set_spell_checking_languages(&self, languages: &[&str]) {
         unsafe {
-            ffi::webkit_web_context_set_spell_checking_languages(self.as_ref().to_glib_none().0, languages.to_glib_none().0);
+            webkit2_sys::webkit_web_context_set_spell_checking_languages(self.as_ref().to_glib_none().0, languages.to_glib_none().0);
         }
     }
 
     fn set_tls_errors_policy(&self, policy: TLSErrorsPolicy) {
         unsafe {
-            ffi::webkit_web_context_set_tls_errors_policy(self.as_ref().to_glib_none().0, policy.to_glib());
+            webkit2_sys::webkit_web_context_set_tls_errors_policy(self.as_ref().to_glib_none().0, policy.to_glib());
         }
     }
 
     fn set_web_extensions_directory(&self, directory: &str) {
         unsafe {
-            ffi::webkit_web_context_set_web_extensions_directory(self.as_ref().to_glib_none().0, directory.to_glib_none().0);
+            webkit2_sys::webkit_web_context_set_web_extensions_directory(self.as_ref().to_glib_none().0, directory.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn set_web_extensions_initialization_user_data(&self, user_data: &glib::Variant) {
         unsafe {
-            ffi::webkit_web_context_set_web_extensions_initialization_user_data(self.as_ref().to_glib_none().0, user_data.to_glib_none().0);
+            webkit2_sys::webkit_web_context_set_web_extensions_initialization_user_data(self.as_ref().to_glib_none().0, user_data.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn set_web_process_count_limit(&self, limit: u32) {
         unsafe {
-            ffi::webkit_web_context_set_web_process_count_limit(self.as_ref().to_glib_none().0, limit);
+            webkit2_sys::webkit_web_context_set_web_process_count_limit(self.as_ref().to_glib_none().0, limit);
         }
     }
 
@@ -452,7 +446,7 @@ impl<O: IsA<WebContext>> WebContextExt for O {
     fn get_property_local_storage_directory(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"local-storage-directory\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"local-storage-directory\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -464,48 +458,48 @@ impl<O: IsA<WebContext>> WebContextExt for O {
 
     fn connect_download_started<F: Fn(&Self, &Download) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Download) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"download-started\0".as_ptr() as *const _,
-                transmute(download_started_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(download_started_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn connect_initialize_notification_permissions<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"initialize-notification-permissions\0".as_ptr() as *const _,
-                transmute(initialize_notification_permissions_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(initialize_notification_permissions_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn connect_initialize_web_extensions<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"initialize-web-extensions\0".as_ptr() as *const _,
-                transmute(initialize_web_extensions_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(initialize_web_extensions_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn download_started_trampoline<P>(this: *mut ffi::WebKitWebContext, download: *mut ffi::WebKitDownload, f: glib_ffi::gpointer)
+unsafe extern "C" fn download_started_trampoline<P, F: Fn(&P, &Download) + 'static>(this: *mut webkit2_sys::WebKitWebContext, download: *mut webkit2_sys::WebKitDownload, f: glib_sys::gpointer)
 where P: IsA<WebContext> {
-    let f: &&(Fn(&P, &Download) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&WebContext::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(download))
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-unsafe extern "C" fn initialize_notification_permissions_trampoline<P>(this: *mut ffi::WebKitWebContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn initialize_notification_permissions_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebContext, f: glib_sys::gpointer)
 where P: IsA<WebContext> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&WebContext::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_4", feature = "dox"))]
-unsafe extern "C" fn initialize_web_extensions_trampoline<P>(this: *mut ffi::WebKitWebContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn initialize_web_extensions_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebContext, f: glib_sys::gpointer)
 where P: IsA<WebContext> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&WebContext::from_glib_borrow(this).unsafe_cast())
 }
 

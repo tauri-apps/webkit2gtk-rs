@@ -6,20 +6,20 @@
 use UserContentInjectedFrames;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 use UserStyleLevel;
-use ffi;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 use glib::GString;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 use glib::translate::*;
+use webkit2_sys;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct UserStyleSheet(Shared<ffi::WebKitUserStyleSheet>);
+    pub struct UserStyleSheet(Shared<webkit2_sys::WebKitUserStyleSheet>);
 
     match fn {
-        ref => |ptr| ffi::webkit_user_style_sheet_ref(ptr),
-        unref => |ptr| ffi::webkit_user_style_sheet_unref(ptr),
-        get_type => || ffi::webkit_user_style_sheet_get_type(),
+        ref => |ptr| webkit2_sys::webkit_user_style_sheet_ref(ptr),
+        unref => |ptr| webkit2_sys::webkit_user_style_sheet_unref(ptr),
+        get_type => || webkit2_sys::webkit_user_style_sheet_get_type(),
     }
 }
 
@@ -28,7 +28,15 @@ impl UserStyleSheet {
     pub fn new(source: &str, injected_frames: UserContentInjectedFrames, level: UserStyleLevel, whitelist: &[&str], blacklist: &[&str]) -> UserStyleSheet {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::webkit_user_style_sheet_new(source.to_glib_none().0, injected_frames.to_glib(), level.to_glib(), whitelist.to_glib_none().0, blacklist.to_glib_none().0))
+            from_glib_full(webkit2_sys::webkit_user_style_sheet_new(source.to_glib_none().0, injected_frames.to_glib(), level.to_glib(), whitelist.to_glib_none().0, blacklist.to_glib_none().0))
+        }
+    }
+
+    #[cfg(any(feature = "v2_22", feature = "dox"))]
+    pub fn new_for_world(source: &str, injected_frames: UserContentInjectedFrames, level: UserStyleLevel, world_name: &str, whitelist: &[&str], blacklist: &[&str]) -> UserStyleSheet {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_full(webkit2_sys::webkit_user_style_sheet_new_for_world(source.to_glib_none().0, injected_frames.to_glib(), level.to_glib(), world_name.to_glib_none().0, whitelist.to_glib_none().0, blacklist.to_glib_none().0))
         }
     }
 }

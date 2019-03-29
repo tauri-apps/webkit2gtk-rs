@@ -5,8 +5,20 @@ GIR_FILES = gir-files/WebKit2-4.0.gir
 # Run `gir` generating the bindings
 gir : src/auto/mod.rs
 
+gir-sys : webkit2gtk-sys/src/lib.rs
+
+regen_check: $(GIR) $(GIR_FILES)
+	rm src/auto/*
+	rm webkit2gtk-sys/tests/*
+	$(GIR) -c Gir.toml
+	$(GIR) -c webkit2gtk-sys/Gir.toml
+	git diff -R --exit-code
+
 src/auto/mod.rs : Gir.toml $(GIR) $(GIR_FILES)
 	$(GIR) -c Gir.toml
+
+webkit2gtk-sys/src/lib.rs : webkit2gtk-sys/Gir.toml $(GIR) $(GIR_FILES)
+	$(GIR) -c webkit2gtk-sys/Gir.toml
 
 $(GIR) : $(GIR_SRC)
 	rm -f gir/target/bin/gir

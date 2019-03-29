@@ -231,8 +231,8 @@ pub const WEBKIT_EDITING_COMMAND_REDO: *const c_char = b"Redo\0" as *const u8 as
 pub const WEBKIT_EDITING_COMMAND_SELECT_ALL: *const c_char = b"SelectAll\0" as *const u8 as *const c_char;
 pub const WEBKIT_EDITING_COMMAND_UNDO: *const c_char = b"Undo\0" as *const u8 as *const c_char;
 pub const WEBKIT_MAJOR_VERSION: c_int = 2;
-pub const WEBKIT_MICRO_VERSION: c_int = 2;
-pub const WEBKIT_MINOR_VERSION: c_int = 20;
+pub const WEBKIT_MICRO_VERSION: c_int = 5;
+pub const WEBKIT_MINOR_VERSION: c_int = 22;
 
 // Flags
 pub type WebKitEditorTypingAttributes = c_uint;
@@ -2613,6 +2613,8 @@ extern "C" {
     //=========================================================================
     pub fn webkit_javascript_result_get_type() -> GType;
     pub fn webkit_javascript_result_get_global_context(js_result: *mut WebKitJavascriptResult) -> java_script_core::JSGlobalContextRef;
+    #[cfg(any(feature = "v2_22", feature = "dox"))]
+    pub fn webkit_javascript_result_get_js_value(js_result: *mut WebKitJavascriptResult) -> *mut java_script_core::JSCValue;
     pub fn webkit_javascript_result_get_value(js_result: *mut WebKitJavascriptResult) -> java_script_core::JSValueRef;
     pub fn webkit_javascript_result_ref(js_result: *mut WebKitJavascriptResult) -> *mut WebKitJavascriptResult;
     pub fn webkit_javascript_result_unref(js_result: *mut WebKitJavascriptResult);
@@ -2622,7 +2624,7 @@ extern "C" {
     //=========================================================================
     pub fn webkit_mime_info_get_type() -> GType;
     pub fn webkit_mime_info_get_description(info: *mut WebKitMimeInfo) -> *const c_char;
-    pub fn webkit_mime_info_get_extensions(info: *mut WebKitMimeInfo) -> *mut *mut c_char;
+    pub fn webkit_mime_info_get_extensions(info: *mut WebKitMimeInfo) -> *const *const c_char;
     pub fn webkit_mime_info_get_mime_type(info: *mut WebKitMimeInfo) -> *const c_char;
     pub fn webkit_mime_info_ref(info: *mut WebKitMimeInfo) -> *mut WebKitMimeInfo;
     pub fn webkit_mime_info_unref(info: *mut WebKitMimeInfo);
@@ -2653,7 +2655,7 @@ extern "C" {
     //=========================================================================
     pub fn webkit_network_proxy_settings_get_type() -> GType;
     #[cfg(any(feature = "v2_16", feature = "dox"))]
-    pub fn webkit_network_proxy_settings_new(default_proxy_uri: *const c_char, ignore_hosts: *mut *mut c_char) -> *mut WebKitNetworkProxySettings;
+    pub fn webkit_network_proxy_settings_new(default_proxy_uri: *const c_char, ignore_hosts: *const *const c_char) -> *mut WebKitNetworkProxySettings;
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     pub fn webkit_network_proxy_settings_add_proxy_for_scheme(proxy_settings: *mut WebKitNetworkProxySettings, scheme: *const c_char, proxy_uri: *const c_char);
     #[cfg(any(feature = "v2_16", feature = "dox"))]
@@ -2720,7 +2722,9 @@ extern "C" {
     //=========================================================================
     pub fn webkit_user_script_get_type() -> GType;
     #[cfg(any(feature = "v2_6", feature = "dox"))]
-    pub fn webkit_user_script_new(source: *const c_char, injected_frames: WebKitUserContentInjectedFrames, injection_time: WebKitUserScriptInjectionTime, whitelist: *mut *mut c_char, blacklist: *mut *mut c_char) -> *mut WebKitUserScript;
+    pub fn webkit_user_script_new(source: *const c_char, injected_frames: WebKitUserContentInjectedFrames, injection_time: WebKitUserScriptInjectionTime, whitelist: *const *const c_char, blacklist: *const *const c_char) -> *mut WebKitUserScript;
+    #[cfg(any(feature = "v2_22", feature = "dox"))]
+    pub fn webkit_user_script_new_for_world(source: *const c_char, injected_frames: WebKitUserContentInjectedFrames, injection_time: WebKitUserScriptInjectionTime, world_name: *const c_char, whitelist: *const *const c_char, blacklist: *const *const c_char) -> *mut WebKitUserScript;
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn webkit_user_script_ref(user_script: *mut WebKitUserScript) -> *mut WebKitUserScript;
     #[cfg(any(feature = "v2_6", feature = "dox"))]
@@ -2731,7 +2735,9 @@ extern "C" {
     //=========================================================================
     pub fn webkit_user_style_sheet_get_type() -> GType;
     #[cfg(any(feature = "v2_6", feature = "dox"))]
-    pub fn webkit_user_style_sheet_new(source: *const c_char, injected_frames: WebKitUserContentInjectedFrames, level: WebKitUserStyleLevel, whitelist: *mut *mut c_char, blacklist: *mut *mut c_char) -> *mut WebKitUserStyleSheet;
+    pub fn webkit_user_style_sheet_new(source: *const c_char, injected_frames: WebKitUserContentInjectedFrames, level: WebKitUserStyleLevel, whitelist: *const *const c_char, blacklist: *const *const c_char) -> *mut WebKitUserStyleSheet;
+    #[cfg(any(feature = "v2_22", feature = "dox"))]
+    pub fn webkit_user_style_sheet_new_for_world(source: *const c_char, injected_frames: WebKitUserContentInjectedFrames, level: WebKitUserStyleLevel, world_name: *const c_char, whitelist: *const *const c_char, blacklist: *const *const c_char) -> *mut WebKitUserStyleSheet;
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn webkit_user_style_sheet_ref(user_style_sheet: *mut WebKitUserStyleSheet) -> *mut WebKitUserStyleSheet;
     #[cfg(any(feature = "v2_6", feature = "dox"))]
@@ -2943,11 +2949,11 @@ extern "C" {
     //=========================================================================
     pub fn webkit_file_chooser_request_get_type() -> GType;
     pub fn webkit_file_chooser_request_cancel(request: *mut WebKitFileChooserRequest);
-    pub fn webkit_file_chooser_request_get_mime_types(request: *mut WebKitFileChooserRequest) -> *mut *mut c_char;
+    pub fn webkit_file_chooser_request_get_mime_types(request: *mut WebKitFileChooserRequest) -> *const *const c_char;
     pub fn webkit_file_chooser_request_get_mime_types_filter(request: *mut WebKitFileChooserRequest) -> *mut gtk::GtkFileFilter;
     pub fn webkit_file_chooser_request_get_select_multiple(request: *mut WebKitFileChooserRequest) -> gboolean;
-    pub fn webkit_file_chooser_request_get_selected_files(request: *mut WebKitFileChooserRequest) -> *mut *mut c_char;
-    pub fn webkit_file_chooser_request_select_files(request: *mut WebKitFileChooserRequest, files: *mut *mut c_char);
+    pub fn webkit_file_chooser_request_get_selected_files(request: *mut WebKitFileChooserRequest) -> *const *const c_char;
+    pub fn webkit_file_chooser_request_select_files(request: *mut WebKitFileChooserRequest, files: *const *const c_char);
 
     //=========================================================================
     // WebKitFindController
@@ -3151,6 +3157,8 @@ extern "C" {
     pub fn webkit_settings_get_enable_hyperlink_auditing(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_java(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_javascript(settings: *mut WebKitSettings) -> gboolean;
+    #[cfg(any(feature = "v2_22", feature = "dox"))]
+    pub fn webkit_settings_get_enable_media_capabilities(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_media_stream(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_mediasource(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_offline_web_application_cache(settings: *mut WebKitSettings) -> gboolean;
@@ -3207,6 +3215,8 @@ extern "C" {
     pub fn webkit_settings_set_enable_hyperlink_auditing(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_java(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_javascript(settings: *mut WebKitSettings, enabled: gboolean);
+    #[cfg(any(feature = "v2_22", feature = "dox"))]
+    pub fn webkit_settings_set_enable_media_capabilities(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_media_stream(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_mediasource(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_offline_web_application_cache(settings: *mut WebKitSettings, enabled: gboolean);
@@ -3286,12 +3296,16 @@ extern "C" {
     pub fn webkit_user_content_manager_add_style_sheet(manager: *mut WebKitUserContentManager, stylesheet: *mut WebKitUserStyleSheet);
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     pub fn webkit_user_content_manager_register_script_message_handler(manager: *mut WebKitUserContentManager, name: *const c_char) -> gboolean;
+    #[cfg(any(feature = "v2_22", feature = "dox"))]
+    pub fn webkit_user_content_manager_register_script_message_handler_in_world(manager: *mut WebKitUserContentManager, name: *const c_char, world_name: *const c_char) -> gboolean;
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn webkit_user_content_manager_remove_all_scripts(manager: *mut WebKitUserContentManager);
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn webkit_user_content_manager_remove_all_style_sheets(manager: *mut WebKitUserContentManager);
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     pub fn webkit_user_content_manager_unregister_script_message_handler(manager: *mut WebKitUserContentManager, name: *const c_char);
+    #[cfg(any(feature = "v2_22", feature = "dox"))]
+    pub fn webkit_user_content_manager_unregister_script_message_handler_in_world(manager: *mut WebKitUserContentManager, name: *const c_char, world_name: *const c_char);
 
     //=========================================================================
     // WebKitUserMediaPermissionRequest
@@ -3322,7 +3336,7 @@ extern "C" {
     pub fn webkit_web_context_get_process_model(context: *mut WebKitWebContext) -> WebKitProcessModel;
     pub fn webkit_web_context_get_security_manager(context: *mut WebKitWebContext) -> *mut WebKitSecurityManager;
     pub fn webkit_web_context_get_spell_checking_enabled(context: *mut WebKitWebContext) -> gboolean;
-    pub fn webkit_web_context_get_spell_checking_languages(context: *mut WebKitWebContext) -> *mut *mut c_char;
+    pub fn webkit_web_context_get_spell_checking_languages(context: *mut WebKitWebContext) -> *const *const c_char;
     pub fn webkit_web_context_get_tls_errors_policy(context: *mut WebKitWebContext) -> WebKitTLSErrorsPolicy;
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     pub fn webkit_web_context_get_web_process_count_limit(context: *mut WebKitWebContext) -> c_uint;
@@ -3344,10 +3358,10 @@ extern "C" {
     pub fn webkit_web_context_set_favicon_database_directory(context: *mut WebKitWebContext, path: *const c_char);
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     pub fn webkit_web_context_set_network_proxy_settings(context: *mut WebKitWebContext, proxy_mode: WebKitNetworkProxyMode, proxy_settings: *mut WebKitNetworkProxySettings);
-    pub fn webkit_web_context_set_preferred_languages(context: *mut WebKitWebContext, languages: *mut *mut c_char);
+    pub fn webkit_web_context_set_preferred_languages(context: *mut WebKitWebContext, languages: *const *const c_char);
     pub fn webkit_web_context_set_process_model(context: *mut WebKitWebContext, process_model: WebKitProcessModel);
     pub fn webkit_web_context_set_spell_checking_enabled(context: *mut WebKitWebContext, enabled: gboolean);
-    pub fn webkit_web_context_set_spell_checking_languages(context: *mut WebKitWebContext, languages: *mut *mut c_char);
+    pub fn webkit_web_context_set_spell_checking_languages(context: *mut WebKitWebContext, languages: *const *const c_char);
     pub fn webkit_web_context_set_tls_errors_policy(context: *mut WebKitWebContext, policy: WebKitTLSErrorsPolicy);
     pub fn webkit_web_context_set_web_extensions_directory(context: *mut WebKitWebContext, directory: *const c_char);
     pub fn webkit_web_context_set_web_extensions_initialization_user_data(context: *mut WebKitWebContext, user_data: *mut glib::GVariant);
@@ -3452,6 +3466,10 @@ extern "C" {
     pub fn webkit_web_view_run_javascript_finish(web_view: *mut WebKitWebView, result: *mut gio::GAsyncResult, error: *mut *mut glib::GError) -> *mut WebKitJavascriptResult;
     pub fn webkit_web_view_run_javascript_from_gresource(web_view: *mut WebKitWebView, resource: *const c_char, cancellable: *mut gio::GCancellable, callback: gio::GAsyncReadyCallback, user_data: gpointer);
     pub fn webkit_web_view_run_javascript_from_gresource_finish(web_view: *mut WebKitWebView, result: *mut gio::GAsyncResult, error: *mut *mut glib::GError) -> *mut WebKitJavascriptResult;
+    #[cfg(any(feature = "v2_22", feature = "dox"))]
+    pub fn webkit_web_view_run_javascript_in_world(web_view: *mut WebKitWebView, script: *const c_char, world_name: *const c_char, cancellable: *mut gio::GCancellable, callback: gio::GAsyncReadyCallback, user_data: gpointer);
+    #[cfg(any(feature = "v2_22", feature = "dox"))]
+    pub fn webkit_web_view_run_javascript_in_world_finish(web_view: *mut WebKitWebView, result: *mut gio::GAsyncResult, error: *mut *mut glib::GError) -> *mut WebKitJavascriptResult;
     pub fn webkit_web_view_save(web_view: *mut WebKitWebView, save_mode: WebKitSaveMode, cancellable: *mut gio::GCancellable, callback: gio::GAsyncReadyCallback, user_data: gpointer);
     pub fn webkit_web_view_save_finish(web_view: *mut WebKitWebView, result: *mut gio::GAsyncResult, error: *mut *mut glib::GError) -> *mut gio::GInputStream;
     pub fn webkit_web_view_save_to_file(web_view: *mut WebKitWebView, file: *mut gio::GFile, save_mode: WebKitSaveMode, cancellable: *mut gio::GCancellable, callback: gio::GAsyncReadyCallback, user_data: gpointer);

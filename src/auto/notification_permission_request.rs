@@ -3,15 +3,15 @@
 // DO NOT EDIT
 
 use PermissionRequest;
-use ffi;
 use glib::translate::*;
 use std::fmt;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct NotificationPermissionRequest(Object<ffi::WebKitNotificationPermissionRequest, ffi::WebKitNotificationPermissionRequestClass, NotificationPermissionRequestClass>) @implements PermissionRequest;
+    pub struct NotificationPermissionRequest(Object<webkit2_sys::WebKitNotificationPermissionRequest, webkit2_sys::WebKitNotificationPermissionRequestClass, NotificationPermissionRequestClass>) @implements PermissionRequest;
 
     match fn {
-        get_type => || ffi::webkit_notification_permission_request_get_type(),
+        get_type => || webkit2_sys::webkit_notification_permission_request_get_type(),
     }
 }
 

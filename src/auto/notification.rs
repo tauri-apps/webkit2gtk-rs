@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 use glib::GString;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
@@ -14,18 +13,19 @@ use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
-use glib_ffi;
+use glib_sys;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 use std::mem::transmute;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct Notification(Object<ffi::WebKitNotification, ffi::WebKitNotificationClass, NotificationClass>);
+    pub struct Notification(Object<webkit2_sys::WebKitNotification, webkit2_sys::WebKitNotificationClass, NotificationClass>);
 
     match fn {
-        get_type => || ffi::webkit_notification_get_type(),
+        get_type => || webkit2_sys::webkit_notification_get_type(),
     }
 }
 
@@ -73,139 +73,139 @@ impl<O: IsA<Notification>> NotificationExt for O {
     #[cfg(any(feature = "v2_12", feature = "dox"))]
     fn clicked(&self) {
         unsafe {
-            ffi::webkit_notification_clicked(self.as_ref().to_glib_none().0);
+            webkit2_sys::webkit_notification_clicked(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn close(&self) {
         unsafe {
-            ffi::webkit_notification_close(self.as_ref().to_glib_none().0);
+            webkit2_sys::webkit_notification_close(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn get_body(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_notification_get_body(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_notification_get_body(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn get_id(&self) -> u64 {
         unsafe {
-            ffi::webkit_notification_get_id(self.as_ref().to_glib_none().0)
+            webkit2_sys::webkit_notification_get_id(self.as_ref().to_glib_none().0)
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_tag(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_notification_get_tag(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_notification_get_tag(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn get_title(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::webkit_notification_get_title(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_notification_get_title(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_12", feature = "dox"))]
     fn connect_clicked<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"clicked\0".as_ptr() as *const _,
-                transmute(clicked_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(clicked_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_closed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"closed\0".as_ptr() as *const _,
-                transmute(closed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(closed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_property_body_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::body\0".as_ptr() as *const _,
-                transmute(notify_body_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_body_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_property_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::id\0".as_ptr() as *const _,
-                transmute(notify_id_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_id_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn connect_property_tag_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::tag\0".as_ptr() as *const _,
-                transmute(notify_tag_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_tag_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::title\0".as_ptr() as *const _,
-                transmute(notify_title_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_title_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v2_12", feature = "dox"))]
-unsafe extern "C" fn clicked_trampoline<P>(this: *mut ffi::WebKitNotification, f: glib_ffi::gpointer)
+unsafe extern "C" fn clicked_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitNotification, f: glib_sys::gpointer)
 where P: IsA<Notification> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notification::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
-unsafe extern "C" fn closed_trampoline<P>(this: *mut ffi::WebKitNotification, f: glib_ffi::gpointer)
+unsafe extern "C" fn closed_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitNotification, f: glib_sys::gpointer)
 where P: IsA<Notification> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notification::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
-unsafe extern "C" fn notify_body_trampoline<P>(this: *mut ffi::WebKitNotification, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_body_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitNotification, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Notification> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notification::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
-unsafe extern "C" fn notify_id_trampoline<P>(this: *mut ffi::WebKitNotification, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_id_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitNotification, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Notification> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notification::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-unsafe extern "C" fn notify_tag_trampoline<P>(this: *mut ffi::WebKitNotification, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_tag_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitNotification, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Notification> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notification::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
-unsafe extern "C" fn notify_title_trampoline<P>(this: *mut ffi::WebKitNotification, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_title_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitNotification, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Notification> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notification::from_glib_borrow(this).unsafe_cast())
 }
 

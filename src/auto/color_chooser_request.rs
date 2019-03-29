@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use gdk;
 use glib::StaticType;
 use glib::Value;
@@ -11,17 +10,18 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct ColorChooserRequest(Object<ffi::WebKitColorChooserRequest, ffi::WebKitColorChooserRequestClass, ColorChooserRequestClass>);
+    pub struct ColorChooserRequest(Object<webkit2_sys::WebKitColorChooserRequest, webkit2_sys::WebKitColorChooserRequestClass, ColorChooserRequestClass>);
 
     match fn {
-        get_type => || ffi::webkit_color_chooser_request_get_type(),
+        get_type => || webkit2_sys::webkit_color_chooser_request_get_type(),
     }
 }
 
@@ -57,14 +57,14 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn cancel(&self) {
         unsafe {
-            ffi::webkit_color_chooser_request_cancel(self.as_ref().to_glib_none().0);
+            webkit2_sys::webkit_color_chooser_request_cancel(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn finish(&self) {
         unsafe {
-            ffi::webkit_color_chooser_request_finish(self.as_ref().to_glib_none().0);
+            webkit2_sys::webkit_color_chooser_request_finish(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -72,7 +72,7 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
     fn get_element_rectangle(&self) -> gdk::Rectangle {
         unsafe {
             let mut rect = gdk::Rectangle::uninitialized();
-            ffi::webkit_color_chooser_request_get_element_rectangle(self.as_ref().to_glib_none().0, rect.to_glib_none_mut().0);
+            webkit2_sys::webkit_color_chooser_request_get_element_rectangle(self.as_ref().to_glib_none().0, rect.to_glib_none_mut().0);
             rect
         }
     }
@@ -81,7 +81,7 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
     fn get_rgba(&self) -> gdk::RGBA {
         unsafe {
             let mut rgba = gdk::RGBA::uninitialized();
-            ffi::webkit_color_chooser_request_get_rgba(self.as_ref().to_glib_none().0, rgba.to_glib_none_mut().0);
+            webkit2_sys::webkit_color_chooser_request_get_rgba(self.as_ref().to_glib_none().0, rgba.to_glib_none_mut().0);
             rgba
         }
     }
@@ -89,52 +89,52 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn set_rgba(&self, rgba: &gdk::RGBA) {
         unsafe {
-            ffi::webkit_color_chooser_request_set_rgba(self.as_ref().to_glib_none().0, rgba.to_glib_none().0);
+            webkit2_sys::webkit_color_chooser_request_set_rgba(self.as_ref().to_glib_none().0, rgba.to_glib_none().0);
         }
     }
 
     fn get_property_rgba(&self) -> Option<gdk::RGBA> {
         unsafe {
             let mut value = Value::from_type(<gdk::RGBA as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"rgba\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"rgba\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
     fn set_property_rgba(&self, rgba: Option<&gdk::RGBA>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"rgba\0".as_ptr() as *const _, Value::from(rgba).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"rgba\0".as_ptr() as *const _, Value::from(rgba).to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"finished\0".as_ptr() as *const _,
-                transmute(finished_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(finished_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_rgba_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::rgba\0".as_ptr() as *const _,
-                transmute(notify_rgba_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_rgba_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
-unsafe extern "C" fn finished_trampoline<P>(this: *mut ffi::WebKitColorChooserRequest, f: glib_ffi::gpointer)
+unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitColorChooserRequest, f: glib_sys::gpointer)
 where P: IsA<ColorChooserRequest> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ColorChooserRequest::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_rgba_trampoline<P>(this: *mut ffi::WebKitColorChooserRequest, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_rgba_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitColorChooserRequest, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<ColorChooserRequest> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ColorChooserRequest::from_glib_borrow(this).unsafe_cast())
 }
 

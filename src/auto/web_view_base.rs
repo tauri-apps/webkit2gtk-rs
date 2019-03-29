@@ -2,16 +2,16 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::translate::*;
 use gtk;
 use std::fmt;
+use webkit2_sys;
 
 glib_wrapper! {
-    pub struct WebViewBase(Object<ffi::WebKitWebViewBase, ffi::WebKitWebViewBaseClass, WebViewBaseClass>) @extends gtk::Container, gtk::Widget;
+    pub struct WebViewBase(Object<webkit2_sys::WebKitWebViewBase, webkit2_sys::WebKitWebViewBaseClass, WebViewBaseClass>) @extends gtk::Container, gtk::Widget;
 
     match fn {
-        get_type => || ffi::webkit_web_view_base_get_type(),
+        get_type => || webkit2_sys::webkit_web_view_base_get_type(),
     }
 }
 
