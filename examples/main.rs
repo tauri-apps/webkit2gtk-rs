@@ -20,6 +20,7 @@
  */
 
 extern crate glib;
+extern crate gio;
 extern crate gtk;
 extern crate webkit2gtk;
 
@@ -53,8 +54,9 @@ fn main() {
 
     window.show_all();
 
-    webview.run_javascript("alert('Hello');");
-    webview.run_javascript_with_callback("42", |result| {
+    webview.run_javascript("alert('Hello');", None::<&gio::Cancellable>, |_result| {
+    });
+    webview.run_javascript("42", None::<&gio::Cancellable>, |result| {
         match result {
             Ok(result) => {
                 let context = result.get_global_context().unwrap();
