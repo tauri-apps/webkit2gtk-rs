@@ -1,3 +1,6 @@
+[crate_name_overrides]
+"web_kit2" = "webkit2"
+
 [options]
 girs_dir = "gir-files"
 library = "WebKit2"
@@ -5,6 +8,8 @@ version = "4.0"
 work_mode = "normal"
 target_path = "."
 generate_safety_asserts = true
+single_version_file = true
+
 external_libraries = [
     "Gio",
     "Gtk",
@@ -108,8 +113,9 @@ manual = [
     "Gtk.PrintSettings",
     "Gtk.Widget",
     "Gtk.Window",
-    "JavaScriptCore.GlobalContext",
+    "JavaScriptCore.GlobalContextRef",
     "JavaScriptCore.Value",
+    "JavaScriptCore.ValueRef",
     "WebKit2.ScriptDialog",
 ]
 

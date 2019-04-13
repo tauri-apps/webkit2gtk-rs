@@ -1,3 +1,4 @@
+dist: xenial
 language: rust
 rust:
   - nightly
@@ -15,3 +16,4 @@ script:
   - rustc --version
   - ./check_init_asserts
   - cargo build
+  - cargo build --example main --features v2_6
