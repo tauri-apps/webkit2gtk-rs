@@ -1,6 +1,6 @@
 [package]
 name = "webkit2gtk"
-version = "0.6.0"
+version = "0.7.0"
 authors = ["The Gtk-rs Project Developers"]
 
 categories = ["api-bindings", "gui"]
@@ -41,8 +41,8 @@ glib-sys = "^0.8.0"
 gobject-sys = "^0.8.0"
 gtk = "^0.6.0"
 gtk-sys = "^0.8.0"
-javascriptcore-rs = "^0.6.0"
+javascriptcore-rs = "^0.7.0"
 
 [dependencies.webkit2gtk-sys]
 path = "./webkit2gtk-sys"
-version = "^0.8"
+version = "^0.9"
