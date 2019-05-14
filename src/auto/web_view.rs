@@ -28,6 +28,7 @@ use PermissionRequest;
 use PolicyDecision;
 use PolicyDecisionType;
 use PrintOperation;
+use SaveMode;
 use ScriptDialog;
 use Settings;
 use SnapshotOptions;
@@ -259,10 +260,10 @@ pub trait WebViewExt: 'static {
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     fn run_javascript_in_world_future(&self, script: &str, world_name: &str) -> Box_<futures_core::Future<Item = (Self, JavascriptResult), Error = (Self, Error)>> where Self: Sized + Clone;
 
-    //fn save<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/gio::InputStream, Error>) + Send + 'static>(&self, save_mode: SaveMode, cancellable: Option<&P>, callback: Q);
+    fn save<P: IsA<gio::Cancellable>, Q: FnOnce(Result<gio::InputStream, Error>) + Send + 'static>(&self, save_mode: SaveMode, cancellable: Option<&P>, callback: Q);
 
-    //#[cfg(feature = "futures")]
-    //fn save_future(&self, save_mode: SaveMode) -> Box_<futures_core::Future<Item = (Self, /*Ignored*/gio::InputStream), Error = (Self, Error)>> where Self: Sized + Clone;
+    #[cfg(feature = "futures")]
+    fn save_future(&self, save_mode: SaveMode) -> Box_<futures_core::Future<Item = (Self, gio::InputStream), Error = (Self, Error)>> where Self: Sized + Clone;
 
     //fn save_to_file<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), Error>) + Send + 'static>(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode, cancellable: Option<&P>, callback: Q);
 
@@ -864,32 +865,43 @@ impl<O: IsA<WebView>> WebViewExt for O {
         })
     }
 
-    //fn save<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/gio::InputStream, Error>) + Send + 'static>(&self, save_mode: SaveMode, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_view_save() }
-    //}
+    fn save<P: IsA<gio::Cancellable>, Q: FnOnce(Result<gio::InputStream, Error>) + Send + 'static>(&self, save_mode: SaveMode, cancellable: Option<&P>, callback: Q) {
+        let user_data: Box<Q> = Box::new(callback);
+        unsafe extern "C" fn save_trampoline<Q: FnOnce(Result<gio::InputStream, Error>) + Send + 'static>(_source_object: *mut gobject_sys::GObject, res: *mut gio_sys::GAsyncResult, user_data: glib_sys::gpointer) {
+            let mut error = ptr::null_mut();
+            let ret = webkit2_sys::webkit_web_view_save_finish(_source_object as *mut _, res, &mut error);
+            let result = if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) };
+            let callback: Box<Q> = Box::from_raw(user_data as *mut _);
+            callback(result);
+        }
+        let callback = save_trampoline::<Q>;
+        unsafe {
+            webkit2_sys::webkit_web_view_save(self.as_ref().to_glib_none().0, save_mode.to_glib(), cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box::into_raw(user_data) as *mut _);
+        }
+    }
 
-    //#[cfg(feature = "futures")]
-    //fn save_future(&self, save_mode: SaveMode) -> Box_<futures_core::Future<Item = (Self, /*Ignored*/gio::InputStream), Error = (Self, Error)>> where Self: Sized + Clone {
-        //use gio::GioFuture;
-        //use fragile::Fragile;
+    #[cfg(feature = "futures")]
+    fn save_future(&self, save_mode: SaveMode) -> Box_<futures_core::Future<Item = (Self, gio::InputStream), Error = (Self, Error)>> where Self: Sized + Clone {
+        use gio::GioFuture;
+        use fragile::Fragile;
 
-        //GioFuture::new(self, move |obj, send| {
-        //    let cancellable = gio::Cancellable::new();
-        //    let send = Fragile::new(send);
-        //    let obj_clone = Fragile::new(obj.clone());
-        //    obj.save(
-        //        save_mode,
-        //        Some(&cancellable),
-        //        move |res| {
-        //            let obj = obj_clone.into_inner();
-        //            let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
-        //            let _ = send.into_inner().send(res);
-        //        },
-        //    );
+        GioFuture::new(self, move |obj, send| {
+            let cancellable = gio::Cancellable::new();
+            let send = Fragile::new(send);
+            let obj_clone = Fragile::new(obj.clone());
+            obj.save(
+                save_mode,
+                Some(&cancellable),
+                move |res| {
+                    let obj = obj_clone.into_inner();
+                    let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
+                    let _ = send.into_inner().send(res);
+                },
+            );
 
-        //    cancellable
-        //})
-    //}
+            cancellable
+        })
+    }
 
     //fn save_to_file<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), Error>) + Send + 'static>(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode, cancellable: Option<&P>, callback: Q) {
     //    unsafe { TODO: call webkit2_sys:webkit_web_view_save_to_file() }

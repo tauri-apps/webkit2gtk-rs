@@ -99,6 +99,7 @@ manual = [
     "Gdk.Rectangle",
     "Gdk.RGBA",
     "Gio.Cancellable",
+    "Gio.InputStream",
     "Gio.TlsCertificate",
     "Gio.TlsCertificateFlags",
     "GLib.Bytes",
