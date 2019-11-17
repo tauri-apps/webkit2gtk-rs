@@ -66,7 +66,7 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
             let mut error = ptr::null_mut();
             let mut length = mem::MaybeUninit::uninit();
             let ret = webkit2_sys::webkit_web_resource_get_data_finish(_source_object as *mut _, res, length.as_mut_ptr(), &mut error);
-            let result = if error.is_null() { Ok((FromGlibContainer::from_glib_full_num(ret, length.assume_init() as usize), length)) } else { Err(from_glib_full(error)) };
+            let result = if error.is_null() { Ok((FromGlibContainer::from_glib_full_num(ret, length.assume_init() as usize), length.assume_init() as usize)) } else { Err(from_glib_full(error)) };
             let callback: Box_<Q> = Box_::from_raw(user_data as *mut _);
             callback(result);
         }
