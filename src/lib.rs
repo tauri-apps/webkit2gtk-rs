@@ -7,6 +7,7 @@
 
 #[macro_use]
 extern crate bitflags;
+extern crate fragile;
 extern crate cairo;
 extern crate gdk;
 extern crate gdk_sys;

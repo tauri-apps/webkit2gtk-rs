@@ -36,6 +36,7 @@ v2_22 = ["v2_20", "webkit2gtk-sys/v2_22"]
 [dependencies]
 bitflags = "^1.0"
 libc = "^0.2"
+fragile = { version = "0.3" }
 
 [dependencies.cairo-rs]
 git = "https://github.com/gtk-rs/cairo"
