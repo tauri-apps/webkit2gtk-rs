@@ -2,10 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Error;
 use URIRequest;
 use URIResponse;
 use WebView;
+use glib;
 use glib::GString;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -58,7 +58,7 @@ pub trait DownloadExt: 'static {
 
     fn connect_decide_destination<F: Fn(&Self, &str) -> bool + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_failed<F: Fn(&Self, &Error) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_failed<F: Fn(&Self, &glib::Error) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -144,6 +144,12 @@ impl<O: IsA<Download>> DownloadExt for O {
     }
 
     fn connect_created_destination<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn created_destination_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut webkit2_sys::WebKitDownload, destination: *mut libc::c_char, f: glib_sys::gpointer)
+            where P: IsA<Download>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Download::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(destination))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"created-destination\0".as_ptr() as *const _,
@@ -152,6 +158,12 @@ impl<O: IsA<Download>> DownloadExt for O {
     }
 
     fn connect_decide_destination<F: Fn(&Self, &str) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn decide_destination_trampoline<P, F: Fn(&P, &str) -> bool + 'static>(this: *mut webkit2_sys::WebKitDownload, suggested_filename: *mut libc::c_char, f: glib_sys::gpointer) -> glib_sys::gboolean
+            where P: IsA<Download>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Download::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(suggested_filename)).to_glib()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"decide-destination\0".as_ptr() as *const _,
@@ -159,7 +171,13 @@ impl<O: IsA<Download>> DownloadExt for O {
         }
     }
 
-    fn connect_failed<F: Fn(&Self, &Error) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_failed<F: Fn(&Self, &glib::Error) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn failed_trampoline<P, F: Fn(&P, &glib::Error) + 'static>(this: *mut webkit2_sys::WebKitDownload, error: *mut glib_sys::GError, f: glib_sys::gpointer)
+            where P: IsA<Download>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Download::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"failed\0".as_ptr() as *const _,
@@ -168,6 +186,12 @@ impl<O: IsA<Download>> DownloadExt for O {
     }
 
     fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, f: glib_sys::gpointer)
+            where P: IsA<Download>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Download::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"finished\0".as_ptr() as *const _,
@@ -176,6 +200,12 @@ impl<O: IsA<Download>> DownloadExt for O {
     }
 
     fn connect_received_data<F: Fn(&Self, u64) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn received_data_trampoline<P, F: Fn(&P, u64) + 'static>(this: *mut webkit2_sys::WebKitDownload, data_length: u64, f: glib_sys::gpointer)
+            where P: IsA<Download>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Download::from_glib_borrow(this).unsafe_cast(), data_length)
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"received-data\0".as_ptr() as *const _,
@@ -185,6 +215,12 @@ impl<O: IsA<Download>> DownloadExt for O {
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn connect_property_allow_overwrite_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_allow_overwrite_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Download>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Download::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::allow-overwrite\0".as_ptr() as *const _,
@@ -193,6 +229,12 @@ impl<O: IsA<Download>> DownloadExt for O {
     }
 
     fn connect_property_destination_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_destination_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Download>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Download::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::destination\0".as_ptr() as *const _,
@@ -201,6 +243,12 @@ impl<O: IsA<Download>> DownloadExt for O {
     }
 
     fn connect_property_estimated_progress_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_estimated_progress_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Download>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Download::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::estimated-progress\0".as_ptr() as *const _,
@@ -209,67 +257,18 @@ impl<O: IsA<Download>> DownloadExt for O {
     }
 
     fn connect_property_response_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_response_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Download>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Download::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::response\0".as_ptr() as *const _,
                 Some(transmute(notify_response_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn created_destination_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut webkit2_sys::WebKitDownload, destination: *mut libc::c_char, f: glib_sys::gpointer)
-where P: IsA<Download> {
-    let f: &F = &*(f as *const F);
-    f(&Download::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(destination))
-}
-
-unsafe extern "C" fn decide_destination_trampoline<P, F: Fn(&P, &str) -> bool + 'static>(this: *mut webkit2_sys::WebKitDownload, suggested_filename: *mut libc::c_char, f: glib_sys::gpointer) -> glib_sys::gboolean
-where P: IsA<Download> {
-    let f: &F = &*(f as *const F);
-    f(&Download::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(suggested_filename)).to_glib()
-}
-
-unsafe extern "C" fn failed_trampoline<P, F: Fn(&P, &Error) + 'static>(this: *mut webkit2_sys::WebKitDownload, error: *mut glib_sys::GError, f: glib_sys::gpointer)
-where P: IsA<Download> {
-    let f: &F = &*(f as *const F);
-    f(&Download::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error))
-}
-
-unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, f: glib_sys::gpointer)
-where P: IsA<Download> {
-    let f: &F = &*(f as *const F);
-    f(&Download::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn received_data_trampoline<P, F: Fn(&P, u64) + 'static>(this: *mut webkit2_sys::WebKitDownload, data_length: u64, f: glib_sys::gpointer)
-where P: IsA<Download> {
-    let f: &F = &*(f as *const F);
-    f(&Download::from_glib_borrow(this).unsafe_cast(), data_length)
-}
-
-#[cfg(any(feature = "v2_6", feature = "dox"))]
-unsafe extern "C" fn notify_allow_overwrite_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Download> {
-    let f: &F = &*(f as *const F);
-    f(&Download::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_destination_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Download> {
-    let f: &F = &*(f as *const F);
-    f(&Download::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_estimated_progress_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Download> {
-    let f: &F = &*(f as *const F);
-    f(&Download::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_response_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Download> {
-    let f: &F = &*(f as *const F);
-    f(&Download::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for Download {

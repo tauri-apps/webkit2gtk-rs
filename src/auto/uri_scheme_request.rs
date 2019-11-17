@@ -2,10 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v2_2", feature = "dox"))]
-use Error;
 use WebView;
 use gio;
+#[cfg(any(feature = "v2_2", feature = "dox"))]
+use glib;
 use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
@@ -26,7 +26,7 @@ pub trait URISchemeRequestExt: 'static {
     fn finish<P: IsA<gio::InputStream>>(&self, stream: &P, stream_length: i64, mime_type: Option<&str>);
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
-    fn finish_error(&self, error: &mut Error);
+    fn finish_error(&self, error: &mut glib::Error);
 
     fn get_path(&self) -> Option<GString>;
 
@@ -45,7 +45,7 @@ impl<O: IsA<URISchemeRequest>> URISchemeRequestExt for O {
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
-    fn finish_error(&self, error: &mut Error) {
+    fn finish_error(&self, error: &mut glib::Error) {
         unsafe {
             webkit2_sys::webkit_uri_scheme_request_finish_error(self.as_ref().to_glib_none().0, error.to_glib_none_mut().0);
         }

@@ -87,6 +87,9 @@ pub trait SettingsExt: 'static {
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     fn get_enable_accelerated_2d_canvas(&self) -> bool;
 
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn get_enable_back_forward_navigation_gestures(&self) -> bool;
+
     fn get_enable_caret_browsing(&self) -> bool;
 
     fn get_enable_developer_extras(&self) -> bool;
@@ -110,6 +113,12 @@ pub trait SettingsExt: 'static {
 
     fn get_enable_javascript(&self) -> bool;
 
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn get_enable_javascript_markup(&self) -> bool;
+
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn get_enable_media(&self) -> bool;
+
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     fn get_enable_media_capabilities(&self) -> bool;
 
@@ -118,6 +127,9 @@ pub trait SettingsExt: 'static {
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn get_enable_mediasource(&self) -> bool;
+
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn get_enable_mock_capture_devices(&self) -> bool;
 
     fn get_enable_offline_web_application_cache(&self) -> bool;
 
@@ -204,6 +216,9 @@ pub trait SettingsExt: 'static {
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     fn set_enable_accelerated_2d_canvas(&self, enabled: bool);
 
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn set_enable_back_forward_navigation_gestures(&self, enabled: bool);
+
     fn set_enable_caret_browsing(&self, enabled: bool);
 
     fn set_enable_developer_extras(&self, enabled: bool);
@@ -227,6 +242,12 @@ pub trait SettingsExt: 'static {
 
     fn set_enable_javascript(&self, enabled: bool);
 
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn set_enable_javascript_markup(&self, enabled: bool);
+
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn set_enable_media(&self, enabled: bool);
+
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     fn set_enable_media_capabilities(&self, enabled: bool);
 
@@ -235,6 +256,9 @@ pub trait SettingsExt: 'static {
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn set_enable_mediasource(&self, enabled: bool);
+
+    #[cfg(any(feature = "v2_4", feature = "dox"))]
+    fn set_enable_mock_capture_devices(&self, enabled: bool);
 
     fn set_enable_offline_web_application_cache(&self, enabled: bool);
 
@@ -323,6 +347,9 @@ pub trait SettingsExt: 'static {
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     fn connect_property_enable_accelerated_2d_canvas_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn connect_property_enable_back_forward_navigation_gestures_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
     fn connect_property_enable_caret_browsing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_enable_developer_extras_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -346,6 +373,12 @@ pub trait SettingsExt: 'static {
 
     fn connect_property_enable_javascript_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn connect_property_enable_javascript_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn connect_property_enable_media_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     fn connect_property_enable_media_capabilities_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -354,6 +387,9 @@ pub trait SettingsExt: 'static {
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn connect_property_enable_mediasource_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn connect_property_enable_mock_capture_devices_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_enable_offline_web_application_cache_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -486,6 +522,13 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn get_enable_back_forward_navigation_gestures(&self) -> bool {
+        unsafe {
+            from_glib(webkit2_sys::webkit_settings_get_enable_back_forward_navigation_gestures(self.as_ref().to_glib_none().0))
+        }
+    }
+
     fn get_enable_caret_browsing(&self) -> bool {
         unsafe {
             from_glib(webkit2_sys::webkit_settings_get_enable_caret_browsing(self.as_ref().to_glib_none().0))
@@ -553,6 +596,20 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn get_enable_javascript_markup(&self) -> bool {
+        unsafe {
+            from_glib(webkit2_sys::webkit_settings_get_enable_javascript_markup(self.as_ref().to_glib_none().0))
+        }
+    }
+
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn get_enable_media(&self) -> bool {
+        unsafe {
+            from_glib(webkit2_sys::webkit_settings_get_enable_media(self.as_ref().to_glib_none().0))
+        }
+    }
+
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     fn get_enable_media_capabilities(&self) -> bool {
         unsafe {
@@ -571,6 +628,13 @@ impl<O: IsA<Settings>> SettingsExt for O {
     fn get_enable_mediasource(&self) -> bool {
         unsafe {
             from_glib(webkit2_sys::webkit_settings_get_enable_mediasource(self.as_ref().to_glib_none().0))
+        }
+    }
+
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn get_enable_mock_capture_devices(&self) -> bool {
+        unsafe {
+            from_glib(webkit2_sys::webkit_settings_get_enable_mock_capture_devices(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -814,6 +878,13 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn set_enable_back_forward_navigation_gestures(&self, enabled: bool) {
+        unsafe {
+            webkit2_sys::webkit_settings_set_enable_back_forward_navigation_gestures(self.as_ref().to_glib_none().0, enabled.to_glib());
+        }
+    }
+
     fn set_enable_caret_browsing(&self, enabled: bool) {
         unsafe {
             webkit2_sys::webkit_settings_set_enable_caret_browsing(self.as_ref().to_glib_none().0, enabled.to_glib());
@@ -881,6 +952,20 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn set_enable_javascript_markup(&self, enabled: bool) {
+        unsafe {
+            webkit2_sys::webkit_settings_set_enable_javascript_markup(self.as_ref().to_glib_none().0, enabled.to_glib());
+        }
+    }
+
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn set_enable_media(&self, enabled: bool) {
+        unsafe {
+            webkit2_sys::webkit_settings_set_enable_media(self.as_ref().to_glib_none().0, enabled.to_glib());
+        }
+    }
+
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     fn set_enable_media_capabilities(&self, enabled: bool) {
         unsafe {
@@ -899,6 +984,13 @@ impl<O: IsA<Settings>> SettingsExt for O {
     fn set_enable_mediasource(&self, enabled: bool) {
         unsafe {
             webkit2_sys::webkit_settings_set_enable_mediasource(self.as_ref().to_glib_none().0, enabled.to_glib());
+        }
+    }
+
+    #[cfg(any(feature = "v2_4", feature = "dox"))]
+    fn set_enable_mock_capture_devices(&self, enabled: bool) {
+        unsafe {
+            webkit2_sys::webkit_settings_set_enable_mock_capture_devices(self.as_ref().to_glib_none().0, enabled.to_glib());
         }
     }
 
@@ -1081,6 +1173,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn connect_property_allow_file_access_from_file_urls_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_allow_file_access_from_file_urls_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::allow-file-access-from-file-urls\0".as_ptr() as *const _,
@@ -1089,6 +1187,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_allow_modal_dialogs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_allow_modal_dialogs_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::allow-modal-dialogs\0".as_ptr() as *const _,
@@ -1098,6 +1202,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     #[cfg(any(feature = "v2_14", feature = "dox"))]
     fn connect_property_allow_universal_access_from_file_urls_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_allow_universal_access_from_file_urls_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::allow-universal-access-from-file-urls\0".as_ptr() as *const _,
@@ -1106,6 +1216,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_auto_load_images_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_auto_load_images_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::auto-load-images\0".as_ptr() as *const _,
@@ -1114,6 +1230,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_cursive_font_family_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_cursive_font_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::cursive-font-family\0".as_ptr() as *const _,
@@ -1122,6 +1244,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_default_charset_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_default_charset_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::default-charset\0".as_ptr() as *const _,
@@ -1130,6 +1258,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_default_font_family_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_default_font_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::default-font-family\0".as_ptr() as *const _,
@@ -1138,6 +1272,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_default_font_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_default_font_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::default-font-size\0".as_ptr() as *const _,
@@ -1146,6 +1286,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_default_monospace_font_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_default_monospace_font_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::default-monospace-font-size\0".as_ptr() as *const _,
@@ -1154,6 +1300,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_draw_compositing_indicators_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_draw_compositing_indicators_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::draw-compositing-indicators\0".as_ptr() as *const _,
@@ -1163,6 +1315,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     fn connect_property_enable_accelerated_2d_canvas_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_accelerated_2d_canvas_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-accelerated-2d-canvas\0".as_ptr() as *const _,
@@ -1170,7 +1328,28 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn connect_property_enable_back_forward_navigation_gestures_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_back_forward_navigation_gestures_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::enable-back-forward-navigation-gestures\0".as_ptr() as *const _,
+                Some(transmute(notify_enable_back_forward_navigation_gestures_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+        }
+    }
+
     fn connect_property_enable_caret_browsing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_caret_browsing_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-caret-browsing\0".as_ptr() as *const _,
@@ -1179,6 +1358,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_developer_extras_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_developer_extras_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-developer-extras\0".as_ptr() as *const _,
@@ -1187,6 +1372,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_dns_prefetching_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_dns_prefetching_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-dns-prefetching\0".as_ptr() as *const _,
@@ -1196,6 +1387,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
     fn connect_property_enable_encrypted_media_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_encrypted_media_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-encrypted-media\0".as_ptr() as *const _,
@@ -1204,6 +1401,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_frame_flattening_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_frame_flattening_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-frame-flattening\0".as_ptr() as *const _,
@@ -1212,6 +1415,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_fullscreen_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_fullscreen_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-fullscreen\0".as_ptr() as *const _,
@@ -1220,6 +1429,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_html5_database_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_html5_database_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-html5-database\0".as_ptr() as *const _,
@@ -1228,6 +1443,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_html5_local_storage_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_html5_local_storage_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-html5-local-storage\0".as_ptr() as *const _,
@@ -1236,6 +1457,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_hyperlink_auditing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_hyperlink_auditing_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-hyperlink-auditing\0".as_ptr() as *const _,
@@ -1244,6 +1471,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_java_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_java_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-java\0".as_ptr() as *const _,
@@ -1252,6 +1485,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_javascript_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_javascript_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-javascript\0".as_ptr() as *const _,
@@ -1259,8 +1498,44 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn connect_property_enable_javascript_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_javascript_markup_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::enable-javascript-markup\0".as_ptr() as *const _,
+                Some(transmute(notify_enable_javascript_markup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+        }
+    }
+
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn connect_property_enable_media_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_media_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::enable-media\0".as_ptr() as *const _,
+                Some(transmute(notify_enable_media_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+        }
+    }
+
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     fn connect_property_enable_media_capabilities_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_media_capabilities_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-media-capabilities\0".as_ptr() as *const _,
@@ -1270,6 +1545,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn connect_property_enable_media_stream_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_media_stream_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-media-stream\0".as_ptr() as *const _,
@@ -1279,6 +1560,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn connect_property_enable_mediasource_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_mediasource_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-mediasource\0".as_ptr() as *const _,
@@ -1286,7 +1573,28 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    fn connect_property_enable_mock_capture_devices_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_mock_capture_devices_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::enable-mock-capture-devices\0".as_ptr() as *const _,
+                Some(transmute(notify_enable_mock_capture_devices_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+        }
+    }
+
     fn connect_property_enable_offline_web_application_cache_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_offline_web_application_cache_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-offline-web-application-cache\0".as_ptr() as *const _,
@@ -1295,6 +1603,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_page_cache_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_page_cache_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-page-cache\0".as_ptr() as *const _,
@@ -1303,6 +1617,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_plugins_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_plugins_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-plugins\0".as_ptr() as *const _,
@@ -1311,6 +1631,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_private_browsing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_private_browsing_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-private-browsing\0".as_ptr() as *const _,
@@ -1319,6 +1645,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_resizable_text_areas_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_resizable_text_areas_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-resizable-text-areas\0".as_ptr() as *const _,
@@ -1327,6 +1659,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_site_specific_quirks_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_site_specific_quirks_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-site-specific-quirks\0".as_ptr() as *const _,
@@ -1335,6 +1673,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_smooth_scrolling_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_smooth_scrolling_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-smooth-scrolling\0".as_ptr() as *const _,
@@ -1344,6 +1688,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn connect_property_enable_spatial_navigation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_spatial_navigation_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-spatial-navigation\0".as_ptr() as *const _,
@@ -1352,6 +1702,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_tabs_to_links_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_tabs_to_links_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-tabs-to-links\0".as_ptr() as *const _,
@@ -1360,6 +1716,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_webaudio_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_webaudio_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-webaudio\0".as_ptr() as *const _,
@@ -1368,6 +1730,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_webgl_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_webgl_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-webgl\0".as_ptr() as *const _,
@@ -1377,6 +1745,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     fn connect_property_enable_write_console_messages_to_stdout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_write_console_messages_to_stdout_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-write-console-messages-to-stdout\0".as_ptr() as *const _,
@@ -1385,6 +1759,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_enable_xss_auditor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_xss_auditor_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-xss-auditor\0".as_ptr() as *const _,
@@ -1393,6 +1773,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_fantasy_font_family_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_fantasy_font_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::fantasy-font-family\0".as_ptr() as *const _,
@@ -1402,6 +1788,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn connect_property_hardware_acceleration_policy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_hardware_acceleration_policy_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::hardware-acceleration-policy\0".as_ptr() as *const _,
@@ -1410,6 +1802,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_javascript_can_access_clipboard_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_javascript_can_access_clipboard_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::javascript-can-access-clipboard\0".as_ptr() as *const _,
@@ -1418,6 +1816,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_javascript_can_open_windows_automatically_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_javascript_can_open_windows_automatically_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::javascript-can-open-windows-automatically\0".as_ptr() as *const _,
@@ -1426,6 +1830,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_load_icons_ignoring_image_load_setting_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_load_icons_ignoring_image_load_setting_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::load-icons-ignoring-image-load-setting\0".as_ptr() as *const _,
@@ -1434,6 +1844,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_media_playback_allows_inline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_media_playback_allows_inline_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::media-playback-allows-inline\0".as_ptr() as *const _,
@@ -1442,6 +1858,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_media_playback_requires_user_gesture_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_media_playback_requires_user_gesture_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::media-playback-requires-user-gesture\0".as_ptr() as *const _,
@@ -1450,6 +1872,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_minimum_font_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_minimum_font_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::minimum-font-size\0".as_ptr() as *const _,
@@ -1458,6 +1886,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_monospace_font_family_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_monospace_font_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::monospace-font-family\0".as_ptr() as *const _,
@@ -1466,6 +1900,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_pictograph_font_family_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_pictograph_font_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::pictograph-font-family\0".as_ptr() as *const _,
@@ -1474,6 +1914,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_print_backgrounds_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_print_backgrounds_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::print-backgrounds\0".as_ptr() as *const _,
@@ -1482,6 +1928,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_sans_serif_font_family_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_sans_serif_font_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::sans-serif-font-family\0".as_ptr() as *const _,
@@ -1490,6 +1942,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_serif_font_family_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_serif_font_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::serif-font-family\0".as_ptr() as *const _,
@@ -1498,6 +1956,12 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_user_agent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_user_agent_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::user-agent\0".as_ptr() as *const _,
@@ -1506,340 +1970,18 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn connect_property_zoom_text_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_zoom_text_only_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Settings>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::zoom-text-only\0".as_ptr() as *const _,
                 Some(transmute(notify_zoom_text_only_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-unsafe extern "C" fn notify_allow_file_access_from_file_urls_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_allow_modal_dialogs_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v2_14", feature = "dox"))]
-unsafe extern "C" fn notify_allow_universal_access_from_file_urls_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_auto_load_images_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_cursive_font_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_default_charset_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_default_font_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_default_font_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_default_monospace_font_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_draw_compositing_indicators_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v2_2", feature = "dox"))]
-unsafe extern "C" fn notify_enable_accelerated_2d_canvas_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_caret_browsing_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_developer_extras_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_dns_prefetching_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v2_20", feature = "dox"))]
-unsafe extern "C" fn notify_enable_encrypted_media_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_frame_flattening_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_fullscreen_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_html5_database_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_html5_local_storage_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_hyperlink_auditing_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_java_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_javascript_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v2_22", feature = "dox"))]
-unsafe extern "C" fn notify_enable_media_capabilities_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v2_4", feature = "dox"))]
-unsafe extern "C" fn notify_enable_media_stream_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v2_4", feature = "dox"))]
-unsafe extern "C" fn notify_enable_mediasource_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_offline_web_application_cache_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_page_cache_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_plugins_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_private_browsing_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_resizable_text_areas_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_site_specific_quirks_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_smooth_scrolling_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v2_4", feature = "dox"))]
-unsafe extern "C" fn notify_enable_spatial_navigation_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_tabs_to_links_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_webaudio_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_webgl_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v2_2", feature = "dox"))]
-unsafe extern "C" fn notify_enable_write_console_messages_to_stdout_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_xss_auditor_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_fantasy_font_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-unsafe extern "C" fn notify_hardware_acceleration_policy_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_javascript_can_access_clipboard_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_javascript_can_open_windows_automatically_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_load_icons_ignoring_image_load_setting_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_media_playback_allows_inline_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_media_playback_requires_user_gesture_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_minimum_font_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_monospace_font_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_pictograph_font_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_print_backgrounds_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_sans_serif_font_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_serif_font_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_user_agent_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_zoom_text_only_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitSettings, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Settings> {
-    let f: &F = &*(f as *const F);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for Settings {

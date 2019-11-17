@@ -133,19 +133,18 @@ impl<O: IsA<AuthenticationRequest>> AuthenticationRequestExt for O {
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     fn connect_cancelled<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn cancelled_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitAuthenticationRequest, f: glib_sys::gpointer)
+            where P: IsA<AuthenticationRequest>
+        {
+            let f: &F = &*(f as *const F);
+            f(&AuthenticationRequest::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"cancelled\0".as_ptr() as *const _,
                 Some(transmute(cancelled_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-#[cfg(any(feature = "v2_2", feature = "dox"))]
-unsafe extern "C" fn cancelled_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitAuthenticationRequest, f: glib_sys::gpointer)
-where P: IsA<AuthenticationRequest> {
-    let f: &F = &*(f as *const F);
-    f(&AuthenticationRequest::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for AuthenticationRequest {

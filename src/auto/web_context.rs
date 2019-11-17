@@ -5,7 +5,6 @@
 use CacheModel;
 use CookieManager;
 use Download;
-use Error;
 use FaviconDatabase;
 use Plugin;
 #[cfg(any(feature = "v2_4", feature = "dox"))]
@@ -17,11 +16,8 @@ use TLSErrorsPolicy;
 use URISchemeRequest;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 use WebsiteDataManager;
-#[cfg(feature = "futures")]
-use futures_core;
 use gio;
 use gio_sys;
-#[cfg(any(feature = "v2_4", feature = "dox"))]
 use glib;
 use glib::GString;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
@@ -35,9 +31,12 @@ use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_sys;
 use gobject_sys;
+#[cfg(any(feature = "v2_26", feature = "dox"))]
+use std;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
+use std::pin::Pin;
 use std::ptr;
 use webkit2_sys;
 
@@ -92,6 +91,9 @@ impl Default for WebContext {
 pub const NONE_WEB_CONTEXT: Option<&WebContext> = None;
 
 pub trait WebContextExt: 'static {
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn add_path_to_sandbox<P: AsRef<std::path::Path>>(&self, path: P, read_only: bool);
+
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn allow_tls_certificate_for_host<P: IsA<gio::TlsCertificate>>(&self, certificate: &P, host: &str);
 
@@ -107,13 +109,19 @@ pub trait WebContextExt: 'static {
 
     fn get_favicon_database_directory(&self) -> Option<GString>;
 
-    fn get_plugins<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q);
+    //#[cfg(any(feature = "v2_26", feature = "dox"))]
+    //fn get_geolocation_manager(&self) -> /*Ignored*/Option<GeolocationManager>;
 
-    #[cfg(feature = "futures")]
-    fn get_plugins_future(&self) -> Box_<futures_core::Future<Item = (Self, Vec<Plugin>), Error = (Self, Error)>> where Self: Sized + Clone;
+    fn get_plugins<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<Plugin>, glib::Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q);
+
+    
+    fn get_plugins_future(&self) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<Plugin>, glib::Error>> + 'static>>;
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn get_process_model(&self) -> ProcessModel;
+
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn get_sandbox_enabled(&self) -> bool;
 
     fn get_security_manager(&self) -> Option<SecurityManager>;
 
@@ -123,6 +131,7 @@ pub trait WebContextExt: 'static {
 
     fn get_tls_errors_policy(&self) -> TLSErrorsPolicy;
 
+    #[cfg_attr(feature = "v2_26", deprecated)]
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_web_process_count_limit(&self) -> u32;
 
@@ -159,6 +168,9 @@ pub trait WebContextExt: 'static {
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn set_process_model(&self, process_model: ProcessModel);
 
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn set_sandbox_enabled(&self, enabled: bool);
+
     fn set_spell_checking_enabled(&self, enabled: bool);
 
     fn set_spell_checking_languages(&self, languages: &[&str]);
@@ -170,6 +182,7 @@ pub trait WebContextExt: 'static {
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn set_web_extensions_initialization_user_data(&self, user_data: &glib::Variant);
 
+    #[cfg_attr(feature = "v2_26", deprecated)]
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn set_web_process_count_limit(&self, limit: u32);
 
@@ -190,6 +203,13 @@ pub trait WebContextExt: 'static {
 }
 
 impl<O: IsA<WebContext>> WebContextExt for O {
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn add_path_to_sandbox<P: AsRef<std::path::Path>>(&self, path: P, read_only: bool) {
+        unsafe {
+            webkit2_sys::webkit_web_context_add_path_to_sandbox(self.as_ref().to_glib_none().0, path.as_ref().to_glib_none().0, read_only.to_glib());
+        }
+    }
+
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn allow_tls_certificate_for_host<P: IsA<gio::TlsCertificate>>(&self, certificate: &P, host: &str) {
         unsafe {
@@ -233,35 +253,37 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         }
     }
 
-    fn get_plugins<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q) {
-        let user_data: Box<Q> = Box::new(callback);
-        unsafe extern "C" fn get_plugins_trampoline<Q: FnOnce(Result<Vec<Plugin>, Error>) + Send + 'static>(_source_object: *mut gobject_sys::GObject, res: *mut gio_sys::GAsyncResult, user_data: glib_sys::gpointer) {
+    //#[cfg(any(feature = "v2_26", feature = "dox"))]
+    //fn get_geolocation_manager(&self) -> /*Ignored*/Option<GeolocationManager> {
+    //    unsafe { TODO: call webkit2_sys:webkit_web_context_get_geolocation_manager() }
+    //}
+
+    fn get_plugins<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<Plugin>, glib::Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q) {
+        let user_data: Box_<Q> = Box_::new(callback);
+        unsafe extern "C" fn get_plugins_trampoline<Q: FnOnce(Result<Vec<Plugin>, glib::Error>) + Send + 'static>(_source_object: *mut gobject_sys::GObject, res: *mut gio_sys::GAsyncResult, user_data: glib_sys::gpointer) {
             let mut error = ptr::null_mut();
             let ret = webkit2_sys::webkit_web_context_get_plugins_finish(_source_object as *mut _, res, &mut error);
             let result = if error.is_null() { Ok(FromGlibPtrContainer::from_glib_full(ret)) } else { Err(from_glib_full(error)) };
-            let callback: Box<Q> = Box::from_raw(user_data as *mut _);
+            let callback: Box_<Q> = Box_::from_raw(user_data as *mut _);
             callback(result);
         }
         let callback = get_plugins_trampoline::<Q>;
         unsafe {
-            webkit2_sys::webkit_web_context_get_plugins(self.as_ref().to_glib_none().0, cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box::into_raw(user_data) as *mut _);
+            webkit2_sys::webkit_web_context_get_plugins(self.as_ref().to_glib_none().0, cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box_::into_raw(user_data) as *mut _);
         }
     }
 
-    #[cfg(feature = "futures")]
-    fn get_plugins_future(&self) -> Box_<futures_core::Future<Item = (Self, Vec<Plugin>), Error = (Self, Error)>> where Self: Sized + Clone {
+    
+    fn get_plugins_future(&self) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<Plugin>, glib::Error>> + 'static>> {
         use gio::GioFuture;
         use fragile::Fragile;
 
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
             let send = Fragile::new(send);
-            let obj_clone = Fragile::new(obj.clone());
             obj.get_plugins(
                 Some(&cancellable),
                 move |res| {
-                    let obj = obj_clone.into_inner();
-                    let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
                     let _ = send.into_inner().send(res);
                 },
             );
@@ -274,6 +296,13 @@ impl<O: IsA<WebContext>> WebContextExt for O {
     fn get_process_model(&self) -> ProcessModel {
         unsafe {
             from_glib(webkit2_sys::webkit_web_context_get_process_model(self.as_ref().to_glib_none().0))
+        }
+    }
+
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn get_sandbox_enabled(&self) -> bool {
+        unsafe {
+            from_glib(webkit2_sys::webkit_web_context_get_sandbox_enabled(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -343,7 +372,7 @@ impl<O: IsA<WebContext>> WebContextExt for O {
     }
 
     fn register_uri_scheme<P: Fn(&URISchemeRequest) + 'static>(&self, scheme: &str, callback: P) {
-        let callback_data: Box_<P> = Box::new(callback);
+        let callback_data: Box_<P> = Box_::new(callback);
         unsafe extern "C" fn callback_func<P: Fn(&URISchemeRequest) + 'static>(request: *mut webkit2_sys::WebKitURISchemeRequest, user_data: glib_sys::gpointer) {
             let request = from_glib_borrow(request);
             let callback: &P = &*(user_data as *mut _);
@@ -356,7 +385,7 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         let destroy_call4 = Some(user_data_destroy_func_func::<P> as _);
         let super_callback0: Box_<P> = callback_data;
         unsafe {
-            webkit2_sys::webkit_web_context_register_uri_scheme(self.as_ref().to_glib_none().0, scheme.to_glib_none().0, callback, Box::into_raw(super_callback0) as *mut _, destroy_call4);
+            webkit2_sys::webkit_web_context_register_uri_scheme(self.as_ref().to_glib_none().0, scheme.to_glib_none().0, callback, Box_::into_raw(super_callback0) as *mut _, destroy_call4);
         }
     }
 
@@ -404,6 +433,13 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         }
     }
 
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn set_sandbox_enabled(&self, enabled: bool) {
+        unsafe {
+            webkit2_sys::webkit_web_context_set_sandbox_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
+        }
+    }
+
     fn set_spell_checking_enabled(&self, enabled: bool) {
         unsafe {
             webkit2_sys::webkit_web_context_set_spell_checking_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
@@ -447,7 +483,7 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
             gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"local-storage-directory\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
+            value.get().expect("Return Value for property `local-storage-directory` getter")
         }
     }
 
@@ -457,6 +493,12 @@ impl<O: IsA<WebContext>> WebContextExt for O {
     //}
 
     fn connect_download_started<F: Fn(&Self, &Download) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn download_started_trampoline<P, F: Fn(&P, &Download) + 'static>(this: *mut webkit2_sys::WebKitWebContext, download: *mut webkit2_sys::WebKitDownload, f: glib_sys::gpointer)
+            where P: IsA<WebContext>
+        {
+            let f: &F = &*(f as *const F);
+            f(&WebContext::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(download))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"download-started\0".as_ptr() as *const _,
@@ -466,6 +508,12 @@ impl<O: IsA<WebContext>> WebContextExt for O {
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn connect_initialize_notification_permissions<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn initialize_notification_permissions_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebContext, f: glib_sys::gpointer)
+            where P: IsA<WebContext>
+        {
+            let f: &F = &*(f as *const F);
+            f(&WebContext::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"initialize-notification-permissions\0".as_ptr() as *const _,
@@ -475,32 +523,18 @@ impl<O: IsA<WebContext>> WebContextExt for O {
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn connect_initialize_web_extensions<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn initialize_web_extensions_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebContext, f: glib_sys::gpointer)
+            where P: IsA<WebContext>
+        {
+            let f: &F = &*(f as *const F);
+            f(&WebContext::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"initialize-web-extensions\0".as_ptr() as *const _,
                 Some(transmute(initialize_web_extensions_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn download_started_trampoline<P, F: Fn(&P, &Download) + 'static>(this: *mut webkit2_sys::WebKitWebContext, download: *mut webkit2_sys::WebKitDownload, f: glib_sys::gpointer)
-where P: IsA<WebContext> {
-    let f: &F = &*(f as *const F);
-    f(&WebContext::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(download))
-}
-
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-unsafe extern "C" fn initialize_notification_permissions_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebContext, f: glib_sys::gpointer)
-where P: IsA<WebContext> {
-    let f: &F = &*(f as *const F);
-    f(&WebContext::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v2_4", feature = "dox"))]
-unsafe extern "C" fn initialize_web_extensions_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebContext, f: glib_sys::gpointer)
-where P: IsA<WebContext> {
-    let f: &F = &*(f as *const F);
-    f(&WebContext::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for WebContext {

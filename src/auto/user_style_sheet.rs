@@ -7,8 +7,6 @@ use UserContentInjectedFrames;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 use UserStyleLevel;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
-use glib::GString;
-#[cfg(any(feature = "v2_6", feature = "dox"))]
 use glib::translate::*;
 use webkit2_sys;
 

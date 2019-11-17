@@ -236,7 +236,9 @@ bitflags! {
         const INDEXEDDB_DATABASES = 64;
         const PLUGIN_DATA = 128;
         const COOKIES = 256;
-        const ALL = 511;
+        const DEVICE_ID_HASH_SALT = 512;
+        const HSTS_CACHE = 1024;
+        const ALL = 2047;
     }
 }
 

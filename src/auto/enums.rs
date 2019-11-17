@@ -238,6 +238,7 @@ pub enum ContextMenuAction {
     MediaMute,
     DownloadVideoToDisk,
     DownloadAudioToDisk,
+    InsertEmoji,
     Custom,
     #[doc(hidden)]
     __Unknown(i32),
@@ -290,6 +291,7 @@ impl fmt::Display for ContextMenuAction {
             ContextMenuAction::MediaMute => "MediaMute",
             ContextMenuAction::DownloadVideoToDisk => "DownloadVideoToDisk",
             ContextMenuAction::DownloadAudioToDisk => "DownloadAudioToDisk",
+            ContextMenuAction::InsertEmoji => "InsertEmoji",
             ContextMenuAction::Custom => "Custom",
             _ => "Unknown",
         })
@@ -346,6 +348,7 @@ impl ToGlib for ContextMenuAction {
             ContextMenuAction::MediaMute => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_MEDIA_MUTE,
             ContextMenuAction::DownloadVideoToDisk => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_VIDEO_TO_DISK,
             ContextMenuAction::DownloadAudioToDisk => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_AUDIO_TO_DISK,
+            ContextMenuAction::InsertEmoji => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_INSERT_EMOJI,
             ContextMenuAction::Custom => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_CUSTOM,
             ContextMenuAction::__Unknown(value) => value
         }
@@ -401,6 +404,7 @@ impl FromGlib<webkit2_sys::WebKitContextMenuAction> for ContextMenuAction {
             41 => ContextMenuAction::MediaMute,
             42 => ContextMenuAction::DownloadVideoToDisk,
             43 => ContextMenuAction::DownloadAudioToDisk,
+            44 => ContextMenuAction::InsertEmoji,
             10000 => ContextMenuAction::Custom,
             value => ContextMenuAction::__Unknown(value),
         }

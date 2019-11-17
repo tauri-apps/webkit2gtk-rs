@@ -97,7 +97,7 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
         unsafe {
             let mut value = Value::from_type(<gdk::RGBA as StaticType>::static_type());
             gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"rgba\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
+            value.get().expect("Return Value for property `rgba` getter")
         }
     }
 
@@ -109,6 +109,12 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitColorChooserRequest, f: glib_sys::gpointer)
+            where P: IsA<ColorChooserRequest>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ColorChooserRequest::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"finished\0".as_ptr() as *const _,
@@ -117,25 +123,18 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
     }
 
     fn connect_property_rgba_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_rgba_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitColorChooserRequest, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<ColorChooserRequest>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ColorChooserRequest::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::rgba\0".as_ptr() as *const _,
                 Some(transmute(notify_rgba_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-#[cfg(any(feature = "v2_8", feature = "dox"))]
-unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitColorChooserRequest, f: glib_sys::gpointer)
-where P: IsA<ColorChooserRequest> {
-    let f: &F = &*(f as *const F);
-    f(&ColorChooserRequest::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_rgba_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitColorChooserRequest, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<ColorChooserRequest> {
-    let f: &F = &*(f as *const F);
-    f(&ColorChooserRequest::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for ColorChooserRequest {

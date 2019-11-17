@@ -76,6 +76,12 @@ impl<O: IsA<PrintCustomWidget>> PrintCustomWidgetExt for O {
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn connect_apply<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn apply_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitPrintCustomWidget, f: glib_sys::gpointer)
+            where P: IsA<PrintCustomWidget>
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"apply\0".as_ptr() as *const _,
@@ -85,26 +91,18 @@ impl<O: IsA<PrintCustomWidget>> PrintCustomWidgetExt for O {
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn connect_update<F: Fn(&Self, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn update_trampoline<P, F: Fn(&P, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(this: *mut webkit2_sys::WebKitPrintCustomWidget, page_setup: *mut gtk_sys::GtkPageSetup, print_settings: *mut gtk_sys::GtkPrintSettings, f: glib_sys::gpointer)
+            where P: IsA<PrintCustomWidget>
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(page_setup), &from_glib_borrow(print_settings))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"update\0".as_ptr() as *const _,
                 Some(transmute(update_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-unsafe extern "C" fn apply_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitPrintCustomWidget, f: glib_sys::gpointer)
-where P: IsA<PrintCustomWidget> {
-    let f: &F = &*(f as *const F);
-    f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-unsafe extern "C" fn update_trampoline<P, F: Fn(&P, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(this: *mut webkit2_sys::WebKitPrintCustomWidget, page_setup: *mut gtk_sys::GtkPageSetup, print_settings: *mut gtk_sys::GtkPrintSettings, f: glib_sys::gpointer)
-where P: IsA<PrintCustomWidget> {
-    let f: &F = &*(f as *const F);
-    f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(page_setup), &from_glib_borrow(print_settings))
 }
 
 impl fmt::Display for PrintCustomWidget {
