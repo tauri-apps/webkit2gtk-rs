@@ -2,12 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use MimeInfo;
-use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
+use glib::GString;
 use std::fmt;
 use webkit2_sys;
+use MimeInfo;
 
 glib_wrapper! {
     pub struct Plugin(Object<webkit2_sys::WebKitPlugin, webkit2_sys::WebKitPluginClass, PluginClass>);

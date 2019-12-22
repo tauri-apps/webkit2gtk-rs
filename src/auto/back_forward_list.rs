@@ -2,11 +2,11 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use BackForwardListItem;
 use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
 use webkit2_sys;
+use BackForwardListItem;
 
 glib_wrapper! {
     pub struct BackForwardList(Object<webkit2_sys::WebKitBackForwardList, webkit2_sys::WebKitBackForwardListClass, BackForwardListClass>);

@@ -2,20 +2,20 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-use CookieManager;
+use glib::object::IsA;
+use glib::translate::*;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 use glib::GString;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib::StaticType;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib::Value;
-use glib::object::IsA;
-use glib::translate::*;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use gobject_sys;
 use std::fmt;
 use webkit2_sys;
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+use CookieManager;
 
 glib_wrapper! {
     pub struct WebsiteDataManager(Object<webkit2_sys::WebKitWebsiteDataManager, webkit2_sys::WebKitWebsiteDataManagerClass, WebsiteDataManagerClass>);
@@ -44,18 +44,18 @@ pub const NONE_WEBSITE_DATA_MANAGER: Option<&WebsiteDataManager> = None;
 
 pub trait WebsiteDataManagerExt: 'static {
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan, cancellable: Option<&P>, callback: Q);
+    //fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan, cancellable: Option<&P>, callback: Q);
 
-    //#[cfg(feature = "futures")]
+    //
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn clear_future(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> where Self: Sized + Clone;
+    //fn clear_future(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
 
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn fetch<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/Vec<WebsiteData>, Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q);
+    //fn fetch<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/Vec<WebsiteData>, glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q);
 
-    //#[cfg(feature = "futures")]
+    //
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn fetch_future(&self, types: WebsiteDataTypes) -> Box_<futures_core::Future<Item = (Self, /*Ignored*/Vec<WebsiteData>), Error = (Self, Error)>> where Self: Sized + Clone;
+    //fn fetch_future(&self, types: WebsiteDataTypes) -> Pin<Box_<dyn std::future::Future<Output = Result</*Ignored*/Vec<WebsiteData>, glib::Error>> + 'static>>;
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_base_cache_directory(&self) -> Option<GString>;
@@ -69,6 +69,9 @@ pub trait WebsiteDataManagerExt: 'static {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_disk_cache_directory(&self) -> Option<GString>;
 
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn get_hsts_cache_directory(&self) -> Option<GString>;
+
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_indexeddb_directory(&self) -> Option<GString>;
 
@@ -78,6 +81,7 @@ pub trait WebsiteDataManagerExt: 'static {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_offline_application_cache_directory(&self) -> Option<GString>;
 
+    #[cfg_attr(feature = "v2_24", deprecated)]
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_websql_directory(&self) -> Option<GString>;
 
@@ -85,11 +89,11 @@ pub trait WebsiteDataManagerExt: 'static {
     fn is_ephemeral(&self) -> bool;
 
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn remove<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q);
+    //fn remove<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q);
 
-    //#[cfg(feature = "futures")]
+    //
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn remove_future(&self, types: WebsiteDataTypes) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> where Self: Sized + Clone;
+    //fn remove_future(&self, types: WebsiteDataTypes) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_property_is_ephemeral(&self) -> bool;
@@ -97,62 +101,50 @@ pub trait WebsiteDataManagerExt: 'static {
 
 impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan, cancellable: Option<&P>, callback: Q) {
+    //fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan, cancellable: Option<&P>, callback: Q) {
     //    unsafe { TODO: call webkit2_sys:webkit_website_data_manager_clear() }
     //}
 
-    //#[cfg(feature = "futures")]
+    //
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn clear_future(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> where Self: Sized + Clone {
-        //use gio::GioFuture;
-        //use fragile::Fragile;
+    //fn clear_future(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
 
-        //GioFuture::new(self, move |obj, send| {
+        //Box_::pin(gio::GioFuture::new(self, move |obj, send| {
         //    let cancellable = gio::Cancellable::new();
-        //    let send = Fragile::new(send);
-        //    let obj_clone = Fragile::new(obj.clone());
         //    obj.clear(
         //        types,
         //        timespan,
         //        Some(&cancellable),
         //        move |res| {
-        //            let obj = obj_clone.into_inner();
-        //            let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
-        //            let _ = send.into_inner().send(res);
+        //            send.resolve(res);
         //        },
         //    );
 
         //    cancellable
-        //})
+        //}))
     //}
 
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn fetch<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/Vec<WebsiteData>, Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q) {
+    //fn fetch<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/Vec<WebsiteData>, glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q) {
     //    unsafe { TODO: call webkit2_sys:webkit_website_data_manager_fetch() }
     //}
 
-    //#[cfg(feature = "futures")]
+    //
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn fetch_future(&self, types: WebsiteDataTypes) -> Box_<futures_core::Future<Item = (Self, /*Ignored*/Vec<WebsiteData>), Error = (Self, Error)>> where Self: Sized + Clone {
-        //use gio::GioFuture;
-        //use fragile::Fragile;
+    //fn fetch_future(&self, types: WebsiteDataTypes) -> Pin<Box_<dyn std::future::Future<Output = Result</*Ignored*/Vec<WebsiteData>, glib::Error>> + 'static>> {
 
-        //GioFuture::new(self, move |obj, send| {
+        //Box_::pin(gio::GioFuture::new(self, move |obj, send| {
         //    let cancellable = gio::Cancellable::new();
-        //    let send = Fragile::new(send);
-        //    let obj_clone = Fragile::new(obj.clone());
         //    obj.fetch(
         //        types,
         //        Some(&cancellable),
         //        move |res| {
-        //            let obj = obj_clone.into_inner();
-        //            let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
-        //            let _ = send.into_inner().send(res);
+        //            send.resolve(res);
         //        },
         //    );
 
         //    cancellable
-        //})
+        //}))
     //}
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
@@ -180,6 +172,13 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     fn get_disk_cache_directory(&self) -> Option<GString> {
         unsafe {
             from_glib_none(webkit2_sys::webkit_website_data_manager_get_disk_cache_directory(self.as_ref().to_glib_none().0))
+        }
+    }
+
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn get_hsts_cache_directory(&self) -> Option<GString> {
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_website_data_manager_get_hsts_cache_directory(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -219,32 +218,26 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     }
 
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn remove<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q) {
+    //fn remove<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q) {
     //    unsafe { TODO: call webkit2_sys:webkit_website_data_manager_remove() }
     //}
 
-    //#[cfg(feature = "futures")]
+    //
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn remove_future(&self, types: WebsiteDataTypes) -> Box_<futures_core::Future<Item = (Self, ()), Error = (Self, Error)>> where Self: Sized + Clone {
-        //use gio::GioFuture;
-        //use fragile::Fragile;
+    //fn remove_future(&self, types: WebsiteDataTypes) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
 
-        //GioFuture::new(self, move |obj, send| {
+        //Box_::pin(gio::GioFuture::new(self, move |obj, send| {
         //    let cancellable = gio::Cancellable::new();
-        //    let send = Fragile::new(send);
-        //    let obj_clone = Fragile::new(obj.clone());
         //    obj.remove(
         //        types,
         //        Some(&cancellable),
         //        move |res| {
-        //            let obj = obj_clone.into_inner();
-        //            let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
-        //            let _ = send.into_inner().send(res);
+        //            send.resolve(res);
         //        },
         //    );
 
         //    cancellable
-        //})
+        //}))
     //}
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
@@ -252,7 +245,7 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
             gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"is-ephemeral\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
+            value.get().expect("Return Value for property `is-ephemeral` getter").unwrap()
         }
     }
 }

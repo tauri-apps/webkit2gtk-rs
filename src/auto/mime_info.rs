@@ -2,8 +2,8 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::GString;
 use glib::translate::*;
+use glib::GString;
 use webkit2_sys;
 
 glib_wrapper! {

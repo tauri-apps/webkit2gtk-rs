@@ -3,9 +3,9 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-use glib::GString;
-#[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib::translate::*;
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+use glib::GString;
 use std::fmt;
 use webkit2_sys;
 
