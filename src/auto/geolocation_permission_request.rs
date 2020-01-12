@@ -2,10 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use PermissionRequest;
 use glib::translate::*;
 use std::fmt;
 use webkit2_sys;
+use PermissionRequest;
 
 glib_wrapper! {
     pub struct GeolocationPermissionRequest(Object<webkit2_sys::WebKitGeolocationPermissionRequest, webkit2_sys::WebKitGeolocationPermissionRequestClass, GeolocationPermissionRequestClass>) @implements PermissionRequest;

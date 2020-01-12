@@ -2,18 +2,18 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use WebViewBase;
-use glib::GString;
 use glib::object::Cast;
 use glib::object::IsA;
-use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::GString;
 use glib_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 use webkit2_sys;
+use WebViewBase;
 
 glib_wrapper! {
     pub struct WebInspector(Object<webkit2_sys::WebKitWebInspector, webkit2_sys::WebKitWebInspectorClass, WebInspectorClass>);
@@ -120,6 +120,12 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
     }
 
     fn connect_attach<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn attach_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut webkit2_sys::WebKitWebInspector, f: glib_sys::gpointer) -> glib_sys::gboolean
+            where P: IsA<WebInspector>
+        {
+            let f: &F = &*(f as *const F);
+            f(&WebInspector::from_glib_borrow(this).unsafe_cast()).to_glib()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"attach\0".as_ptr() as *const _,
@@ -128,6 +134,12 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
     }
 
     fn connect_bring_to_front<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn bring_to_front_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut webkit2_sys::WebKitWebInspector, f: glib_sys::gpointer) -> glib_sys::gboolean
+            where P: IsA<WebInspector>
+        {
+            let f: &F = &*(f as *const F);
+            f(&WebInspector::from_glib_borrow(this).unsafe_cast()).to_glib()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"bring-to-front\0".as_ptr() as *const _,
@@ -136,6 +148,12 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
     }
 
     fn connect_closed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn closed_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebInspector, f: glib_sys::gpointer)
+            where P: IsA<WebInspector>
+        {
+            let f: &F = &*(f as *const F);
+            f(&WebInspector::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"closed\0".as_ptr() as *const _,
@@ -144,6 +162,12 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
     }
 
     fn connect_detach<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn detach_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut webkit2_sys::WebKitWebInspector, f: glib_sys::gpointer) -> glib_sys::gboolean
+            where P: IsA<WebInspector>
+        {
+            let f: &F = &*(f as *const F);
+            f(&WebInspector::from_glib_borrow(this).unsafe_cast()).to_glib()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"detach\0".as_ptr() as *const _,
@@ -152,6 +176,12 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
     }
 
     fn connect_open_window<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn open_window_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut webkit2_sys::WebKitWebInspector, f: glib_sys::gpointer) -> glib_sys::gboolean
+            where P: IsA<WebInspector>
+        {
+            let f: &F = &*(f as *const F);
+            f(&WebInspector::from_glib_borrow(this).unsafe_cast()).to_glib()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"open-window\0".as_ptr() as *const _,
@@ -160,6 +190,12 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
     }
 
     fn connect_property_attached_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_attached_height_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebInspector, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<WebInspector>
+        {
+            let f: &F = &*(f as *const F);
+            f(&WebInspector::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::attached-height\0".as_ptr() as *const _,
@@ -169,6 +205,12 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_property_can_attach_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_can_attach_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebInspector, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<WebInspector>
+        {
+            let f: &F = &*(f as *const F);
+            f(&WebInspector::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::can-attach\0".as_ptr() as *const _,
@@ -177,61 +219,18 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
     }
 
     fn connect_property_inspected_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_inspected_uri_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebInspector, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<WebInspector>
+        {
+            let f: &F = &*(f as *const F);
+            f(&WebInspector::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::inspected-uri\0".as_ptr() as *const _,
                 Some(transmute(notify_inspected_uri_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn attach_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut webkit2_sys::WebKitWebInspector, f: glib_sys::gpointer) -> glib_sys::gboolean
-where P: IsA<WebInspector> {
-    let f: &F = &*(f as *const F);
-    f(&WebInspector::from_glib_borrow(this).unsafe_cast()).to_glib()
-}
-
-unsafe extern "C" fn bring_to_front_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut webkit2_sys::WebKitWebInspector, f: glib_sys::gpointer) -> glib_sys::gboolean
-where P: IsA<WebInspector> {
-    let f: &F = &*(f as *const F);
-    f(&WebInspector::from_glib_borrow(this).unsafe_cast()).to_glib()
-}
-
-unsafe extern "C" fn closed_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebInspector, f: glib_sys::gpointer)
-where P: IsA<WebInspector> {
-    let f: &F = &*(f as *const F);
-    f(&WebInspector::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn detach_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut webkit2_sys::WebKitWebInspector, f: glib_sys::gpointer) -> glib_sys::gboolean
-where P: IsA<WebInspector> {
-    let f: &F = &*(f as *const F);
-    f(&WebInspector::from_glib_borrow(this).unsafe_cast()).to_glib()
-}
-
-unsafe extern "C" fn open_window_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut webkit2_sys::WebKitWebInspector, f: glib_sys::gpointer) -> glib_sys::gboolean
-where P: IsA<WebInspector> {
-    let f: &F = &*(f as *const F);
-    f(&WebInspector::from_glib_borrow(this).unsafe_cast()).to_glib()
-}
-
-unsafe extern "C" fn notify_attached_height_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebInspector, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<WebInspector> {
-    let f: &F = &*(f as *const F);
-    f(&WebInspector::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v2_8", feature = "dox"))]
-unsafe extern "C" fn notify_can_attach_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebInspector, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<WebInspector> {
-    let f: &F = &*(f as *const F);
-    f(&WebInspector::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_inspected_uri_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitWebInspector, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<WebInspector> {
-    let f: &F = &*(f as *const F);
-    f(&WebInspector::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for WebInspector {

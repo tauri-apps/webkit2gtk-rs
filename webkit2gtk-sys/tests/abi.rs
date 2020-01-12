@@ -4,13 +4,14 @@
 
 extern crate webkit2gtk_sys;
 extern crate shell_words;
-extern crate tempdir;
+extern crate tempfile;
 use std::env;
 use std::error::Error;
 use std::path::Path;
 use std::mem::{align_of, size_of};
 use std::process::Command;
 use std::str;
+use tempfile::Builder;
 use webkit2gtk_sys::*;
 
 static PACKAGES: &[&str] = &["webkit2gtk-4.0"];
@@ -21,7 +22,7 @@ struct Compiler {
 }
 
 impl Compiler {
-    pub fn new() -> Result<Compiler, Box<Error>> {
+    pub fn new() -> Result<Compiler, Box<dyn Error>> {
         let mut args = get_var("CC", "cc")?;
         args.push("-Wno-deprecated-declarations".to_owned());
         // For %z support in printf when using MinGW.
@@ -40,7 +41,7 @@ impl Compiler {
         self.args.push(arg);
     }
 
-    pub fn compile(&self, src: &Path, out: &Path) -> Result<(), Box<Error>> {
+    pub fn compile(&self, src: &Path, out: &Path) -> Result<(), Box<dyn Error>> {
         let mut cmd = self.to_command();
         cmd.arg(src);
         cmd.arg("-o");
@@ -60,7 +61,7 @@ impl Compiler {
     }
 }
 
-fn get_var(name: &str, default: &str) -> Result<Vec<String>, Box<Error>> {
+fn get_var(name: &str, default: &str) -> Result<Vec<String>, Box<dyn Error>> {
     match env::var(name) {
         Ok(value) => Ok(shell_words::split(&value)?),
         Err(env::VarError::NotPresent) => Ok(shell_words::split(default)?),
@@ -68,7 +69,7 @@ fn get_var(name: &str, default: &str) -> Result<Vec<String>, Box<Error>> {
     }
 }
 
-fn pkg_config_cflags(packages: &[&str]) -> Result<Vec<String>, Box<Error>> {
+fn pkg_config_cflags(packages: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
     if packages.is_empty() {
         return Ok(Vec::new());
     }
@@ -130,7 +131,7 @@ impl Results {
 
 #[test]
 fn cross_validate_constants_with_c() {
-    let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
+    let tmpdir = Builder::new().prefix("abi").tempdir().expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
     assert_eq!("1",
@@ -163,7 +164,7 @@ fn cross_validate_constants_with_c() {
 
 #[test]
 fn cross_validate_layout_with_c() {
-    let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
+    let tmpdir = Builder::new().prefix("abi").tempdir().expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
     assert_eq!(Layout {size: 1, alignment: 1},
@@ -194,7 +195,7 @@ fn cross_validate_layout_with_c() {
     results.expect_total_success();
 }
 
-fn get_c_layout(dir: &Path, cc: &Compiler, name: &str) -> Result<Layout, Box<Error>> {
+fn get_c_layout(dir: &Path, cc: &Compiler, name: &str) -> Result<Layout, Box<dyn Error>> {
     let exe = dir.join("layout");
     let mut cc = cc.clone();
     cc.define("ABI_TYPE_NAME", name);
@@ -214,7 +215,7 @@ fn get_c_layout(dir: &Path, cc: &Compiler, name: &str) -> Result<Layout, Box<Err
     Ok(Layout {size, alignment})
 }
 
-fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Error>> {
+fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<dyn Error>> {
     let exe = dir.join("constant");
     let mut cc = cc.clone();
     cc.define("ABI_CONSTANT_NAME", name);
@@ -260,6 +261,8 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
     ("WebKitCookieManagerClass", Layout {size: size_of::<WebKitCookieManagerClass>(), alignment: align_of::<WebKitCookieManagerClass>()}),
     ("WebKitCookiePersistentStorage", Layout {size: size_of::<WebKitCookiePersistentStorage>(), alignment: align_of::<WebKitCookiePersistentStorage>()}),
     ("WebKitCredentialPersistence", Layout {size: size_of::<WebKitCredentialPersistence>(), alignment: align_of::<WebKitCredentialPersistence>()}),
+    ("WebKitDeviceInfoPermissionRequest", Layout {size: size_of::<WebKitDeviceInfoPermissionRequest>(), alignment: align_of::<WebKitDeviceInfoPermissionRequest>()}),
+    ("WebKitDeviceInfoPermissionRequestClass", Layout {size: size_of::<WebKitDeviceInfoPermissionRequestClass>(), alignment: align_of::<WebKitDeviceInfoPermissionRequestClass>()}),
     ("WebKitDownload", Layout {size: size_of::<WebKitDownload>(), alignment: align_of::<WebKitDownload>()}),
     ("WebKitDownloadClass", Layout {size: size_of::<WebKitDownloadClass>(), alignment: align_of::<WebKitDownloadClass>()}),
     ("WebKitDownloadError", Layout {size: size_of::<WebKitDownloadError>(), alignment: align_of::<WebKitDownloadError>()}),
@@ -276,6 +279,8 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
     ("WebKitFindOptions", Layout {size: size_of::<WebKitFindOptions>(), alignment: align_of::<WebKitFindOptions>()}),
     ("WebKitFormSubmissionRequest", Layout {size: size_of::<WebKitFormSubmissionRequest>(), alignment: align_of::<WebKitFormSubmissionRequest>()}),
     ("WebKitFormSubmissionRequestClass", Layout {size: size_of::<WebKitFormSubmissionRequestClass>(), alignment: align_of::<WebKitFormSubmissionRequestClass>()}),
+    ("WebKitGeolocationManager", Layout {size: size_of::<WebKitGeolocationManager>(), alignment: align_of::<WebKitGeolocationManager>()}),
+    ("WebKitGeolocationManagerClass", Layout {size: size_of::<WebKitGeolocationManagerClass>(), alignment: align_of::<WebKitGeolocationManagerClass>()}),
     ("WebKitGeolocationPermissionRequest", Layout {size: size_of::<WebKitGeolocationPermissionRequest>(), alignment: align_of::<WebKitGeolocationPermissionRequest>()}),
     ("WebKitGeolocationPermissionRequestClass", Layout {size: size_of::<WebKitGeolocationPermissionRequestClass>(), alignment: align_of::<WebKitGeolocationPermissionRequestClass>()}),
     ("WebKitHardwareAccelerationPolicy", Layout {size: size_of::<WebKitHardwareAccelerationPolicy>(), alignment: align_of::<WebKitHardwareAccelerationPolicy>()}),
@@ -331,6 +336,9 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
     ("WebKitURIResponseClass", Layout {size: size_of::<WebKitURIResponseClass>(), alignment: align_of::<WebKitURIResponseClass>()}),
     ("WebKitURISchemeRequest", Layout {size: size_of::<WebKitURISchemeRequest>(), alignment: align_of::<WebKitURISchemeRequest>()}),
     ("WebKitURISchemeRequestClass", Layout {size: size_of::<WebKitURISchemeRequestClass>(), alignment: align_of::<WebKitURISchemeRequestClass>()}),
+    ("WebKitUserContentFilterError", Layout {size: size_of::<WebKitUserContentFilterError>(), alignment: align_of::<WebKitUserContentFilterError>()}),
+    ("WebKitUserContentFilterStore", Layout {size: size_of::<WebKitUserContentFilterStore>(), alignment: align_of::<WebKitUserContentFilterStore>()}),
+    ("WebKitUserContentFilterStoreClass", Layout {size: size_of::<WebKitUserContentFilterStoreClass>(), alignment: align_of::<WebKitUserContentFilterStoreClass>()}),
     ("WebKitUserContentInjectedFrames", Layout {size: size_of::<WebKitUserContentInjectedFrames>(), alignment: align_of::<WebKitUserContentInjectedFrames>()}),
     ("WebKitUserContentManager", Layout {size: size_of::<WebKitUserContentManager>(), alignment: align_of::<WebKitUserContentManager>()}),
     ("WebKitUserContentManagerClass", Layout {size: size_of::<WebKitUserContentManagerClass>(), alignment: align_of::<WebKitUserContentManagerClass>()}),
@@ -390,6 +398,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) WEBKIT_CONTEXT_MENU_ACTION_IGNORE_GRAMMAR", "25"),
     ("(gint) WEBKIT_CONTEXT_MENU_ACTION_IGNORE_SPELLING", "23"),
     ("(gint) WEBKIT_CONTEXT_MENU_ACTION_INPUT_METHODS", "19"),
+    ("(gint) WEBKIT_CONTEXT_MENU_ACTION_INSERT_EMOJI", "44"),
     ("(gint) WEBKIT_CONTEXT_MENU_ACTION_INSPECT_ELEMENT", "31"),
     ("(gint) WEBKIT_CONTEXT_MENU_ACTION_ITALIC", "28"),
     ("(gint) WEBKIT_CONTEXT_MENU_ACTION_LEARN_SPELLING", "24"),
@@ -465,8 +474,8 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) WEBKIT_LOAD_REDIRECTED", "1"),
     ("(gint) WEBKIT_LOAD_STARTED", "0"),
     ("WEBKIT_MAJOR_VERSION", "2"),
-    ("WEBKIT_MICRO_VERSION", "5"),
-    ("WEBKIT_MINOR_VERSION", "22"),
+    ("WEBKIT_MICRO_VERSION", "1"),
+    ("WEBKIT_MINOR_VERSION", "26"),
     ("(gint) WEBKIT_NAVIGATION_TYPE_BACK_FORWARD", "2"),
     ("(gint) WEBKIT_NAVIGATION_TYPE_FORM_RESUBMITTED", "4"),
     ("(gint) WEBKIT_NAVIGATION_TYPE_FORM_SUBMITTED", "1"),
@@ -515,15 +524,19 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) WEBKIT_SNAPSHOT_REGION_VISIBLE", "0"),
     ("(gint) WEBKIT_TLS_ERRORS_POLICY_FAIL", "1"),
     ("(gint) WEBKIT_TLS_ERRORS_POLICY_IGNORE", "0"),
+    ("(gint) WEBKIT_USER_CONTENT_FILTER_ERROR_INVALID_SOURCE", "0"),
+    ("(gint) WEBKIT_USER_CONTENT_FILTER_ERROR_NOT_FOUND", "1"),
     ("(gint) WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES", "0"),
     ("(gint) WEBKIT_USER_CONTENT_INJECT_TOP_FRAME", "1"),
     ("(gint) WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END", "1"),
     ("(gint) WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_START", "0"),
     ("(gint) WEBKIT_USER_STYLE_LEVEL_AUTHOR", "1"),
     ("(gint) WEBKIT_USER_STYLE_LEVEL_USER", "0"),
-    ("(guint) WEBKIT_WEBSITE_DATA_ALL", "511"),
+    ("(guint) WEBKIT_WEBSITE_DATA_ALL", "2047"),
     ("(guint) WEBKIT_WEBSITE_DATA_COOKIES", "256"),
+    ("(guint) WEBKIT_WEBSITE_DATA_DEVICE_ID_HASH_SALT", "512"),
     ("(guint) WEBKIT_WEBSITE_DATA_DISK_CACHE", "2"),
+    ("(guint) WEBKIT_WEBSITE_DATA_HSTS_CACHE", "1024"),
     ("(guint) WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES", "64"),
     ("(guint) WEBKIT_WEBSITE_DATA_LOCAL_STORAGE", "16"),
     ("(guint) WEBKIT_WEBSITE_DATA_MEMORY_CACHE", "1"),

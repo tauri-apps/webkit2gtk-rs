@@ -2,19 +2,19 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use PolicyDecision;
-use URIRequest;
-use URIResponse;
 use glib::object::Cast;
 use glib::object::IsA;
-use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 use webkit2_sys;
+use PolicyDecision;
+use URIRequest;
+use URIResponse;
 
 glib_wrapper! {
     pub struct ResponsePolicyDecision(Object<webkit2_sys::WebKitResponsePolicyDecision, webkit2_sys::WebKitResponsePolicyDecisionClass, ResponsePolicyDecisionClass>) @extends PolicyDecision;
@@ -60,6 +60,12 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
     }
 
     fn connect_property_request_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_request_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitResponsePolicyDecision, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<ResponsePolicyDecision>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ResponsePolicyDecision::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::request\0".as_ptr() as *const _,
@@ -68,24 +74,18 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
     }
 
     fn connect_property_response_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_response_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitResponsePolicyDecision, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<ResponsePolicyDecision>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ResponsePolicyDecision::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::response\0".as_ptr() as *const _,
                 Some(transmute(notify_response_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn notify_request_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitResponsePolicyDecision, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<ResponsePolicyDecision> {
-    let f: &F = &*(f as *const F);
-    f(&ResponsePolicyDecision::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_response_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitResponsePolicyDecision, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<ResponsePolicyDecision> {
-    let f: &F = &*(f as *const F);
-    f(&ResponsePolicyDecision::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for ResponsePolicyDecision {

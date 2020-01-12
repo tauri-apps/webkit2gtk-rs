@@ -88,6 +88,7 @@ pub const WEBKIT_CONTEXT_MENU_ACTION_MEDIA_PAUSE: WebKitContextMenuAction = 40;
 pub const WEBKIT_CONTEXT_MENU_ACTION_MEDIA_MUTE: WebKitContextMenuAction = 41;
 pub const WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_VIDEO_TO_DISK: WebKitContextMenuAction = 42;
 pub const WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_AUDIO_TO_DISK: WebKitContextMenuAction = 43;
+pub const WEBKIT_CONTEXT_MENU_ACTION_INSERT_EMOJI: WebKitContextMenuAction = 44;
 pub const WEBKIT_CONTEXT_MENU_ACTION_CUSTOM: WebKitContextMenuAction = 10000;
 
 pub type WebKitCookieAcceptPolicy = c_int;
@@ -205,6 +206,10 @@ pub type WebKitTLSErrorsPolicy = c_int;
 pub const WEBKIT_TLS_ERRORS_POLICY_IGNORE: WebKitTLSErrorsPolicy = 0;
 pub const WEBKIT_TLS_ERRORS_POLICY_FAIL: WebKitTLSErrorsPolicy = 1;
 
+pub type WebKitUserContentFilterError = c_int;
+pub const WEBKIT_USER_CONTENT_FILTER_ERROR_INVALID_SOURCE: WebKitUserContentFilterError = 0;
+pub const WEBKIT_USER_CONTENT_FILTER_ERROR_NOT_FOUND: WebKitUserContentFilterError = 1;
+
 pub type WebKitUserContentInjectedFrames = c_int;
 pub const WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES: WebKitUserContentInjectedFrames = 0;
 pub const WEBKIT_USER_CONTENT_INJECT_TOP_FRAME: WebKitUserContentInjectedFrames = 1;
@@ -231,8 +236,8 @@ pub const WEBKIT_EDITING_COMMAND_REDO: *const c_char = b"Redo\0" as *const u8 as
 pub const WEBKIT_EDITING_COMMAND_SELECT_ALL: *const c_char = b"SelectAll\0" as *const u8 as *const c_char;
 pub const WEBKIT_EDITING_COMMAND_UNDO: *const c_char = b"Undo\0" as *const u8 as *const c_char;
 pub const WEBKIT_MAJOR_VERSION: c_int = 2;
-pub const WEBKIT_MICRO_VERSION: c_int = 5;
-pub const WEBKIT_MINOR_VERSION: c_int = 22;
+pub const WEBKIT_MICRO_VERSION: c_int = 1;
+pub const WEBKIT_MINOR_VERSION: c_int = 26;
 
 // Flags
 pub type WebKitEditorTypingAttributes = c_uint;
@@ -274,7 +279,9 @@ pub const WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES: WebKitWebsiteDataTypes = 32;
 pub const WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES: WebKitWebsiteDataTypes = 64;
 pub const WEBKIT_WEBSITE_DATA_PLUGIN_DATA: WebKitWebsiteDataTypes = 128;
 pub const WEBKIT_WEBSITE_DATA_COOKIES: WebKitWebsiteDataTypes = 256;
-pub const WEBKIT_WEBSITE_DATA_ALL: WebKitWebsiteDataTypes = 511;
+pub const WEBKIT_WEBSITE_DATA_DEVICE_ID_HASH_SALT: WebKitWebsiteDataTypes = 512;
+pub const WEBKIT_WEBSITE_DATA_HSTS_CACHE: WebKitWebsiteDataTypes = 1024;
+pub const WEBKIT_WEBSITE_DATA_ALL: WebKitWebsiteDataTypes = 2047;
 
 // Callbacks
 pub type WebKitURISchemeRequestCallback = Option<unsafe extern "C" fn(*mut WebKitURISchemeRequest, gpointer)>;
@@ -313,14 +320,9 @@ impl ::std::fmt::Debug for WebKitAuthenticationRequestClass {
 }
 
 #[repr(C)]
-pub struct WebKitAuthenticationRequestPrivate(c_void);
+pub struct _WebKitAuthenticationRequestPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitAuthenticationRequestPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitAuthenticationRequestPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitAuthenticationRequestPrivate = *mut _WebKitAuthenticationRequestPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -345,14 +347,9 @@ impl ::std::fmt::Debug for WebKitAutomationSessionClass {
 }
 
 #[repr(C)]
-pub struct WebKitAutomationSessionPrivate(c_void);
+pub struct _WebKitAutomationSessionPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitAutomationSessionPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitAutomationSessionPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitAutomationSessionPrivate = *mut _WebKitAutomationSessionPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -399,24 +396,14 @@ impl ::std::fmt::Debug for WebKitBackForwardListItemClass {
 }
 
 #[repr(C)]
-pub struct WebKitBackForwardListItemPrivate(c_void);
+pub struct _WebKitBackForwardListItemPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitBackForwardListItemPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitBackForwardListItemPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitBackForwardListItemPrivate = *mut _WebKitBackForwardListItemPrivate;
 
 #[repr(C)]
-pub struct WebKitBackForwardListPrivate(c_void);
+pub struct _WebKitBackForwardListPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitBackForwardListPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitBackForwardListPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitBackForwardListPrivate = *mut _WebKitBackForwardListPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -433,14 +420,9 @@ impl ::std::fmt::Debug for WebKitColorChooserRequestClass {
 }
 
 #[repr(C)]
-pub struct WebKitColorChooserRequestPrivate(c_void);
+pub struct _WebKitColorChooserRequestPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitColorChooserRequestPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitColorChooserRequestPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitColorChooserRequestPrivate = *mut _WebKitColorChooserRequestPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -487,24 +469,14 @@ impl ::std::fmt::Debug for WebKitContextMenuItemClass {
 }
 
 #[repr(C)]
-pub struct WebKitContextMenuItemPrivate(c_void);
+pub struct _WebKitContextMenuItemPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitContextMenuItemPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitContextMenuItemPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitContextMenuItemPrivate = *mut _WebKitContextMenuItemPrivate;
 
 #[repr(C)]
-pub struct WebKitContextMenuPrivate(c_void);
+pub struct _WebKitContextMenuPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitContextMenuPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitContextMenuPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitContextMenuPrivate = *mut _WebKitContextMenuPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -529,14 +501,9 @@ impl ::std::fmt::Debug for WebKitCookieManagerClass {
 }
 
 #[repr(C)]
-pub struct WebKitCookieManagerPrivate(c_void);
+pub struct _WebKitCookieManagerPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitCookieManagerPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitCookieManagerPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitCookieManagerPrivate = *mut _WebKitCookieManagerPrivate;
 
 #[repr(C)]
 pub struct WebKitCredential(c_void);
@@ -547,6 +514,33 @@ impl ::std::fmt::Debug for WebKitCredential {
          .finish()
     }
 }
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct WebKitDeviceInfoPermissionRequestClass {
+    pub parent_class: gobject::GObjectClass,
+    pub _webkit_reserved0: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved1: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved2: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved3: Option<unsafe extern "C" fn()>,
+}
+
+impl ::std::fmt::Debug for WebKitDeviceInfoPermissionRequestClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("WebKitDeviceInfoPermissionRequestClass @ {:?}", self as *const _))
+         .field("parent_class", &self.parent_class)
+         .field("_webkit_reserved0", &self._webkit_reserved0)
+         .field("_webkit_reserved1", &self._webkit_reserved1)
+         .field("_webkit_reserved2", &self._webkit_reserved2)
+         .field("_webkit_reserved3", &self._webkit_reserved3)
+         .finish()
+    }
+}
+
+#[repr(C)]
+pub struct _WebKitDeviceInfoPermissionRequestPrivate(c_void);
+
+pub type WebKitDeviceInfoPermissionRequestPrivate = *mut _WebKitDeviceInfoPermissionRequestPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -573,14 +567,9 @@ impl ::std::fmt::Debug for WebKitDownloadClass {
 }
 
 #[repr(C)]
-pub struct WebKitDownloadPrivate(c_void);
+pub struct _WebKitDownloadPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitDownloadPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitDownloadPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitDownloadPrivate = *mut _WebKitDownloadPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -605,14 +594,9 @@ impl ::std::fmt::Debug for WebKitEditorStateClass {
 }
 
 #[repr(C)]
-pub struct WebKitEditorStatePrivate(c_void);
+pub struct _WebKitEditorStatePrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitEditorStatePrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitEditorStatePrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitEditorStatePrivate = *mut _WebKitEditorStatePrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -637,14 +621,9 @@ impl ::std::fmt::Debug for WebKitFaviconDatabaseClass {
 }
 
 #[repr(C)]
-pub struct WebKitFaviconDatabasePrivate(c_void);
+pub struct _WebKitFaviconDatabasePrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitFaviconDatabasePrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitFaviconDatabasePrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitFaviconDatabasePrivate = *mut _WebKitFaviconDatabasePrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -669,14 +648,9 @@ impl ::std::fmt::Debug for WebKitFileChooserRequestClass {
 }
 
 #[repr(C)]
-pub struct WebKitFileChooserRequestPrivate(c_void);
+pub struct _WebKitFileChooserRequestPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitFileChooserRequestPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitFileChooserRequestPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitFileChooserRequestPrivate = *mut _WebKitFileChooserRequestPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -701,14 +675,9 @@ impl ::std::fmt::Debug for WebKitFindControllerClass {
 }
 
 #[repr(C)]
-pub struct WebKitFindControllerPrivate(c_void);
+pub struct _WebKitFindControllerPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitFindControllerPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitFindControllerPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitFindControllerPrivate = *mut _WebKitFindControllerPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -733,14 +702,36 @@ impl ::std::fmt::Debug for WebKitFormSubmissionRequestClass {
 }
 
 #[repr(C)]
-pub struct WebKitFormSubmissionRequestPrivate(c_void);
+pub struct _WebKitFormSubmissionRequestPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitFormSubmissionRequestPrivate {
+pub type WebKitFormSubmissionRequestPrivate = *mut _WebKitFormSubmissionRequestPrivate;
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct WebKitGeolocationManagerClass {
+    pub parent_class: gobject::GObjectClass,
+    pub _webkit_reserved0: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved1: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved2: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved3: Option<unsafe extern "C" fn()>,
+}
+
+impl ::std::fmt::Debug for WebKitGeolocationManagerClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitFormSubmissionRequestPrivate @ {:?}", self as *const _))
+        f.debug_struct(&format!("WebKitGeolocationManagerClass @ {:?}", self as *const _))
+         .field("parent_class", &self.parent_class)
+         .field("_webkit_reserved0", &self._webkit_reserved0)
+         .field("_webkit_reserved1", &self._webkit_reserved1)
+         .field("_webkit_reserved2", &self._webkit_reserved2)
+         .field("_webkit_reserved3", &self._webkit_reserved3)
          .finish()
     }
 }
+
+#[repr(C)]
+pub struct _WebKitGeolocationManagerPrivate(c_void);
+
+pub type WebKitGeolocationManagerPrivate = *mut _WebKitGeolocationManagerPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -765,11 +756,16 @@ impl ::std::fmt::Debug for WebKitGeolocationPermissionRequestClass {
 }
 
 #[repr(C)]
-pub struct WebKitGeolocationPermissionRequestPrivate(c_void);
+pub struct _WebKitGeolocationPermissionRequestPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitGeolocationPermissionRequestPrivate {
+pub type WebKitGeolocationPermissionRequestPrivate = *mut _WebKitGeolocationPermissionRequestPrivate;
+
+#[repr(C)]
+pub struct WebKitGeolocationPosition(c_void);
+
+impl ::std::fmt::Debug for WebKitGeolocationPosition {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitGeolocationPermissionRequestPrivate @ {:?}", self as *const _))
+        f.debug_struct(&format!("WebKitGeolocationPosition @ {:?}", self as *const _))
          .finish()
     }
 }
@@ -797,14 +793,9 @@ impl ::std::fmt::Debug for WebKitHitTestResultClass {
 }
 
 #[repr(C)]
-pub struct WebKitHitTestResultPrivate(c_void);
+pub struct _WebKitHitTestResultPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitHitTestResultPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitHitTestResultPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitHitTestResultPrivate = *mut _WebKitHitTestResultPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -829,14 +820,9 @@ impl ::std::fmt::Debug for WebKitInstallMissingMediaPluginsPermissionRequestClas
 }
 
 #[repr(C)]
-pub struct WebKitInstallMissingMediaPluginsPermissionRequestPrivate(c_void);
+pub struct _WebKitInstallMissingMediaPluginsPermissionRequestPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitInstallMissingMediaPluginsPermissionRequestPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitInstallMissingMediaPluginsPermissionRequestPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitInstallMissingMediaPluginsPermissionRequestPrivate = *mut _WebKitInstallMissingMediaPluginsPermissionRequestPrivate;
 
 #[repr(C)]
 pub struct WebKitJavascriptResult(c_void);
@@ -891,14 +877,9 @@ impl ::std::fmt::Debug for WebKitNavigationPolicyDecisionClass {
 }
 
 #[repr(C)]
-pub struct WebKitNavigationPolicyDecisionPrivate(c_void);
+pub struct _WebKitNavigationPolicyDecisionPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitNavigationPolicyDecisionPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitNavigationPolicyDecisionPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitNavigationPolicyDecisionPrivate = *mut _WebKitNavigationPolicyDecisionPrivate;
 
 #[repr(C)]
 pub struct WebKitNetworkProxySettings(c_void);
@@ -951,24 +932,14 @@ impl ::std::fmt::Debug for WebKitNotificationPermissionRequestClass {
 }
 
 #[repr(C)]
-pub struct WebKitNotificationPermissionRequestPrivate(c_void);
+pub struct _WebKitNotificationPermissionRequestPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitNotificationPermissionRequestPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitNotificationPermissionRequestPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitNotificationPermissionRequestPrivate = *mut _WebKitNotificationPermissionRequestPrivate;
 
 #[repr(C)]
-pub struct WebKitNotificationPrivate(c_void);
+pub struct _WebKitNotificationPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitNotificationPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitNotificationPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitNotificationPrivate = *mut _WebKitNotificationPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1003,14 +974,9 @@ impl ::std::fmt::Debug for WebKitOptionMenuItem {
 }
 
 #[repr(C)]
-pub struct WebKitOptionMenuPrivate(c_void);
+pub struct _WebKitOptionMenuPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitOptionMenuPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitOptionMenuPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitOptionMenuPrivate = *mut _WebKitOptionMenuPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1053,14 +1019,9 @@ impl ::std::fmt::Debug for WebKitPluginClass {
 }
 
 #[repr(C)]
-pub struct WebKitPluginPrivate(c_void);
+pub struct _WebKitPluginPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitPluginPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitPluginPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitPluginPrivate = *mut _WebKitPluginPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1085,14 +1046,9 @@ impl ::std::fmt::Debug for WebKitPolicyDecisionClass {
 }
 
 #[repr(C)]
-pub struct WebKitPolicyDecisionPrivate(c_void);
+pub struct _WebKitPolicyDecisionPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitPolicyDecisionPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitPolicyDecisionPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitPolicyDecisionPrivate = *mut _WebKitPolicyDecisionPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1121,14 +1077,9 @@ impl ::std::fmt::Debug for WebKitPrintCustomWidgetClass {
 }
 
 #[repr(C)]
-pub struct WebKitPrintCustomWidgetPrivate(c_void);
+pub struct _WebKitPrintCustomWidgetPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitPrintCustomWidgetPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitPrintCustomWidgetPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitPrintCustomWidgetPrivate = *mut _WebKitPrintCustomWidgetPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1153,14 +1104,9 @@ impl ::std::fmt::Debug for WebKitPrintOperationClass {
 }
 
 #[repr(C)]
-pub struct WebKitPrintOperationPrivate(c_void);
+pub struct _WebKitPrintOperationPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitPrintOperationPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitPrintOperationPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitPrintOperationPrivate = *mut _WebKitPrintOperationPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1185,14 +1131,9 @@ impl ::std::fmt::Debug for WebKitResponsePolicyDecisionClass {
 }
 
 #[repr(C)]
-pub struct WebKitResponsePolicyDecisionPrivate(c_void);
+pub struct _WebKitResponsePolicyDecisionPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitResponsePolicyDecisionPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitResponsePolicyDecisionPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitResponsePolicyDecisionPrivate = *mut _WebKitResponsePolicyDecisionPrivate;
 
 #[repr(C)]
 pub struct WebKitScriptDialog(c_void);
@@ -1227,14 +1168,9 @@ impl ::std::fmt::Debug for WebKitSecurityManagerClass {
 }
 
 #[repr(C)]
-pub struct WebKitSecurityManagerPrivate(c_void);
+pub struct _WebKitSecurityManagerPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitSecurityManagerPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitSecurityManagerPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitSecurityManagerPrivate = *mut _WebKitSecurityManagerPrivate;
 
 #[repr(C)]
 pub struct WebKitSecurityOrigin(c_void);
@@ -1269,14 +1205,9 @@ impl ::std::fmt::Debug for WebKitSettingsClass {
 }
 
 #[repr(C)]
-pub struct WebKitSettingsPrivate(c_void);
+pub struct _WebKitSettingsPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitSettingsPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitSettingsPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitSettingsPrivate = *mut _WebKitSettingsPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1301,14 +1232,9 @@ impl ::std::fmt::Debug for WebKitURIRequestClass {
 }
 
 #[repr(C)]
-pub struct WebKitURIRequestPrivate(c_void);
+pub struct _WebKitURIRequestPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitURIRequestPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitURIRequestPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitURIRequestPrivate = *mut _WebKitURIRequestPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1333,14 +1259,9 @@ impl ::std::fmt::Debug for WebKitURIResponseClass {
 }
 
 #[repr(C)]
-pub struct WebKitURIResponsePrivate(c_void);
+pub struct _WebKitURIResponsePrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitURIResponsePrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitURIResponsePrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitURIResponsePrivate = *mut _WebKitURIResponsePrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1365,14 +1286,46 @@ impl ::std::fmt::Debug for WebKitURISchemeRequestClass {
 }
 
 #[repr(C)]
-pub struct WebKitURISchemeRequestPrivate(c_void);
+pub struct _WebKitURISchemeRequestPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitURISchemeRequestPrivate {
+pub type WebKitURISchemeRequestPrivate = *mut _WebKitURISchemeRequestPrivate;
+
+#[repr(C)]
+pub struct WebKitUserContentFilter(c_void);
+
+impl ::std::fmt::Debug for WebKitUserContentFilter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitURISchemeRequestPrivate @ {:?}", self as *const _))
+        f.debug_struct(&format!("WebKitUserContentFilter @ {:?}", self as *const _))
          .finish()
     }
 }
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct WebKitUserContentFilterStoreClass {
+    pub parent_class: gobject::GObjectClass,
+    pub _webkit_reserved0: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved1: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved2: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved3: Option<unsafe extern "C" fn()>,
+}
+
+impl ::std::fmt::Debug for WebKitUserContentFilterStoreClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("WebKitUserContentFilterStoreClass @ {:?}", self as *const _))
+         .field("parent_class", &self.parent_class)
+         .field("_webkit_reserved0", &self._webkit_reserved0)
+         .field("_webkit_reserved1", &self._webkit_reserved1)
+         .field("_webkit_reserved2", &self._webkit_reserved2)
+         .field("_webkit_reserved3", &self._webkit_reserved3)
+         .finish()
+    }
+}
+
+#[repr(C)]
+pub struct _WebKitUserContentFilterStorePrivate(c_void);
+
+pub type WebKitUserContentFilterStorePrivate = *mut _WebKitUserContentFilterStorePrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1397,14 +1350,9 @@ impl ::std::fmt::Debug for WebKitUserContentManagerClass {
 }
 
 #[repr(C)]
-pub struct WebKitUserContentManagerPrivate(c_void);
+pub struct _WebKitUserContentManagerPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitUserContentManagerPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitUserContentManagerPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitUserContentManagerPrivate = *mut _WebKitUserContentManagerPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1429,14 +1377,9 @@ impl ::std::fmt::Debug for WebKitUserMediaPermissionRequestClass {
 }
 
 #[repr(C)]
-pub struct WebKitUserMediaPermissionRequestPrivate(c_void);
+pub struct _WebKitUserMediaPermissionRequestPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitUserMediaPermissionRequestPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitUserMediaPermissionRequestPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitUserMediaPermissionRequestPrivate = *mut _WebKitUserMediaPermissionRequestPrivate;
 
 #[repr(C)]
 pub struct WebKitUserScript(c_void);
@@ -1489,14 +1432,9 @@ impl ::std::fmt::Debug for WebKitWebContextClass {
 }
 
 #[repr(C)]
-pub struct WebKitWebContextPrivate(c_void);
+pub struct _WebKitWebContextPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitWebContextPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitWebContextPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitWebContextPrivate = *mut _WebKitWebContextPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1521,14 +1459,9 @@ impl ::std::fmt::Debug for WebKitWebInspectorClass {
 }
 
 #[repr(C)]
-pub struct WebKitWebInspectorPrivate(c_void);
+pub struct _WebKitWebInspectorPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitWebInspectorPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitWebInspectorPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitWebInspectorPrivate = *mut _WebKitWebInspectorPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1553,14 +1486,9 @@ impl ::std::fmt::Debug for WebKitWebResourceClass {
 }
 
 #[repr(C)]
-pub struct WebKitWebResourcePrivate(c_void);
+pub struct _WebKitWebResourcePrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitWebResourcePrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitWebResourcePrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitWebResourcePrivate = *mut _WebKitWebResourcePrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1585,14 +1513,9 @@ impl ::std::fmt::Debug for WebKitWebViewBaseClass {
 }
 
 #[repr(C)]
-pub struct WebKitWebViewBasePrivate(c_void);
+pub struct _WebKitWebViewBasePrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitWebViewBasePrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitWebViewBasePrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitWebViewBasePrivate = *mut _WebKitWebViewBasePrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1665,14 +1588,9 @@ impl ::std::fmt::Debug for WebKitWebViewClass {
 }
 
 #[repr(C)]
-pub struct WebKitWebViewPrivate(c_void);
+pub struct _WebKitWebViewPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitWebViewPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitWebViewPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitWebViewPrivate = *mut _WebKitWebViewPrivate;
 
 #[repr(C)]
 pub struct WebKitWebViewSessionState(c_void);
@@ -1717,14 +1635,9 @@ impl ::std::fmt::Debug for WebKitWebsiteDataManagerClass {
 }
 
 #[repr(C)]
-pub struct WebKitWebsiteDataManagerPrivate(c_void);
+pub struct _WebKitWebsiteDataManagerPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitWebsiteDataManagerPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitWebsiteDataManagerPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitWebsiteDataManagerPrivate = *mut _WebKitWebsiteDataManagerPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1749,14 +1662,9 @@ impl ::std::fmt::Debug for WebKitWindowPropertiesClass {
 }
 
 #[repr(C)]
-pub struct WebKitWindowPropertiesPrivate(c_void);
+pub struct _WebKitWindowPropertiesPrivate(c_void);
 
-impl ::std::fmt::Debug for WebKitWindowPropertiesPrivate {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("WebKitWindowPropertiesPrivate @ {:?}", self as *const _))
-         .finish()
-    }
-}
+pub type WebKitWindowPropertiesPrivate = *mut _WebKitWindowPropertiesPrivate;
 
 // Classes
 #[repr(C)]
@@ -1887,6 +1795,21 @@ impl ::std::fmt::Debug for WebKitCookieManager {
 
 #[repr(C)]
 #[derive(Copy, Clone)]
+pub struct WebKitDeviceInfoPermissionRequest {
+    pub parent: gobject::GObject,
+    pub priv_: *mut WebKitDeviceInfoPermissionRequestPrivate,
+}
+
+impl ::std::fmt::Debug for WebKitDeviceInfoPermissionRequest {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("WebKitDeviceInfoPermissionRequest @ {:?}", self as *const _))
+         .field("parent", &self.parent)
+         .finish()
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone)]
 pub struct WebKitDownload {
     pub parent: gobject::GObject,
     pub priv_: *mut WebKitDownloadPrivate,
@@ -1973,6 +1896,21 @@ pub struct WebKitFormSubmissionRequest {
 impl ::std::fmt::Debug for WebKitFormSubmissionRequest {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("WebKitFormSubmissionRequest @ {:?}", self as *const _))
+         .field("parent", &self.parent)
+         .finish()
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct WebKitGeolocationManager {
+    pub parent: gobject::GObject,
+    pub priv_: *mut WebKitGeolocationManagerPrivate,
+}
+
+impl ::std::fmt::Debug for WebKitGeolocationManager {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("WebKitGeolocationManager @ {:?}", self as *const _))
          .field("parent", &self.parent)
          .finish()
     }
@@ -2239,6 +2177,21 @@ impl ::std::fmt::Debug for WebKitURISchemeRequest {
         f.debug_struct(&format!("WebKitURISchemeRequest @ {:?}", self as *const _))
          .field("parent", &self.parent)
          .field("priv_", &self.priv_)
+         .finish()
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct WebKitUserContentFilterStore {
+    pub parent: gobject::GObject,
+    pub priv_: *mut WebKitUserContentFilterStorePrivate,
+}
+
+impl ::std::fmt::Debug for WebKitUserContentFilterStore {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("WebKitUserContentFilterStore @ {:?}", self as *const _))
+         .field("parent", &self.parent)
          .finish()
     }
 }
@@ -2533,6 +2486,12 @@ extern "C" {
     pub fn webkit_tls_errors_policy_get_type() -> GType;
 
     //=========================================================================
+    // WebKitUserContentFilterError
+    //=========================================================================
+    pub fn webkit_user_content_filter_error_get_type() -> GType;
+    pub fn webkit_user_content_filter_error_quark() -> glib::GQuark;
+
+    //=========================================================================
     // WebKitUserContentInjectedFrames
     //=========================================================================
     pub fn webkit_user_content_injected_frames_get_type() -> GType;
@@ -2607,6 +2566,27 @@ extern "C" {
     pub fn webkit_credential_get_persistence(credential: *mut WebKitCredential) -> WebKitCredentialPersistence;
     pub fn webkit_credential_get_username(credential: *mut WebKitCredential) -> *const c_char;
     pub fn webkit_credential_has_password(credential: *mut WebKitCredential) -> gboolean;
+
+    //=========================================================================
+    // WebKitGeolocationPosition
+    //=========================================================================
+    pub fn webkit_geolocation_position_get_type() -> GType;
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_geolocation_position_new(latitude: c_double, longitude: c_double, accuracy: c_double) -> *mut WebKitGeolocationPosition;
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_geolocation_position_copy(position: *mut WebKitGeolocationPosition) -> *mut WebKitGeolocationPosition;
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_geolocation_position_free(position: *mut WebKitGeolocationPosition);
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_geolocation_position_set_altitude(position: *mut WebKitGeolocationPosition, altitude: c_double);
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_geolocation_position_set_altitude_accuracy(position: *mut WebKitGeolocationPosition, altitude_accuracy: c_double);
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_geolocation_position_set_heading(position: *mut WebKitGeolocationPosition, heading: c_double);
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_geolocation_position_set_speed(position: *mut WebKitGeolocationPosition, speed: c_double);
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_geolocation_position_set_timestamp(position: *mut WebKitGeolocationPosition, timestamp: u64);
 
     //=========================================================================
     // WebKitJavascriptResult
@@ -2688,11 +2668,17 @@ extern "C" {
     // WebKitScriptDialog
     //=========================================================================
     pub fn webkit_script_dialog_get_type() -> GType;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_script_dialog_close(dialog: *mut WebKitScriptDialog);
     pub fn webkit_script_dialog_confirm_set_confirmed(dialog: *mut WebKitScriptDialog, confirmed: gboolean);
     pub fn webkit_script_dialog_get_dialog_type(dialog: *mut WebKitScriptDialog) -> WebKitScriptDialogType;
     pub fn webkit_script_dialog_get_message(dialog: *mut WebKitScriptDialog) -> *const c_char;
     pub fn webkit_script_dialog_prompt_get_default_text(dialog: *mut WebKitScriptDialog) -> *const c_char;
     pub fn webkit_script_dialog_prompt_set_text(dialog: *mut WebKitScriptDialog, text: *const c_char);
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_script_dialog_ref(dialog: *mut WebKitScriptDialog) -> *mut WebKitScriptDialog;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_script_dialog_unref(dialog: *mut WebKitScriptDialog);
 
     //=========================================================================
     // WebKitSecurityOrigin
@@ -2716,6 +2702,17 @@ extern "C" {
     pub fn webkit_security_origin_to_string(origin: *mut WebKitSecurityOrigin) -> *mut c_char;
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     pub fn webkit_security_origin_unref(origin: *mut WebKitSecurityOrigin);
+
+    //=========================================================================
+    // WebKitUserContentFilter
+    //=========================================================================
+    pub fn webkit_user_content_filter_get_type() -> GType;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_get_identifier(user_content_filter: *mut WebKitUserContentFilter) -> *const c_char;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_ref(user_content_filter: *mut WebKitUserContentFilter) -> *mut WebKitUserContentFilter;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_unref(user_content_filter: *mut WebKitUserContentFilter);
 
     //=========================================================================
     // WebKitUserScript
@@ -2901,6 +2898,11 @@ extern "C" {
     pub fn webkit_cookie_manager_set_persistent_storage(cookie_manager: *mut WebKitCookieManager, filename: *const c_char, storage: WebKitCookiePersistentStorage);
 
     //=========================================================================
+    // WebKitDeviceInfoPermissionRequest
+    //=========================================================================
+    pub fn webkit_device_info_permission_request_get_type() -> GType;
+
+    //=========================================================================
     // WebKitDownload
     //=========================================================================
     pub fn webkit_download_get_type() -> GType;
@@ -2977,6 +2979,17 @@ extern "C" {
     #[cfg(any(feature = "v2_20", feature = "dox"))]
     pub fn webkit_form_submission_request_list_text_fields(request: *mut WebKitFormSubmissionRequest, field_names: *mut *mut glib::GPtrArray, field_values: *mut *mut glib::GPtrArray) -> gboolean;
     pub fn webkit_form_submission_request_submit(request: *mut WebKitFormSubmissionRequest);
+
+    //=========================================================================
+    // WebKitGeolocationManager
+    //=========================================================================
+    pub fn webkit_geolocation_manager_get_type() -> GType;
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_geolocation_manager_failed(manager: *mut WebKitGeolocationManager, error_message: *const c_char);
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_geolocation_manager_get_enable_high_accuracy(manager: *mut WebKitGeolocationManager) -> gboolean;
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_geolocation_manager_update_position(manager: *mut WebKitGeolocationManager, position: *mut WebKitGeolocationPosition);
 
     //=========================================================================
     // WebKitGeolocationPermissionRequest
@@ -3145,6 +3158,8 @@ extern "C" {
     pub fn webkit_settings_get_default_monospace_font_size(settings: *mut WebKitSettings) -> u32;
     pub fn webkit_settings_get_draw_compositing_indicators(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_accelerated_2d_canvas(settings: *mut WebKitSettings) -> gboolean;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_settings_get_enable_back_forward_navigation_gestures(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_caret_browsing(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_developer_extras(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_dns_prefetching(settings: *mut WebKitSettings) -> gboolean;
@@ -3157,10 +3172,16 @@ extern "C" {
     pub fn webkit_settings_get_enable_hyperlink_auditing(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_java(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_javascript(settings: *mut WebKitSettings) -> gboolean;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_settings_get_enable_javascript_markup(settings: *mut WebKitSettings) -> gboolean;
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_settings_get_enable_media(settings: *mut WebKitSettings) -> gboolean;
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     pub fn webkit_settings_get_enable_media_capabilities(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_media_stream(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_mediasource(settings: *mut WebKitSettings) -> gboolean;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_settings_get_enable_mock_capture_devices(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_offline_web_application_cache(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_page_cache(settings: *mut WebKitSettings) -> gboolean;
     pub fn webkit_settings_get_enable_plugins(settings: *mut WebKitSettings) -> gboolean;
@@ -3203,6 +3224,8 @@ extern "C" {
     pub fn webkit_settings_set_default_monospace_font_size(settings: *mut WebKitSettings, font_size: u32);
     pub fn webkit_settings_set_draw_compositing_indicators(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_accelerated_2d_canvas(settings: *mut WebKitSettings, enabled: gboolean);
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_settings_set_enable_back_forward_navigation_gestures(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_caret_browsing(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_developer_extras(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_dns_prefetching(settings: *mut WebKitSettings, enabled: gboolean);
@@ -3215,10 +3238,15 @@ extern "C" {
     pub fn webkit_settings_set_enable_hyperlink_auditing(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_java(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_javascript(settings: *mut WebKitSettings, enabled: gboolean);
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_settings_set_enable_javascript_markup(settings: *mut WebKitSettings, enabled: gboolean);
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_settings_set_enable_media(settings: *mut WebKitSettings, enabled: gboolean);
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     pub fn webkit_settings_set_enable_media_capabilities(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_media_stream(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_mediasource(settings: *mut WebKitSettings, enabled: gboolean);
+    pub fn webkit_settings_set_enable_mock_capture_devices(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_offline_web_application_cache(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_page_cache(settings: *mut WebKitSettings, enabled: gboolean);
     pub fn webkit_settings_set_enable_plugins(settings: *mut WebKitSettings, enabled: gboolean);
@@ -3285,11 +3313,42 @@ extern "C" {
     pub fn webkit_uri_scheme_request_get_web_view(request: *mut WebKitURISchemeRequest) -> *mut WebKitWebView;
 
     //=========================================================================
+    // WebKitUserContentFilterStore
+    //=========================================================================
+    pub fn webkit_user_content_filter_store_get_type() -> GType;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_store_new(storage_path: *const c_char) -> *mut WebKitUserContentFilterStore;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_store_fetch_identifiers(store: *mut WebKitUserContentFilterStore, cancellable: *mut gio::GCancellable, callback: gio::GAsyncReadyCallback, user_data: gpointer);
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_store_fetch_identifiers_finish(store: *mut WebKitUserContentFilterStore, result: *mut gio::GAsyncResult) -> *mut *mut c_char;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_store_get_path(store: *mut WebKitUserContentFilterStore) -> *const c_char;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_store_load(store: *mut WebKitUserContentFilterStore, identifier: *const c_char, cancellable: *mut gio::GCancellable, callback: gio::GAsyncReadyCallback, user_data: gpointer);
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_store_load_finish(store: *mut WebKitUserContentFilterStore, result: *mut gio::GAsyncResult, error: *mut *mut glib::GError) -> *mut WebKitUserContentFilter;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_store_remove(store: *mut WebKitUserContentFilterStore, identifier: *const c_char, cancellable: *mut gio::GCancellable, callback: gio::GAsyncReadyCallback, user_data: gpointer);
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_store_remove_finish(store: *mut WebKitUserContentFilterStore, result: *mut gio::GAsyncResult, error: *mut *mut glib::GError) -> gboolean;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_store_save(store: *mut WebKitUserContentFilterStore, identifier: *const c_char, source: *mut glib::GBytes, cancellable: *mut gio::GCancellable, callback: gio::GAsyncReadyCallback, user_data: gpointer);
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_store_save_finish(store: *mut WebKitUserContentFilterStore, result: *mut gio::GAsyncResult, error: *mut *mut glib::GError) -> *mut WebKitUserContentFilter;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_store_save_from_file(store: *mut WebKitUserContentFilterStore, identifier: *const c_char, file: *mut gio::GFile, cancellable: *mut gio::GCancellable, callback: gio::GAsyncReadyCallback, user_data: gpointer);
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_filter_store_save_from_file_finish(store: *mut WebKitUserContentFilterStore, result: *mut gio::GAsyncResult, error: *mut *mut glib::GError) -> *mut WebKitUserContentFilter;
+
+    //=========================================================================
     // WebKitUserContentManager
     //=========================================================================
     pub fn webkit_user_content_manager_get_type() -> GType;
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn webkit_user_content_manager_new() -> *mut WebKitUserContentManager;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_manager_add_filter(manager: *mut WebKitUserContentManager, filter: *mut WebKitUserContentFilter);
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn webkit_user_content_manager_add_script(manager: *mut WebKitUserContentManager, script: *mut WebKitUserScript);
     #[cfg(any(feature = "v2_6", feature = "dox"))]
@@ -3298,10 +3357,15 @@ extern "C" {
     pub fn webkit_user_content_manager_register_script_message_handler(manager: *mut WebKitUserContentManager, name: *const c_char) -> gboolean;
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     pub fn webkit_user_content_manager_register_script_message_handler_in_world(manager: *mut WebKitUserContentManager, name: *const c_char, world_name: *const c_char) -> gboolean;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_user_content_manager_remove_all_filters(manager: *mut WebKitUserContentManager);
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn webkit_user_content_manager_remove_all_scripts(manager: *mut WebKitUserContentManager);
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn webkit_user_content_manager_remove_all_style_sheets(manager: *mut WebKitUserContentManager);
+    pub fn webkit_user_content_manager_remove_filter(manager: *mut WebKitUserContentManager, filter: *mut WebKitUserContentFilter);
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_user_content_manager_remove_filter_by_id(manager: *mut WebKitUserContentManager, filter_id: *const c_char);
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     pub fn webkit_user_content_manager_unregister_script_message_handler(manager: *mut WebKitUserContentManager, name: *const c_char);
     #[cfg(any(feature = "v2_22", feature = "dox"))]
@@ -3323,6 +3387,8 @@ extern "C" {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     pub fn webkit_web_context_new_with_website_data_manager(manager: *mut WebKitWebsiteDataManager) -> *mut WebKitWebContext;
     pub fn webkit_web_context_get_default() -> *mut WebKitWebContext;
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_web_context_add_path_to_sandbox(context: *mut WebKitWebContext, path: *const c_char, read_only: gboolean);
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn webkit_web_context_allow_tls_certificate_for_host(context: *mut WebKitWebContext, certificate: *mut gio::GTlsCertificate, host: *const c_char);
     pub fn webkit_web_context_clear_cache(context: *mut WebKitWebContext);
@@ -3331,9 +3397,13 @@ extern "C" {
     pub fn webkit_web_context_get_cookie_manager(context: *mut WebKitWebContext) -> *mut WebKitCookieManager;
     pub fn webkit_web_context_get_favicon_database(context: *mut WebKitWebContext) -> *mut WebKitFaviconDatabase;
     pub fn webkit_web_context_get_favicon_database_directory(context: *mut WebKitWebContext) -> *const c_char;
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_web_context_get_geolocation_manager(context: *mut WebKitWebContext) -> *mut WebKitGeolocationManager;
     pub fn webkit_web_context_get_plugins(context: *mut WebKitWebContext, cancellable: *mut gio::GCancellable, callback: gio::GAsyncReadyCallback, user_data: gpointer);
     pub fn webkit_web_context_get_plugins_finish(context: *mut WebKitWebContext, result: *mut gio::GAsyncResult, error: *mut *mut glib::GError) -> *mut glib::GList;
     pub fn webkit_web_context_get_process_model(context: *mut WebKitWebContext) -> WebKitProcessModel;
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_web_context_get_sandbox_enabled(context: *mut WebKitWebContext) -> gboolean;
     pub fn webkit_web_context_get_security_manager(context: *mut WebKitWebContext) -> *mut WebKitSecurityManager;
     pub fn webkit_web_context_get_spell_checking_enabled(context: *mut WebKitWebContext) -> gboolean;
     pub fn webkit_web_context_get_spell_checking_languages(context: *mut WebKitWebContext) -> *const *const c_char;
@@ -3360,6 +3430,8 @@ extern "C" {
     pub fn webkit_web_context_set_network_proxy_settings(context: *mut WebKitWebContext, proxy_mode: WebKitNetworkProxyMode, proxy_settings: *mut WebKitNetworkProxySettings);
     pub fn webkit_web_context_set_preferred_languages(context: *mut WebKitWebContext, languages: *const *const c_char);
     pub fn webkit_web_context_set_process_model(context: *mut WebKitWebContext, process_model: WebKitProcessModel);
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_web_context_set_sandbox_enabled(context: *mut WebKitWebContext, enabled: gboolean);
     pub fn webkit_web_context_set_spell_checking_enabled(context: *mut WebKitWebContext, enabled: gboolean);
     pub fn webkit_web_context_set_spell_checking_languages(context: *mut WebKitWebContext, languages: *const *const c_char);
     pub fn webkit_web_context_set_tls_errors_policy(context: *mut WebKitWebContext, policy: WebKitTLSErrorsPolicy);
@@ -3514,6 +3586,8 @@ extern "C" {
     pub fn webkit_website_data_manager_get_cookie_manager(manager: *mut WebKitWebsiteDataManager) -> *mut WebKitCookieManager;
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     pub fn webkit_website_data_manager_get_disk_cache_directory(manager: *mut WebKitWebsiteDataManager) -> *const c_char;
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn webkit_website_data_manager_get_hsts_cache_directory(manager: *mut WebKitWebsiteDataManager) -> *const c_char;
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     pub fn webkit_website_data_manager_get_indexeddb_directory(manager: *mut WebKitWebsiteDataManager) -> *const c_char;
     #[cfg(any(feature = "v2_10", feature = "dox"))]
@@ -3555,6 +3629,8 @@ extern "C" {
     pub fn webkit_get_major_version() -> c_uint;
     pub fn webkit_get_micro_version() -> c_uint;
     pub fn webkit_get_minor_version() -> c_uint;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn webkit_uri_for_display(uri: *const c_char) -> *mut c_char;
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     pub fn webkit_user_media_permission_is_for_audio_device(request: *mut WebKitUserMediaPermissionRequest) -> gboolean;
     #[cfg(any(feature = "v2_8", feature = "dox"))]

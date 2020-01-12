@@ -2,14 +2,24 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+#[cfg(not(feature = "dox"))]
 extern crate pkg_config;
 
+#[cfg(not(feature = "dox"))]
 use pkg_config::{Config, Error};
+#[cfg(not(feature = "dox"))]
 use std::env;
+#[cfg(not(feature = "dox"))]
 use std::io::prelude::*;
+#[cfg(not(feature = "dox"))]
 use std::io;
+#[cfg(not(feature = "dox"))]
 use std::process;
 
+#[cfg(feature = "dox")]
+fn main() {} // prevent linking libraries to avoid documentation failure
+
+#[cfg(not(feature = "dox"))]
 fn main() {
     if let Err(s) = find() {
         let _ = writeln!(io::stderr(), "{}", s);
@@ -17,10 +27,15 @@ fn main() {
     }
 }
 
+#[cfg(not(feature = "dox"))]
 fn find() -> Result<(), Error> {
     let package_name = "webkit2gtk-4.0";
     let shared_libs = ["webkit2gtk-4.0", "javascriptcoregtk-4.0"];
-    let version = if cfg!(feature = "v2_22") {
+    let version = if cfg!(feature = "v2_26") {
+        "2.26"
+    } else if cfg!(feature = "v2_24") {
+        "2.24"
+    } else if cfg!(feature = "v2_22") {
         "2.22"
     } else if cfg!(feature = "v2_20") {
         "2.20"
