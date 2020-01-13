@@ -48,74 +48,94 @@ pub trait HitTestResultExt: 'static {
 impl<O: IsA<HitTestResult>> HitTestResultExt for O {
     fn context_is_editable(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_hit_test_result_context_is_editable(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_hit_test_result_context_is_editable(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn context_is_image(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_hit_test_result_context_is_image(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_hit_test_result_context_is_image(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn context_is_link(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_hit_test_result_context_is_link(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_hit_test_result_context_is_link(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn context_is_media(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_hit_test_result_context_is_media(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_hit_test_result_context_is_media(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn context_is_scrollbar(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_hit_test_result_context_is_scrollbar(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_hit_test_result_context_is_scrollbar(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn context_is_selection(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_hit_test_result_context_is_selection(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_hit_test_result_context_is_selection(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_context(&self) -> u32 {
-        unsafe {
-            webkit2_sys::webkit_hit_test_result_get_context(self.as_ref().to_glib_none().0)
-        }
+        unsafe { webkit2_sys::webkit_hit_test_result_get_context(self.as_ref().to_glib_none().0) }
     }
 
     fn get_image_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_hit_test_result_get_image_uri(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_hit_test_result_get_image_uri(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_link_label(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_hit_test_result_get_link_label(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_hit_test_result_get_link_label(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_link_title(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_hit_test_result_get_link_title(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_hit_test_result_get_link_title(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_link_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_hit_test_result_get_link_uri(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_hit_test_result_get_link_uri(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_media_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_hit_test_result_get_media_uri(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_hit_test_result_get_media_uri(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 }

@@ -16,6 +16,7 @@ addons:
 script:
   - rustc --version
   - if [ "$TRAVIS_RUST_VERSION" == "nightly" ]; then
+    rustup component add rustfmt;
     make regen_check;
     fi
   - ./check_init_asserts

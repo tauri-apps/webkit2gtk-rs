@@ -21,7 +21,11 @@ impl NetworkProxySettings {
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     pub fn add_proxy_for_scheme(&mut self, scheme: &str, proxy_uri: &str) {
         unsafe {
-            webkit2_sys::webkit_network_proxy_settings_add_proxy_for_scheme(self.to_glib_none_mut().0, scheme.to_glib_none().0, proxy_uri.to_glib_none().0);
+            webkit2_sys::webkit_network_proxy_settings_add_proxy_for_scheme(
+                self.to_glib_none_mut().0,
+                scheme.to_glib_none().0,
+                proxy_uri.to_glib_none().0,
+            );
         }
     }
 }

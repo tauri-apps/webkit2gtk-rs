@@ -26,35 +26,47 @@ impl Credential {
     pub fn new(username: &str, password: &str, persistence: CredentialPersistence) -> Credential {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(webkit2_sys::webkit_credential_new(username.to_glib_none().0, password.to_glib_none().0, persistence.to_glib()))
+            from_glib_full(webkit2_sys::webkit_credential_new(
+                username.to_glib_none().0,
+                password.to_glib_none().0,
+                persistence.to_glib(),
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     pub fn get_password(&mut self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_credential_get_password(self.to_glib_none_mut().0))
+            from_glib_none(webkit2_sys::webkit_credential_get_password(
+                self.to_glib_none_mut().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     pub fn get_persistence(&mut self) -> CredentialPersistence {
         unsafe {
-            from_glib(webkit2_sys::webkit_credential_get_persistence(self.to_glib_none_mut().0))
+            from_glib(webkit2_sys::webkit_credential_get_persistence(
+                self.to_glib_none_mut().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     pub fn get_username(&mut self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_credential_get_username(self.to_glib_none_mut().0))
+            from_glib_none(webkit2_sys::webkit_credential_get_username(
+                self.to_glib_none_mut().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     pub fn has_password(&mut self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_credential_has_password(self.to_glib_none_mut().0))
+            from_glib(webkit2_sys::webkit_credential_has_password(
+                self.to_glib_none_mut().0,
+            ))
         }
     }
 }

@@ -56,7 +56,10 @@ pub trait DownloadExt: 'static {
 
     fn connect_created_destination<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_decide_destination<F: Fn(&Self, &str) -> bool + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_decide_destination<F: Fn(&Self, &str) -> bool + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_failed<F: Fn(&Self, &glib::Error) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -65,11 +68,17 @@ pub trait DownloadExt: 'static {
     fn connect_received_data<F: Fn(&Self, u64) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
-    fn connect_property_allow_overwrite_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_allow_overwrite_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_destination_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_estimated_progress_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_estimated_progress_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_response_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -84,20 +93,22 @@ impl<O: IsA<Download>> DownloadExt for O {
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn get_allow_overwrite(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_download_get_allow_overwrite(self.as_ref().to_glib_none().0))
+            from_glib(webkit2_sys::webkit_download_get_allow_overwrite(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_destination(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_download_get_destination(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_download_get_destination(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_elapsed_time(&self) -> f64 {
-        unsafe {
-            webkit2_sys::webkit_download_get_elapsed_time(self.as_ref().to_glib_none().0)
-        }
+        unsafe { webkit2_sys::webkit_download_get_elapsed_time(self.as_ref().to_glib_none().0) }
     }
 
     fn get_estimated_progress(&self) -> f64 {
@@ -114,159 +125,268 @@ impl<O: IsA<Download>> DownloadExt for O {
 
     fn get_request(&self) -> Option<URIRequest> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_download_get_request(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_download_get_request(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_response(&self) -> Option<URIResponse> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_download_get_response(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_download_get_response(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_web_view(&self) -> Option<WebView> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_download_get_web_view(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_download_get_web_view(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn set_allow_overwrite(&self, allowed: bool) {
         unsafe {
-            webkit2_sys::webkit_download_set_allow_overwrite(self.as_ref().to_glib_none().0, allowed.to_glib());
+            webkit2_sys::webkit_download_set_allow_overwrite(
+                self.as_ref().to_glib_none().0,
+                allowed.to_glib(),
+            );
         }
     }
 
     fn set_destination(&self, uri: &str) {
         unsafe {
-            webkit2_sys::webkit_download_set_destination(self.as_ref().to_glib_none().0, uri.to_glib_none().0);
+            webkit2_sys::webkit_download_set_destination(
+                self.as_ref().to_glib_none().0,
+                uri.to_glib_none().0,
+            );
         }
     }
 
     fn connect_created_destination<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn created_destination_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut webkit2_sys::WebKitDownload, destination: *mut libc::c_char, f: glib_sys::gpointer)
-            where P: IsA<Download>
+        unsafe extern "C" fn created_destination_trampoline<P, F: Fn(&P, &str) + 'static>(
+            this: *mut webkit2_sys::WebKitDownload,
+            destination: *mut libc::c_char,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Download>,
         {
             let f: &F = &*(f as *const F);
-            f(&Download::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(destination))
+            f(
+                &Download::from_glib_borrow(this).unsafe_cast(),
+                &GString::from_glib_borrow(destination),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"created-destination\0".as_ptr() as *const _,
-                Some(transmute(created_destination_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"created-destination\0".as_ptr() as *const _,
+                Some(transmute(
+                    created_destination_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_decide_destination<F: Fn(&Self, &str) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn decide_destination_trampoline<P, F: Fn(&P, &str) -> bool + 'static>(this: *mut webkit2_sys::WebKitDownload, suggested_filename: *mut libc::c_char, f: glib_sys::gpointer) -> glib_sys::gboolean
-            where P: IsA<Download>
+    fn connect_decide_destination<F: Fn(&Self, &str) -> bool + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn decide_destination_trampoline<P, F: Fn(&P, &str) -> bool + 'static>(
+            this: *mut webkit2_sys::WebKitDownload,
+            suggested_filename: *mut libc::c_char,
+            f: glib_sys::gpointer,
+        ) -> glib_sys::gboolean
+        where
+            P: IsA<Download>,
         {
             let f: &F = &*(f as *const F);
-            f(&Download::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(suggested_filename)).to_glib()
+            f(
+                &Download::from_glib_borrow(this).unsafe_cast(),
+                &GString::from_glib_borrow(suggested_filename),
+            )
+            .to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"decide-destination\0".as_ptr() as *const _,
-                Some(transmute(decide_destination_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"decide-destination\0".as_ptr() as *const _,
+                Some(transmute(decide_destination_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_failed<F: Fn(&Self, &glib::Error) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn failed_trampoline<P, F: Fn(&P, &glib::Error) + 'static>(this: *mut webkit2_sys::WebKitDownload, error: *mut glib_sys::GError, f: glib_sys::gpointer)
-            where P: IsA<Download>
+        unsafe extern "C" fn failed_trampoline<P, F: Fn(&P, &glib::Error) + 'static>(
+            this: *mut webkit2_sys::WebKitDownload,
+            error: *mut glib_sys::GError,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Download>,
         {
             let f: &F = &*(f as *const F);
-            f(&Download::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error))
+            f(
+                &Download::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(error),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"failed\0".as_ptr() as *const _,
-                Some(transmute(failed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"failed\0".as_ptr() as *const _,
+                Some(transmute(failed_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, f: glib_sys::gpointer)
-            where P: IsA<Download>
+        unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut webkit2_sys::WebKitDownload,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Download>,
         {
             let f: &F = &*(f as *const F);
             f(&Download::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"finished\0".as_ptr() as *const _,
-                Some(transmute(finished_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"finished\0".as_ptr() as *const _,
+                Some(transmute(finished_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_received_data<F: Fn(&Self, u64) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn received_data_trampoline<P, F: Fn(&P, u64) + 'static>(this: *mut webkit2_sys::WebKitDownload, data_length: u64, f: glib_sys::gpointer)
-            where P: IsA<Download>
+        unsafe extern "C" fn received_data_trampoline<P, F: Fn(&P, u64) + 'static>(
+            this: *mut webkit2_sys::WebKitDownload,
+            data_length: u64,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Download>,
         {
             let f: &F = &*(f as *const F);
             f(&Download::from_glib_borrow(this).unsafe_cast(), data_length)
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"received-data\0".as_ptr() as *const _,
-                Some(transmute(received_data_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"received-data\0".as_ptr() as *const _,
+                Some(transmute(received_data_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
-    fn connect_property_allow_overwrite_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_allow_overwrite_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Download>
+    fn connect_property_allow_overwrite_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_allow_overwrite_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut webkit2_sys::WebKitDownload,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Download>,
         {
             let f: &F = &*(f as *const F);
             f(&Download::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::allow-overwrite\0".as_ptr() as *const _,
-                Some(transmute(notify_allow_overwrite_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::allow-overwrite\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_allow_overwrite_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_destination_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_destination_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Download>
+        unsafe extern "C" fn notify_destination_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut webkit2_sys::WebKitDownload,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Download>,
         {
             let f: &F = &*(f as *const F);
             f(&Download::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::destination\0".as_ptr() as *const _,
-                Some(transmute(notify_destination_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::destination\0".as_ptr() as *const _,
+                Some(transmute(notify_destination_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_estimated_progress_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_estimated_progress_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Download>
+    fn connect_property_estimated_progress_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_estimated_progress_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut webkit2_sys::WebKitDownload,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Download>,
         {
             let f: &F = &*(f as *const F);
             f(&Download::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::estimated-progress\0".as_ptr() as *const _,
-                Some(transmute(notify_estimated_progress_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::estimated-progress\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_estimated_progress_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_response_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_response_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitDownload, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Download>
+        unsafe extern "C" fn notify_response_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut webkit2_sys::WebKitDownload,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Download>,
         {
             let f: &F = &*(f as *const F);
             f(&Download::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::response\0".as_ptr() as *const _,
-                Some(transmute(notify_response_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::response\0".as_ptr() as *const _,
+                Some(transmute(notify_response_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }

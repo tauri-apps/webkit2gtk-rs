@@ -24,14 +24,18 @@ impl WebViewSessionState {
     pub fn new(data: &glib::Bytes) -> WebViewSessionState {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(webkit2_sys::webkit_web_view_session_state_new(data.to_glib_none().0))
+            from_glib_full(webkit2_sys::webkit_web_view_session_state_new(
+                data.to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_12", feature = "dox"))]
     pub fn serialize(&self) -> Option<glib::Bytes> {
         unsafe {
-            from_glib_full(webkit2_sys::webkit_web_view_session_state_serialize(self.to_glib_none().0))
+            from_glib_full(webkit2_sys::webkit_web_view_session_state_serialize(
+                self.to_glib_none().0,
+            ))
         }
     }
 }

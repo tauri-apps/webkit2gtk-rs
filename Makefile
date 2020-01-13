@@ -12,6 +12,8 @@ regen_check: $(GIR) $(GIR_FILES)
 	rm webkit2gtk-sys/tests/*
 	$(GIR) -c Gir.toml
 	$(GIR) -c webkit2gtk-sys/Gir.toml
+	cargo fmt
+	cd webkit2gtk-sys && cargo fmt
 	git diff -R --exit-code
 
 src/auto/mod.rs : Gir.toml $(GIR) $(GIR_FILES)

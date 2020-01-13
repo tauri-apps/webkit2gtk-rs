@@ -32,25 +32,33 @@ pub trait PluginExt: 'static {
 impl<O: IsA<Plugin>> PluginExt for O {
     fn get_description(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_plugin_get_description(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_plugin_get_description(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_mime_info_list(&self) -> Vec<MimeInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(webkit2_sys::webkit_plugin_get_mime_info_list(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(webkit2_sys::webkit_plugin_get_mime_info_list(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_name(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_plugin_get_name(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_plugin_get_name(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_path(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_plugin_get_path(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_plugin_get_path(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 }
