@@ -20,19 +20,25 @@ glib_wrapper! {
 impl MimeInfo {
     pub fn get_description(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_mime_info_get_description(self.to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_mime_info_get_description(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_extensions(&self) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(webkit2_sys::webkit_mime_info_get_extensions(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(webkit2_sys::webkit_mime_info_get_extensions(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_mime_type(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_mime_info_get_mime_type(self.to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_mime_info_get_mime_type(
+                self.to_glib_none().0,
+            ))
         }
     }
 }

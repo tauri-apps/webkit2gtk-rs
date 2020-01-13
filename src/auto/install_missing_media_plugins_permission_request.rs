@@ -18,14 +18,18 @@ glib_wrapper! {
     }
 }
 
-pub const NONE_INSTALL_MISSING_MEDIA_PLUGINS_PERMISSION_REQUEST: Option<&InstallMissingMediaPluginsPermissionRequest> = None;
+pub const NONE_INSTALL_MISSING_MEDIA_PLUGINS_PERMISSION_REQUEST: Option<
+    &InstallMissingMediaPluginsPermissionRequest,
+> = None;
 
 pub trait InstallMissingMediaPluginsPermissionRequestExt: 'static {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_description(&self) -> Option<GString>;
 }
 
-impl<O: IsA<InstallMissingMediaPluginsPermissionRequest>> InstallMissingMediaPluginsPermissionRequestExt for O {
+impl<O: IsA<InstallMissingMediaPluginsPermissionRequest>>
+    InstallMissingMediaPluginsPermissionRequestExt for O
+{
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_description(&self) -> Option<GString> {
         unsafe {

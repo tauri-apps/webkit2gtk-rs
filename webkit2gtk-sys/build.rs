@@ -10,9 +10,9 @@ use pkg_config::{Config, Error};
 #[cfg(not(feature = "dox"))]
 use std::env;
 #[cfg(not(feature = "dox"))]
-use std::io::prelude::*;
-#[cfg(not(feature = "dox"))]
 use std::io;
+#[cfg(not(feature = "dox"))]
+use std::io::prelude::*;
 #[cfg(not(feature = "dox"))]
 use std::process;
 
@@ -65,7 +65,7 @@ fn find() -> Result<(), Error> {
             println!("cargo:rustc-link-lib=dylib={}", lib_);
         }
         println!("cargo:rustc-link-search=native={}", lib_dir);
-        return Ok(())
+        return Ok(());
     }
 
     let target = env::var("TARGET").expect("TARGET environment variable doesn't exist");
@@ -87,8 +87,10 @@ fn find() -> Result<(), Error> {
                     println!("cargo:rustc-link-lib=dylib={}", lib_);
                 }
                 for path in library.link_paths.iter() {
-                    println!("cargo:rustc-link-search=native={}",
-                             path.to_str().expect("library path doesn't exist"));
+                    println!(
+                        "cargo:rustc-link-search=native={}",
+                        path.to_str().expect("library path doesn't exist")
+                    );
                 }
             }
             Ok(())
@@ -102,4 +104,3 @@ fn find() -> Result<(), Error> {
         Err(err) => Err(err),
     }
 }
-

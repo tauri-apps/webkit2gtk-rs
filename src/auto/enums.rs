@@ -16,8 +16,7 @@ use std::fmt;
 use webkit2_sys;
 
 #[cfg(any(feature = "v2_2", feature = "dox"))]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum AuthenticationScheme {
     Default,
     HttpBasic,
@@ -35,18 +34,23 @@ pub enum AuthenticationScheme {
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 impl fmt::Display for AuthenticationScheme {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "AuthenticationScheme::{}", match *self {
-            AuthenticationScheme::Default => "Default",
-            AuthenticationScheme::HttpBasic => "HttpBasic",
-            AuthenticationScheme::HttpDigest => "HttpDigest",
-            AuthenticationScheme::HtmlForm => "HtmlForm",
-            AuthenticationScheme::Ntlm => "Ntlm",
-            AuthenticationScheme::Negotiate => "Negotiate",
-            AuthenticationScheme::ClientCertificateRequested => "ClientCertificateRequested",
-            AuthenticationScheme::ServerTrustEvaluationRequested => "ServerTrustEvaluationRequested",
-            AuthenticationScheme::Unknown => "Unknown",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "AuthenticationScheme::{}",
+            match *self {
+                AuthenticationScheme::Default => "Default",
+                AuthenticationScheme::HttpBasic => "HttpBasic",
+                AuthenticationScheme::HttpDigest => "HttpDigest",
+                AuthenticationScheme::HtmlForm => "HtmlForm",
+                AuthenticationScheme::Ntlm => "Ntlm",
+                AuthenticationScheme::Negotiate => "Negotiate",
+                AuthenticationScheme::ClientCertificateRequested => "ClientCertificateRequested",
+                AuthenticationScheme::ServerTrustEvaluationRequested =>
+                    "ServerTrustEvaluationRequested",
+                AuthenticationScheme::Unknown => "Unknown",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -59,14 +63,20 @@ impl ToGlib for AuthenticationScheme {
         match *self {
             AuthenticationScheme::Default => webkit2_sys::WEBKIT_AUTHENTICATION_SCHEME_DEFAULT,
             AuthenticationScheme::HttpBasic => webkit2_sys::WEBKIT_AUTHENTICATION_SCHEME_HTTP_BASIC,
-            AuthenticationScheme::HttpDigest => webkit2_sys::WEBKIT_AUTHENTICATION_SCHEME_HTTP_DIGEST,
+            AuthenticationScheme::HttpDigest => {
+                webkit2_sys::WEBKIT_AUTHENTICATION_SCHEME_HTTP_DIGEST
+            }
             AuthenticationScheme::HtmlForm => webkit2_sys::WEBKIT_AUTHENTICATION_SCHEME_HTML_FORM,
             AuthenticationScheme::Ntlm => webkit2_sys::WEBKIT_AUTHENTICATION_SCHEME_NTLM,
             AuthenticationScheme::Negotiate => webkit2_sys::WEBKIT_AUTHENTICATION_SCHEME_NEGOTIATE,
-            AuthenticationScheme::ClientCertificateRequested => webkit2_sys::WEBKIT_AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE_REQUESTED,
-            AuthenticationScheme::ServerTrustEvaluationRequested => webkit2_sys::WEBKIT_AUTHENTICATION_SCHEME_SERVER_TRUST_EVALUATION_REQUESTED,
+            AuthenticationScheme::ClientCertificateRequested => {
+                webkit2_sys::WEBKIT_AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE_REQUESTED
+            }
+            AuthenticationScheme::ServerTrustEvaluationRequested => {
+                webkit2_sys::WEBKIT_AUTHENTICATION_SCHEME_SERVER_TRUST_EVALUATION_REQUESTED
+            }
             AuthenticationScheme::Unknown => webkit2_sys::WEBKIT_AUTHENTICATION_SCHEME_UNKNOWN,
-            AuthenticationScheme::__Unknown(value) => value
+            AuthenticationScheme::__Unknown(value) => value,
         }
     }
 }
@@ -119,8 +129,7 @@ impl SetValue for AuthenticationScheme {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum CacheModel {
     DocumentViewer,
     WebBrowser,
@@ -131,12 +140,16 @@ pub enum CacheModel {
 
 impl fmt::Display for CacheModel {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "CacheModel::{}", match *self {
-            CacheModel::DocumentViewer => "DocumentViewer",
-            CacheModel::WebBrowser => "WebBrowser",
-            CacheModel::DocumentBrowser => "DocumentBrowser",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "CacheModel::{}",
+            match *self {
+                CacheModel::DocumentViewer => "DocumentViewer",
+                CacheModel::WebBrowser => "WebBrowser",
+                CacheModel::DocumentBrowser => "DocumentBrowser",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -149,7 +162,7 @@ impl ToGlib for CacheModel {
             CacheModel::DocumentViewer => webkit2_sys::WEBKIT_CACHE_MODEL_DOCUMENT_VIEWER,
             CacheModel::WebBrowser => webkit2_sys::WEBKIT_CACHE_MODEL_WEB_BROWSER,
             CacheModel::DocumentBrowser => webkit2_sys::WEBKIT_CACHE_MODEL_DOCUMENT_BROWSER,
-            CacheModel::__Unknown(value) => value
+            CacheModel::__Unknown(value) => value,
         }
     }
 }
@@ -191,8 +204,7 @@ impl SetValue for CacheModel {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum ContextMenuAction {
     NoAction,
     OpenLink,
@@ -246,55 +258,59 @@ pub enum ContextMenuAction {
 
 impl fmt::Display for ContextMenuAction {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "ContextMenuAction::{}", match *self {
-            ContextMenuAction::NoAction => "NoAction",
-            ContextMenuAction::OpenLink => "OpenLink",
-            ContextMenuAction::OpenLinkInNewWindow => "OpenLinkInNewWindow",
-            ContextMenuAction::DownloadLinkToDisk => "DownloadLinkToDisk",
-            ContextMenuAction::CopyLinkToClipboard => "CopyLinkToClipboard",
-            ContextMenuAction::OpenImageInNewWindow => "OpenImageInNewWindow",
-            ContextMenuAction::DownloadImageToDisk => "DownloadImageToDisk",
-            ContextMenuAction::CopyImageToClipboard => "CopyImageToClipboard",
-            ContextMenuAction::CopyImageUrlToClipboard => "CopyImageUrlToClipboard",
-            ContextMenuAction::OpenFrameInNewWindow => "OpenFrameInNewWindow",
-            ContextMenuAction::GoBack => "GoBack",
-            ContextMenuAction::GoForward => "GoForward",
-            ContextMenuAction::Stop => "Stop",
-            ContextMenuAction::Reload => "Reload",
-            ContextMenuAction::Copy => "Copy",
-            ContextMenuAction::Cut => "Cut",
-            ContextMenuAction::Paste => "Paste",
-            ContextMenuAction::Delete => "Delete",
-            ContextMenuAction::SelectAll => "SelectAll",
-            ContextMenuAction::InputMethods => "InputMethods",
-            ContextMenuAction::Unicode => "Unicode",
-            ContextMenuAction::SpellingGuess => "SpellingGuess",
-            ContextMenuAction::NoGuessesFound => "NoGuessesFound",
-            ContextMenuAction::IgnoreSpelling => "IgnoreSpelling",
-            ContextMenuAction::LearnSpelling => "LearnSpelling",
-            ContextMenuAction::IgnoreGrammar => "IgnoreGrammar",
-            ContextMenuAction::FontMenu => "FontMenu",
-            ContextMenuAction::Bold => "Bold",
-            ContextMenuAction::Italic => "Italic",
-            ContextMenuAction::Underline => "Underline",
-            ContextMenuAction::Outline => "Outline",
-            ContextMenuAction::InspectElement => "InspectElement",
-            ContextMenuAction::OpenVideoInNewWindow => "OpenVideoInNewWindow",
-            ContextMenuAction::OpenAudioInNewWindow => "OpenAudioInNewWindow",
-            ContextMenuAction::CopyVideoLinkToClipboard => "CopyVideoLinkToClipboard",
-            ContextMenuAction::CopyAudioLinkToClipboard => "CopyAudioLinkToClipboard",
-            ContextMenuAction::ToggleMediaControls => "ToggleMediaControls",
-            ContextMenuAction::ToggleMediaLoop => "ToggleMediaLoop",
-            ContextMenuAction::EnterVideoFullscreen => "EnterVideoFullscreen",
-            ContextMenuAction::MediaPlay => "MediaPlay",
-            ContextMenuAction::MediaPause => "MediaPause",
-            ContextMenuAction::MediaMute => "MediaMute",
-            ContextMenuAction::DownloadVideoToDisk => "DownloadVideoToDisk",
-            ContextMenuAction::DownloadAudioToDisk => "DownloadAudioToDisk",
-            ContextMenuAction::InsertEmoji => "InsertEmoji",
-            ContextMenuAction::Custom => "Custom",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "ContextMenuAction::{}",
+            match *self {
+                ContextMenuAction::NoAction => "NoAction",
+                ContextMenuAction::OpenLink => "OpenLink",
+                ContextMenuAction::OpenLinkInNewWindow => "OpenLinkInNewWindow",
+                ContextMenuAction::DownloadLinkToDisk => "DownloadLinkToDisk",
+                ContextMenuAction::CopyLinkToClipboard => "CopyLinkToClipboard",
+                ContextMenuAction::OpenImageInNewWindow => "OpenImageInNewWindow",
+                ContextMenuAction::DownloadImageToDisk => "DownloadImageToDisk",
+                ContextMenuAction::CopyImageToClipboard => "CopyImageToClipboard",
+                ContextMenuAction::CopyImageUrlToClipboard => "CopyImageUrlToClipboard",
+                ContextMenuAction::OpenFrameInNewWindow => "OpenFrameInNewWindow",
+                ContextMenuAction::GoBack => "GoBack",
+                ContextMenuAction::GoForward => "GoForward",
+                ContextMenuAction::Stop => "Stop",
+                ContextMenuAction::Reload => "Reload",
+                ContextMenuAction::Copy => "Copy",
+                ContextMenuAction::Cut => "Cut",
+                ContextMenuAction::Paste => "Paste",
+                ContextMenuAction::Delete => "Delete",
+                ContextMenuAction::SelectAll => "SelectAll",
+                ContextMenuAction::InputMethods => "InputMethods",
+                ContextMenuAction::Unicode => "Unicode",
+                ContextMenuAction::SpellingGuess => "SpellingGuess",
+                ContextMenuAction::NoGuessesFound => "NoGuessesFound",
+                ContextMenuAction::IgnoreSpelling => "IgnoreSpelling",
+                ContextMenuAction::LearnSpelling => "LearnSpelling",
+                ContextMenuAction::IgnoreGrammar => "IgnoreGrammar",
+                ContextMenuAction::FontMenu => "FontMenu",
+                ContextMenuAction::Bold => "Bold",
+                ContextMenuAction::Italic => "Italic",
+                ContextMenuAction::Underline => "Underline",
+                ContextMenuAction::Outline => "Outline",
+                ContextMenuAction::InspectElement => "InspectElement",
+                ContextMenuAction::OpenVideoInNewWindow => "OpenVideoInNewWindow",
+                ContextMenuAction::OpenAudioInNewWindow => "OpenAudioInNewWindow",
+                ContextMenuAction::CopyVideoLinkToClipboard => "CopyVideoLinkToClipboard",
+                ContextMenuAction::CopyAudioLinkToClipboard => "CopyAudioLinkToClipboard",
+                ContextMenuAction::ToggleMediaControls => "ToggleMediaControls",
+                ContextMenuAction::ToggleMediaLoop => "ToggleMediaLoop",
+                ContextMenuAction::EnterVideoFullscreen => "EnterVideoFullscreen",
+                ContextMenuAction::MediaPlay => "MediaPlay",
+                ContextMenuAction::MediaPause => "MediaPause",
+                ContextMenuAction::MediaMute => "MediaMute",
+                ContextMenuAction::DownloadVideoToDisk => "DownloadVideoToDisk",
+                ContextMenuAction::DownloadAudioToDisk => "DownloadAudioToDisk",
+                ContextMenuAction::InsertEmoji => "InsertEmoji",
+                ContextMenuAction::Custom => "Custom",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -306,14 +322,30 @@ impl ToGlib for ContextMenuAction {
         match *self {
             ContextMenuAction::NoAction => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_NO_ACTION,
             ContextMenuAction::OpenLink => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_OPEN_LINK,
-            ContextMenuAction::OpenLinkInNewWindow => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_OPEN_LINK_IN_NEW_WINDOW,
-            ContextMenuAction::DownloadLinkToDisk => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_LINK_TO_DISK,
-            ContextMenuAction::CopyLinkToClipboard => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_COPY_LINK_TO_CLIPBOARD,
-            ContextMenuAction::OpenImageInNewWindow => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_OPEN_IMAGE_IN_NEW_WINDOW,
-            ContextMenuAction::DownloadImageToDisk => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_IMAGE_TO_DISK,
-            ContextMenuAction::CopyImageToClipboard => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_COPY_IMAGE_TO_CLIPBOARD,
-            ContextMenuAction::CopyImageUrlToClipboard => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_COPY_IMAGE_URL_TO_CLIPBOARD,
-            ContextMenuAction::OpenFrameInNewWindow => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_OPEN_FRAME_IN_NEW_WINDOW,
+            ContextMenuAction::OpenLinkInNewWindow => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_OPEN_LINK_IN_NEW_WINDOW
+            }
+            ContextMenuAction::DownloadLinkToDisk => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_LINK_TO_DISK
+            }
+            ContextMenuAction::CopyLinkToClipboard => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_COPY_LINK_TO_CLIPBOARD
+            }
+            ContextMenuAction::OpenImageInNewWindow => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_OPEN_IMAGE_IN_NEW_WINDOW
+            }
+            ContextMenuAction::DownloadImageToDisk => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_IMAGE_TO_DISK
+            }
+            ContextMenuAction::CopyImageToClipboard => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_COPY_IMAGE_TO_CLIPBOARD
+            }
+            ContextMenuAction::CopyImageUrlToClipboard => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_COPY_IMAGE_URL_TO_CLIPBOARD
+            }
+            ContextMenuAction::OpenFrameInNewWindow => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_OPEN_FRAME_IN_NEW_WINDOW
+            }
             ContextMenuAction::GoBack => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_GO_BACK,
             ContextMenuAction::GoForward => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_GO_FORWARD,
             ContextMenuAction::Stop => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_STOP,
@@ -323,34 +355,66 @@ impl ToGlib for ContextMenuAction {
             ContextMenuAction::Paste => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_PASTE,
             ContextMenuAction::Delete => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_DELETE,
             ContextMenuAction::SelectAll => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_SELECT_ALL,
-            ContextMenuAction::InputMethods => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_INPUT_METHODS,
+            ContextMenuAction::InputMethods => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_INPUT_METHODS
+            }
             ContextMenuAction::Unicode => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_UNICODE,
-            ContextMenuAction::SpellingGuess => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_SPELLING_GUESS,
-            ContextMenuAction::NoGuessesFound => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_NO_GUESSES_FOUND,
-            ContextMenuAction::IgnoreSpelling => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_IGNORE_SPELLING,
-            ContextMenuAction::LearnSpelling => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_LEARN_SPELLING,
-            ContextMenuAction::IgnoreGrammar => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_IGNORE_GRAMMAR,
+            ContextMenuAction::SpellingGuess => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_SPELLING_GUESS
+            }
+            ContextMenuAction::NoGuessesFound => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_NO_GUESSES_FOUND
+            }
+            ContextMenuAction::IgnoreSpelling => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_IGNORE_SPELLING
+            }
+            ContextMenuAction::LearnSpelling => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_LEARN_SPELLING
+            }
+            ContextMenuAction::IgnoreGrammar => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_IGNORE_GRAMMAR
+            }
             ContextMenuAction::FontMenu => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_FONT_MENU,
             ContextMenuAction::Bold => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_BOLD,
             ContextMenuAction::Italic => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_ITALIC,
             ContextMenuAction::Underline => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_UNDERLINE,
             ContextMenuAction::Outline => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_OUTLINE,
-            ContextMenuAction::InspectElement => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_INSPECT_ELEMENT,
-            ContextMenuAction::OpenVideoInNewWindow => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_OPEN_VIDEO_IN_NEW_WINDOW,
-            ContextMenuAction::OpenAudioInNewWindow => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_OPEN_AUDIO_IN_NEW_WINDOW,
-            ContextMenuAction::CopyVideoLinkToClipboard => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_COPY_VIDEO_LINK_TO_CLIPBOARD,
-            ContextMenuAction::CopyAudioLinkToClipboard => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_COPY_AUDIO_LINK_TO_CLIPBOARD,
-            ContextMenuAction::ToggleMediaControls => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_TOGGLE_MEDIA_CONTROLS,
-            ContextMenuAction::ToggleMediaLoop => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_TOGGLE_MEDIA_LOOP,
-            ContextMenuAction::EnterVideoFullscreen => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_ENTER_VIDEO_FULLSCREEN,
+            ContextMenuAction::InspectElement => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_INSPECT_ELEMENT
+            }
+            ContextMenuAction::OpenVideoInNewWindow => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_OPEN_VIDEO_IN_NEW_WINDOW
+            }
+            ContextMenuAction::OpenAudioInNewWindow => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_OPEN_AUDIO_IN_NEW_WINDOW
+            }
+            ContextMenuAction::CopyVideoLinkToClipboard => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_COPY_VIDEO_LINK_TO_CLIPBOARD
+            }
+            ContextMenuAction::CopyAudioLinkToClipboard => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_COPY_AUDIO_LINK_TO_CLIPBOARD
+            }
+            ContextMenuAction::ToggleMediaControls => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_TOGGLE_MEDIA_CONTROLS
+            }
+            ContextMenuAction::ToggleMediaLoop => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_TOGGLE_MEDIA_LOOP
+            }
+            ContextMenuAction::EnterVideoFullscreen => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_ENTER_VIDEO_FULLSCREEN
+            }
             ContextMenuAction::MediaPlay => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_MEDIA_PLAY,
             ContextMenuAction::MediaPause => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_MEDIA_PAUSE,
             ContextMenuAction::MediaMute => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_MEDIA_MUTE,
-            ContextMenuAction::DownloadVideoToDisk => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_VIDEO_TO_DISK,
-            ContextMenuAction::DownloadAudioToDisk => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_AUDIO_TO_DISK,
+            ContextMenuAction::DownloadVideoToDisk => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_VIDEO_TO_DISK
+            }
+            ContextMenuAction::DownloadAudioToDisk => {
+                webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_AUDIO_TO_DISK
+            }
             ContextMenuAction::InsertEmoji => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_INSERT_EMOJI,
             ContextMenuAction::Custom => webkit2_sys::WEBKIT_CONTEXT_MENU_ACTION_CUSTOM,
-            ContextMenuAction::__Unknown(value) => value
+            ContextMenuAction::__Unknown(value) => value,
         }
     }
 }
@@ -435,8 +499,7 @@ impl SetValue for ContextMenuAction {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum CookieAcceptPolicy {
     Always,
     Never,
@@ -447,12 +510,16 @@ pub enum CookieAcceptPolicy {
 
 impl fmt::Display for CookieAcceptPolicy {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "CookieAcceptPolicy::{}", match *self {
-            CookieAcceptPolicy::Always => "Always",
-            CookieAcceptPolicy::Never => "Never",
-            CookieAcceptPolicy::NoThirdParty => "NoThirdParty",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "CookieAcceptPolicy::{}",
+            match *self {
+                CookieAcceptPolicy::Always => "Always",
+                CookieAcceptPolicy::Never => "Never",
+                CookieAcceptPolicy::NoThirdParty => "NoThirdParty",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -464,8 +531,10 @@ impl ToGlib for CookieAcceptPolicy {
         match *self {
             CookieAcceptPolicy::Always => webkit2_sys::WEBKIT_COOKIE_POLICY_ACCEPT_ALWAYS,
             CookieAcceptPolicy::Never => webkit2_sys::WEBKIT_COOKIE_POLICY_ACCEPT_NEVER,
-            CookieAcceptPolicy::NoThirdParty => webkit2_sys::WEBKIT_COOKIE_POLICY_ACCEPT_NO_THIRD_PARTY,
-            CookieAcceptPolicy::__Unknown(value) => value
+            CookieAcceptPolicy::NoThirdParty => {
+                webkit2_sys::WEBKIT_COOKIE_POLICY_ACCEPT_NO_THIRD_PARTY
+            }
+            CookieAcceptPolicy::__Unknown(value) => value,
         }
     }
 }
@@ -507,8 +576,7 @@ impl SetValue for CookieAcceptPolicy {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum CookiePersistentStorage {
     Text,
     Sqlite,
@@ -518,11 +586,15 @@ pub enum CookiePersistentStorage {
 
 impl fmt::Display for CookiePersistentStorage {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "CookiePersistentStorage::{}", match *self {
-            CookiePersistentStorage::Text => "Text",
-            CookiePersistentStorage::Sqlite => "Sqlite",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "CookiePersistentStorage::{}",
+            match *self {
+                CookiePersistentStorage::Text => "Text",
+                CookiePersistentStorage::Sqlite => "Sqlite",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -534,7 +606,7 @@ impl ToGlib for CookiePersistentStorage {
         match *self {
             CookiePersistentStorage::Text => webkit2_sys::WEBKIT_COOKIE_PERSISTENT_STORAGE_TEXT,
             CookiePersistentStorage::Sqlite => webkit2_sys::WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE,
-            CookiePersistentStorage::__Unknown(value) => value
+            CookiePersistentStorage::__Unknown(value) => value,
         }
     }
 }
@@ -576,8 +648,7 @@ impl SetValue for CookiePersistentStorage {
 }
 
 #[cfg(any(feature = "v2_2", feature = "dox"))]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum CredentialPersistence {
     None,
     ForSession,
@@ -589,12 +660,16 @@ pub enum CredentialPersistence {
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 impl fmt::Display for CredentialPersistence {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "CredentialPersistence::{}", match *self {
-            CredentialPersistence::None => "None",
-            CredentialPersistence::ForSession => "ForSession",
-            CredentialPersistence::Permanent => "Permanent",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "CredentialPersistence::{}",
+            match *self {
+                CredentialPersistence::None => "None",
+                CredentialPersistence::ForSession => "ForSession",
+                CredentialPersistence::Permanent => "Permanent",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -606,9 +681,13 @@ impl ToGlib for CredentialPersistence {
     fn to_glib(&self) -> webkit2_sys::WebKitCredentialPersistence {
         match *self {
             CredentialPersistence::None => webkit2_sys::WEBKIT_CREDENTIAL_PERSISTENCE_NONE,
-            CredentialPersistence::ForSession => webkit2_sys::WEBKIT_CREDENTIAL_PERSISTENCE_FOR_SESSION,
-            CredentialPersistence::Permanent => webkit2_sys::WEBKIT_CREDENTIAL_PERSISTENCE_PERMANENT,
-            CredentialPersistence::__Unknown(value) => value
+            CredentialPersistence::ForSession => {
+                webkit2_sys::WEBKIT_CREDENTIAL_PERSISTENCE_FOR_SESSION
+            }
+            CredentialPersistence::Permanent => {
+                webkit2_sys::WEBKIT_CREDENTIAL_PERSISTENCE_PERMANENT
+            }
+            CredentialPersistence::__Unknown(value) => value,
         }
     }
 }
@@ -655,8 +734,7 @@ impl SetValue for CredentialPersistence {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum DownloadError {
     Network,
     CancelledByUser,
@@ -667,12 +745,16 @@ pub enum DownloadError {
 
 impl fmt::Display for DownloadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "DownloadError::{}", match *self {
-            DownloadError::Network => "Network",
-            DownloadError::CancelledByUser => "CancelledByUser",
-            DownloadError::Destination => "Destination",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "DownloadError::{}",
+            match *self {
+                DownloadError::Network => "Network",
+                DownloadError::CancelledByUser => "CancelledByUser",
+                DownloadError::Destination => "Destination",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -685,7 +767,7 @@ impl ToGlib for DownloadError {
             DownloadError::Network => webkit2_sys::WEBKIT_DOWNLOAD_ERROR_NETWORK,
             DownloadError::CancelledByUser => webkit2_sys::WEBKIT_DOWNLOAD_ERROR_CANCELLED_BY_USER,
             DownloadError::Destination => webkit2_sys::WEBKIT_DOWNLOAD_ERROR_DESTINATION,
-            DownloadError::__Unknown(value) => value
+            DownloadError::__Unknown(value) => value,
         }
     }
 }
@@ -748,8 +830,7 @@ impl SetValue for DownloadError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum FaviconDatabaseError {
     NotInitialized,
     FaviconNotFound,
@@ -760,12 +841,16 @@ pub enum FaviconDatabaseError {
 
 impl fmt::Display for FaviconDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "FaviconDatabaseError::{}", match *self {
-            FaviconDatabaseError::NotInitialized => "NotInitialized",
-            FaviconDatabaseError::FaviconNotFound => "FaviconNotFound",
-            FaviconDatabaseError::FaviconUnknown => "FaviconUnknown",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "FaviconDatabaseError::{}",
+            match *self {
+                FaviconDatabaseError::NotInitialized => "NotInitialized",
+                FaviconDatabaseError::FaviconNotFound => "FaviconNotFound",
+                FaviconDatabaseError::FaviconUnknown => "FaviconUnknown",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -775,10 +860,16 @@ impl ToGlib for FaviconDatabaseError {
 
     fn to_glib(&self) -> webkit2_sys::WebKitFaviconDatabaseError {
         match *self {
-            FaviconDatabaseError::NotInitialized => webkit2_sys::WEBKIT_FAVICON_DATABASE_ERROR_NOT_INITIALIZED,
-            FaviconDatabaseError::FaviconNotFound => webkit2_sys::WEBKIT_FAVICON_DATABASE_ERROR_FAVICON_NOT_FOUND,
-            FaviconDatabaseError::FaviconUnknown => webkit2_sys::WEBKIT_FAVICON_DATABASE_ERROR_FAVICON_UNKNOWN,
-            FaviconDatabaseError::__Unknown(value) => value
+            FaviconDatabaseError::NotInitialized => {
+                webkit2_sys::WEBKIT_FAVICON_DATABASE_ERROR_NOT_INITIALIZED
+            }
+            FaviconDatabaseError::FaviconNotFound => {
+                webkit2_sys::WEBKIT_FAVICON_DATABASE_ERROR_FAVICON_NOT_FOUND
+            }
+            FaviconDatabaseError::FaviconUnknown => {
+                webkit2_sys::WEBKIT_FAVICON_DATABASE_ERROR_FAVICON_UNKNOWN
+            }
+            FaviconDatabaseError::__Unknown(value) => value,
         }
     }
 }
@@ -842,8 +933,7 @@ impl SetValue for FaviconDatabaseError {
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum HardwareAccelerationPolicy {
     OnDemand,
     Always,
@@ -855,12 +945,16 @@ pub enum HardwareAccelerationPolicy {
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 impl fmt::Display for HardwareAccelerationPolicy {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "HardwareAccelerationPolicy::{}", match *self {
-            HardwareAccelerationPolicy::OnDemand => "OnDemand",
-            HardwareAccelerationPolicy::Always => "Always",
-            HardwareAccelerationPolicy::Never => "Never",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "HardwareAccelerationPolicy::{}",
+            match *self {
+                HardwareAccelerationPolicy::OnDemand => "OnDemand",
+                HardwareAccelerationPolicy::Always => "Always",
+                HardwareAccelerationPolicy::Never => "Never",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -871,10 +965,16 @@ impl ToGlib for HardwareAccelerationPolicy {
 
     fn to_glib(&self) -> webkit2_sys::WebKitHardwareAccelerationPolicy {
         match *self {
-            HardwareAccelerationPolicy::OnDemand => webkit2_sys::WEBKIT_HARDWARE_ACCELERATION_POLICY_ON_DEMAND,
-            HardwareAccelerationPolicy::Always => webkit2_sys::WEBKIT_HARDWARE_ACCELERATION_POLICY_ALWAYS,
-            HardwareAccelerationPolicy::Never => webkit2_sys::WEBKIT_HARDWARE_ACCELERATION_POLICY_NEVER,
-            HardwareAccelerationPolicy::__Unknown(value) => value
+            HardwareAccelerationPolicy::OnDemand => {
+                webkit2_sys::WEBKIT_HARDWARE_ACCELERATION_POLICY_ON_DEMAND
+            }
+            HardwareAccelerationPolicy::Always => {
+                webkit2_sys::WEBKIT_HARDWARE_ACCELERATION_POLICY_ALWAYS
+            }
+            HardwareAccelerationPolicy::Never => {
+                webkit2_sys::WEBKIT_HARDWARE_ACCELERATION_POLICY_NEVER
+            }
+            HardwareAccelerationPolicy::__Unknown(value) => value,
         }
     }
 }
@@ -921,8 +1021,7 @@ impl SetValue for HardwareAccelerationPolicy {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum InsecureContentEvent {
     Run,
     Displayed,
@@ -932,11 +1031,15 @@ pub enum InsecureContentEvent {
 
 impl fmt::Display for InsecureContentEvent {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "InsecureContentEvent::{}", match *self {
-            InsecureContentEvent::Run => "Run",
-            InsecureContentEvent::Displayed => "Displayed",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "InsecureContentEvent::{}",
+            match *self {
+                InsecureContentEvent::Run => "Run",
+                InsecureContentEvent::Displayed => "Displayed",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -948,7 +1051,7 @@ impl ToGlib for InsecureContentEvent {
         match *self {
             InsecureContentEvent::Run => webkit2_sys::WEBKIT_INSECURE_CONTENT_RUN,
             InsecureContentEvent::Displayed => webkit2_sys::WEBKIT_INSECURE_CONTENT_DISPLAYED,
-            InsecureContentEvent::__Unknown(value) => value
+            InsecureContentEvent::__Unknown(value) => value,
         }
     }
 }
@@ -989,8 +1092,7 @@ impl SetValue for InsecureContentEvent {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum JavascriptError {
     Failed,
     #[doc(hidden)]
@@ -999,10 +1101,14 @@ pub enum JavascriptError {
 
 impl fmt::Display for JavascriptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "JavascriptError::{}", match *self {
-            JavascriptError::Failed => "Failed",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "JavascriptError::{}",
+            match *self {
+                JavascriptError::Failed => "Failed",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -1013,7 +1119,7 @@ impl ToGlib for JavascriptError {
     fn to_glib(&self) -> webkit2_sys::WebKitJavascriptError {
         match *self {
             JavascriptError::Failed => webkit2_sys::WEBKIT_JAVASCRIPT_ERROR_SCRIPT_FAILED,
-            JavascriptError::__Unknown(value) => value
+            JavascriptError::__Unknown(value) => value,
         }
     }
 }
@@ -1072,8 +1178,7 @@ impl SetValue for JavascriptError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum LoadEvent {
     Started,
     Redirected,
@@ -1085,13 +1190,17 @@ pub enum LoadEvent {
 
 impl fmt::Display for LoadEvent {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "LoadEvent::{}", match *self {
-            LoadEvent::Started => "Started",
-            LoadEvent::Redirected => "Redirected",
-            LoadEvent::Committed => "Committed",
-            LoadEvent::Finished => "Finished",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "LoadEvent::{}",
+            match *self {
+                LoadEvent::Started => "Started",
+                LoadEvent::Redirected => "Redirected",
+                LoadEvent::Committed => "Committed",
+                LoadEvent::Finished => "Finished",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -1105,7 +1214,7 @@ impl ToGlib for LoadEvent {
             LoadEvent::Redirected => webkit2_sys::WEBKIT_LOAD_REDIRECTED,
             LoadEvent::Committed => webkit2_sys::WEBKIT_LOAD_COMMITTED,
             LoadEvent::Finished => webkit2_sys::WEBKIT_LOAD_FINISHED,
-            LoadEvent::__Unknown(value) => value
+            LoadEvent::__Unknown(value) => value,
         }
     }
 }
@@ -1148,8 +1257,7 @@ impl SetValue for LoadEvent {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum NavigationType {
     LinkClicked,
     FormSubmitted,
@@ -1163,15 +1271,19 @@ pub enum NavigationType {
 
 impl fmt::Display for NavigationType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "NavigationType::{}", match *self {
-            NavigationType::LinkClicked => "LinkClicked",
-            NavigationType::FormSubmitted => "FormSubmitted",
-            NavigationType::BackForward => "BackForward",
-            NavigationType::Reload => "Reload",
-            NavigationType::FormResubmitted => "FormResubmitted",
-            NavigationType::Other => "Other",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "NavigationType::{}",
+            match *self {
+                NavigationType::LinkClicked => "LinkClicked",
+                NavigationType::FormSubmitted => "FormSubmitted",
+                NavigationType::BackForward => "BackForward",
+                NavigationType::Reload => "Reload",
+                NavigationType::FormResubmitted => "FormResubmitted",
+                NavigationType::Other => "Other",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -1187,7 +1299,7 @@ impl ToGlib for NavigationType {
             NavigationType::Reload => webkit2_sys::WEBKIT_NAVIGATION_TYPE_RELOAD,
             NavigationType::FormResubmitted => webkit2_sys::WEBKIT_NAVIGATION_TYPE_FORM_RESUBMITTED,
             NavigationType::Other => webkit2_sys::WEBKIT_NAVIGATION_TYPE_OTHER,
-            NavigationType::__Unknown(value) => value
+            NavigationType::__Unknown(value) => value,
         }
     }
 }
@@ -1232,8 +1344,7 @@ impl SetValue for NavigationType {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum NetworkError {
     Failed,
     Transport,
@@ -1246,14 +1357,18 @@ pub enum NetworkError {
 
 impl fmt::Display for NetworkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "NetworkError::{}", match *self {
-            NetworkError::Failed => "Failed",
-            NetworkError::Transport => "Transport",
-            NetworkError::UnknownProtocol => "UnknownProtocol",
-            NetworkError::Cancelled => "Cancelled",
-            NetworkError::FileDoesNotExist => "FileDoesNotExist",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "NetworkError::{}",
+            match *self {
+                NetworkError::Failed => "Failed",
+                NetworkError::Transport => "Transport",
+                NetworkError::UnknownProtocol => "UnknownProtocol",
+                NetworkError::Cancelled => "Cancelled",
+                NetworkError::FileDoesNotExist => "FileDoesNotExist",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -1268,7 +1383,7 @@ impl ToGlib for NetworkError {
             NetworkError::UnknownProtocol => webkit2_sys::WEBKIT_NETWORK_ERROR_UNKNOWN_PROTOCOL,
             NetworkError::Cancelled => webkit2_sys::WEBKIT_NETWORK_ERROR_CANCELLED,
             NetworkError::FileDoesNotExist => webkit2_sys::WEBKIT_NETWORK_ERROR_FILE_DOES_NOT_EXIST,
-            NetworkError::__Unknown(value) => value
+            NetworkError::__Unknown(value) => value,
         }
     }
 }
@@ -1336,8 +1451,7 @@ impl SetValue for NetworkError {
 }
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum NetworkProxyMode {
     Default,
     NoProxy,
@@ -1349,12 +1463,16 @@ pub enum NetworkProxyMode {
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 impl fmt::Display for NetworkProxyMode {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "NetworkProxyMode::{}", match *self {
-            NetworkProxyMode::Default => "Default",
-            NetworkProxyMode::NoProxy => "NoProxy",
-            NetworkProxyMode::Custom => "Custom",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "NetworkProxyMode::{}",
+            match *self {
+                NetworkProxyMode::Default => "Default",
+                NetworkProxyMode::NoProxy => "NoProxy",
+                NetworkProxyMode::Custom => "Custom",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -1368,7 +1486,7 @@ impl ToGlib for NetworkProxyMode {
             NetworkProxyMode::Default => webkit2_sys::WEBKIT_NETWORK_PROXY_MODE_DEFAULT,
             NetworkProxyMode::NoProxy => webkit2_sys::WEBKIT_NETWORK_PROXY_MODE_NO_PROXY,
             NetworkProxyMode::Custom => webkit2_sys::WEBKIT_NETWORK_PROXY_MODE_CUSTOM,
-            NetworkProxyMode::__Unknown(value) => value
+            NetworkProxyMode::__Unknown(value) => value,
         }
     }
 }
@@ -1415,8 +1533,7 @@ impl SetValue for NetworkProxyMode {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PluginError {
     Failed,
     CannotFindPlugin,
@@ -1430,15 +1547,19 @@ pub enum PluginError {
 
 impl fmt::Display for PluginError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "PluginError::{}", match *self {
-            PluginError::Failed => "Failed",
-            PluginError::CannotFindPlugin => "CannotFindPlugin",
-            PluginError::CannotLoadPlugin => "CannotLoadPlugin",
-            PluginError::JavaUnavailable => "JavaUnavailable",
-            PluginError::ConnectionCancelled => "ConnectionCancelled",
-            PluginError::WillHandleLoad => "WillHandleLoad",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "PluginError::{}",
+            match *self {
+                PluginError::Failed => "Failed",
+                PluginError::CannotFindPlugin => "CannotFindPlugin",
+                PluginError::CannotLoadPlugin => "CannotLoadPlugin",
+                PluginError::JavaUnavailable => "JavaUnavailable",
+                PluginError::ConnectionCancelled => "ConnectionCancelled",
+                PluginError::WillHandleLoad => "WillHandleLoad",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -1452,9 +1573,11 @@ impl ToGlib for PluginError {
             PluginError::CannotFindPlugin => webkit2_sys::WEBKIT_PLUGIN_ERROR_CANNOT_FIND_PLUGIN,
             PluginError::CannotLoadPlugin => webkit2_sys::WEBKIT_PLUGIN_ERROR_CANNOT_LOAD_PLUGIN,
             PluginError::JavaUnavailable => webkit2_sys::WEBKIT_PLUGIN_ERROR_JAVA_UNAVAILABLE,
-            PluginError::ConnectionCancelled => webkit2_sys::WEBKIT_PLUGIN_ERROR_CONNECTION_CANCELLED,
+            PluginError::ConnectionCancelled => {
+                webkit2_sys::WEBKIT_PLUGIN_ERROR_CONNECTION_CANCELLED
+            }
             PluginError::WillHandleLoad => webkit2_sys::WEBKIT_PLUGIN_ERROR_WILL_HANDLE_LOAD,
-            PluginError::__Unknown(value) => value
+            PluginError::__Unknown(value) => value,
         }
     }
 }
@@ -1523,8 +1646,7 @@ impl SetValue for PluginError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PolicyDecisionType {
     NavigationAction,
     NewWindowAction,
@@ -1535,12 +1657,16 @@ pub enum PolicyDecisionType {
 
 impl fmt::Display for PolicyDecisionType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "PolicyDecisionType::{}", match *self {
-            PolicyDecisionType::NavigationAction => "NavigationAction",
-            PolicyDecisionType::NewWindowAction => "NewWindowAction",
-            PolicyDecisionType::Response => "Response",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "PolicyDecisionType::{}",
+            match *self {
+                PolicyDecisionType::NavigationAction => "NavigationAction",
+                PolicyDecisionType::NewWindowAction => "NewWindowAction",
+                PolicyDecisionType::Response => "Response",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -1550,10 +1676,14 @@ impl ToGlib for PolicyDecisionType {
 
     fn to_glib(&self) -> webkit2_sys::WebKitPolicyDecisionType {
         match *self {
-            PolicyDecisionType::NavigationAction => webkit2_sys::WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION,
-            PolicyDecisionType::NewWindowAction => webkit2_sys::WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION,
+            PolicyDecisionType::NavigationAction => {
+                webkit2_sys::WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION
+            }
+            PolicyDecisionType::NewWindowAction => {
+                webkit2_sys::WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION
+            }
             PolicyDecisionType::Response => webkit2_sys::WEBKIT_POLICY_DECISION_TYPE_RESPONSE,
-            PolicyDecisionType::__Unknown(value) => value
+            PolicyDecisionType::__Unknown(value) => value,
         }
     }
 }
@@ -1595,8 +1725,7 @@ impl SetValue for PolicyDecisionType {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PolicyError {
     Failed,
     CannotShowMimeType,
@@ -1609,14 +1738,19 @@ pub enum PolicyError {
 
 impl fmt::Display for PolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "PolicyError::{}", match *self {
-            PolicyError::Failed => "Failed",
-            PolicyError::CannotShowMimeType => "CannotShowMimeType",
-            PolicyError::CannotShowUri => "CannotShowUri",
-            PolicyError::FrameLoadInterruptedByPolicyChange => "FrameLoadInterruptedByPolicyChange",
-            PolicyError::CannotUseRestrictedPort => "CannotUseRestrictedPort",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "PolicyError::{}",
+            match *self {
+                PolicyError::Failed => "Failed",
+                PolicyError::CannotShowMimeType => "CannotShowMimeType",
+                PolicyError::CannotShowUri => "CannotShowUri",
+                PolicyError::FrameLoadInterruptedByPolicyChange =>
+                    "FrameLoadInterruptedByPolicyChange",
+                PolicyError::CannotUseRestrictedPort => "CannotUseRestrictedPort",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -1627,11 +1761,17 @@ impl ToGlib for PolicyError {
     fn to_glib(&self) -> webkit2_sys::WebKitPolicyError {
         match *self {
             PolicyError::Failed => webkit2_sys::WEBKIT_POLICY_ERROR_FAILED,
-            PolicyError::CannotShowMimeType => webkit2_sys::WEBKIT_POLICY_ERROR_CANNOT_SHOW_MIME_TYPE,
+            PolicyError::CannotShowMimeType => {
+                webkit2_sys::WEBKIT_POLICY_ERROR_CANNOT_SHOW_MIME_TYPE
+            }
             PolicyError::CannotShowUri => webkit2_sys::WEBKIT_POLICY_ERROR_CANNOT_SHOW_URI,
-            PolicyError::FrameLoadInterruptedByPolicyChange => webkit2_sys::WEBKIT_POLICY_ERROR_FRAME_LOAD_INTERRUPTED_BY_POLICY_CHANGE,
-            PolicyError::CannotUseRestrictedPort => webkit2_sys::WEBKIT_POLICY_ERROR_CANNOT_USE_RESTRICTED_PORT,
-            PolicyError::__Unknown(value) => value
+            PolicyError::FrameLoadInterruptedByPolicyChange => {
+                webkit2_sys::WEBKIT_POLICY_ERROR_FRAME_LOAD_INTERRUPTED_BY_POLICY_CHANGE
+            }
+            PolicyError::CannotUseRestrictedPort => {
+                webkit2_sys::WEBKIT_POLICY_ERROR_CANNOT_USE_RESTRICTED_PORT
+            }
+            PolicyError::__Unknown(value) => value,
         }
     }
 }
@@ -1698,8 +1838,7 @@ impl SetValue for PolicyError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PrintError {
     General,
     PrinterNotFound,
@@ -1710,12 +1849,16 @@ pub enum PrintError {
 
 impl fmt::Display for PrintError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "PrintError::{}", match *self {
-            PrintError::General => "General",
-            PrintError::PrinterNotFound => "PrinterNotFound",
-            PrintError::InvalidPageRange => "InvalidPageRange",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "PrintError::{}",
+            match *self {
+                PrintError::General => "General",
+                PrintError::PrinterNotFound => "PrinterNotFound",
+                PrintError::InvalidPageRange => "InvalidPageRange",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -1728,7 +1871,7 @@ impl ToGlib for PrintError {
             PrintError::General => webkit2_sys::WEBKIT_PRINT_ERROR_GENERAL,
             PrintError::PrinterNotFound => webkit2_sys::WEBKIT_PRINT_ERROR_PRINTER_NOT_FOUND,
             PrintError::InvalidPageRange => webkit2_sys::WEBKIT_PRINT_ERROR_INVALID_PAGE_RANGE,
-            PrintError::__Unknown(value) => value
+            PrintError::__Unknown(value) => value,
         }
     }
 }
@@ -1791,8 +1934,7 @@ impl SetValue for PrintError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PrintOperationResponse {
     Print,
     Cancel,
@@ -1802,11 +1944,15 @@ pub enum PrintOperationResponse {
 
 impl fmt::Display for PrintOperationResponse {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "PrintOperationResponse::{}", match *self {
-            PrintOperationResponse::Print => "Print",
-            PrintOperationResponse::Cancel => "Cancel",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "PrintOperationResponse::{}",
+            match *self {
+                PrintOperationResponse::Print => "Print",
+                PrintOperationResponse::Cancel => "Cancel",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -1818,7 +1964,7 @@ impl ToGlib for PrintOperationResponse {
         match *self {
             PrintOperationResponse::Print => webkit2_sys::WEBKIT_PRINT_OPERATION_RESPONSE_PRINT,
             PrintOperationResponse::Cancel => webkit2_sys::WEBKIT_PRINT_OPERATION_RESPONSE_CANCEL,
-            PrintOperationResponse::__Unknown(value) => value
+            PrintOperationResponse::__Unknown(value) => value,
         }
     }
 }
@@ -1860,8 +2006,7 @@ impl SetValue for PrintOperationResponse {
 }
 
 #[cfg(any(feature = "v2_4", feature = "dox"))]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum ProcessModel {
     SharedSecondaryProcess,
     MultipleSecondaryProcesses,
@@ -1872,11 +2017,15 @@ pub enum ProcessModel {
 #[cfg(any(feature = "v2_4", feature = "dox"))]
 impl fmt::Display for ProcessModel {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "ProcessModel::{}", match *self {
-            ProcessModel::SharedSecondaryProcess => "SharedSecondaryProcess",
-            ProcessModel::MultipleSecondaryProcesses => "MultipleSecondaryProcesses",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "ProcessModel::{}",
+            match *self {
+                ProcessModel::SharedSecondaryProcess => "SharedSecondaryProcess",
+                ProcessModel::MultipleSecondaryProcesses => "MultipleSecondaryProcesses",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -1887,9 +2036,13 @@ impl ToGlib for ProcessModel {
 
     fn to_glib(&self) -> webkit2_sys::WebKitProcessModel {
         match *self {
-            ProcessModel::SharedSecondaryProcess => webkit2_sys::WEBKIT_PROCESS_MODEL_SHARED_SECONDARY_PROCESS,
-            ProcessModel::MultipleSecondaryProcesses => webkit2_sys::WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES,
-            ProcessModel::__Unknown(value) => value
+            ProcessModel::SharedSecondaryProcess => {
+                webkit2_sys::WEBKIT_PROCESS_MODEL_SHARED_SECONDARY_PROCESS
+            }
+            ProcessModel::MultipleSecondaryProcesses => {
+                webkit2_sys::WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES
+            }
+            ProcessModel::__Unknown(value) => value,
         }
     }
 }
@@ -1935,8 +2088,7 @@ impl SetValue for ProcessModel {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum SaveMode {
     Mhtml,
     #[doc(hidden)]
@@ -1945,10 +2097,14 @@ pub enum SaveMode {
 
 impl fmt::Display for SaveMode {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "SaveMode::{}", match *self {
-            SaveMode::Mhtml => "Mhtml",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "SaveMode::{}",
+            match *self {
+                SaveMode::Mhtml => "Mhtml",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -1959,7 +2115,7 @@ impl ToGlib for SaveMode {
     fn to_glib(&self) -> webkit2_sys::WebKitSaveMode {
         match *self {
             SaveMode::Mhtml => webkit2_sys::WEBKIT_SAVE_MODE_MHTML,
-            SaveMode::__Unknown(value) => value
+            SaveMode::__Unknown(value) => value,
         }
     }
 }
@@ -1999,8 +2155,7 @@ impl SetValue for SaveMode {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum ScriptDialogType {
     Alert,
     Confirm,
@@ -2012,13 +2167,17 @@ pub enum ScriptDialogType {
 
 impl fmt::Display for ScriptDialogType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "ScriptDialogType::{}", match *self {
-            ScriptDialogType::Alert => "Alert",
-            ScriptDialogType::Confirm => "Confirm",
-            ScriptDialogType::Prompt => "Prompt",
-            ScriptDialogType::BeforeUnloadConfirm => "BeforeUnloadConfirm",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "ScriptDialogType::{}",
+            match *self {
+                ScriptDialogType::Alert => "Alert",
+                ScriptDialogType::Confirm => "Confirm",
+                ScriptDialogType::Prompt => "Prompt",
+                ScriptDialogType::BeforeUnloadConfirm => "BeforeUnloadConfirm",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -2031,8 +2190,10 @@ impl ToGlib for ScriptDialogType {
             ScriptDialogType::Alert => webkit2_sys::WEBKIT_SCRIPT_DIALOG_ALERT,
             ScriptDialogType::Confirm => webkit2_sys::WEBKIT_SCRIPT_DIALOG_CONFIRM,
             ScriptDialogType::Prompt => webkit2_sys::WEBKIT_SCRIPT_DIALOG_PROMPT,
-            ScriptDialogType::BeforeUnloadConfirm => webkit2_sys::WEBKIT_SCRIPT_DIALOG_BEFORE_UNLOAD_CONFIRM,
-            ScriptDialogType::__Unknown(value) => value
+            ScriptDialogType::BeforeUnloadConfirm => {
+                webkit2_sys::WEBKIT_SCRIPT_DIALOG_BEFORE_UNLOAD_CONFIRM
+            }
+            ScriptDialogType::__Unknown(value) => value,
         }
     }
 }
@@ -2075,8 +2236,7 @@ impl SetValue for ScriptDialogType {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum SnapshotError {
     Create,
     #[doc(hidden)]
@@ -2085,10 +2245,14 @@ pub enum SnapshotError {
 
 impl fmt::Display for SnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "SnapshotError::{}", match *self {
-            SnapshotError::Create => "Create",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "SnapshotError::{}",
+            match *self {
+                SnapshotError::Create => "Create",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -2099,7 +2263,7 @@ impl ToGlib for SnapshotError {
     fn to_glib(&self) -> webkit2_sys::WebKitSnapshotError {
         match *self {
             SnapshotError::Create => webkit2_sys::WEBKIT_SNAPSHOT_ERROR_FAILED_TO_CREATE,
-            SnapshotError::__Unknown(value) => value
+            SnapshotError::__Unknown(value) => value,
         }
     }
 }
@@ -2158,8 +2322,7 @@ impl SetValue for SnapshotError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum SnapshotRegion {
     Visible,
     FullDocument,
@@ -2169,11 +2332,15 @@ pub enum SnapshotRegion {
 
 impl fmt::Display for SnapshotRegion {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "SnapshotRegion::{}", match *self {
-            SnapshotRegion::Visible => "Visible",
-            SnapshotRegion::FullDocument => "FullDocument",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "SnapshotRegion::{}",
+            match *self {
+                SnapshotRegion::Visible => "Visible",
+                SnapshotRegion::FullDocument => "FullDocument",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -2185,7 +2352,7 @@ impl ToGlib for SnapshotRegion {
         match *self {
             SnapshotRegion::Visible => webkit2_sys::WEBKIT_SNAPSHOT_REGION_VISIBLE,
             SnapshotRegion::FullDocument => webkit2_sys::WEBKIT_SNAPSHOT_REGION_FULL_DOCUMENT,
-            SnapshotRegion::__Unknown(value) => value
+            SnapshotRegion::__Unknown(value) => value,
         }
     }
 }
@@ -2226,8 +2393,7 @@ impl SetValue for SnapshotRegion {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum TLSErrorsPolicy {
     Ignore,
     Fail,
@@ -2237,11 +2403,15 @@ pub enum TLSErrorsPolicy {
 
 impl fmt::Display for TLSErrorsPolicy {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "TLSErrorsPolicy::{}", match *self {
-            TLSErrorsPolicy::Ignore => "Ignore",
-            TLSErrorsPolicy::Fail => "Fail",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "TLSErrorsPolicy::{}",
+            match *self {
+                TLSErrorsPolicy::Ignore => "Ignore",
+                TLSErrorsPolicy::Fail => "Fail",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -2253,7 +2423,7 @@ impl ToGlib for TLSErrorsPolicy {
         match *self {
             TLSErrorsPolicy::Ignore => webkit2_sys::WEBKIT_TLS_ERRORS_POLICY_IGNORE,
             TLSErrorsPolicy::Fail => webkit2_sys::WEBKIT_TLS_ERRORS_POLICY_FAIL,
-            TLSErrorsPolicy::__Unknown(value) => value
+            TLSErrorsPolicy::__Unknown(value) => value,
         }
     }
 }
@@ -2295,8 +2465,7 @@ impl SetValue for TLSErrorsPolicy {
 }
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum UserContentInjectedFrames {
     AllFrames,
     TopFrame,
@@ -2307,11 +2476,15 @@ pub enum UserContentInjectedFrames {
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 impl fmt::Display for UserContentInjectedFrames {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "UserContentInjectedFrames::{}", match *self {
-            UserContentInjectedFrames::AllFrames => "AllFrames",
-            UserContentInjectedFrames::TopFrame => "TopFrame",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "UserContentInjectedFrames::{}",
+            match *self {
+                UserContentInjectedFrames::AllFrames => "AllFrames",
+                UserContentInjectedFrames::TopFrame => "TopFrame",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -2322,9 +2495,13 @@ impl ToGlib for UserContentInjectedFrames {
 
     fn to_glib(&self) -> webkit2_sys::WebKitUserContentInjectedFrames {
         match *self {
-            UserContentInjectedFrames::AllFrames => webkit2_sys::WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES,
-            UserContentInjectedFrames::TopFrame => webkit2_sys::WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
-            UserContentInjectedFrames::__Unknown(value) => value
+            UserContentInjectedFrames::AllFrames => {
+                webkit2_sys::WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES
+            }
+            UserContentInjectedFrames::TopFrame => {
+                webkit2_sys::WEBKIT_USER_CONTENT_INJECT_TOP_FRAME
+            }
+            UserContentInjectedFrames::__Unknown(value) => value,
         }
     }
 }
@@ -2371,8 +2548,7 @@ impl SetValue for UserContentInjectedFrames {
 }
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum UserScriptInjectionTime {
     Start,
     End,
@@ -2383,11 +2559,15 @@ pub enum UserScriptInjectionTime {
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 impl fmt::Display for UserScriptInjectionTime {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "UserScriptInjectionTime::{}", match *self {
-            UserScriptInjectionTime::Start => "Start",
-            UserScriptInjectionTime::End => "End",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "UserScriptInjectionTime::{}",
+            match *self {
+                UserScriptInjectionTime::Start => "Start",
+                UserScriptInjectionTime::End => "End",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -2398,9 +2578,11 @@ impl ToGlib for UserScriptInjectionTime {
 
     fn to_glib(&self) -> webkit2_sys::WebKitUserScriptInjectionTime {
         match *self {
-            UserScriptInjectionTime::Start => webkit2_sys::WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_START,
+            UserScriptInjectionTime::Start => {
+                webkit2_sys::WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_START
+            }
             UserScriptInjectionTime::End => webkit2_sys::WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
-            UserScriptInjectionTime::__Unknown(value) => value
+            UserScriptInjectionTime::__Unknown(value) => value,
         }
     }
 }
@@ -2447,8 +2629,7 @@ impl SetValue for UserScriptInjectionTime {
 }
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum UserStyleLevel {
     User,
     Author,
@@ -2459,11 +2640,15 @@ pub enum UserStyleLevel {
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 impl fmt::Display for UserStyleLevel {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "UserStyleLevel::{}", match *self {
-            UserStyleLevel::User => "User",
-            UserStyleLevel::Author => "Author",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "UserStyleLevel::{}",
+            match *self {
+                UserStyleLevel::User => "User",
+                UserStyleLevel::Author => "Author",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
@@ -2476,7 +2661,7 @@ impl ToGlib for UserStyleLevel {
         match *self {
             UserStyleLevel::User => webkit2_sys::WEBKIT_USER_STYLE_LEVEL_USER,
             UserStyleLevel::Author => webkit2_sys::WEBKIT_USER_STYLE_LEVEL_AUTHOR,
-            UserStyleLevel::__Unknown(value) => value
+            UserStyleLevel::__Unknown(value) => value,
         }
     }
 }
@@ -2521,4 +2706,3 @@ impl SetValue for UserStyleLevel {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
-

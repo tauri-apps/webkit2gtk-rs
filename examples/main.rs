@@ -26,9 +26,9 @@ extern crate webkit2gtk;
 #[cfg(feature = "v2_4")]
 use glib::ToVariant;
 use gtk::{ContainerExt, Inhibit, WidgetExt, Window, WindowType};
-use webkit2gtk::{SettingsExt, WebContext, WebContextExt, WebView, WebViewExt};
 #[cfg(feature = "v2_6")]
 use webkit2gtk::UserContentManager;
+use webkit2gtk::{SettingsExt, WebContext, WebContextExt, WebView, WebViewExt};
 
 fn main() {
     gtk::init().unwrap();
@@ -39,7 +39,8 @@ fn main() {
     context.set_web_extensions_initialization_user_data(&"webkit".to_variant());
     context.set_web_extensions_directory("../webkit2gtk-webextension-rs/example/target/debug/");
     #[cfg(feature = "v2_6")]
-    let webview = WebView::new_with_context_and_user_content_manager(&context, &UserContentManager::new());
+    let webview =
+        WebView::new_with_context_and_user_content_manager(&context, &UserContentManager::new());
     #[cfg(not(feature = "v2_6"))]
     let webview = WebView::new_with_context(&context);
     webview.load_uri("https://crates.io/");
@@ -53,21 +54,19 @@ fn main() {
 
     window.show_all();
 
-    webview.run_javascript("alert('Hello');", None::<&gio::Cancellable>, |_result|{});
+    webview.run_javascript("alert('Hello');", None::<&gio::Cancellable>, |_result| {});
 
     let cancellable = gio::Cancellable::new();
-    webview.run_javascript("42", Some(&cancellable), |result| {
-        match result {
-            Ok(result) => {
-                let context = result.get_global_context().unwrap();
-                let value = result.get_value().unwrap();
-                println!("is_boolean: {}", value.is_boolean(&context));
-                println!("is_number: {}", value.is_number(&context));
-                println!("{:?}", value.to_number(&context));
-                println!("{:?}", value.to_boolean(&context));
-            },
-            Err(error) => println!("{}", error),
+    webview.run_javascript("42", Some(&cancellable), |result| match result {
+        Ok(result) => {
+            let context = result.get_global_context().unwrap();
+            let value = result.get_value().unwrap();
+            println!("is_boolean: {}", value.is_boolean(&context));
+            println!("is_number: {}", value.is_number(&context));
+            println!("{:?}", value.to_number(&context));
+            println!("{:?}", value.to_boolean(&context));
         }
+        Err(error) => println!("{}", error),
     });
 
     window.connect_delete_event(|_, _| {

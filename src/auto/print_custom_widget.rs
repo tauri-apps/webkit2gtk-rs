@@ -38,7 +38,10 @@ impl PrintCustomWidget {
     pub fn new<P: IsA<gtk::Widget>>(widget: &P, title: &str) -> PrintCustomWidget {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(webkit2_sys::webkit_print_custom_widget_new(widget.as_ref().to_glib_none().0, title.to_glib_none().0))
+            from_glib_full(webkit2_sys::webkit_print_custom_widget_new(
+                widget.as_ref().to_glib_none().0,
+                title.to_glib_none().0,
+            ))
         }
     }
 }
@@ -56,51 +59,84 @@ pub trait PrintCustomWidgetExt: 'static {
     fn connect_apply<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
-    fn connect_update<F: Fn(&Self, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_update<F: Fn(&Self, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<PrintCustomWidget>> PrintCustomWidgetExt for O {
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_title(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_print_custom_widget_get_title(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_print_custom_widget_get_title(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_widget(&self) -> Option<gtk::Widget> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_print_custom_widget_get_widget(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_print_custom_widget_get_widget(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn connect_apply<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn apply_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitPrintCustomWidget, f: glib_sys::gpointer)
-            where P: IsA<PrintCustomWidget>
+        unsafe extern "C" fn apply_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut webkit2_sys::WebKitPrintCustomWidget,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintCustomWidget>,
         {
             let f: &F = &*(f as *const F);
             f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"apply\0".as_ptr() as *const _,
-                Some(transmute(apply_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"apply\0".as_ptr() as *const _,
+                Some(transmute(apply_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
-    fn connect_update<F: Fn(&Self, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn update_trampoline<P, F: Fn(&P, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(this: *mut webkit2_sys::WebKitPrintCustomWidget, page_setup: *mut gtk_sys::GtkPageSetup, print_settings: *mut gtk_sys::GtkPrintSettings, f: glib_sys::gpointer)
-            where P: IsA<PrintCustomWidget>
+    fn connect_update<F: Fn(&Self, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn update_trampoline<
+            P,
+            F: Fn(&P, &gtk::PageSetup, &gtk::PrintSettings) + 'static,
+        >(
+            this: *mut webkit2_sys::WebKitPrintCustomWidget,
+            page_setup: *mut gtk_sys::GtkPageSetup,
+            print_settings: *mut gtk_sys::GtkPrintSettings,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintCustomWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(page_setup), &from_glib_borrow(print_settings))
+            f(
+                &PrintCustomWidget::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(page_setup),
+                &from_glib_borrow(print_settings),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"update\0".as_ptr() as *const _,
-                Some(transmute(update_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"update\0".as_ptr() as *const _,
+                Some(transmute(update_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }

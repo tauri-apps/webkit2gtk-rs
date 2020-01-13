@@ -29,19 +29,25 @@ pub trait BackForwardListItemExt: 'static {
 impl<O: IsA<BackForwardListItem>> BackForwardListItemExt for O {
     fn get_original_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_back_forward_list_item_get_original_uri(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_back_forward_list_item_get_original_uri(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_title(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_back_forward_list_item_get_title(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_back_forward_list_item_get_title(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_back_forward_list_item_get_uri(self.as_ref().to_glib_none().0))
+            from_glib_none(webkit2_sys::webkit_back_forward_list_item_get_uri(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 }

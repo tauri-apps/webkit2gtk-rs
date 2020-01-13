@@ -32,35 +32,45 @@ impl NavigationAction {
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn get_mouse_button(&self) -> u32 {
         unsafe {
-            webkit2_sys::webkit_navigation_action_get_mouse_button(mut_override(self.to_glib_none().0))
+            webkit2_sys::webkit_navigation_action_get_mouse_button(mut_override(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn get_navigation_type(&self) -> NavigationType {
         unsafe {
-            from_glib(webkit2_sys::webkit_navigation_action_get_navigation_type(mut_override(self.to_glib_none().0)))
+            from_glib(webkit2_sys::webkit_navigation_action_get_navigation_type(
+                mut_override(self.to_glib_none().0),
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn get_request(&self) -> Option<URIRequest> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_navigation_action_get_request(mut_override(self.to_glib_none().0)))
+            from_glib_none(webkit2_sys::webkit_navigation_action_get_request(
+                mut_override(self.to_glib_none().0),
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
     pub fn is_redirect(&mut self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_navigation_action_is_redirect(self.to_glib_none_mut().0))
+            from_glib(webkit2_sys::webkit_navigation_action_is_redirect(
+                self.to_glib_none_mut().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn is_user_gesture(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_navigation_action_is_user_gesture(mut_override(self.to_glib_none().0)))
+            from_glib(webkit2_sys::webkit_navigation_action_is_user_gesture(
+                mut_override(self.to_glib_none().0),
+            ))
         }
     }
 }

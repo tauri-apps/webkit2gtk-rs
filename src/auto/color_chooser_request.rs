@@ -72,7 +72,10 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
     fn get_element_rectangle(&self) -> gdk::Rectangle {
         unsafe {
             let mut rect = gdk::Rectangle::uninitialized();
-            webkit2_sys::webkit_color_chooser_request_get_element_rectangle(self.as_ref().to_glib_none().0, rect.to_glib_none_mut().0);
+            webkit2_sys::webkit_color_chooser_request_get_element_rectangle(
+                self.as_ref().to_glib_none().0,
+                rect.to_glib_none_mut().0,
+            );
             rect
         }
     }
@@ -81,7 +84,10 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
     fn get_rgba(&self) -> gdk::RGBA {
         unsafe {
             let mut rgba = gdk::RGBA::uninitialized();
-            webkit2_sys::webkit_color_chooser_request_get_rgba(self.as_ref().to_glib_none().0, rgba.to_glib_none_mut().0);
+            webkit2_sys::webkit_color_chooser_request_get_rgba(
+                self.as_ref().to_glib_none().0,
+                rgba.to_glib_none_mut().0,
+            );
             rgba
         }
     }
@@ -89,50 +95,78 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn set_rgba(&self, rgba: &gdk::RGBA) {
         unsafe {
-            webkit2_sys::webkit_color_chooser_request_set_rgba(self.as_ref().to_glib_none().0, rgba.to_glib_none().0);
+            webkit2_sys::webkit_color_chooser_request_set_rgba(
+                self.as_ref().to_glib_none().0,
+                rgba.to_glib_none().0,
+            );
         }
     }
 
     fn get_property_rgba(&self) -> Option<gdk::RGBA> {
         unsafe {
             let mut value = Value::from_type(<gdk::RGBA as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"rgba\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().expect("Return Value for property `rgba` getter")
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"rgba\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `rgba` getter")
         }
     }
 
     fn set_property_rgba(&self, rgba: Option<&gdk::RGBA>) {
         unsafe {
-            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"rgba\0".as_ptr() as *const _, Value::from(rgba).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"rgba\0".as_ptr() as *const _,
+                Value::from(rgba).to_glib_none().0,
+            );
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitColorChooserRequest, f: glib_sys::gpointer)
-            where P: IsA<ColorChooserRequest>
+        unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut webkit2_sys::WebKitColorChooserRequest,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ColorChooserRequest>,
         {
             let f: &F = &*(f as *const F);
             f(&ColorChooserRequest::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"finished\0".as_ptr() as *const _,
-                Some(transmute(finished_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"finished\0".as_ptr() as *const _,
+                Some(transmute(finished_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_rgba_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_rgba_trampoline<P, F: Fn(&P) + 'static>(this: *mut webkit2_sys::WebKitColorChooserRequest, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<ColorChooserRequest>
+        unsafe extern "C" fn notify_rgba_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut webkit2_sys::WebKitColorChooserRequest,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ColorChooserRequest>,
         {
             let f: &F = &*(f as *const F);
             f(&ColorChooserRequest::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::rgba\0".as_ptr() as *const _,
-                Some(transmute(notify_rgba_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::rgba\0".as_ptr() as *const _,
+                Some(transmute(notify_rgba_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }
