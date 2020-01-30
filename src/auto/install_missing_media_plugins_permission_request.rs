@@ -2,13 +2,13 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use PermissionRequest;
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
+#[cfg(any(feature = "v2_10", feature = "dox"))]
+use glib::GString;
 use std::fmt;
 use webkit2_sys;
+use PermissionRequest;
 
 glib_wrapper! {
     pub struct InstallMissingMediaPluginsPermissionRequest(Object<webkit2_sys::WebKitInstallMissingMediaPluginsPermissionRequest, webkit2_sys::WebKitInstallMissingMediaPluginsPermissionRequestClass, InstallMissingMediaPluginsPermissionRequestClass>) @implements PermissionRequest;

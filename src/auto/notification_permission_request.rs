@@ -2,10 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use PermissionRequest;
 use glib::translate::*;
 use std::fmt;
 use webkit2_sys;
+use PermissionRequest;
 
 glib_wrapper! {
     pub struct NotificationPermissionRequest(Object<webkit2_sys::WebKitNotificationPermissionRequest, webkit2_sys::WebKitNotificationPermissionRequestClass, NotificationPermissionRequestClass>) @implements PermissionRequest;

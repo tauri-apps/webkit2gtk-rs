@@ -3,14 +3,12 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
+use glib::translate::*;
+use webkit2_sys;
+#[cfg(any(feature = "v2_6", feature = "dox"))]
 use UserContentInjectedFrames;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 use UserScriptInjectionTime;
-#[cfg(any(feature = "v2_6", feature = "dox"))]
-use glib::GString;
-#[cfg(any(feature = "v2_6", feature = "dox"))]
-use glib::translate::*;
-use webkit2_sys;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
