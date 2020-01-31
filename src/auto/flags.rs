@@ -2,13 +2,13 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::StaticType;
-use glib::Type;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
+use glib::StaticType;
+use glib::Type;
 use gobject_sys;
 use webkit2_sys;
 
@@ -236,7 +236,9 @@ bitflags! {
         const INDEXEDDB_DATABASES = 64;
         const PLUGIN_DATA = 128;
         const COOKIES = 256;
-        const ALL = 511;
+        const DEVICE_ID_HASH_SALT = 512;
+        const HSTS_CACHE = 1024;
+        const ALL = 2047;
     }
 }
 

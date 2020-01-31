@@ -6,7 +6,7 @@ pkg-config = "0.3.7"
 
 [dependencies]
 atk-sys = "^0.9.0"
-bitflags = "1.0"
+bitflags = "^1.0"
 cairo-sys-rs = "^0.9.0"
 gdk-pixbuf-sys = "^0.9.0"
 gdk-sys = "^0.9.0"
@@ -21,7 +21,7 @@ soup-sys = "^0.9.0"
 
 [dev-dependencies]
 shell-words = "0.1.0"
-tempdir = "0.3"
+tempfile = "3"
 
 [features]
 dox = []
@@ -34,6 +34,8 @@ v2_20 = ["v2_18"]
 v2_22 = ["v2_20"]
 v2_6 = []
 v2_8 = ["v2_6"]
+v2_24 = ["v2_22"]
+v2_26 = ["v2_24"]
 
 [lib]
 name = "webkit2gtk_sys"
@@ -49,4 +51,6 @@ license = "MIT"
 links = "web_kit2"
 name = "webkit2gtk-sys"
 repository = "https://github.com/gtk-rs/webkit2gtk-rs"
-version = "0.10.0"
+version = "0.11.0"
+[package.metadata.docs.rs]
+features = ["dox"]

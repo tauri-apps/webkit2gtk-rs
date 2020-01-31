@@ -3,12 +3,12 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_2", feature = "dox"))]
-use CredentialPersistence;
+use glib::translate::*;
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 use glib::GString;
-#[cfg(any(feature = "v2_2", feature = "dox"))]
-use glib::translate::*;
 use webkit2_sys;
+#[cfg(any(feature = "v2_2", feature = "dox"))]
+use CredentialPersistence;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]

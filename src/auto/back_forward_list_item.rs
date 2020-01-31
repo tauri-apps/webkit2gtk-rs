@@ -2,9 +2,9 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
+use glib::GString;
 use std::fmt;
 use webkit2_sys;
 

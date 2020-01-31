@@ -2,13 +2,13 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ContextMenuItem;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
 use webkit2_sys;
+use ContextMenuItem;
 
 glib_wrapper! {
     pub struct ContextMenu(Object<webkit2_sys::WebKitContextMenu, webkit2_sys::WebKitContextMenuClass, ContextMenuClass>);
