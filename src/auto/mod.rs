@@ -227,11 +227,6 @@ mod web_view_session_state;
 #[cfg(any(feature = "v2_12", feature = "dox"))]
 pub use self::web_view_session_state::WebViewSessionState;
 
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-mod website_data;
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-pub use self::website_data::WebsiteData;
-
 mod enums;
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 pub use self::enums::AuthenticationScheme;

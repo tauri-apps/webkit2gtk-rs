@@ -90,7 +90,6 @@ generate = [
     "WebKit2.WebsiteDataTypes",
     "WebKit2.WebViewBase",
     "WebKit2.WebViewSessionState",
-    "WebKit2.WebsiteData",
     "WebKit2.WebsiteDataManager",
     "WebKit2.WindowProperties",
 ]
