@@ -29,6 +29,8 @@ use CacheModel;
 use CookieManager;
 use Download;
 use FaviconDatabase;
+#[cfg(any(feature = "v2_26", feature = "dox"))]
+use GeolocationManager;
 use Plugin;
 #[cfg(any(feature = "v2_4", feature = "dox"))]
 use ProcessModel;
@@ -109,8 +111,8 @@ pub trait WebContextExt: 'static {
 
     fn get_favicon_database_directory(&self) -> Option<GString>;
 
-    //#[cfg(any(feature = "v2_26", feature = "dox"))]
-    //fn get_geolocation_manager(&self) -> /*Ignored*/Option<GeolocationManager>;
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn get_geolocation_manager(&self) -> Option<GeolocationManager>;
 
     fn get_plugins<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<Plugin>, glib::Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q);
 
@@ -253,10 +255,12 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_26", feature = "dox"))]
-    //fn get_geolocation_manager(&self) -> /*Ignored*/Option<GeolocationManager> {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_context_get_geolocation_manager() }
-    //}
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn get_geolocation_manager(&self) -> Option<GeolocationManager> {
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_web_context_get_geolocation_manager(self.as_ref().to_glib_none().0))
+        }
+    }
 
     fn get_plugins<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<Plugin>, glib::Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q) {
         let user_data: Box_<Q> = Box_::new(callback);

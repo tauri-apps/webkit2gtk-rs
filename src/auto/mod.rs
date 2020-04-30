@@ -63,6 +63,13 @@ mod form_submission_request;
 pub use self::form_submission_request::{FormSubmissionRequest, FormSubmissionRequestClass, NONE_FORM_SUBMISSION_REQUEST};
 pub use self::form_submission_request::FormSubmissionRequestExt;
 
+#[cfg(any(feature = "v2_26", feature = "dox"))]
+mod geolocation_manager;
+#[cfg(any(feature = "v2_26", feature = "dox"))]
+pub use self::geolocation_manager::{GeolocationManager, GeolocationManagerClass, NONE_GEOLOCATION_MANAGER};
+#[cfg(any(feature = "v2_26", feature = "dox"))]
+pub use self::geolocation_manager::GeolocationManagerExt;
+
 mod geolocation_permission_request;
 pub use self::geolocation_permission_request::{GeolocationPermissionRequest, GeolocationPermissionRequestClass, NONE_GEOLOCATION_PERMISSION_REQUEST};
 
@@ -220,6 +227,11 @@ mod web_view_session_state;
 #[cfg(any(feature = "v2_12", feature = "dox"))]
 pub use self::web_view_session_state::WebViewSessionState;
 
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+mod website_data;
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+pub use self::website_data::WebsiteData;
+
 mod enums;
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 pub use self::enums::AuthenticationScheme;
@@ -286,6 +298,8 @@ pub mod traits {
     pub use super::FileChooserRequestExt;
     pub use super::FindControllerExt;
     pub use super::FormSubmissionRequestExt;
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub use super::GeolocationManagerExt;
     pub use super::HitTestResultExt;
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     pub use super::InstallMissingMediaPluginsPermissionRequestExt;
