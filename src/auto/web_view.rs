@@ -55,6 +55,7 @@ use PermissionRequest;
 use PolicyDecision;
 use PolicyDecisionType;
 use PrintOperation;
+use SaveMode;
 use ScriptDialog;
 use Settings;
 use SnapshotOptions;
@@ -256,15 +257,15 @@ pub trait WebViewExt: 'static {
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     fn run_javascript_in_world_future(&self, script: &str, world_name: &str) -> Pin<Box_<dyn std::future::Future<Output = Result<JavascriptResult, glib::Error>> + 'static>>;
 
-    //fn save<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/gio::InputStream, glib::Error>) + Send + 'static>(&self, save_mode: SaveMode, cancellable: Option<&P>, callback: Q);
+    fn save<P: IsA<gio::Cancellable>, Q: FnOnce(Result<gio::InputStream, glib::Error>) + Send + 'static>(&self, save_mode: SaveMode, cancellable: Option<&P>, callback: Q);
 
-    //
-    //fn save_future(&self, save_mode: SaveMode) -> Pin<Box_<dyn std::future::Future<Output = Result</*Ignored*/gio::InputStream, glib::Error>> + 'static>>;
+    
+    fn save_future(&self, save_mode: SaveMode) -> Pin<Box_<dyn std::future::Future<Output = Result<gio::InputStream, glib::Error>> + 'static>>;
 
-    //fn save_to_file<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode, cancellable: Option<&P>, callback: Q);
+    fn save_to_file<P: IsA<gio::File>, Q: IsA<gio::Cancellable>, R: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, file: &P, save_mode: SaveMode, cancellable: Option<&Q>, callback: R);
 
-    //
-    //fn save_to_file_future(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
+    
+    fn save_to_file_future<P: IsA<gio::File> + Clone + 'static>(&self, file: &P, save_mode: SaveMode) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn set_background_color(&self, rgba: &gdk::RGBA);
@@ -832,49 +833,71 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }))
     }
 
-    //fn save<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/gio::InputStream, glib::Error>) + Send + 'static>(&self, save_mode: SaveMode, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_view_save() }
-    //}
+    fn save<P: IsA<gio::Cancellable>, Q: FnOnce(Result<gio::InputStream, glib::Error>) + Send + 'static>(&self, save_mode: SaveMode, cancellable: Option<&P>, callback: Q) {
+        let user_data: Box_<Q> = Box_::new(callback);
+        unsafe extern "C" fn save_trampoline<Q: FnOnce(Result<gio::InputStream, glib::Error>) + Send + 'static>(_source_object: *mut gobject_sys::GObject, res: *mut gio_sys::GAsyncResult, user_data: glib_sys::gpointer) {
+            let mut error = ptr::null_mut();
+            let ret = webkit2_sys::webkit_web_view_save_finish(_source_object as *mut _, res, &mut error);
+            let result = if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) };
+            let callback: Box_<Q> = Box_::from_raw(user_data as *mut _);
+            callback(result);
+        }
+        let callback = save_trampoline::<Q>;
+        unsafe {
+            webkit2_sys::webkit_web_view_save(self.as_ref().to_glib_none().0, save_mode.to_glib(), cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box_::into_raw(user_data) as *mut _);
+        }
+    }
 
-    //
-    //fn save_future(&self, save_mode: SaveMode) -> Pin<Box_<dyn std::future::Future<Output = Result</*Ignored*/gio::InputStream, glib::Error>> + 'static>> {
+    
+    fn save_future(&self, save_mode: SaveMode) -> Pin<Box_<dyn std::future::Future<Output = Result<gio::InputStream, glib::Error>> + 'static>> {
 
-        //Box_::pin(gio::GioFuture::new(self, move |obj, send| {
-        //    let cancellable = gio::Cancellable::new();
-        //    obj.save(
-        //        save_mode,
-        //        Some(&cancellable),
-        //        move |res| {
-        //            send.resolve(res);
-        //        },
-        //    );
+        Box_::pin(gio::GioFuture::new(self, move |obj, send| {
+            let cancellable = gio::Cancellable::new();
+            obj.save(
+                save_mode,
+                Some(&cancellable),
+                move |res| {
+                    send.resolve(res);
+                },
+            );
 
-        //    cancellable
-        //}))
-    //}
+            cancellable
+        }))
+    }
 
-    //fn save_to_file<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_view_save_to_file() }
-    //}
+    fn save_to_file<P: IsA<gio::File>, Q: IsA<gio::Cancellable>, R: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, file: &P, save_mode: SaveMode, cancellable: Option<&Q>, callback: R) {
+        let user_data: Box_<R> = Box_::new(callback);
+        unsafe extern "C" fn save_to_file_trampoline<R: FnOnce(Result<(), glib::Error>) + Send + 'static>(_source_object: *mut gobject_sys::GObject, res: *mut gio_sys::GAsyncResult, user_data: glib_sys::gpointer) {
+            let mut error = ptr::null_mut();
+            let _ = webkit2_sys::webkit_web_view_save_to_file_finish(_source_object as *mut _, res, &mut error);
+            let result = if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) };
+            let callback: Box_<R> = Box_::from_raw(user_data as *mut _);
+            callback(result);
+        }
+        let callback = save_to_file_trampoline::<R>;
+        unsafe {
+            webkit2_sys::webkit_web_view_save_to_file(self.as_ref().to_glib_none().0, file.as_ref().to_glib_none().0, save_mode.to_glib(), cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box_::into_raw(user_data) as *mut _);
+        }
+    }
 
-    //
-    //fn save_to_file_future(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
+    
+    fn save_to_file_future<P: IsA<gio::File> + Clone + 'static>(&self, file: &P, save_mode: SaveMode) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
 
-        //let file = file.clone();
-        //Box_::pin(gio::GioFuture::new(self, move |obj, send| {
-        //    let cancellable = gio::Cancellable::new();
-        //    obj.save_to_file(
-        //        &file,
-        //        save_mode,
-        //        Some(&cancellable),
-        //        move |res| {
-        //            send.resolve(res);
-        //        },
-        //    );
+        let file = file.clone();
+        Box_::pin(gio::GioFuture::new(self, move |obj, send| {
+            let cancellable = gio::Cancellable::new();
+            obj.save_to_file(
+                &file,
+                save_mode,
+                Some(&cancellable),
+                move |res| {
+                    send.resolve(res);
+                },
+            );
 
-        //    cancellable
-        //}))
-    //}
+            cancellable
+        }))
+    }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn set_background_color(&self, rgba: &gdk::RGBA) {
