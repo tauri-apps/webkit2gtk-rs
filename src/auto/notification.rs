@@ -125,14 +125,16 @@ impl<O: IsA<Notification>> NotificationExt for O {
             P: IsA<Notification>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notification::from_glib_borrow(this).unsafe_cast())
+            f(&Notification::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clicked\0".as_ptr() as *const _,
-                Some(transmute(clicked_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    clicked_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -147,14 +149,16 @@ impl<O: IsA<Notification>> NotificationExt for O {
             P: IsA<Notification>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notification::from_glib_borrow(this).unsafe_cast())
+            f(&Notification::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"closed\0".as_ptr() as *const _,
-                Some(transmute(closed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    closed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -170,14 +174,16 @@ impl<O: IsA<Notification>> NotificationExt for O {
             P: IsA<Notification>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notification::from_glib_borrow(this).unsafe_cast())
+            f(&Notification::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::body\0".as_ptr() as *const _,
-                Some(transmute(notify_body_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_body_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -193,14 +199,16 @@ impl<O: IsA<Notification>> NotificationExt for O {
             P: IsA<Notification>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notification::from_glib_borrow(this).unsafe_cast())
+            f(&Notification::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::id\0".as_ptr() as *const _,
-                Some(transmute(notify_id_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_id_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -216,14 +224,16 @@ impl<O: IsA<Notification>> NotificationExt for O {
             P: IsA<Notification>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notification::from_glib_borrow(this).unsafe_cast())
+            f(&Notification::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tag\0".as_ptr() as *const _,
-                Some(transmute(notify_tag_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_tag_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -239,14 +249,16 @@ impl<O: IsA<Notification>> NotificationExt for O {
             P: IsA<Notification>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notification::from_glib_borrow(this).unsafe_cast())
+            f(&Notification::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute(notify_title_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_title_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

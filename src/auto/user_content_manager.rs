@@ -223,7 +223,7 @@ impl<O: IsA<UserContentManager>> UserContentManagerExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &UserContentManager::from_glib_borrow(this).unsafe_cast(),
+                &UserContentManager::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(js_result),
             )
         }
@@ -232,8 +232,8 @@ impl<O: IsA<UserContentManager>> UserContentManagerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"script-message-received\0".as_ptr() as *const _,
-                Some(transmute(
-                    script_message_received_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    script_message_received_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

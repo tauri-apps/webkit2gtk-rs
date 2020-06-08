@@ -156,15 +156,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast()).to_glib_full()
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref()).to_glib_full()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"create-custom-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    create_custom_widget_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    create_custom_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -181,7 +181,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &PrintOperation::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(error),
             )
         }
@@ -190,7 +190,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"failed\0".as_ptr() as *const _,
-                Some(transmute(failed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    failed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -204,14 +206,16 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"finished\0".as_ptr() as *const _,
-                Some(transmute(finished_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    finished_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -226,14 +230,16 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::page-setup\0".as_ptr() as *const _,
-                Some(transmute(notify_page_setup_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_page_setup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -251,15 +257,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::print-settings\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_print_settings_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_print_settings_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -161,7 +161,7 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &WebResource::from_glib_borrow(this).unsafe_cast(),
+                &WebResource::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(error),
             )
         }
@@ -170,7 +170,9 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"failed\0".as_ptr() as *const _,
-                Some(transmute(failed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    failed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -196,7 +198,7 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &WebResource::from_glib_borrow(this).unsafe_cast(),
+                &WebResource::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(certificate),
                 from_glib(errors),
             )
@@ -206,8 +208,8 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"failed-with-tls-errors\0".as_ptr() as *const _,
-                Some(transmute(
-                    failed_with_tls_errors_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    failed_with_tls_errors_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -222,14 +224,16 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
             P: IsA<WebResource>,
         {
             let f: &F = &*(f as *const F);
-            f(&WebResource::from_glib_borrow(this).unsafe_cast())
+            f(&WebResource::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"finished\0".as_ptr() as *const _,
-                Some(transmute(finished_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    finished_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -245,7 +249,7 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &WebResource::from_glib_borrow(this).unsafe_cast(),
+                &WebResource::from_glib_borrow(this).unsafe_cast_ref(),
                 data_length,
             )
         }
@@ -254,7 +258,9 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"received-data\0".as_ptr() as *const _,
-                Some(transmute(received_data_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    received_data_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -277,7 +283,7 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &WebResource::from_glib_borrow(this).unsafe_cast(),
+                &WebResource::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(request),
                 &from_glib_borrow(redirected_response),
             )
@@ -287,7 +293,9 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"sent-request\0".as_ptr() as *const _,
-                Some(transmute(sent_request_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    sent_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -302,14 +310,16 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
             P: IsA<WebResource>,
         {
             let f: &F = &*(f as *const F);
-            f(&WebResource::from_glib_borrow(this).unsafe_cast())
+            f(&WebResource::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::response\0".as_ptr() as *const _,
-                Some(transmute(notify_response_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_response_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -324,14 +334,16 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
             P: IsA<WebResource>,
         {
             let f: &F = &*(f as *const F);
-            f(&WebResource::from_glib_borrow(this).unsafe_cast())
+            f(&WebResource::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::uri\0".as_ptr() as *const _,
-                Some(transmute(notify_uri_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_uri_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

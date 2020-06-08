@@ -137,14 +137,16 @@ impl<O: IsA<FileChooserRequest>> FileChooserRequestExt for O {
             P: IsA<FileChooserRequest>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserRequest::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::filter\0".as_ptr() as *const _,
-                Some(transmute(notify_filter_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_filter_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -159,14 +161,16 @@ impl<O: IsA<FileChooserRequest>> FileChooserRequestExt for O {
             P: IsA<FileChooserRequest>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserRequest::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mime-types\0".as_ptr() as *const _,
-                Some(transmute(notify_mime_types_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_mime_types_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -184,15 +188,15 @@ impl<O: IsA<FileChooserRequest>> FileChooserRequestExt for O {
             P: IsA<FileChooserRequest>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserRequest::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::select-multiple\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_select_multiple_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_select_multiple_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -211,15 +215,15 @@ impl<O: IsA<FileChooserRequest>> FileChooserRequestExt for O {
             P: IsA<FileChooserRequest>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserRequest::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selected-files\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_selected_files_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_selected_files_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

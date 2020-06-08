@@ -61,6 +61,9 @@ pub trait SettingsExt: 'static {
 
     fn get_allow_modal_dialogs(&self) -> bool;
 
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn get_allow_top_navigation_to_data_urls(&self) -> bool;
+
     #[cfg(any(feature = "v2_14", feature = "dox"))]
     fn get_allow_universal_access_from_file_urls(&self) -> bool;
 
@@ -189,6 +192,9 @@ pub trait SettingsExt: 'static {
     fn set_allow_file_access_from_file_urls(&self, allowed: bool);
 
     fn set_allow_modal_dialogs(&self, allowed: bool);
+
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn set_allow_top_navigation_to_data_urls(&self, allowed: bool);
 
     #[cfg(any(feature = "v2_14", feature = "dox"))]
     fn set_allow_universal_access_from_file_urls(&self, allowed: bool);
@@ -327,6 +333,12 @@ pub trait SettingsExt: 'static {
     ) -> SignalHandlerId;
 
     fn connect_property_allow_modal_dialogs_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn connect_property_allow_top_navigation_to_data_urls_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -628,6 +640,17 @@ impl<O: IsA<Settings>> SettingsExt for O {
             from_glib(webkit2_sys::webkit_settings_get_allow_modal_dialogs(
                 self.as_ref().to_glib_none().0,
             ))
+        }
+    }
+
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn get_allow_top_navigation_to_data_urls(&self) -> bool {
+        unsafe {
+            from_glib(
+                webkit2_sys::webkit_settings_get_allow_top_navigation_to_data_urls(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
         }
     }
 
@@ -1123,6 +1146,16 @@ impl<O: IsA<Settings>> SettingsExt for O {
     fn set_allow_modal_dialogs(&self, allowed: bool) {
         unsafe {
             webkit2_sys::webkit_settings_set_allow_modal_dialogs(
+                self.as_ref().to_glib_none().0,
+                allowed.to_glib(),
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn set_allow_top_navigation_to_data_urls(&self, allowed: bool) {
+        unsafe {
+            webkit2_sys::webkit_settings_set_allow_top_navigation_to_data_urls(
                 self.as_ref().to_glib_none().0,
                 allowed.to_glib(),
             );
@@ -1667,15 +1700,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::allow-file-access-from-file-urls\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_allow_file_access_from_file_urls_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_allow_file_access_from_file_urls_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1694,15 +1727,46 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::allow-modal-dialogs\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_allow_modal_dialogs_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_allow_modal_dialogs_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn connect_property_allow_top_navigation_to_data_urls_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_allow_top_navigation_to_data_urls_trampoline<
+            P,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut webkit2_sys::WebKitSettings,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Settings>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::allow-top-navigation-to-data-urls\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_allow_top_navigation_to_data_urls_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1725,15 +1789,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::allow-universal-access-from-file-urls\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_allow_universal_access_from_file_urls_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_allow_universal_access_from_file_urls_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1752,15 +1816,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-load-images\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_auto_load_images_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_auto_load_images_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1779,15 +1843,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::cursive-font-family\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_cursive_font_family_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_cursive_font_family_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1806,15 +1870,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-charset\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_default_charset_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_default_charset_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1833,15 +1897,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-font-family\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_default_font_family_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_default_font_family_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1860,15 +1924,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-font-size\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_default_font_size_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_default_font_size_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1887,15 +1951,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-monospace-font-size\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_default_monospace_font_size_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_default_monospace_font_size_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1914,15 +1978,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::draw-compositing-indicators\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_draw_compositing_indicators_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_draw_compositing_indicators_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1945,15 +2009,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-accelerated-2d-canvas\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_accelerated_2d_canvas_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_accelerated_2d_canvas_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1976,15 +2040,16 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-back-forward-navigation-gestures\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_back_forward_navigation_gestures_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_back_forward_navigation_gestures_trampoline::<Self, F>
+                        as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2003,15 +2068,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-caret-browsing\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_caret_browsing_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_caret_browsing_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2030,15 +2095,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-developer-extras\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_developer_extras_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_developer_extras_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2057,15 +2122,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-dns-prefetching\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_dns_prefetching_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_dns_prefetching_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2085,15 +2150,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-encrypted-media\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_encrypted_media_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_encrypted_media_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2112,15 +2177,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-frame-flattening\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_frame_flattening_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_frame_flattening_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2139,15 +2204,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-fullscreen\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_fullscreen_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_fullscreen_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2166,15 +2231,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-html5-database\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_html5_database_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_html5_database_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2193,15 +2258,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-html5-local-storage\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_html5_local_storage_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_html5_local_storage_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2220,15 +2285,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-hyperlink-auditing\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_hyperlink_auditing_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_hyperlink_auditing_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2244,14 +2309,16 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-java\0".as_ptr() as *const _,
-                Some(transmute(notify_enable_java_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_java_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2269,15 +2336,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-javascript\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_javascript_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_javascript_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2297,15 +2364,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-javascript-markup\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_javascript_markup_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_javascript_markup_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2325,15 +2392,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-media\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_media_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_media_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2353,15 +2420,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-media-capabilities\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_media_capabilities_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_media_capabilities_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2381,15 +2448,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-media-stream\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_media_stream_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_media_stream_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2409,15 +2476,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-mediasource\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_mediasource_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_mediasource_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2437,15 +2504,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-mock-capture-devices\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_mock_capture_devices_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_mock_capture_devices_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2467,15 +2534,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-offline-web-application-cache\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_offline_web_application_cache_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_offline_web_application_cache_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2494,15 +2561,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-page-cache\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_page_cache_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_page_cache_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2521,15 +2588,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-plugins\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_plugins_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_plugins_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2548,15 +2615,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-private-browsing\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_private_browsing_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_private_browsing_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2575,15 +2642,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-resizable-text-areas\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_resizable_text_areas_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_resizable_text_areas_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2602,15 +2669,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-site-specific-quirks\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_site_specific_quirks_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_site_specific_quirks_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2629,15 +2696,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-smooth-scrolling\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_smooth_scrolling_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_smooth_scrolling_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2657,15 +2724,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-spatial-navigation\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_spatial_navigation_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_spatial_navigation_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2684,15 +2751,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-tabs-to-links\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_tabs_to_links_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_tabs_to_links_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2711,15 +2778,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-webaudio\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_webaudio_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_webaudio_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2738,15 +2805,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-webgl\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_webgl_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_webgl_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2769,15 +2836,16 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-write-console-messages-to-stdout\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_write_console_messages_to_stdout_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_write_console_messages_to_stdout_trampoline::<Self, F>
+                        as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2796,15 +2864,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-xss-auditor\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_xss_auditor_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_xss_auditor_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2823,15 +2891,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::fantasy-font-family\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_fantasy_font_family_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_fantasy_font_family_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2854,15 +2922,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hardware-acceleration-policy\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_hardware_acceleration_policy_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_hardware_acceleration_policy_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2884,15 +2952,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::javascript-can-access-clipboard\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_javascript_can_access_clipboard_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_javascript_can_access_clipboard_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2914,15 +2982,16 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::javascript-can-open-windows-automatically\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_javascript_can_open_windows_automatically_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_javascript_can_open_windows_automatically_trampoline::<Self, F>
+                        as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2944,15 +3013,16 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::load-icons-ignoring-image-load-setting\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_load_icons_ignoring_image_load_setting_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_load_icons_ignoring_image_load_setting_trampoline::<Self, F>
+                        as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2974,15 +3044,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::media-playback-allows-inline\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_media_playback_allows_inline_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_media_playback_allows_inline_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3004,15 +3074,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::media-playback-requires-user-gesture\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_media_playback_requires_user_gesture_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_media_playback_requires_user_gesture_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3031,15 +3101,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::minimum-font-size\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_minimum_font_size_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_minimum_font_size_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3058,15 +3128,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::monospace-font-family\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_monospace_font_family_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_monospace_font_family_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3085,15 +3155,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pictograph-font-family\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_pictograph_font_family_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_pictograph_font_family_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3112,15 +3182,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::print-backgrounds\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_print_backgrounds_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_print_backgrounds_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3139,15 +3209,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sans-serif-font-family\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_sans_serif_font_family_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_sans_serif_font_family_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3166,15 +3236,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::serif-font-family\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_serif_font_family_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_serif_font_family_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3190,14 +3260,16 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::user-agent\0".as_ptr() as *const _,
-                Some(transmute(notify_user_agent_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_user_agent_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -3215,15 +3287,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::zoom-text-only\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_zoom_text_only_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_zoom_text_only_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

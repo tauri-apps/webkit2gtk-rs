@@ -274,6 +274,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "WebKitAutomationBrowsingContextPresentation",
+        Layout {
+            size: size_of::<WebKitAutomationBrowsingContextPresentation>(),
+            alignment: align_of::<WebKitAutomationBrowsingContextPresentation>(),
+        },
+    ),
+    (
         "WebKitAutomationSession",
         Layout {
             size: size_of::<WebKitAutomationSession>(),
@@ -589,6 +596,34 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "WebKitInputHints",
+        Layout {
+            size: size_of::<WebKitInputHints>(),
+            alignment: align_of::<WebKitInputHints>(),
+        },
+    ),
+    (
+        "WebKitInputMethodContext",
+        Layout {
+            size: size_of::<WebKitInputMethodContext>(),
+            alignment: align_of::<WebKitInputMethodContext>(),
+        },
+    ),
+    (
+        "WebKitInputMethodContextClass",
+        Layout {
+            size: size_of::<WebKitInputMethodContextClass>(),
+            alignment: align_of::<WebKitInputMethodContextClass>(),
+        },
+    ),
+    (
+        "WebKitInputPurpose",
+        Layout {
+            size: size_of::<WebKitInputPurpose>(),
+            alignment: align_of::<WebKitInputPurpose>(),
+        },
+    ),
+    (
         "WebKitInsecureContentEvent",
         Layout {
             size: size_of::<WebKitInsecureContentEvent>(),
@@ -726,6 +761,20 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<WebKitPluginError>(),
             alignment: align_of::<WebKitPluginError>(),
+        },
+    ),
+    (
+        "WebKitPointerLockPermissionRequest",
+        Layout {
+            size: size_of::<WebKitPointerLockPermissionRequest>(),
+            alignment: align_of::<WebKitPointerLockPermissionRequest>(),
+        },
+    ),
+    (
+        "WebKitPointerLockPermissionRequestClass",
+        Layout {
+            size: size_of::<WebKitPointerLockPermissionRequestClass>(),
+            alignment: align_of::<WebKitPointerLockPermissionRequestClass>(),
         },
     ),
     (
@@ -988,6 +1037,27 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "WebKitUserMessage",
+        Layout {
+            size: size_of::<WebKitUserMessage>(),
+            alignment: align_of::<WebKitUserMessage>(),
+        },
+    ),
+    (
+        "WebKitUserMessageClass",
+        Layout {
+            size: size_of::<WebKitUserMessageClass>(),
+            alignment: align_of::<WebKitUserMessageClass>(),
+        },
+    ),
+    (
+        "WebKitUserMessageError",
+        Layout {
+            size: size_of::<WebKitUserMessageError>(),
+            alignment: align_of::<WebKitUserMessageError>(),
+        },
+    ),
+    (
         "WebKitUserScriptInjectionTime",
         Layout {
             size: size_of::<WebKitUserScriptInjectionTime>(),
@@ -1131,6 +1201,14 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
         "8",
     ),
     ("(gint) WEBKIT_AUTHENTICATION_SCHEME_UNKNOWN", "100"),
+    (
+        "(gint) WEBKIT_AUTOMATION_BROWSING_CONTEXT_PRESENTATION_TAB",
+        "1",
+    ),
+    (
+        "(gint) WEBKIT_AUTOMATION_BROWSING_CONTEXT_PRESENTATION_WINDOW",
+        "0",
+    ),
     ("(gint) WEBKIT_CACHE_MODEL_DOCUMENT_BROWSER", "2"),
     ("(gint) WEBKIT_CACHE_MODEL_DOCUMENT_VIEWER", "0"),
     ("(gint) WEBKIT_CACHE_MODEL_WEB_BROWSER", "1"),
@@ -1277,6 +1355,20 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) WEBKIT_HIT_TEST_RESULT_CONTEXT_MEDIA", "16"),
     ("(guint) WEBKIT_HIT_TEST_RESULT_CONTEXT_SCROLLBAR", "64"),
     ("(guint) WEBKIT_HIT_TEST_RESULT_CONTEXT_SELECTION", "128"),
+    ("(guint) WEBKIT_INPUT_HINT_INHIBIT_OSK", "32"),
+    ("(guint) WEBKIT_INPUT_HINT_LOWERCASE", "2"),
+    ("(guint) WEBKIT_INPUT_HINT_NONE", "0"),
+    ("(guint) WEBKIT_INPUT_HINT_SPELLCHECK", "1"),
+    ("(guint) WEBKIT_INPUT_HINT_UPPERCASE_CHARS", "4"),
+    ("(guint) WEBKIT_INPUT_HINT_UPPERCASE_SENTENCES", "16"),
+    ("(guint) WEBKIT_INPUT_HINT_UPPERCASE_WORDS", "8"),
+    ("(gint) WEBKIT_INPUT_PURPOSE_DIGITS", "1"),
+    ("(gint) WEBKIT_INPUT_PURPOSE_EMAIL", "5"),
+    ("(gint) WEBKIT_INPUT_PURPOSE_FREE_FORM", "0"),
+    ("(gint) WEBKIT_INPUT_PURPOSE_NUMBER", "2"),
+    ("(gint) WEBKIT_INPUT_PURPOSE_PASSWORD", "6"),
+    ("(gint) WEBKIT_INPUT_PURPOSE_PHONE", "3"),
+    ("(gint) WEBKIT_INPUT_PURPOSE_URL", "4"),
     ("(gint) WEBKIT_INSECURE_CONTENT_DISPLAYED", "1"),
     ("(gint) WEBKIT_INSECURE_CONTENT_RUN", "0"),
     ("(gint) WEBKIT_JAVASCRIPT_ERROR_SCRIPT_FAILED", "699"),
@@ -1285,8 +1377,8 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) WEBKIT_LOAD_REDIRECTED", "1"),
     ("(gint) WEBKIT_LOAD_STARTED", "0"),
     ("WEBKIT_MAJOR_VERSION", "2"),
-    ("WEBKIT_MICRO_VERSION", "1"),
-    ("WEBKIT_MINOR_VERSION", "26"),
+    ("WEBKIT_MICRO_VERSION", "2"),
+    ("WEBKIT_MINOR_VERSION", "28"),
     ("(gint) WEBKIT_NAVIGATION_TYPE_BACK_FORWARD", "2"),
     ("(gint) WEBKIT_NAVIGATION_TYPE_FORM_RESUBMITTED", "4"),
     ("(gint) WEBKIT_NAVIGATION_TYPE_FORM_SUBMITTED", "1"),
@@ -1357,6 +1449,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) WEBKIT_USER_CONTENT_FILTER_ERROR_NOT_FOUND", "1"),
     ("(gint) WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES", "0"),
     ("(gint) WEBKIT_USER_CONTENT_INJECT_TOP_FRAME", "1"),
+    ("(gint) WEBKIT_USER_MESSAGE_UNHANDLED_MESSAGE", "0"),
     ("(gint) WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END", "1"),
     ("(gint) WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_START", "0"),
     ("(gint) WEBKIT_USER_STYLE_LEVEL_AUTHOR", "1"),

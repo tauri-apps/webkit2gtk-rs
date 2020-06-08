@@ -165,6 +165,9 @@ pub trait WebContextExt: 'static {
 
     fn register_uri_scheme<P: Fn(&URISchemeRequest) + 'static>(&self, scheme: &str, callback: P);
 
+    //#[cfg(any(feature = "v2_28", feature = "dox"))]
+    //fn send_message_to_all_extensions(&self, message: /*Ignored*/&UserMessage);
+
     fn set_additional_plugins_directory(&self, directory: &str);
 
     #[cfg(any(feature = "v2_18", feature = "dox"))]
@@ -204,6 +207,9 @@ pub trait WebContextExt: 'static {
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn get_property_local_storage_directory(&self) -> Option<GString>;
 
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn get_property_process_swap_on_cross_site_navigation_enabled(&self) -> bool;
+
     //#[cfg(any(feature = "v2_18", feature = "dox"))]
     //fn connect_automation_started<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
@@ -217,6 +223,9 @@ pub trait WebContextExt: 'static {
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn connect_initialize_web_extensions<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    //#[cfg(any(feature = "v2_28", feature = "dox"))]
+    //fn connect_user_message_received<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<WebContext>> WebContextExt for O {
@@ -496,6 +505,11 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         }
     }
 
+    //#[cfg(any(feature = "v2_28", feature = "dox"))]
+    //fn send_message_to_all_extensions(&self, message: /*Ignored*/&UserMessage) {
+    //    unsafe { TODO: call webkit2_sys:webkit_web_context_send_message_to_all_extensions() }
+    //}
+
     fn set_additional_plugins_directory(&self, directory: &str) {
         unsafe {
             webkit2_sys::webkit_web_context_set_additional_plugins_directory(
@@ -642,6 +656,19 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         }
     }
 
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn get_property_process_swap_on_cross_site_navigation_enabled(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"process-swap-on-cross-site-navigation-enabled\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value.get().expect("Return Value for property `process-swap-on-cross-site-navigation-enabled` getter").unwrap()
+        }
+    }
+
     //#[cfg(any(feature = "v2_18", feature = "dox"))]
     //fn connect_automation_started<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored session: WebKit2.AutomationSession
@@ -657,7 +684,7 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &WebContext::from_glib_borrow(this).unsafe_cast(),
+                &WebContext::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(download),
             )
         }
@@ -666,7 +693,9 @@ impl<O: IsA<WebContext>> WebContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"download-started\0".as_ptr() as *const _,
-                Some(transmute(download_started_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    download_started_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -687,15 +716,15 @@ impl<O: IsA<WebContext>> WebContextExt for O {
             P: IsA<WebContext>,
         {
             let f: &F = &*(f as *const F);
-            f(&WebContext::from_glib_borrow(this).unsafe_cast())
+            f(&WebContext::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"initialize-notification-permissions\0".as_ptr() as *const _,
-                Some(transmute(
-                    initialize_notification_permissions_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    initialize_notification_permissions_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -711,20 +740,25 @@ impl<O: IsA<WebContext>> WebContextExt for O {
             P: IsA<WebContext>,
         {
             let f: &F = &*(f as *const F);
-            f(&WebContext::from_glib_borrow(this).unsafe_cast())
+            f(&WebContext::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"initialize-web-extensions\0".as_ptr() as *const _,
-                Some(transmute(
-                    initialize_web_extensions_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    initialize_web_extensions_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
         }
     }
+
+    //#[cfg(any(feature = "v2_28", feature = "dox"))]
+    //fn connect_user_message_received<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
+    //    Ignored message: WebKit2.UserMessage
+    //}
 }
 
 impl fmt::Display for WebContext {

@@ -84,14 +84,16 @@ impl<O: IsA<URIRequest>> URIRequestExt for O {
             P: IsA<URIRequest>,
         {
             let f: &F = &*(f as *const F);
-            f(&URIRequest::from_glib_borrow(this).unsafe_cast())
+            f(&URIRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::uri\0".as_ptr() as *const _,
-                Some(transmute(notify_uri_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_uri_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
