@@ -39,7 +39,6 @@ generate = [
     "WebKit2.FileChooserRequest",
     "WebKit2.FindController",
     "WebKit2.FindOptions",
-    "WebKit2.FormSubmissionRequest",
     "WebKit2.GeolocationPermissionRequest",
     "WebKit2.HardwareAccelerationPolicy",
     "WebKit2.HitTestResult",
@@ -193,3 +192,11 @@ status = "generate"
         [[object.function.parameter]]
         name = "navigation"
         const = true
+
+[[object]]
+name = "WebKit2.FormSubmissionRequest"
+status = "generate"
+    [[object.function]]
+    name = "list_text_fields"
+    # Fails to get generated as some how glib::GString doesn't get added
+    ignore = true
