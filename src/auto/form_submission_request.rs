@@ -4,6 +4,7 @@
 
 use glib::object::IsA;
 use glib::translate::*;
+use glib::GString;
 use std::fmt;
 #[cfg(any(feature = "v2_20", feature = "dox"))]
 use std::ptr;
