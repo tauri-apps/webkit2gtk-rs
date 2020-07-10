@@ -62,7 +62,7 @@ impl WebContext {
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
-    pub fn new_with_website_data_manager<P: IsA<WebsiteDataManager>>(manager: &P) -> WebContext {
+    pub fn with_website_data_manager<P: IsA<WebsiteDataManager>>(manager: &P) -> WebContext {
         skip_assert_initialized!();
         unsafe {
             from_glib_full(

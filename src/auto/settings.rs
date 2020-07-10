@@ -30,7 +30,7 @@ impl Settings {
         unsafe { from_glib_full(webkit2_sys::webkit_settings_new()) }
     }
 
-    //pub fn new_with_settings(first_setting_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Settings {
+    //pub fn with_settings(first_setting_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Settings {
     //    unsafe { TODO: call webkit2_sys:webkit_settings_new_with_settings() }
     //}
 

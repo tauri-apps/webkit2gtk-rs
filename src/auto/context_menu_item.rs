@@ -24,11 +24,11 @@ impl ContextMenuItem {
     //}
 
     //#[cfg(any(feature = "v2_18", feature = "dox"))]
-    //pub fn new_from_gaction(action: /*Ignored*/&gio::Action, label: &str, target: Option<&glib::Variant>) -> ContextMenuItem {
+    //pub fn from_gaction(action: /*Ignored*/&gio::Action, label: &str, target: Option<&glib::Variant>) -> ContextMenuItem {
     //    unsafe { TODO: call webkit2_sys:webkit_context_menu_item_new_from_gaction() }
     //}
 
-    pub fn new_from_stock_action(action: ContextMenuAction) -> ContextMenuItem {
+    pub fn from_stock_action(action: ContextMenuAction) -> ContextMenuItem {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(webkit2_sys::webkit_context_menu_item_new_from_stock_action(
@@ -37,10 +37,7 @@ impl ContextMenuItem {
         }
     }
 
-    pub fn new_from_stock_action_with_label(
-        action: ContextMenuAction,
-        label: &str,
-    ) -> ContextMenuItem {
+    pub fn from_stock_action_with_label(action: ContextMenuAction, label: &str) -> ContextMenuItem {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(
@@ -57,7 +54,7 @@ impl ContextMenuItem {
         unsafe { from_glib_none(webkit2_sys::webkit_context_menu_item_new_separator()) }
     }
 
-    pub fn new_with_submenu<P: IsA<ContextMenu>>(label: &str, submenu: &P) -> ContextMenuItem {
+    pub fn with_submenu<P: IsA<ContextMenu>>(label: &str, submenu: &P) -> ContextMenuItem {
         skip_assert_initialized!();
         unsafe {
             from_glib_none(webkit2_sys::webkit_context_menu_item_new_with_submenu(

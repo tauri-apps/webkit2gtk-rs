@@ -24,7 +24,7 @@ impl ContextMenu {
         unsafe { from_glib_full(webkit2_sys::webkit_context_menu_new()) }
     }
 
-    pub fn new_with_items(items: &[ContextMenuItem]) -> ContextMenu {
+    pub fn with_items(items: &[ContextMenuItem]) -> ContextMenu {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(webkit2_sys::webkit_context_menu_new_with_items(

@@ -87,7 +87,7 @@ impl WebView {
         unsafe { gtk::Widget::from_glib_none(webkit2_sys::webkit_web_view_new()).unsafe_cast() }
     }
 
-    pub fn new_with_context<P: IsA<WebContext>>(context: &P) -> WebView {
+    pub fn with_context<P: IsA<WebContext>>(context: &P) -> WebView {
         skip_assert_initialized!();
         unsafe {
             gtk::Widget::from_glib_none(webkit2_sys::webkit_web_view_new_with_context(
@@ -98,7 +98,7 @@ impl WebView {
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
-    pub fn new_with_related_view<P: IsA<WebView>>(web_view: &P) -> WebView {
+    pub fn with_related_view<P: IsA<WebView>>(web_view: &P) -> WebView {
         skip_assert_initialized!();
         unsafe {
             gtk::Widget::from_glib_full(webkit2_sys::webkit_web_view_new_with_related_view(
@@ -109,7 +109,7 @@ impl WebView {
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
-    pub fn new_with_settings<P: IsA<Settings>>(settings: &P) -> WebView {
+    pub fn with_settings<P: IsA<Settings>>(settings: &P) -> WebView {
         skip_assert_initialized!();
         unsafe {
             gtk::Widget::from_glib_none(webkit2_sys::webkit_web_view_new_with_settings(
@@ -120,7 +120,7 @@ impl WebView {
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
-    pub fn new_with_user_content_manager<P: IsA<UserContentManager>>(
+    pub fn with_user_content_manager<P: IsA<UserContentManager>>(
         user_content_manager: &P,
     ) -> WebView {
         skip_assert_initialized!();

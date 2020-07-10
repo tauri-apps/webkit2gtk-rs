@@ -2811,6 +2811,7 @@ extern "C" {
     //=========================================================================
     // WebKitAutomationBrowsingContextPresentation
     //=========================================================================
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
     pub fn webkit_automation_browsing_context_presentation_get_type() -> GType;
 
     //=========================================================================
@@ -2853,11 +2854,13 @@ extern "C" {
     //=========================================================================
     // WebKitHardwareAccelerationPolicy
     //=========================================================================
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
     pub fn webkit_hardware_acceleration_policy_get_type() -> GType;
 
     //=========================================================================
     // WebKitInputPurpose
     //=========================================================================
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
     pub fn webkit_input_purpose_get_type() -> GType;
 
     //=========================================================================
@@ -2890,6 +2893,7 @@ extern "C" {
     //=========================================================================
     // WebKitNetworkProxyMode
     //=========================================================================
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
     pub fn webkit_network_proxy_mode_get_type() -> GType;
 
     //=========================================================================
@@ -2954,38 +2958,47 @@ extern "C" {
     //=========================================================================
     // WebKitUserContentFilterError
     //=========================================================================
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
     pub fn webkit_user_content_filter_error_get_type() -> GType;
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
     pub fn webkit_user_content_filter_error_quark() -> glib::GQuark;
 
     //=========================================================================
     // WebKitUserContentInjectedFrames
     //=========================================================================
+    #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn webkit_user_content_injected_frames_get_type() -> GType;
 
     //=========================================================================
     // WebKitUserMessageError
     //=========================================================================
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
     pub fn webkit_user_message_error_get_type() -> GType;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
     pub fn webkit_user_message_error_quark() -> glib::GQuark;
 
     //=========================================================================
     // WebKitUserScriptInjectionTime
     //=========================================================================
+    #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn webkit_user_script_injection_time_get_type() -> GType;
 
     //=========================================================================
     // WebKitUserStyleLevel
     //=========================================================================
+    #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn webkit_user_style_level_get_type() -> GType;
 
     //=========================================================================
     // WebKitWebProcessTerminationReason
     //=========================================================================
+    #[cfg(any(feature = "v2_20", feature = "dox"))]
     pub fn webkit_web_process_termination_reason_get_type() -> GType;
 
     //=========================================================================
     // WebKitEditorTypingAttributes
     //=========================================================================
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
     pub fn webkit_editor_typing_attributes_get_type() -> GType;
 
     //=========================================================================
@@ -3001,6 +3014,7 @@ extern "C" {
     //=========================================================================
     // WebKitInputHints
     //=========================================================================
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
     pub fn webkit_input_hints_get_type() -> GType;
 
     //=========================================================================
@@ -3011,6 +3025,7 @@ extern "C" {
     //=========================================================================
     // WebKitWebsiteDataTypes
     //=========================================================================
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
     pub fn webkit_website_data_types_get_type() -> GType;
 
     //=========================================================================
@@ -3065,6 +3080,7 @@ extern "C" {
     //=========================================================================
     // WebKitGeolocationPosition
     //=========================================================================
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
     pub fn webkit_geolocation_position_get_type() -> GType;
     #[cfg(any(feature = "v2_26", feature = "dox"))]
     pub fn webkit_geolocation_position_new(
