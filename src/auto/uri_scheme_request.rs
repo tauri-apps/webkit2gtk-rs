@@ -27,7 +27,7 @@ pub trait URISchemeRequestExt: 'static {
         &self,
         stream: &P,
         stream_length: i64,
-        mime_type: Option<&str>,
+        content_type: Option<&str>,
     );
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
@@ -47,14 +47,14 @@ impl<O: IsA<URISchemeRequest>> URISchemeRequestExt for O {
         &self,
         stream: &P,
         stream_length: i64,
-        mime_type: Option<&str>,
+        content_type: Option<&str>,
     ) {
         unsafe {
             webkit2_sys::webkit_uri_scheme_request_finish(
                 self.as_ref().to_glib_none().0,
                 stream.as_ref().to_glib_none().0,
                 stream_length,
-                mime_type.to_glib_none().0,
+                content_type.to_glib_none().0,
             );
         }
     }

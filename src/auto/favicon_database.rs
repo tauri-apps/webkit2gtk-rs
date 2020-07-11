@@ -141,7 +141,7 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &FaviconDatabase::from_glib_borrow(this).unsafe_cast(),
+                &FaviconDatabase::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(page_uri),
                 &GString::from_glib_borrow(favicon_uri),
             )
@@ -151,7 +151,9 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"favicon-changed\0".as_ptr() as *const _,
-                Some(transmute(favicon_changed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    favicon_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

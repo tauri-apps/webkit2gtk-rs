@@ -21,20 +21,12 @@ pub trait FormSubmissionRequestExt: 'static {
     //#[cfg_attr(feature = "v2_20", deprecated)]
     //fn get_text_fields(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 25 }/TypeId { ns_id: 0, id: 25 };
 
-    //#[cfg(any(feature = "v2_20", feature = "dox"))]
-    //fn list_text_fields(&self, field_names: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 0, id: 28 }, field_values: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 0, id: 28 }) -> bool;
-
     fn submit(&self);
 }
 
 impl<O: IsA<FormSubmissionRequest>> FormSubmissionRequestExt for O {
     //fn get_text_fields(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 25 }/TypeId { ns_id: 0, id: 25 } {
     //    unsafe { TODO: call webkit2_sys:webkit_form_submission_request_get_text_fields() }
-    //}
-
-    //#[cfg(any(feature = "v2_20", feature = "dox"))]
-    //fn list_text_fields(&self, field_names: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 0, id: 28 }, field_values: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 0, id: 28 }) -> bool {
-    //    unsafe { TODO: call webkit2_sys:webkit_form_submission_request_list_text_fields() }
     //}
 
     fn submit(&self) {
