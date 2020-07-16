@@ -23,7 +23,7 @@ glib_wrapper! {
 pub const NONE_URI_SCHEME_REQUEST: Option<&URISchemeRequest> = None;
 
 pub trait URISchemeRequestExt: 'static {
-    fn finish<P: IsA<gio::InputStream>>(&self, stream: &P, stream_length: i64, mime_type: Option<&str>);
+    fn finish<P: IsA<gio::InputStream>>(&self, stream: &P, stream_length: i64, content_type: Option<&str>);
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     fn finish_error(&self, error: &mut glib::Error);
@@ -38,9 +38,9 @@ pub trait URISchemeRequestExt: 'static {
 }
 
 impl<O: IsA<URISchemeRequest>> URISchemeRequestExt for O {
-    fn finish<P: IsA<gio::InputStream>>(&self, stream: &P, stream_length: i64, mime_type: Option<&str>) {
+    fn finish<P: IsA<gio::InputStream>>(&self, stream: &P, stream_length: i64, content_type: Option<&str>) {
         unsafe {
-            webkit2_sys::webkit_uri_scheme_request_finish(self.as_ref().to_glib_none().0, stream.as_ref().to_glib_none().0, stream_length, mime_type.to_glib_none().0);
+            webkit2_sys::webkit_uri_scheme_request_finish(self.as_ref().to_glib_none().0, stream.as_ref().to_glib_none().0, stream_length, content_type.to_glib_none().0);
         }
     }
 

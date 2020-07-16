@@ -178,12 +178,12 @@ impl<O: IsA<UserContentManager>> UserContentManagerExt for O {
             where P: IsA<UserContentManager>
         {
             let f: &F = &*(f as *const F);
-            f(&UserContentManager::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(js_result))
+            f(&UserContentManager::from_glib_borrow(this).unsafe_cast_ref(), &from_glib_borrow(js_result))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"script-message-received\0".as_ptr() as *const _,
-                Some(transmute(script_message_received_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(script_message_received_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 }

@@ -18,6 +18,7 @@ use webkit2_sys;
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum AuthenticationScheme {
     Default,
     HttpBasic,
@@ -121,6 +122,7 @@ impl SetValue for AuthenticationScheme {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum CacheModel {
     DocumentViewer,
     WebBrowser,
@@ -193,6 +195,7 @@ impl SetValue for CacheModel {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum ContextMenuAction {
     NoAction,
     OpenLink,
@@ -437,6 +440,7 @@ impl SetValue for ContextMenuAction {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum CookieAcceptPolicy {
     Always,
     Never,
@@ -509,6 +513,7 @@ impl SetValue for CookieAcceptPolicy {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum CookiePersistentStorage {
     Text,
     Sqlite,
@@ -578,6 +583,7 @@ impl SetValue for CookiePersistentStorage {
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum CredentialPersistence {
     None,
     ForSession,
@@ -657,6 +663,7 @@ impl SetValue for CredentialPersistence {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum DownloadError {
     Network,
     CancelledByUser,
@@ -750,6 +757,7 @@ impl SetValue for DownloadError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum FaviconDatabaseError {
     NotInitialized,
     FaviconNotFound,
@@ -844,6 +852,7 @@ impl SetValue for FaviconDatabaseError {
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum HardwareAccelerationPolicy {
     OnDemand,
     Always,
@@ -923,6 +932,7 @@ impl SetValue for HardwareAccelerationPolicy {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum InsecureContentEvent {
     Run,
     Displayed,
@@ -991,6 +1001,7 @@ impl SetValue for InsecureContentEvent {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum JavascriptError {
     Failed,
     #[doc(hidden)]
@@ -1074,6 +1085,7 @@ impl SetValue for JavascriptError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum LoadEvent {
     Started,
     Redirected,
@@ -1150,6 +1162,7 @@ impl SetValue for LoadEvent {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum NavigationType {
     LinkClicked,
     FormSubmitted,
@@ -1234,6 +1247,7 @@ impl SetValue for NavigationType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum NetworkError {
     Failed,
     Transport,
@@ -1338,6 +1352,7 @@ impl SetValue for NetworkError {
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum NetworkProxyMode {
     Default,
     NoProxy,
@@ -1417,6 +1432,7 @@ impl SetValue for NetworkProxyMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum PluginError {
     Failed,
     CannotFindPlugin,
@@ -1525,6 +1541,7 @@ impl SetValue for PluginError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum PolicyDecisionType {
     NavigationAction,
     NewWindowAction,
@@ -1597,6 +1614,7 @@ impl SetValue for PolicyDecisionType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum PolicyError {
     Failed,
     CannotShowMimeType,
@@ -1700,6 +1718,7 @@ impl SetValue for PolicyError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum PrintError {
     General,
     PrinterNotFound,
@@ -1793,6 +1812,7 @@ impl SetValue for PrintError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum PrintOperationResponse {
     Print,
     Cancel,
@@ -1862,6 +1882,7 @@ impl SetValue for PrintOperationResponse {
 #[cfg(any(feature = "v2_4", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum ProcessModel {
     SharedSecondaryProcess,
     MultipleSecondaryProcesses,
@@ -1937,6 +1958,7 @@ impl SetValue for ProcessModel {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum SaveMode {
     Mhtml,
     #[doc(hidden)]
@@ -2001,6 +2023,7 @@ impl SetValue for SaveMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum ScriptDialogType {
     Alert,
     Confirm,
@@ -2077,6 +2100,7 @@ impl SetValue for ScriptDialogType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum SnapshotError {
     Create,
     #[doc(hidden)]
@@ -2160,6 +2184,7 @@ impl SetValue for SnapshotError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum SnapshotRegion {
     Visible,
     FullDocument,
@@ -2228,6 +2253,7 @@ impl SetValue for SnapshotRegion {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum TLSErrorsPolicy {
     Ignore,
     Fail,
@@ -2297,6 +2323,7 @@ impl SetValue for TLSErrorsPolicy {
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum UserContentInjectedFrames {
     AllFrames,
     TopFrame,
@@ -2373,6 +2400,7 @@ impl SetValue for UserContentInjectedFrames {
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum UserScriptInjectionTime {
     Start,
     End,
@@ -2449,6 +2477,7 @@ impl SetValue for UserScriptInjectionTime {
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+#[non_exhaustive]
 pub enum UserStyleLevel {
     User,
     Author,

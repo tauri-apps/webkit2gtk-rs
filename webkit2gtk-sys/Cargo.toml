@@ -5,19 +5,19 @@ repository = "gtk-rs/webkit2gtk-rs"
 pkg-config = "0.3.7"
 
 [dependencies]
-atk-sys = "^0.9.0"
+atk-sys = "^0.10.0"
 bitflags = "^1.0"
-cairo-sys-rs = "^0.9.0"
-gdk-pixbuf-sys = "^0.9.0"
-gdk-sys = "^0.9.0"
-gio-sys = "^0.9.0"
-glib-sys = "^0.9.0"
-gobject-sys = "^0.9.0"
-gtk-sys = "^0.9.0"
+cairo-sys-rs = "^0.10.0"
+gdk-pixbuf-sys = "^0.10.0"
+gdk-sys = "^0.10.0"
+gio-sys = "^0.10.0"
+glib-sys = "^0.10.0"
+gobject-sys = "^0.10.0"
+gtk-sys = "^0.10.0"
 javascriptcore-rs-sys = "^0.2.0"
 libc = "0.2"
-pango-sys = "^0.9.0"
-soup-sys = "^0.9.0"
+pango-sys = "^0.10.0"
+soup-sys = "^0.10.0"
 
 [dev-dependencies]
 shell-words = "0.1.0"
@@ -36,6 +36,7 @@ v2_6 = []
 v2_8 = ["v2_6"]
 v2_24 = ["v2_22"]
 v2_26 = ["v2_24"]
+v2_28 = ["v2_26"]
 
 [lib]
 name = "webkit2gtk_sys"
@@ -51,6 +52,6 @@ license = "MIT"
 links = "web_kit2"
 name = "webkit2gtk-sys"
 repository = "https://github.com/gtk-rs/webkit2gtk-rs"
-version = "0.11.0"
+version = "0.12.0"
 [package.metadata.docs.rs]
 features = ["dox"]

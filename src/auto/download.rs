@@ -148,12 +148,12 @@ impl<O: IsA<Download>> DownloadExt for O {
             where P: IsA<Download>
         {
             let f: &F = &*(f as *const F);
-            f(&Download::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(destination))
+            f(&Download::from_glib_borrow(this).unsafe_cast_ref(), &GString::from_glib_borrow(destination))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"created-destination\0".as_ptr() as *const _,
-                Some(transmute(created_destination_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(created_destination_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 
@@ -162,12 +162,12 @@ impl<O: IsA<Download>> DownloadExt for O {
             where P: IsA<Download>
         {
             let f: &F = &*(f as *const F);
-            f(&Download::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(suggested_filename)).to_glib()
+            f(&Download::from_glib_borrow(this).unsafe_cast_ref(), &GString::from_glib_borrow(suggested_filename)).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"decide-destination\0".as_ptr() as *const _,
-                Some(transmute(decide_destination_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(decide_destination_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 
@@ -176,12 +176,12 @@ impl<O: IsA<Download>> DownloadExt for O {
             where P: IsA<Download>
         {
             let f: &F = &*(f as *const F);
-            f(&Download::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error))
+            f(&Download::from_glib_borrow(this).unsafe_cast_ref(), &from_glib_borrow(error))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"failed\0".as_ptr() as *const _,
-                Some(transmute(failed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(failed_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 
@@ -190,12 +190,12 @@ impl<O: IsA<Download>> DownloadExt for O {
             where P: IsA<Download>
         {
             let f: &F = &*(f as *const F);
-            f(&Download::from_glib_borrow(this).unsafe_cast())
+            f(&Download::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"finished\0".as_ptr() as *const _,
-                Some(transmute(finished_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(finished_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 
@@ -204,12 +204,12 @@ impl<O: IsA<Download>> DownloadExt for O {
             where P: IsA<Download>
         {
             let f: &F = &*(f as *const F);
-            f(&Download::from_glib_borrow(this).unsafe_cast(), data_length)
+            f(&Download::from_glib_borrow(this).unsafe_cast_ref(), data_length)
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"received-data\0".as_ptr() as *const _,
-                Some(transmute(received_data_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(received_data_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 
@@ -219,12 +219,12 @@ impl<O: IsA<Download>> DownloadExt for O {
             where P: IsA<Download>
         {
             let f: &F = &*(f as *const F);
-            f(&Download::from_glib_borrow(this).unsafe_cast())
+            f(&Download::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::allow-overwrite\0".as_ptr() as *const _,
-                Some(transmute(notify_allow_overwrite_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(notify_allow_overwrite_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 
@@ -233,12 +233,12 @@ impl<O: IsA<Download>> DownloadExt for O {
             where P: IsA<Download>
         {
             let f: &F = &*(f as *const F);
-            f(&Download::from_glib_borrow(this).unsafe_cast())
+            f(&Download::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::destination\0".as_ptr() as *const _,
-                Some(transmute(notify_destination_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(notify_destination_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 
@@ -247,12 +247,12 @@ impl<O: IsA<Download>> DownloadExt for O {
             where P: IsA<Download>
         {
             let f: &F = &*(f as *const F);
-            f(&Download::from_glib_borrow(this).unsafe_cast())
+            f(&Download::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::estimated-progress\0".as_ptr() as *const _,
-                Some(transmute(notify_estimated_progress_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(notify_estimated_progress_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 
@@ -261,12 +261,12 @@ impl<O: IsA<Download>> DownloadExt for O {
             where P: IsA<Download>
         {
             let f: &F = &*(f as *const F);
-            f(&Download::from_glib_borrow(this).unsafe_cast())
+            f(&Download::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::response\0".as_ptr() as *const _,
-                Some(transmute(notify_response_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(notify_response_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 }
