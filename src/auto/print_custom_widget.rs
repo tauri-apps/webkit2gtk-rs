@@ -80,12 +80,12 @@ impl<O: IsA<PrintCustomWidget>> PrintCustomWidgetExt for O {
             where P: IsA<PrintCustomWidget>
         {
             let f: &F = &*(f as *const F);
-            f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast())
+            f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"apply\0".as_ptr() as *const _,
-                Some(transmute(apply_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(apply_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 
@@ -95,12 +95,12 @@ impl<O: IsA<PrintCustomWidget>> PrintCustomWidgetExt for O {
             where P: IsA<PrintCustomWidget>
         {
             let f: &F = &*(f as *const F);
-            f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(page_setup), &from_glib_borrow(print_settings))
+            f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast_ref(), &from_glib_borrow(page_setup), &from_glib_borrow(print_settings))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"update\0".as_ptr() as *const _,
-                Some(transmute(update_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(update_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 }

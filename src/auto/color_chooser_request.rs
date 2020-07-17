@@ -113,12 +113,12 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
             where P: IsA<ColorChooserRequest>
         {
             let f: &F = &*(f as *const F);
-            f(&ColorChooserRequest::from_glib_borrow(this).unsafe_cast())
+            f(&ColorChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"finished\0".as_ptr() as *const _,
-                Some(transmute(finished_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(finished_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 
@@ -127,12 +127,12 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
             where P: IsA<ColorChooserRequest>
         {
             let f: &F = &*(f as *const F);
-            f(&ColorChooserRequest::from_glib_borrow(this).unsafe_cast())
+            f(&ColorChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::rgba\0".as_ptr() as *const _,
-                Some(transmute(notify_rgba_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(notify_rgba_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 }

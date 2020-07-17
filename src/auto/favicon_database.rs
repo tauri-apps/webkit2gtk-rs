@@ -96,12 +96,12 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
             where P: IsA<FaviconDatabase>
         {
             let f: &F = &*(f as *const F);
-            f(&FaviconDatabase::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(page_uri), &GString::from_glib_borrow(favicon_uri))
+            f(&FaviconDatabase::from_glib_borrow(this).unsafe_cast_ref(), &GString::from_glib_borrow(page_uri), &GString::from_glib_borrow(favicon_uri))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"favicon-changed\0".as_ptr() as *const _,
-                Some(transmute(favicon_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute::<_, unsafe extern "C" fn()>(favicon_changed_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
         }
     }
 }
