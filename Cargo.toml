@@ -6,8 +6,8 @@ categories = ["api-bindings", "gui"]
 description = "Rust bindings for webkit-gtk library"
 repository = "https://github.com/gtk-rs/webkit2gtk-rs"
 license = "MIT"
-homepage = "http://gtk-rs.org/"
-documentation = "http://gtk-rs.org/docs/webkit2gtk"
+homepage = "https://gtk-rs.org/"
+documentation = "https://gtk-rs.org/docs/webkit2gtk"
 keywords = ["webkit", "gtk-rs", "gnome", "GUI"]
 exclude = [
     "gir-files/*",
