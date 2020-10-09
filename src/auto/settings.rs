@@ -168,6 +168,9 @@ pub trait SettingsExt: 'static {
 
     fn get_load_icons_ignoring_image_load_setting(&self) -> bool;
 
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_media_content_types_requiring_hardware_support(&self) -> Option<GString>;
+
     fn get_media_playback_allows_inline(&self) -> bool;
 
     fn get_media_playback_requires_user_gesture(&self) -> bool;
@@ -299,6 +302,9 @@ pub trait SettingsExt: 'static {
     fn set_javascript_can_open_windows_automatically(&self, enabled: bool);
 
     fn set_load_icons_ignoring_image_load_setting(&self, enabled: bool);
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_media_content_types_requiring_hardware_support(&self, content_types: Option<&str>);
 
     fn set_media_playback_allows_inline(&self, enabled: bool);
 
@@ -571,6 +577,14 @@ pub trait SettingsExt: 'static {
     ) -> SignalHandlerId;
 
     fn connect_property_load_icons_ignoring_image_load_setting_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn connect_property_media_content_types_requiring_hardware_support_notify<
+        F: Fn(&Self) + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -1045,6 +1059,17 @@ impl<O: IsA<Settings>> SettingsExt for O {
         unsafe {
             from_glib(
                 webkit2_sys::webkit_settings_get_load_icons_ignoring_image_load_setting(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_media_content_types_requiring_hardware_support(&self) -> Option<GString> {
+        unsafe {
+            from_glib_none(
+                webkit2_sys::webkit_settings_get_media_content_types_requiring_hardware_support(
                     self.as_ref().to_glib_none().0,
                 ),
             )
@@ -1576,6 +1601,16 @@ impl<O: IsA<Settings>> SettingsExt for O {
             webkit2_sys::webkit_settings_set_load_icons_ignoring_image_load_setting(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_media_content_types_requiring_hardware_support(&self, content_types: Option<&str>) {
+        unsafe {
+            webkit2_sys::webkit_settings_set_media_content_types_requiring_hardware_support(
+                self.as_ref().to_glib_none().0,
+                content_types.to_glib_none().0,
             );
         }
     }
@@ -3022,6 +3057,40 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"notify::load-icons-ignoring-image-load-setting\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_load_icons_ignoring_image_load_setting_trampoline::<Self, F>
+                        as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn connect_property_media_content_types_requiring_hardware_support_notify<
+        F: Fn(&Self) + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_media_content_types_requiring_hardware_support_trampoline<
+            P,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut webkit2_sys::WebKitSettings,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Settings>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::media-content-types-requiring-hardware-support\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_media_content_types_requiring_hardware_support_trampoline::<Self, F>
                         as *const (),
                 )),
                 Box_::into_raw(f),

@@ -23,6 +23,9 @@ pub trait PolicyDecisionExt: 'static {
     fn ignore(&self);
 
     fn use_(&self);
+
+    //#[cfg(any(feature = "v2_30", feature = "dox"))]
+    //fn use_with_policies(&self, policies: /*Ignored*/&WebsitePolicies);
 }
 
 impl<O: IsA<PolicyDecision>> PolicyDecisionExt for O {
@@ -43,6 +46,11 @@ impl<O: IsA<PolicyDecision>> PolicyDecisionExt for O {
             webkit2_sys::webkit_policy_decision_use(self.as_ref().to_glib_none().0);
         }
     }
+
+    //#[cfg(any(feature = "v2_30", feature = "dox"))]
+    //fn use_with_policies(&self, policies: /*Ignored*/&WebsitePolicies) {
+    //    unsafe { TODO: call webkit2_sys:webkit_policy_decision_use_with_policies() }
+    //}
 }
 
 impl fmt::Display for PolicyDecision {

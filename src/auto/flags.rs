@@ -238,7 +238,10 @@ bitflags! {
         const COOKIES = 256;
         const DEVICE_ID_HASH_SALT = 512;
         const HSTS_CACHE = 1024;
-        const ALL = 2047;
+        const ITP = 2048;
+        const SERVICE_WORKER_REGISTRATIONS = 4096;
+        const DOM_CACHE = 8192;
+        const ALL = 16383;
     }
 }
 

@@ -196,6 +196,9 @@ pub trait WebViewExt: 'static {
 
     fn get_inspector(&self) -> Option<WebInspector>;
 
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_is_muted(&self) -> bool;
+
     #[cfg_attr(feature = "v2_22", deprecated)]
     fn get_javascript_global_context(&self) -> Option<java_script_core::GlobalContextRef>;
 
@@ -236,6 +239,9 @@ pub trait WebViewExt: 'static {
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_website_data_manager(&self) -> Option<WebsiteDataManager>;
+
+    //#[cfg(any(feature = "v2_30", feature = "dox"))]
+    //fn get_website_policies(&self) -> /*Ignored*/Option<WebsitePolicies>;
 
     fn get_window_properties(&self) -> Option<WindowProperties>;
 
@@ -372,6 +378,9 @@ pub trait WebViewExt: 'static {
 
     //#[cfg(any(feature = "v2_28", feature = "dox"))]
     //fn set_input_method_context(&self, context: /*Ignored*/Option<&InputMethodContext>);
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_is_muted(&self, muted: bool);
 
     fn set_settings<P: IsA<Settings>>(&self, settings: &P);
 
@@ -524,6 +533,9 @@ pub trait WebViewExt: 'static {
     fn connect_property_favicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_is_loading_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn connect_property_is_muted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_property_is_playing_audio_notify<F: Fn(&Self) + 'static>(
@@ -742,6 +754,15 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }
     }
 
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_is_muted(&self) -> bool {
+        unsafe {
+            from_glib(webkit2_sys::webkit_web_view_get_is_muted(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     fn get_javascript_global_context(&self) -> Option<java_script_core::GlobalContextRef> {
         unsafe {
             from_glib_none(webkit2_sys::webkit_web_view_get_javascript_global_context(
@@ -891,6 +912,11 @@ impl<O: IsA<WebView>> WebViewExt for O {
             ))
         }
     }
+
+    //#[cfg(any(feature = "v2_30", feature = "dox"))]
+    //fn get_website_policies(&self) -> /*Ignored*/Option<WebsitePolicies> {
+    //    unsafe { TODO: call webkit2_sys:webkit_web_view_get_website_policies() }
+    //}
 
     fn get_window_properties(&self) -> Option<WindowProperties> {
         unsafe {
@@ -1375,6 +1401,16 @@ impl<O: IsA<WebView>> WebViewExt for O {
     //fn set_input_method_context(&self, context: /*Ignored*/Option<&InputMethodContext>) {
     //    unsafe { TODO: call webkit2_sys:webkit_web_view_set_input_method_context() }
     //}
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_is_muted(&self, muted: bool) {
+        unsafe {
+            webkit2_sys::webkit_web_view_set_is_muted(
+                self.as_ref().to_glib_none().0,
+                muted.to_glib(),
+            );
+        }
+    }
 
     fn set_settings<P: IsA<Settings>>(&self, settings: &P) {
         unsafe {
@@ -2375,6 +2411,31 @@ impl<O: IsA<WebView>> WebViewExt for O {
                 b"notify::is-loading\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_is_loading_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn connect_property_is_muted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_is_muted_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut webkit2_sys::WebKitWebView,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<WebView>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&WebView::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::is-muted\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_is_muted_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

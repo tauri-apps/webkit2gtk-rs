@@ -295,6 +295,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "WebKitAutoplayPolicy",
+        Layout {
+            size: size_of::<WebKitAutoplayPolicy>(),
+            alignment: align_of::<WebKitAutoplayPolicy>(),
+        },
+    ),
+    (
         "WebKitBackForwardList",
         Layout {
             size: size_of::<WebKitBackForwardList>(),
@@ -1149,6 +1156,20 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "WebKitWebsiteDataAccessPermissionRequest",
+        Layout {
+            size: size_of::<WebKitWebsiteDataAccessPermissionRequest>(),
+            alignment: align_of::<WebKitWebsiteDataAccessPermissionRequest>(),
+        },
+    ),
+    (
+        "WebKitWebsiteDataAccessPermissionRequestClass",
+        Layout {
+            size: size_of::<WebKitWebsiteDataAccessPermissionRequestClass>(),
+            alignment: align_of::<WebKitWebsiteDataAccessPermissionRequestClass>(),
+        },
+    ),
+    (
         "WebKitWebsiteDataManager",
         Layout {
             size: size_of::<WebKitWebsiteDataManager>(),
@@ -1167,6 +1188,20 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<WebKitWebsiteDataTypes>(),
             alignment: align_of::<WebKitWebsiteDataTypes>(),
+        },
+    ),
+    (
+        "WebKitWebsitePolicies",
+        Layout {
+            size: size_of::<WebKitWebsitePolicies>(),
+            alignment: align_of::<WebKitWebsitePolicies>(),
+        },
+    ),
+    (
+        "WebKitWebsitePoliciesClass",
+        Layout {
+            size: size_of::<WebKitWebsitePoliciesClass>(),
+            alignment: align_of::<WebKitWebsitePoliciesClass>(),
         },
     ),
     (
@@ -1209,6 +1244,9 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
         "(gint) WEBKIT_AUTOMATION_BROWSING_CONTEXT_PRESENTATION_WINDOW",
         "0",
     ),
+    ("(gint) WEBKIT_AUTOPLAY_ALLOW", "0"),
+    ("(gint) WEBKIT_AUTOPLAY_ALLOW_WITHOUT_SOUND", "1"),
+    ("(gint) WEBKIT_AUTOPLAY_DENY", "2"),
     ("(gint) WEBKIT_CACHE_MODEL_DOCUMENT_BROWSER", "2"),
     ("(gint) WEBKIT_CACHE_MODEL_DOCUMENT_VIEWER", "0"),
     ("(gint) WEBKIT_CACHE_MODEL_WEB_BROWSER", "1"),
@@ -1295,6 +1333,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ),
     ("(gint) WEBKIT_CONTEXT_MENU_ACTION_OUTLINE", "30"),
     ("(gint) WEBKIT_CONTEXT_MENU_ACTION_PASTE", "16"),
+    (
+        "(gint) WEBKIT_CONTEXT_MENU_ACTION_PASTE_AS_PLAIN_TEXT",
+        "45",
+    ),
     ("(gint) WEBKIT_CONTEXT_MENU_ACTION_RELOAD", "13"),
     ("(gint) WEBKIT_CONTEXT_MENU_ACTION_SELECT_ALL", "18"),
     ("(gint) WEBKIT_CONTEXT_MENU_ACTION_SPELLING_GUESS", "21"),
@@ -1322,6 +1364,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("WEBKIT_EDITING_COMMAND_CUT", "Cut"),
     ("WEBKIT_EDITING_COMMAND_INSERT_IMAGE", "InsertImage"),
     ("WEBKIT_EDITING_COMMAND_PASTE", "Paste"),
+    (
+        "WEBKIT_EDITING_COMMAND_PASTE_AS_PLAIN_TEXT",
+        "PasteAsPlainText",
+    ),
     ("WEBKIT_EDITING_COMMAND_REDO", "Redo"),
     ("WEBKIT_EDITING_COMMAND_SELECT_ALL", "SelectAll"),
     ("WEBKIT_EDITING_COMMAND_UNDO", "Undo"),
@@ -1377,8 +1423,8 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) WEBKIT_LOAD_REDIRECTED", "1"),
     ("(gint) WEBKIT_LOAD_STARTED", "0"),
     ("WEBKIT_MAJOR_VERSION", "2"),
-    ("WEBKIT_MICRO_VERSION", "2"),
-    ("WEBKIT_MINOR_VERSION", "28"),
+    ("WEBKIT_MICRO_VERSION", "1"),
+    ("WEBKIT_MINOR_VERSION", "30"),
     ("(gint) WEBKIT_NAVIGATION_TYPE_BACK_FORWARD", "2"),
     ("(gint) WEBKIT_NAVIGATION_TYPE_FORM_RESUBMITTED", "4"),
     ("(gint) WEBKIT_NAVIGATION_TYPE_FORM_SUBMITTED", "1"),
@@ -1454,16 +1500,22 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_START", "0"),
     ("(gint) WEBKIT_USER_STYLE_LEVEL_AUTHOR", "1"),
     ("(gint) WEBKIT_USER_STYLE_LEVEL_USER", "0"),
-    ("(guint) WEBKIT_WEBSITE_DATA_ALL", "2047"),
+    ("(guint) WEBKIT_WEBSITE_DATA_ALL", "16383"),
     ("(guint) WEBKIT_WEBSITE_DATA_COOKIES", "256"),
     ("(guint) WEBKIT_WEBSITE_DATA_DEVICE_ID_HASH_SALT", "512"),
     ("(guint) WEBKIT_WEBSITE_DATA_DISK_CACHE", "2"),
+    ("(guint) WEBKIT_WEBSITE_DATA_DOM_CACHE", "8192"),
     ("(guint) WEBKIT_WEBSITE_DATA_HSTS_CACHE", "1024"),
     ("(guint) WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES", "64"),
+    ("(guint) WEBKIT_WEBSITE_DATA_ITP", "2048"),
     ("(guint) WEBKIT_WEBSITE_DATA_LOCAL_STORAGE", "16"),
     ("(guint) WEBKIT_WEBSITE_DATA_MEMORY_CACHE", "1"),
     ("(guint) WEBKIT_WEBSITE_DATA_OFFLINE_APPLICATION_CACHE", "4"),
     ("(guint) WEBKIT_WEBSITE_DATA_PLUGIN_DATA", "128"),
+    (
+        "(guint) WEBKIT_WEBSITE_DATA_SERVICE_WORKER_REGISTRATIONS",
+        "4096",
+    ),
     ("(guint) WEBKIT_WEBSITE_DATA_SESSION_STORAGE", "8"),
     ("(guint) WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES", "32"),
     ("(gint) WEBKIT_WEB_PROCESS_CRASHED", "0"),

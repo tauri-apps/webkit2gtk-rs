@@ -67,17 +67,39 @@ pub trait WebsiteDataManagerExt: 'static {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_disk_cache_directory(&self) -> Option<GString>;
 
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_dom_cache_directory(&self) -> Option<GString>;
+
     #[cfg(any(feature = "v2_26", feature = "dox"))]
     fn get_hsts_cache_directory(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_indexeddb_directory(&self) -> Option<GString>;
 
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_itp_directory(&self) -> Option<GString>;
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_itp_enabled(&self) -> bool;
+
+    //#[cfg(any(feature = "v2_30", feature = "dox"))]
+    //fn get_itp_summary<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/Vec<ITPThirdParty>, glib::Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q);
+
+    //
+    //#[cfg(any(feature = "v2_30", feature = "dox"))]
+    //fn get_itp_summary_future(&self) -> Pin<Box_<dyn std::future::Future<Output = Result</*Ignored*/Vec<ITPThirdParty>, glib::Error>> + 'static>>;
+
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_local_storage_directory(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_offline_application_cache_directory(&self) -> Option<GString>;
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_persistent_credential_storage_enabled(&self) -> bool;
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_service_worker_registrations_directory(&self) -> Option<GString>;
 
     #[cfg_attr(feature = "v2_24", deprecated)]
     #[cfg(any(feature = "v2_10", feature = "dox"))]
@@ -92,6 +114,12 @@ pub trait WebsiteDataManagerExt: 'static {
     //
     //#[cfg(any(feature = "v2_16", feature = "dox"))]
     //fn remove_future(&self, types: WebsiteDataTypes) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_itp_enabled(&self, enabled: bool);
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_persistent_credential_storage_enabled(&self, enabled: bool);
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_property_is_ephemeral(&self) -> bool;
@@ -187,6 +215,17 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
         }
     }
 
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_dom_cache_directory(&self) -> Option<GString> {
+        unsafe {
+            from_glib_none(
+                webkit2_sys::webkit_website_data_manager_get_dom_cache_directory(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
+        }
+    }
+
     #[cfg(any(feature = "v2_26", feature = "dox"))]
     fn get_hsts_cache_directory(&self) -> Option<GString> {
         unsafe {
@@ -209,6 +248,46 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
         }
     }
 
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_itp_directory(&self) -> Option<GString> {
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_website_data_manager_get_itp_directory(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_itp_enabled(&self) -> bool {
+        unsafe {
+            from_glib(webkit2_sys::webkit_website_data_manager_get_itp_enabled(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    //#[cfg(any(feature = "v2_30", feature = "dox"))]
+    //fn get_itp_summary<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/Vec<ITPThirdParty>, glib::Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q) {
+    //    unsafe { TODO: call webkit2_sys:webkit_website_data_manager_get_itp_summary() }
+    //}
+
+    //
+    //#[cfg(any(feature = "v2_30", feature = "dox"))]
+    //fn get_itp_summary_future(&self) -> Pin<Box_<dyn std::future::Future<Output = Result</*Ignored*/Vec<ITPThirdParty>, glib::Error>> + 'static>> {
+
+    //Box_::pin(gio::GioFuture::new(self, move |obj, send| {
+    //    let cancellable = gio::Cancellable::new();
+    //    obj.get_itp_summary(
+    //        Some(&cancellable),
+    //        move |res| {
+    //            send.resolve(res);
+    //        },
+    //    );
+
+    //    cancellable
+    //}))
+    //}
+
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_local_storage_directory(&self) -> Option<GString> {
         unsafe {
@@ -225,6 +304,28 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
         unsafe {
             from_glib_none(
                 webkit2_sys::webkit_website_data_manager_get_offline_application_cache_directory(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_persistent_credential_storage_enabled(&self) -> bool {
+        unsafe {
+            from_glib(
+                webkit2_sys::webkit_website_data_manager_get_persistent_credential_storage_enabled(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_service_worker_registrations_directory(&self) -> Option<GString> {
+        unsafe {
+            from_glib_none(
+                webkit2_sys::webkit_website_data_manager_get_service_worker_registrations_directory(
                     self.as_ref().to_glib_none().0,
                 ),
             )
@@ -273,6 +374,26 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     //    cancellable
     //}))
     //}
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_itp_enabled(&self, enabled: bool) {
+        unsafe {
+            webkit2_sys::webkit_website_data_manager_set_itp_enabled(
+                self.as_ref().to_glib_none().0,
+                enabled.to_glib(),
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_persistent_credential_storage_enabled(&self, enabled: bool) {
+        unsafe {
+            webkit2_sys::webkit_website_data_manager_set_persistent_credential_storage_enabled(
+                self.as_ref().to_glib_none().0,
+                enabled.to_glib(),
+            );
+        }
+    }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_property_is_ephemeral(&self) -> bool {

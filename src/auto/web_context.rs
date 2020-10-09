@@ -141,6 +141,9 @@ pub trait WebContextExt: 'static {
 
     fn get_tls_errors_policy(&self) -> TLSErrorsPolicy;
 
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_use_system_appearance_for_scrollbars(&self) -> bool;
+
     #[cfg_attr(feature = "v2_26", deprecated)]
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_web_process_count_limit(&self) -> u32;
@@ -194,6 +197,9 @@ pub trait WebContextExt: 'static {
 
     fn set_tls_errors_policy(&self, policy: TLSErrorsPolicy);
 
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_use_system_appearance_for_scrollbars(&self, enabled: bool);
+
     fn set_web_extensions_directory(&self, directory: &str);
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
@@ -226,6 +232,12 @@ pub trait WebContextExt: 'static {
 
     //#[cfg(any(feature = "v2_28", feature = "dox"))]
     //fn connect_user_message_received<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn connect_property_use_system_appearance_for_scrollbars_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<WebContext>> WebContextExt for O {
@@ -413,6 +425,17 @@ impl<O: IsA<WebContext>> WebContextExt for O {
             from_glib(webkit2_sys::webkit_web_context_get_tls_errors_policy(
                 self.as_ref().to_glib_none().0,
             ))
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_use_system_appearance_for_scrollbars(&self) -> bool {
+        unsafe {
+            from_glib(
+                webkit2_sys::webkit_web_context_get_use_system_appearance_for_scrollbars(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
         }
     }
 
@@ -612,6 +635,16 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         }
     }
 
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_use_system_appearance_for_scrollbars(&self, enabled: bool) {
+        unsafe {
+            webkit2_sys::webkit_web_context_set_use_system_appearance_for_scrollbars(
+                self.as_ref().to_glib_none().0,
+                enabled.to_glib(),
+            );
+        }
+    }
+
     fn set_web_extensions_directory(&self, directory: &str) {
         unsafe {
             webkit2_sys::webkit_web_context_set_web_extensions_directory(
@@ -759,6 +792,37 @@ impl<O: IsA<WebContext>> WebContextExt for O {
     //fn connect_user_message_received<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored message: WebKit2.UserMessage
     //}
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn connect_property_use_system_appearance_for_scrollbars_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_use_system_appearance_for_scrollbars_trampoline<
+            P,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut webkit2_sys::WebKitWebContext,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<WebContext>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&WebContext::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::use-system-appearance-for-scrollbars\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_system_appearance_for_scrollbars_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 }
 
 impl fmt::Display for WebContext {
