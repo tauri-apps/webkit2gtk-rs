@@ -130,6 +130,178 @@ impl SetValue for AuthenticationScheme {
     }
 }
 
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+pub enum AutomationBrowsingContextPresentation {
+    Window,
+    Tab,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl fmt::Display for AutomationBrowsingContextPresentation {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "AutomationBrowsingContextPresentation::{}",
+            match *self {
+                AutomationBrowsingContextPresentation::Window => "Window",
+                AutomationBrowsingContextPresentation::Tab => "Tab",
+                _ => "Unknown",
+            }
+        )
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+#[doc(hidden)]
+impl ToGlib for AutomationBrowsingContextPresentation {
+    type GlibType = webkit2_sys::WebKitAutomationBrowsingContextPresentation;
+
+    fn to_glib(&self) -> webkit2_sys::WebKitAutomationBrowsingContextPresentation {
+        match *self {
+            AutomationBrowsingContextPresentation::Window => {
+                webkit2_sys::WEBKIT_AUTOMATION_BROWSING_CONTEXT_PRESENTATION_WINDOW
+            }
+            AutomationBrowsingContextPresentation::Tab => {
+                webkit2_sys::WEBKIT_AUTOMATION_BROWSING_CONTEXT_PRESENTATION_TAB
+            }
+            AutomationBrowsingContextPresentation::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+#[doc(hidden)]
+impl FromGlib<webkit2_sys::WebKitAutomationBrowsingContextPresentation>
+    for AutomationBrowsingContextPresentation
+{
+    fn from_glib(value: webkit2_sys::WebKitAutomationBrowsingContextPresentation) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => AutomationBrowsingContextPresentation::Window,
+            1 => AutomationBrowsingContextPresentation::Tab,
+            value => AutomationBrowsingContextPresentation::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl StaticType for AutomationBrowsingContextPresentation {
+    fn static_type() -> Type {
+        unsafe {
+            from_glib(webkit2_sys::webkit_automation_browsing_context_presentation_get_type())
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl<'a> FromValueOptional<'a> for AutomationBrowsingContextPresentation {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl<'a> FromValue<'a> for AutomationBrowsingContextPresentation {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl SetValue for AutomationBrowsingContextPresentation {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[cfg(any(feature = "v2_30", feature = "dox"))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+pub enum AutoplayPolicy {
+    Allow,
+    AllowWithoutSound,
+    Deny,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v2_30", feature = "dox"))]
+impl fmt::Display for AutoplayPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "AutoplayPolicy::{}",
+            match *self {
+                AutoplayPolicy::Allow => "Allow",
+                AutoplayPolicy::AllowWithoutSound => "AllowWithoutSound",
+                AutoplayPolicy::Deny => "Deny",
+                _ => "Unknown",
+            }
+        )
+    }
+}
+
+#[cfg(any(feature = "v2_30", feature = "dox"))]
+#[doc(hidden)]
+impl ToGlib for AutoplayPolicy {
+    type GlibType = webkit2_sys::WebKitAutoplayPolicy;
+
+    fn to_glib(&self) -> webkit2_sys::WebKitAutoplayPolicy {
+        match *self {
+            AutoplayPolicy::Allow => webkit2_sys::WEBKIT_AUTOPLAY_ALLOW,
+            AutoplayPolicy::AllowWithoutSound => webkit2_sys::WEBKIT_AUTOPLAY_ALLOW_WITHOUT_SOUND,
+            AutoplayPolicy::Deny => webkit2_sys::WEBKIT_AUTOPLAY_DENY,
+            AutoplayPolicy::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_30", feature = "dox"))]
+#[doc(hidden)]
+impl FromGlib<webkit2_sys::WebKitAutoplayPolicy> for AutoplayPolicy {
+    fn from_glib(value: webkit2_sys::WebKitAutoplayPolicy) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => AutoplayPolicy::Allow,
+            1 => AutoplayPolicy::AllowWithoutSound,
+            2 => AutoplayPolicy::Deny,
+            value => AutoplayPolicy::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_30", feature = "dox"))]
+impl StaticType for AutoplayPolicy {
+    fn static_type() -> Type {
+        unsafe { from_glib(webkit2_sys::webkit_autoplay_policy_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v2_30", feature = "dox"))]
+impl<'a> FromValueOptional<'a> for AutoplayPolicy {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(any(feature = "v2_30", feature = "dox"))]
+impl<'a> FromValue<'a> for AutoplayPolicy {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v2_30", feature = "dox"))]
+impl SetValue for AutoplayPolicy {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum CacheModel {
@@ -1031,6 +1203,106 @@ impl<'a> FromValue<'a> for HardwareAccelerationPolicy {
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 impl SetValue for HardwareAccelerationPolicy {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+pub enum InputPurpose {
+    FreeForm,
+    Digits,
+    Number,
+    Phone,
+    Url,
+    Email,
+    Password,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl fmt::Display for InputPurpose {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "InputPurpose::{}",
+            match *self {
+                InputPurpose::FreeForm => "FreeForm",
+                InputPurpose::Digits => "Digits",
+                InputPurpose::Number => "Number",
+                InputPurpose::Phone => "Phone",
+                InputPurpose::Url => "Url",
+                InputPurpose::Email => "Email",
+                InputPurpose::Password => "Password",
+                _ => "Unknown",
+            }
+        )
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+#[doc(hidden)]
+impl ToGlib for InputPurpose {
+    type GlibType = webkit2_sys::WebKitInputPurpose;
+
+    fn to_glib(&self) -> webkit2_sys::WebKitInputPurpose {
+        match *self {
+            InputPurpose::FreeForm => webkit2_sys::WEBKIT_INPUT_PURPOSE_FREE_FORM,
+            InputPurpose::Digits => webkit2_sys::WEBKIT_INPUT_PURPOSE_DIGITS,
+            InputPurpose::Number => webkit2_sys::WEBKIT_INPUT_PURPOSE_NUMBER,
+            InputPurpose::Phone => webkit2_sys::WEBKIT_INPUT_PURPOSE_PHONE,
+            InputPurpose::Url => webkit2_sys::WEBKIT_INPUT_PURPOSE_URL,
+            InputPurpose::Email => webkit2_sys::WEBKIT_INPUT_PURPOSE_EMAIL,
+            InputPurpose::Password => webkit2_sys::WEBKIT_INPUT_PURPOSE_PASSWORD,
+            InputPurpose::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+#[doc(hidden)]
+impl FromGlib<webkit2_sys::WebKitInputPurpose> for InputPurpose {
+    fn from_glib(value: webkit2_sys::WebKitInputPurpose) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => InputPurpose::FreeForm,
+            1 => InputPurpose::Digits,
+            2 => InputPurpose::Number,
+            3 => InputPurpose::Phone,
+            4 => InputPurpose::Url,
+            5 => InputPurpose::Email,
+            6 => InputPurpose::Password,
+            value => InputPurpose::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl StaticType for InputPurpose {
+    fn static_type() -> Type {
+        unsafe { from_glib(webkit2_sys::webkit_input_purpose_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl<'a> FromValueOptional<'a> for InputPurpose {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl<'a> FromValue<'a> for InputPurpose {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl SetValue for InputPurpose {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
@@ -2496,6 +2768,111 @@ impl SetValue for TLSErrorsPolicy {
     }
 }
 
+#[cfg(any(feature = "v2_24", feature = "dox"))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+pub enum UserContentFilterError {
+    InvalidSource,
+    NotFound,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v2_24", feature = "dox"))]
+impl fmt::Display for UserContentFilterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "UserContentFilterError::{}",
+            match *self {
+                UserContentFilterError::InvalidSource => "InvalidSource",
+                UserContentFilterError::NotFound => "NotFound",
+                _ => "Unknown",
+            }
+        )
+    }
+}
+
+#[cfg(any(feature = "v2_24", feature = "dox"))]
+#[doc(hidden)]
+impl ToGlib for UserContentFilterError {
+    type GlibType = webkit2_sys::WebKitUserContentFilterError;
+
+    fn to_glib(&self) -> webkit2_sys::WebKitUserContentFilterError {
+        match *self {
+            UserContentFilterError::InvalidSource => {
+                webkit2_sys::WEBKIT_USER_CONTENT_FILTER_ERROR_INVALID_SOURCE
+            }
+            UserContentFilterError::NotFound => {
+                webkit2_sys::WEBKIT_USER_CONTENT_FILTER_ERROR_NOT_FOUND
+            }
+            UserContentFilterError::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_24", feature = "dox"))]
+#[doc(hidden)]
+impl FromGlib<webkit2_sys::WebKitUserContentFilterError> for UserContentFilterError {
+    fn from_glib(value: webkit2_sys::WebKitUserContentFilterError) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => UserContentFilterError::InvalidSource,
+            1 => UserContentFilterError::NotFound,
+            value => UserContentFilterError::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_24", feature = "dox"))]
+impl ErrorDomain for UserContentFilterError {
+    fn domain() -> Quark {
+        skip_assert_initialized!();
+        unsafe { from_glib(webkit2_sys::webkit_user_content_filter_error_quark()) }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib()
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
+        match code {
+            0 => Some(UserContentFilterError::InvalidSource),
+            1 => Some(UserContentFilterError::NotFound),
+            value => Some(UserContentFilterError::__Unknown(value)),
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_24", feature = "dox"))]
+impl StaticType for UserContentFilterError {
+    fn static_type() -> Type {
+        unsafe { from_glib(webkit2_sys::webkit_user_content_filter_error_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v2_24", feature = "dox"))]
+impl<'a> FromValueOptional<'a> for UserContentFilterError {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(any(feature = "v2_24", feature = "dox"))]
+impl<'a> FromValue<'a> for UserContentFilterError {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v2_24", feature = "dox"))]
+impl SetValue for UserContentFilterError {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -2575,6 +2952,102 @@ impl<'a> FromValue<'a> for UserContentInjectedFrames {
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 impl SetValue for UserContentInjectedFrames {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+pub enum UserMessageError {
+    Message,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl fmt::Display for UserMessageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "UserMessageError::{}",
+            match *self {
+                UserMessageError::Message => "Message",
+                _ => "Unknown",
+            }
+        )
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+#[doc(hidden)]
+impl ToGlib for UserMessageError {
+    type GlibType = webkit2_sys::WebKitUserMessageError;
+
+    fn to_glib(&self) -> webkit2_sys::WebKitUserMessageError {
+        match *self {
+            UserMessageError::Message => webkit2_sys::WEBKIT_USER_MESSAGE_UNHANDLED_MESSAGE,
+            UserMessageError::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+#[doc(hidden)]
+impl FromGlib<webkit2_sys::WebKitUserMessageError> for UserMessageError {
+    fn from_glib(value: webkit2_sys::WebKitUserMessageError) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => UserMessageError::Message,
+            value => UserMessageError::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl ErrorDomain for UserMessageError {
+    fn domain() -> Quark {
+        skip_assert_initialized!();
+        unsafe { from_glib(webkit2_sys::webkit_user_message_error_quark()) }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib()
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
+        match code {
+            0 => Some(UserMessageError::Message),
+            value => Some(UserMessageError::__Unknown(value)),
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl StaticType for UserMessageError {
+    fn static_type() -> Type {
+        unsafe { from_glib(webkit2_sys::webkit_user_message_error_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl<'a> FromValueOptional<'a> for UserMessageError {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl<'a> FromValue<'a> for UserMessageError {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl SetValue for UserMessageError {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
@@ -2737,6 +3210,88 @@ impl<'a> FromValue<'a> for UserStyleLevel {
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 impl SetValue for UserStyleLevel {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[cfg(any(feature = "v2_20", feature = "dox"))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+pub enum WebProcessTerminationReason {
+    Crashed,
+    ExceededMemoryLimit,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v2_20", feature = "dox"))]
+impl fmt::Display for WebProcessTerminationReason {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "WebProcessTerminationReason::{}",
+            match *self {
+                WebProcessTerminationReason::Crashed => "Crashed",
+                WebProcessTerminationReason::ExceededMemoryLimit => "ExceededMemoryLimit",
+                _ => "Unknown",
+            }
+        )
+    }
+}
+
+#[cfg(any(feature = "v2_20", feature = "dox"))]
+#[doc(hidden)]
+impl ToGlib for WebProcessTerminationReason {
+    type GlibType = webkit2_sys::WebKitWebProcessTerminationReason;
+
+    fn to_glib(&self) -> webkit2_sys::WebKitWebProcessTerminationReason {
+        match *self {
+            WebProcessTerminationReason::Crashed => webkit2_sys::WEBKIT_WEB_PROCESS_CRASHED,
+            WebProcessTerminationReason::ExceededMemoryLimit => {
+                webkit2_sys::WEBKIT_WEB_PROCESS_EXCEEDED_MEMORY_LIMIT
+            }
+            WebProcessTerminationReason::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_20", feature = "dox"))]
+#[doc(hidden)]
+impl FromGlib<webkit2_sys::WebKitWebProcessTerminationReason> for WebProcessTerminationReason {
+    fn from_glib(value: webkit2_sys::WebKitWebProcessTerminationReason) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => WebProcessTerminationReason::Crashed,
+            1 => WebProcessTerminationReason::ExceededMemoryLimit,
+            value => WebProcessTerminationReason::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v2_20", feature = "dox"))]
+impl StaticType for WebProcessTerminationReason {
+    fn static_type() -> Type {
+        unsafe { from_glib(webkit2_sys::webkit_web_process_termination_reason_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v2_20", feature = "dox"))]
+impl<'a> FromValueOptional<'a> for WebProcessTerminationReason {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(any(feature = "v2_20", feature = "dox"))]
+impl<'a> FromValue<'a> for WebProcessTerminationReason {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v2_20", feature = "dox"))]
+impl SetValue for WebProcessTerminationReason {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }

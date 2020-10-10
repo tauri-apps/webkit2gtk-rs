@@ -32,6 +32,8 @@ use std::ptr;
 use webkit2_sys;
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 use AuthenticationRequest;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+use AutomationBrowsingContextPresentation;
 use BackForwardList;
 use BackForwardListItem;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
@@ -44,6 +46,8 @@ use FileChooserRequest;
 use FindController;
 use FormSubmissionRequest;
 use HitTestResult;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+use InputMethodContext;
 use InsecureContentEvent;
 use JavascriptResult;
 use LoadEvent;
@@ -51,6 +55,8 @@ use LoadEvent;
 use NavigationAction;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 use Notification;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+use OptionMenu;
 use PermissionRequest;
 use PolicyDecision;
 use PolicyDecisionType;
@@ -63,14 +69,20 @@ use SnapshotRegion;
 use URIRequest;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 use UserContentManager;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+use UserMessage;
 use WebContext;
 use WebInspector;
+#[cfg(any(feature = "v2_20", feature = "dox"))]
+use WebProcessTerminationReason;
 use WebResource;
 use WebViewBase;
 #[cfg(any(feature = "v2_12", feature = "dox"))]
 use WebViewSessionState;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use WebsiteDataManager;
+#[cfg(any(feature = "v2_30", feature = "dox"))]
+use WebsitePolicies;
 use WindowProperties;
 
 glib_wrapper! {
@@ -170,8 +182,8 @@ pub trait WebViewExt: 'static {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn execute_editing_command_with_argument(&self, command: &str, argument: &str);
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn get_automation_presentation_type(&self) -> /*Ignored*/AutomationBrowsingContextPresentation;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn get_automation_presentation_type(&self) -> AutomationBrowsingContextPresentation;
 
     fn get_back_forward_list(&self) -> Option<BackForwardList>;
 
@@ -191,8 +203,8 @@ pub trait WebViewExt: 'static {
 
     fn get_find_controller(&self) -> Option<FindController>;
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn get_input_method_context(&self) -> /*Ignored*/Option<InputMethodContext>;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn get_input_method_context(&self) -> Option<InputMethodContext>;
 
     fn get_inspector(&self) -> Option<WebInspector>;
 
@@ -240,8 +252,8 @@ pub trait WebViewExt: 'static {
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_website_data_manager(&self) -> Option<WebsiteDataManager>;
 
-    //#[cfg(any(feature = "v2_30", feature = "dox"))]
-    //fn get_website_policies(&self) -> /*Ignored*/Option<WebsitePolicies>;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_website_policies(&self) -> Option<WebsitePolicies>;
 
     fn get_window_properties(&self) -> Option<WindowProperties>;
 
@@ -361,12 +373,23 @@ pub trait WebViewExt: 'static {
     //
     //fn save_to_file_future(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn send_message_to_page<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/UserMessage, glib::Error>) + Send + 'static>(&self, message: /*Ignored*/&UserMessage, cancellable: Option<&P>, callback: Q);
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn send_message_to_page<
+        P: IsA<UserMessage>,
+        Q: IsA<gio::Cancellable>,
+        R: FnOnce(Result<UserMessage, glib::Error>) + Send + 'static,
+    >(
+        &self,
+        message: &P,
+        cancellable: Option<&Q>,
+        callback: R,
+    );
 
-    //
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn send_message_to_page_future(&self, message: /*Ignored*/&UserMessage) -> Pin<Box_<dyn std::future::Future<Output = Result</*Ignored*/UserMessage, glib::Error>> + 'static>>;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn send_message_to_page_future<P: IsA<UserMessage> + Clone + 'static>(
+        &self,
+        message: &P,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<UserMessage, glib::Error>> + 'static>>;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn set_background_color(&self, rgba: &gdk::RGBA);
@@ -376,8 +399,8 @@ pub trait WebViewExt: 'static {
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn set_editable(&self, editable: bool);
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn set_input_method_context(&self, context: /*Ignored*/Option<&InputMethodContext>);
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn set_input_method_context<P: IsA<InputMethodContext>>(&self, context: Option<&P>);
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
     fn set_is_muted(&self, muted: bool);
@@ -505,22 +528,33 @@ pub trait WebViewExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn connect_show_option_menu<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn connect_show_option_menu<
+        F: Fn(&Self, &OptionMenu, &gdk::Event, &gdk::Rectangle) -> bool + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_submit_form<F: Fn(&Self, &FormSubmissionRequest) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn connect_user_message_received<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn connect_user_message_received<F: Fn(&Self, &UserMessage) -> bool + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[cfg_attr(feature = "v2_20", deprecated)]
     fn connect_web_process_crashed<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v2_20", feature = "dox"))]
-    //fn connect_web_process_terminated<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v2_20", feature = "dox"))]
+    fn connect_web_process_terminated<F: Fn(&Self, WebProcessTerminationReason) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_property_editable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -669,10 +703,16 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn get_automation_presentation_type(&self) -> /*Ignored*/AutomationBrowsingContextPresentation {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_view_get_automation_presentation_type() }
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn get_automation_presentation_type(&self) -> AutomationBrowsingContextPresentation {
+        unsafe {
+            from_glib(
+                webkit2_sys::webkit_web_view_get_automation_presentation_type(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
+        }
+    }
 
     fn get_back_forward_list(&self) -> Option<BackForwardList> {
         unsafe {
@@ -741,10 +781,14 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn get_input_method_context(&self) -> /*Ignored*/Option<InputMethodContext> {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_view_get_input_method_context() }
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn get_input_method_context(&self) -> Option<InputMethodContext> {
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_web_view_get_input_method_context(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
     fn get_inspector(&self) -> Option<WebInspector> {
         unsafe {
@@ -913,10 +957,14 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_30", feature = "dox"))]
-    //fn get_website_policies(&self) -> /*Ignored*/Option<WebsitePolicies> {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_view_get_website_policies() }
-    //}
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_website_policies(&self) -> Option<WebsitePolicies> {
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_web_view_get_website_policies(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
     fn get_window_properties(&self) -> Option<WindowProperties> {
         unsafe {
@@ -1344,29 +1392,67 @@ impl<O: IsA<WebView>> WebViewExt for O {
     //}))
     //}
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn send_message_to_page<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/UserMessage, glib::Error>) + Send + 'static>(&self, message: /*Ignored*/&UserMessage, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_view_send_message_to_page() }
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn send_message_to_page<
+        P: IsA<UserMessage>,
+        Q: IsA<gio::Cancellable>,
+        R: FnOnce(Result<UserMessage, glib::Error>) + Send + 'static,
+    >(
+        &self,
+        message: &P,
+        cancellable: Option<&Q>,
+        callback: R,
+    ) {
+        let user_data: Box_<R> = Box_::new(callback);
+        unsafe extern "C" fn send_message_to_page_trampoline<
+            R: FnOnce(Result<UserMessage, glib::Error>) + Send + 'static,
+        >(
+            _source_object: *mut gobject_sys::GObject,
+            res: *mut gio_sys::GAsyncResult,
+            user_data: glib_sys::gpointer,
+        ) {
+            let mut error = ptr::null_mut();
+            let ret = webkit2_sys::webkit_web_view_send_message_to_page_finish(
+                _source_object as *mut _,
+                res,
+                &mut error,
+            );
+            let result = if error.is_null() {
+                Ok(from_glib_full(ret))
+            } else {
+                Err(from_glib_full(error))
+            };
+            let callback: Box_<R> = Box_::from_raw(user_data as *mut _);
+            callback(result);
+        }
+        let callback = send_message_to_page_trampoline::<R>;
+        unsafe {
+            webkit2_sys::webkit_web_view_send_message_to_page(
+                self.as_ref().to_glib_none().0,
+                message.as_ref().to_glib_none().0,
+                cancellable.map(|p| p.as_ref()).to_glib_none().0,
+                Some(callback),
+                Box_::into_raw(user_data) as *mut _,
+            );
+        }
+    }
 
-    //
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn send_message_to_page_future(&self, message: /*Ignored*/&UserMessage) -> Pin<Box_<dyn std::future::Future<Output = Result</*Ignored*/UserMessage, glib::Error>> + 'static>> {
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn send_message_to_page_future<P: IsA<UserMessage> + Clone + 'static>(
+        &self,
+        message: &P,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<UserMessage, glib::Error>> + 'static>>
+    {
+        let message = message.clone();
+        Box_::pin(gio::GioFuture::new(self, move |obj, send| {
+            let cancellable = gio::Cancellable::new();
+            obj.send_message_to_page(&message, Some(&cancellable), move |res| {
+                send.resolve(res);
+            });
 
-    //let message = message.clone();
-    //Box_::pin(gio::GioFuture::new(self, move |obj, send| {
-    //    let cancellable = gio::Cancellable::new();
-    //    obj.send_message_to_page(
-    //        &message,
-    //        Some(&cancellable),
-    //        move |res| {
-    //            send.resolve(res);
-    //        },
-    //    );
-
-    //    cancellable
-    //}))
-    //}
+            cancellable
+        }))
+    }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn set_background_color(&self, rgba: &gdk::RGBA) {
@@ -1397,10 +1483,15 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn set_input_method_context(&self, context: /*Ignored*/Option<&InputMethodContext>) {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_view_set_input_method_context() }
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn set_input_method_context<P: IsA<InputMethodContext>>(&self, context: Option<&P>) {
+        unsafe {
+            webkit2_sys::webkit_web_view_set_input_method_context(
+                self.as_ref().to_glib_none().0,
+                context.map(|p| p.as_ref()).to_glib_none().0,
+            );
+        }
+    }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
     fn set_is_muted(&self, muted: bool) {
@@ -2245,10 +2336,47 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn connect_show_option_menu<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored object: WebKit2.OptionMenu
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn connect_show_option_menu<
+        F: Fn(&Self, &OptionMenu, &gdk::Event, &gdk::Rectangle) -> bool + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn show_option_menu_trampoline<
+            P,
+            F: Fn(&P, &OptionMenu, &gdk::Event, &gdk::Rectangle) -> bool + 'static,
+        >(
+            this: *mut webkit2_sys::WebKitWebView,
+            object: *mut webkit2_sys::WebKitOptionMenu,
+            p0: *mut gdk_sys::GdkEvent,
+            p1: *mut gdk_sys::GdkRectangle,
+            f: glib_sys::gpointer,
+        ) -> glib_sys::gboolean
+        where
+            P: IsA<WebView>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &WebView::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(object),
+                &from_glib_none(p0),
+                &from_glib_borrow(p1),
+            )
+            .to_glib()
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"show-option-menu\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    show_option_menu_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 
     fn connect_submit_form<F: Fn(&Self, &FormSubmissionRequest) + 'static>(
         &self,
@@ -2283,10 +2411,41 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn connect_user_message_received<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored message: WebKit2.UserMessage
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn connect_user_message_received<F: Fn(&Self, &UserMessage) -> bool + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn user_message_received_trampoline<
+            P,
+            F: Fn(&P, &UserMessage) -> bool + 'static,
+        >(
+            this: *mut webkit2_sys::WebKitWebView,
+            message: *mut webkit2_sys::WebKitUserMessage,
+            f: glib_sys::gpointer,
+        ) -> glib_sys::gboolean
+        where
+            P: IsA<WebView>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &WebView::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(message),
+            )
+            .to_glib()
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"user-message-received\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    user_message_received_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 
     fn connect_web_process_crashed<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn web_process_crashed_trampoline<P, F: Fn(&P) -> bool + 'static>(
@@ -2312,10 +2471,39 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_20", feature = "dox"))]
-    //fn connect_web_process_terminated<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored reason: WebKit2.WebProcessTerminationReason
-    //}
+    #[cfg(any(feature = "v2_20", feature = "dox"))]
+    fn connect_web_process_terminated<F: Fn(&Self, WebProcessTerminationReason) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn web_process_terminated_trampoline<
+            P,
+            F: Fn(&P, WebProcessTerminationReason) + 'static,
+        >(
+            this: *mut webkit2_sys::WebKitWebView,
+            reason: webkit2_sys::WebKitWebProcessTerminationReason,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<WebView>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &WebView::from_glib_borrow(this).unsafe_cast_ref(),
+                from_glib(reason),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"web-process-terminated\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    web_process_terminated_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_property_editable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

@@ -25,10 +25,14 @@ use std::mem::transmute;
 use std::pin::Pin;
 use std::ptr;
 use webkit2_sys;
+#[cfg(any(feature = "v2_18", feature = "dox"))]
+use AutomationSession;
 use CacheModel;
 use CookieManager;
 use Download;
 use FaviconDatabase;
+#[cfg(any(feature = "v2_26", feature = "dox"))]
+use GeolocationManager;
 use Plugin;
 #[cfg(any(feature = "v2_4", feature = "dox"))]
 use ProcessModel;
@@ -37,6 +41,8 @@ use SecurityManager;
 use SecurityOrigin;
 use TLSErrorsPolicy;
 use URISchemeRequest;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+use UserMessage;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 use WebsiteDataManager;
 
@@ -111,8 +117,8 @@ pub trait WebContextExt: 'static {
 
     fn get_favicon_database_directory(&self) -> Option<GString>;
 
-    //#[cfg(any(feature = "v2_26", feature = "dox"))]
-    //fn get_geolocation_manager(&self) -> /*Ignored*/Option<GeolocationManager>;
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn get_geolocation_manager(&self) -> Option<GeolocationManager>;
 
     fn get_plugins<
         P: IsA<gio::Cancellable>,
@@ -168,8 +174,8 @@ pub trait WebContextExt: 'static {
 
     fn register_uri_scheme<P: Fn(&URISchemeRequest) + 'static>(&self, scheme: &str, callback: P);
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn send_message_to_all_extensions(&self, message: /*Ignored*/&UserMessage);
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn send_message_to_all_extensions<P: IsA<UserMessage>>(&self, message: &P);
 
     fn set_additional_plugins_directory(&self, directory: &str);
 
@@ -216,8 +222,11 @@ pub trait WebContextExt: 'static {
     #[cfg(any(feature = "v2_28", feature = "dox"))]
     fn get_property_process_swap_on_cross_site_navigation_enabled(&self) -> bool;
 
-    //#[cfg(any(feature = "v2_18", feature = "dox"))]
-    //fn connect_automation_started<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v2_18", feature = "dox"))]
+    fn connect_automation_started<F: Fn(&Self, &AutomationSession) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_download_started<F: Fn(&Self, &Download) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -230,8 +239,11 @@ pub trait WebContextExt: 'static {
     #[cfg(any(feature = "v2_4", feature = "dox"))]
     fn connect_initialize_web_extensions<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn connect_user_message_received<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn connect_user_message_received<F: Fn(&Self, &UserMessage) -> bool + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
     fn connect_property_use_system_appearance_for_scrollbars_notify<F: Fn(&Self) + 'static>(
@@ -316,10 +328,14 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_26", feature = "dox"))]
-    //fn get_geolocation_manager(&self) -> /*Ignored*/Option<GeolocationManager> {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_context_get_geolocation_manager() }
-    //}
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn get_geolocation_manager(&self) -> Option<GeolocationManager> {
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_web_context_get_geolocation_manager(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
     fn get_plugins<
         P: IsA<gio::Cancellable>,
@@ -528,10 +544,15 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn send_message_to_all_extensions(&self, message: /*Ignored*/&UserMessage) {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_context_send_message_to_all_extensions() }
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn send_message_to_all_extensions<P: IsA<UserMessage>>(&self, message: &P) {
+        unsafe {
+            webkit2_sys::webkit_web_context_send_message_to_all_extensions(
+                self.as_ref().to_glib_none().0,
+                message.as_ref().to_glib_none().0,
+            );
+        }
+    }
 
     fn set_additional_plugins_directory(&self, directory: &str) {
         unsafe {
@@ -702,10 +723,39 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_18", feature = "dox"))]
-    //fn connect_automation_started<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored session: WebKit2.AutomationSession
-    //}
+    #[cfg(any(feature = "v2_18", feature = "dox"))]
+    fn connect_automation_started<F: Fn(&Self, &AutomationSession) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn automation_started_trampoline<
+            P,
+            F: Fn(&P, &AutomationSession) + 'static,
+        >(
+            this: *mut webkit2_sys::WebKitWebContext,
+            session: *mut webkit2_sys::WebKitAutomationSession,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<WebContext>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &WebContext::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(session),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"automation-started\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    automation_started_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 
     fn connect_download_started<F: Fn(&Self, &Download) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn download_started_trampoline<P, F: Fn(&P, &Download) + 'static>(
@@ -788,10 +838,41 @@ impl<O: IsA<WebContext>> WebContextExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn connect_user_message_received<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored message: WebKit2.UserMessage
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn connect_user_message_received<F: Fn(&Self, &UserMessage) -> bool + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn user_message_received_trampoline<
+            P,
+            F: Fn(&P, &UserMessage) -> bool + 'static,
+        >(
+            this: *mut webkit2_sys::WebKitWebContext,
+            message: *mut webkit2_sys::WebKitUserMessage,
+            f: glib_sys::gpointer,
+        ) -> glib_sys::gboolean
+        where
+            P: IsA<WebContext>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &WebContext::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(message),
+            )
+            .to_glib()
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"user-message-received\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    user_message_received_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
     fn connect_property_use_system_appearance_for_scrollbars_notify<F: Fn(&Self) + 'static>(
