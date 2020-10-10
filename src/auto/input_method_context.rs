@@ -2,6 +2,8 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+use gdk;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -33,8 +35,8 @@ glib_wrapper! {
 pub const NONE_INPUT_METHOD_CONTEXT: Option<&InputMethodContext> = None;
 
 pub trait InputMethodContextExt: 'static {
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn filter_key_event(&self, key_event: /*Ignored*/&mut gdk::EventKey) -> bool;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn filter_key_event(&self, key_event: &mut gdk::EventKey) -> bool;
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
     fn get_input_hints(&self) -> InputHints;
@@ -102,10 +104,15 @@ pub trait InputMethodContextExt: 'static {
 }
 
 impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn filter_key_event(&self, key_event: /*Ignored*/&mut gdk::EventKey) -> bool {
-    //    unsafe { TODO: call webkit2_sys:webkit_input_method_context_filter_key_event() }
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn filter_key_event(&self, key_event: &mut gdk::EventKey) -> bool {
+        unsafe {
+            from_glib(webkit2_sys::webkit_input_method_context_filter_key_event(
+                self.as_ref().to_glib_none().0,
+                key_event.to_glib_none_mut().0,
+            ))
+        }
+    }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
     fn get_input_hints(&self) -> InputHints {

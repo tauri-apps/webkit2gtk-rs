@@ -61,12 +61,21 @@ impl WebsiteDataManager {
 pub const NONE_WEBSITE_DATA_MANAGER: Option<&WebsiteDataManager> = None;
 
 pub trait WebsiteDataManagerExt: 'static {
-    //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan, cancellable: Option<&P>, callback: Q);
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(
+        &self,
+        types: WebsiteDataTypes,
+        timespan: glib::TimeSpan,
+        cancellable: Option<&P>,
+        callback: Q,
+    );
 
-    //
-    //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn clear_future(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    fn clear_future(
+        &self,
+        types: WebsiteDataTypes,
+        timespan: glib::TimeSpan,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn fetch<
@@ -173,29 +182,64 @@ pub trait WebsiteDataManagerExt: 'static {
 }
 
 impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
-    //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call webkit2_sys:webkit_website_data_manager_clear() }
-    //}
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(
+        &self,
+        types: WebsiteDataTypes,
+        timespan: glib::TimeSpan,
+        cancellable: Option<&P>,
+        callback: Q,
+    ) {
+        let user_data: Box_<Q> = Box_::new(callback);
+        unsafe extern "C" fn clear_trampoline<
+            Q: FnOnce(Result<(), glib::Error>) + Send + 'static,
+        >(
+            _source_object: *mut gobject_sys::GObject,
+            res: *mut gio_sys::GAsyncResult,
+            user_data: glib_sys::gpointer,
+        ) {
+            let mut error = ptr::null_mut();
+            let _ = webkit2_sys::webkit_website_data_manager_clear_finish(
+                _source_object as *mut _,
+                res,
+                &mut error,
+            );
+            let result = if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            };
+            let callback: Box_<Q> = Box_::from_raw(user_data as *mut _);
+            callback(result);
+        }
+        let callback = clear_trampoline::<Q>;
+        unsafe {
+            webkit2_sys::webkit_website_data_manager_clear(
+                self.as_ref().to_glib_none().0,
+                types.to_glib(),
+                timespan,
+                cancellable.map(|p| p.as_ref()).to_glib_none().0,
+                Some(callback),
+                Box_::into_raw(user_data) as *mut _,
+            );
+        }
+    }
 
-    //
-    //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn clear_future(&self, types: WebsiteDataTypes, timespan: /*Ignored*/glib::TimeSpan) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    fn clear_future(
+        &self,
+        types: WebsiteDataTypes,
+        timespan: glib::TimeSpan,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
+        Box_::pin(gio::GioFuture::new(self, move |obj, send| {
+            let cancellable = gio::Cancellable::new();
+            obj.clear(types, timespan, Some(&cancellable), move |res| {
+                send.resolve(res);
+            });
 
-    //Box_::pin(gio::GioFuture::new(self, move |obj, send| {
-    //    let cancellable = gio::Cancellable::new();
-    //    obj.clear(
-    //        types,
-    //        timespan,
-    //        Some(&cancellable),
-    //        move |res| {
-    //            send.resolve(res);
-    //        },
-    //    );
-
-    //    cancellable
-    //}))
-    //}
+            cancellable
+        }))
+    }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn fetch<

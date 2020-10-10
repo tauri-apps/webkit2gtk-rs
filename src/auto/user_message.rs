@@ -3,6 +3,8 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_28", feature = "dox"))]
+use gio;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
@@ -31,17 +33,28 @@ impl UserMessage {
         }
     }
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //pub fn with_fd_list(name: &str, parameters: Option<&glib::Variant>, fd_list: /*Ignored*/Option<&gio::UnixFDList>) -> UserMessage {
-    //    unsafe { TODO: call webkit2_sys:webkit_user_message_new_with_fd_list() }
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    pub fn with_fd_list<P: IsA<gio::UnixFDList>>(
+        name: &str,
+        parameters: Option<&glib::Variant>,
+        fd_list: Option<&P>,
+    ) -> UserMessage {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_user_message_new_with_fd_list(
+                name.to_glib_none().0,
+                parameters.to_glib_none().0,
+                fd_list.map(|p| p.as_ref()).to_glib_none().0,
+            ))
+        }
+    }
 }
 
 pub const NONE_USER_MESSAGE: Option<&UserMessage> = None;
 
 pub trait UserMessageExt: 'static {
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn get_fd_list(&self) -> /*Ignored*/Option<gio::UnixFDList>;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn get_fd_list(&self) -> Option<gio::UnixFDList>;
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
     fn get_name(&self) -> Option<GString>;
@@ -54,10 +67,14 @@ pub trait UserMessageExt: 'static {
 }
 
 impl<O: IsA<UserMessage>> UserMessageExt for O {
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn get_fd_list(&self) -> /*Ignored*/Option<gio::UnixFDList> {
-    //    unsafe { TODO: call webkit2_sys:webkit_user_message_get_fd_list() }
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn get_fd_list(&self) -> Option<gio::UnixFDList> {
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_user_message_get_fd_list(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
     fn get_name(&self) -> Option<GString> {

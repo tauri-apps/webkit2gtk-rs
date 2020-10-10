@@ -2,6 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v2_18", feature = "dox"))]
+use gio;
+#[cfg(any(feature = "v2_18", feature = "dox"))]
+use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
@@ -23,10 +27,21 @@ impl ContextMenuItem {
     //    unsafe { TODO: call webkit2_sys:webkit_context_menu_item_new() }
     //}
 
-    //#[cfg(any(feature = "v2_18", feature = "dox"))]
-    //pub fn from_gaction(action: /*Ignored*/&gio::Action, label: &str, target: Option<&glib::Variant>) -> ContextMenuItem {
-    //    unsafe { TODO: call webkit2_sys:webkit_context_menu_item_new_from_gaction() }
-    //}
+    #[cfg(any(feature = "v2_18", feature = "dox"))]
+    pub fn from_gaction<P: IsA<gio::Action>>(
+        action: &P,
+        label: &str,
+        target: Option<&glib::Variant>,
+    ) -> ContextMenuItem {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_context_menu_item_new_from_gaction(
+                action.as_ref().to_glib_none().0,
+                label.to_glib_none().0,
+                target.to_glib_none().0,
+            ))
+        }
+    }
 
     pub fn from_stock_action(action: ContextMenuAction) -> ContextMenuItem {
         assert_initialized_main_thread!();
@@ -71,8 +86,8 @@ pub trait ContextMenuItemExt: 'static {
     //#[cfg_attr(feature = "v2_18", deprecated)]
     //fn get_action(&self) -> /*Ignored*/Option<gtk::Action>;
 
-    //#[cfg(any(feature = "v2_18", feature = "dox"))]
-    //fn get_gaction(&self) -> /*Ignored*/Option<gio::Action>;
+    #[cfg(any(feature = "v2_18", feature = "dox"))]
+    fn get_gaction(&self) -> Option<gio::Action>;
 
     fn get_stock_action(&self) -> ContextMenuAction;
 
@@ -88,10 +103,14 @@ impl<O: IsA<ContextMenuItem>> ContextMenuItemExt for O {
     //    unsafe { TODO: call webkit2_sys:webkit_context_menu_item_get_action() }
     //}
 
-    //#[cfg(any(feature = "v2_18", feature = "dox"))]
-    //fn get_gaction(&self) -> /*Ignored*/Option<gio::Action> {
-    //    unsafe { TODO: call webkit2_sys:webkit_context_menu_item_get_gaction() }
-    //}
+    #[cfg(any(feature = "v2_18", feature = "dox"))]
+    fn get_gaction(&self) -> Option<gio::Action> {
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_context_menu_item_get_gaction(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
     fn get_stock_action(&self) -> ContextMenuAction {
         unsafe {

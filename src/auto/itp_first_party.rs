@@ -3,6 +3,8 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_30", feature = "dox"))]
+use glib;
+#[cfg(any(feature = "v2_30", feature = "dox"))]
 use glib::translate::*;
 #[cfg(any(feature = "v2_30", feature = "dox"))]
 use glib::GString;
@@ -29,10 +31,14 @@ impl ITPFirstParty {
         }
     }
 
-    //#[cfg(any(feature = "v2_30", feature = "dox"))]
-    //pub fn get_last_update_time(&self) -> /*Ignored*/Option<glib::DateTime> {
-    //    unsafe { TODO: call webkit2_sys:webkit_itp_first_party_get_last_update_time() }
-    //}
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn get_last_update_time(&self) -> Option<glib::DateTime> {
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_itp_first_party_get_last_update_time(
+                self.to_glib_none().0,
+            ))
+        }
+    }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
     pub fn get_website_data_access_allowed(&self) -> bool {
