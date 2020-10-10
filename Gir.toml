@@ -45,14 +45,14 @@ generate = [
     "WebKit2.GeolocationPosition",
     "WebKit2.HardwareAccelerationPolicy",
     "WebKit2.HitTestResultContext",
-    "WebKit2.InputHints",
-    "WebKit2.InputMethodContext",
-    "WebKit2.InputPurpose",
-    "WebKit2.InputMethodUnderline",
-    "WebKit2.InsecureContentEvent",
-    "WebKit2.InstallMissingMediaPluginsPermissionRequest",
     "WebKit2.ITPFirstParty",
     "WebKit2.ITPThirdParty",
+    "WebKit2.InputHints",
+    "WebKit2.InputMethodContext",
+    "WebKit2.InputMethodUnderline",
+    "WebKit2.InputPurpose",
+    "WebKit2.InsecureContentEvent",
+    "WebKit2.InstallMissingMediaPluginsPermissionRequest",
     "WebKit2.JavascriptError",
     "WebKit2.JavascriptResult",
     "WebKit2.LoadEvent",
@@ -72,9 +72,9 @@ generate = [
     "WebKit2.PolicyDecision",
     "WebKit2.PolicyDecisionType",
     "WebKit2.PolicyError",
-    "WebKit2.ProcessModel",
     "WebKit2.PrintError",
     "WebKit2.PrintOperationResponse",
+    "WebKit2.ProcessModel",
     "WebKit2.ResponsePolicyDecision",
     "WebKit2.SaveMode",
     "WebKit2.ScriptDialogType",
@@ -96,13 +96,13 @@ generate = [
     "WebKit2.UserStyleLevel",
     "WebKit2.UserStyleSheet",
     "WebKit2.WebInspector",
+    "WebKit2.WebProcessTerminationReason",
     "WebKit2.WebResource",
-    "WebKit2.WebsiteDataTypes",
     "WebKit2.WebViewBase",
     "WebKit2.WebViewSessionState",
-    "WebKit2.WebProcessTerminationReason",
     "WebKit2.WebsiteData",
     "WebKit2.WebsiteDataAccessPermissionRequest",
+    "WebKit2.WebsiteDataTypes",
 ]
 
 manual = [
@@ -147,45 +147,37 @@ status = "generate"
     ignore = true
 
 [[object]]
-name = "WebKit2.WebContext"
+name = "WebKit2.AutomationSession"
 status = "generate"
 generate_builder = true
+
+[[object]]
+name = "WebKit2.ColorChooserRequest"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.Download"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.FindController"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.FormSubmissionRequest"
+status = "generate"
     [[object.function]]
-    name = "set_network_proxy_settings"
+    name = "list_text_fields"
+    # Fails to get generated as some how glib::GString doesn't get added
     ignore = true
 
 [[object]]
-name = "WebKit2.NetworkProxySettings"
-status = "generate"
-    [[object.function]]
-    name = "new"
-    ignore = true
-
-[[object]]
-name = "WebKit2.URISchemeRequest"
-status = "generate"
-module_name = "uri_scheme_request"
-
-[[object]]
-name = "WebKit2.URIRequest"
+name = "WebKit2.HitTestResult"
 status = "generate"
 generate_builder = true
-module_name = "uri_request"
-
-[[object]]
-name = "WebKit2.URIResponse"
-status = "generate"
-module_name = "uri_response"
-
-[[object]]
-name = "WebKit2.WebView"
-status = "generate"
-generate_builder = true
-    [[object.signal]]
-    name = "create"
-    version = "2.6"
-        [object.signal.return]
-        nullable = true
 
 [[object]]
 name = "WebKit2.NavigationAction"
@@ -217,42 +209,11 @@ status = "generate"
         const = true
 
 [[object]]
-name = "WebKit2.FormSubmissionRequest"
+name = "WebKit2.NetworkProxySettings"
 status = "generate"
     [[object.function]]
-    name = "list_text_fields"
-    # Fails to get generated as some how glib::GString doesn't get added
+    name = "new"
     ignore = true
-
-[[object]]
-name = "WebKit2.AutomationSession"
-status = "generate"
-generate_builder = true
-
-[[object]]
-name = "WebKit2.ColorChooserRequest"
-status = "generate"
-generate_builder = true
-
-[[object]]
-name = "WebKit2.Download"
-status = "generate"
-generate_builder = true
-
-[[object]]
-name = "WebKit2.FindController"
-status = "generate"
-generate_builder = true
-
-[[object]]
-name = "WebKit2.HitTestResult"
-status = "generate"
-generate_builder = true
-
-[[object]]
-name = "WebKit2.WebsitePolicies"
-status = "generate"
-generate_builder = true
 
 [[object]]
 name = "WebKit2.PrintCustomWidget"
@@ -275,9 +236,48 @@ status = "generate"
 generate_builder = true
 
 [[object]]
+name = "WebKit2.URISchemeRequest"
+status = "generate"
+module_name = "uri_scheme_request"
+
+[[object]]
+name = "WebKit2.URIRequest"
+status = "generate"
+generate_builder = true
+module_name = "uri_request"
+
+[[object]]
+name = "WebKit2.URIResponse"
+status = "generate"
+module_name = "uri_response"
+
+[[object]]
+name = "WebKit2.WebContext"
+status = "generate"
+generate_builder = true
+    [[object.function]]
+    name = "set_network_proxy_settings"
+    ignore = true
+
+[[object]]
 name = "WebKit2.WebsiteDataManager"
 status = "generate"
 generate_builder = true
+
+[[object]]
+name = "WebKit2.WebsitePolicies"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.WebView"
+status = "generate"
+generate_builder = true
+    [[object.signal]]
+    name = "create"
+    version = "2.6"
+        [object.signal.return]
+        nullable = true
 
 [[object]]
 name = "WebKit2.WindowProperties"
