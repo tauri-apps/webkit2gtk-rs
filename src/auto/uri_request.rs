@@ -8,6 +8,8 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::GString;
+use glib::StaticType;
+use glib::ToValue;
 use glib_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
@@ -26,6 +28,34 @@ impl URIRequest {
     pub fn new(uri: &str) -> URIRequest {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(webkit2_sys::webkit_uri_request_new(uri.to_glib_none().0)) }
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct URIRequestBuilder {
+    uri: Option<String>,
+}
+
+impl URIRequestBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn build(self) -> URIRequest {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref uri) = self.uri {
+            properties.push(("uri", uri));
+        }
+        let ret = glib::Object::new(URIRequest::static_type(), &properties)
+            .expect("object new")
+            .downcast::<URIRequest>()
+            .expect("downcast");
+        ret
+    }
+
+    pub fn uri(mut self, uri: &str) -> Self {
+        self.uri = Some(uri.to_string());
+        self
     }
 }
 

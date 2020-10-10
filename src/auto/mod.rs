@@ -14,6 +14,8 @@ pub use self::authentication_request::{
 #[cfg(any(feature = "v2_18", feature = "dox"))]
 mod automation_session;
 #[cfg(any(feature = "v2_18", feature = "dox"))]
+pub use self::automation_session::AutomationSessionBuilder;
+#[cfg(any(feature = "v2_18", feature = "dox"))]
 pub use self::automation_session::AutomationSessionExt;
 #[cfg(any(feature = "v2_18", feature = "dox"))]
 pub use self::automation_session::{
@@ -32,6 +34,8 @@ pub use self::back_forward_list_item::{
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 mod color_chooser_request;
+#[cfg(any(feature = "v2_8", feature = "dox"))]
+pub use self::color_chooser_request::ColorChooserRequestBuilder;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 pub use self::color_chooser_request::ColorChooserRequestExt;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
@@ -58,6 +62,7 @@ pub use self::device_info_permission_request::{
 };
 
 mod download;
+pub use self::download::DownloadBuilder;
 pub use self::download::DownloadExt;
 pub use self::download::{Download, DownloadClass, NONE_DOWNLOAD};
 
@@ -79,6 +84,7 @@ pub use self::file_chooser_request::{
 };
 
 mod find_controller;
+pub use self::find_controller::FindControllerBuilder;
 pub use self::find_controller::FindControllerExt;
 pub use self::find_controller::{FindController, FindControllerClass, NONE_FIND_CONTROLLER};
 
@@ -104,6 +110,7 @@ pub use self::geolocation_permission_request::{
 };
 
 mod hit_test_result;
+pub use self::hit_test_result::HitTestResultBuilder;
 pub use self::hit_test_result::HitTestResultExt;
 pub use self::hit_test_result::{HitTestResult, HitTestResultClass, NONE_HIT_TEST_RESULT};
 
@@ -173,6 +180,8 @@ pub use self::policy_decision::{PolicyDecision, PolicyDecisionClass, NONE_POLICY
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 mod print_custom_widget;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
+pub use self::print_custom_widget::PrintCustomWidgetBuilder;
+#[cfg(any(feature = "v2_16", feature = "dox"))]
 pub use self::print_custom_widget::PrintCustomWidgetExt;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 pub use self::print_custom_widget::{
@@ -180,6 +189,7 @@ pub use self::print_custom_widget::{
 };
 
 mod print_operation;
+pub use self::print_operation::PrintOperationBuilder;
 pub use self::print_operation::PrintOperationExt;
 pub use self::print_operation::{PrintOperation, PrintOperationClass, NONE_PRINT_OPERATION};
 
@@ -194,10 +204,12 @@ pub use self::security_manager::SecurityManagerExt;
 pub use self::security_manager::{SecurityManager, SecurityManagerClass, NONE_SECURITY_MANAGER};
 
 mod settings;
+pub use self::settings::SettingsBuilder;
 pub use self::settings::SettingsExt;
 pub use self::settings::{Settings, SettingsClass, NONE_SETTINGS};
 
 mod uri_request;
+pub use self::uri_request::URIRequestBuilder;
 pub use self::uri_request::URIRequestExt;
 pub use self::uri_request::{URIRequest, URIRequestClass, NONE_URI_REQUEST};
 
@@ -226,11 +238,14 @@ pub use self::user_media_permission_request::{
 #[cfg(any(feature = "v2_28", feature = "dox"))]
 mod user_message;
 #[cfg(any(feature = "v2_28", feature = "dox"))]
+pub use self::user_message::UserMessageBuilder;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
 pub use self::user_message::UserMessageExt;
 #[cfg(any(feature = "v2_28", feature = "dox"))]
 pub use self::user_message::{UserMessage, UserMessageClass, NONE_USER_MESSAGE};
 
 mod web_context;
+pub use self::web_context::WebContextBuilder;
 pub use self::web_context::WebContextExt;
 pub use self::web_context::{WebContext, WebContextClass, NONE_WEB_CONTEXT};
 
@@ -243,6 +258,7 @@ pub use self::web_resource::WebResourceExt;
 pub use self::web_resource::{WebResource, WebResourceClass, NONE_WEB_RESOURCE};
 
 mod web_view;
+pub use self::web_view::WebViewBuilder;
 pub use self::web_view::WebViewExt;
 pub use self::web_view::{WebView, WebViewClass, NONE_WEB_VIEW};
 
@@ -262,6 +278,8 @@ pub use self::website_data_access_permission_request::{
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 mod website_data_manager;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
+pub use self::website_data_manager::WebsiteDataManagerBuilder;
+#[cfg(any(feature = "v2_10", feature = "dox"))]
 pub use self::website_data_manager::WebsiteDataManagerExt;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 pub use self::website_data_manager::{
@@ -271,11 +289,14 @@ pub use self::website_data_manager::{
 #[cfg(any(feature = "v2_30", feature = "dox"))]
 mod website_policies;
 #[cfg(any(feature = "v2_30", feature = "dox"))]
+pub use self::website_policies::WebsitePoliciesBuilder;
+#[cfg(any(feature = "v2_30", feature = "dox"))]
 pub use self::website_policies::WebsitePoliciesExt;
 #[cfg(any(feature = "v2_30", feature = "dox"))]
 pub use self::website_policies::{WebsitePolicies, WebsitePoliciesClass, NONE_WEBSITE_POLICIES};
 
 mod window_properties;
+pub use self::window_properties::WindowPropertiesBuilder;
 pub use self::window_properties::WindowPropertiesExt;
 pub use self::window_properties::{
     WindowProperties, WindowPropertiesClass, NONE_WINDOW_PROPERTIES,

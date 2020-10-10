@@ -20,12 +20,10 @@ generate = [
     "WebKit2.ApplicationInfo",
     "WebKit2.AuthenticationScheme",
     "WebKit2.AutomationBrowsingContextPresentation",
-    "WebKit2.AutomationSession",
     "WebKit2.AutoplayPolicy",
     "WebKit2.BackForwardList",
     "WebKit2.BackForwardListItem",
     "WebKit2.CacheModel",
-    "WebKit2.ColorChooserRequest",
     "WebKit2.ContextMenu",
     "WebKit2.ContextMenuAction",
     "WebKit2.ContextMenuItem",
@@ -35,20 +33,17 @@ generate = [
     "WebKit2.Credential",
     "WebKit2.CredentialPersistence",
     "WebKit2.DeviceInfoPermissionRequest",
-    "WebKit2.Download",
     "WebKit2.DownloadError",
     "WebKit2.EditorState",
     "WebKit2.EditorTypingAttributes",
     "WebKit2.FaviconDatabase",
     "WebKit2.FaviconDatabaseError",
     "WebKit2.FileChooserRequest",
-    "WebKit2.FindController",
     "WebKit2.FindOptions",
     "WebKit2.GeolocationManager",
     "WebKit2.GeolocationPermissionRequest",
     "WebKit2.GeolocationPosition",
     "WebKit2.HardwareAccelerationPolicy",
-    "WebKit2.HitTestResult",
     "WebKit2.HitTestResultContext",
     "WebKit2.InputHints",
     "WebKit2.InputMethodContext",
@@ -78,16 +73,13 @@ generate = [
     "WebKit2.PolicyDecisionType",
     "WebKit2.PolicyError",
     "WebKit2.ProcessModel",
-    "WebKit2.PrintCustomWidget",
     "WebKit2.PrintError",
-    "WebKit2.PrintOperation",
     "WebKit2.PrintOperationResponse",
     "WebKit2.ResponsePolicyDecision",
     "WebKit2.SaveMode",
     "WebKit2.ScriptDialogType",
     "WebKit2.SecurityManager",
     "WebKit2.SecurityOrigin",
-    "WebKit2.Settings",
     "WebKit2.SnapshotError",
     "WebKit2.SnapshotOptions",
     "WebKit2.SnapshotRegion",
@@ -98,7 +90,6 @@ generate = [
     "WebKit2.UserContentInjectedFrames",
     "WebKit2.UserContentManager",
     "WebKit2.UserMediaPermissionRequest",
-    "WebKit2.UserMessage",
     "WebKit2.UserMessageError",
     "WebKit2.UserScript",
     "WebKit2.UserScriptInjectionTime",
@@ -112,9 +103,6 @@ generate = [
     "WebKit2.WebProcessTerminationReason",
     "WebKit2.WebsiteData",
     "WebKit2.WebsiteDataAccessPermissionRequest",
-    "WebKit2.WebsiteDataManager",
-    "WebKit2.WebsitePolicies",
-    "WebKit2.WindowProperties",
 ]
 
 manual = [
@@ -161,6 +149,7 @@ status = "generate"
 [[object]]
 name = "WebKit2.WebContext"
 status = "generate"
+generate_builder = true
     [[object.function]]
     name = "set_network_proxy_settings"
     ignore = true
@@ -180,6 +169,7 @@ module_name = "uri_scheme_request"
 [[object]]
 name = "WebKit2.URIRequest"
 status = "generate"
+generate_builder = true
 module_name = "uri_request"
 
 [[object]]
@@ -190,6 +180,7 @@ module_name = "uri_response"
 [[object]]
 name = "WebKit2.WebView"
 status = "generate"
+generate_builder = true
     [[object.signal]]
     name = "create"
     version = "2.6"
@@ -232,3 +223,63 @@ status = "generate"
     name = "list_text_fields"
     # Fails to get generated as some how glib::GString doesn't get added
     ignore = true
+
+[[object]]
+name = "WebKit2.AutomationSession"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.ColorChooserRequest"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.Download"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.FindController"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.HitTestResult"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.WebsitePolicies"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.PrintCustomWidget"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.PrintOperation"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.Settings"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.UserMessage"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.WebsiteDataManager"
+status = "generate"
+generate_builder = true
+
+[[object]]
+name = "WebKit2.WindowProperties"
+status = "generate"
+generate_builder = true

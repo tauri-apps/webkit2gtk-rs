@@ -11,8 +11,8 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::GString;
-#[cfg(any(feature = "v2_8", feature = "dox"))]
 use glib::StaticType;
+use glib::ToValue;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 use glib::Value;
 use glib_sys;
@@ -89,6 +89,101 @@ impl WebContext {
 impl Default for WebContext {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct WebContextBuilder {
+    #[cfg(any(feature = "v2_8", feature = "dox"))]
+    local_storage_directory: Option<String>,
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    process_swap_on_cross_site_navigation_enabled: Option<bool>,
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    use_system_appearance_for_scrollbars: Option<bool>,
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    website_data_manager: Option<WebsiteDataManager>,
+}
+
+impl WebContextBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn build(self) -> WebContext {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        #[cfg(any(feature = "v2_8", feature = "dox"))]
+        {
+            if let Some(ref local_storage_directory) = self.local_storage_directory {
+                properties.push(("local-storage-directory", local_storage_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_28", feature = "dox"))]
+        {
+            if let Some(ref process_swap_on_cross_site_navigation_enabled) =
+                self.process_swap_on_cross_site_navigation_enabled
+            {
+                properties.push((
+                    "process-swap-on-cross-site-navigation-enabled",
+                    process_swap_on_cross_site_navigation_enabled,
+                ));
+            }
+        }
+        #[cfg(any(feature = "v2_30", feature = "dox"))]
+        {
+            if let Some(ref use_system_appearance_for_scrollbars) =
+                self.use_system_appearance_for_scrollbars
+            {
+                properties.push((
+                    "use-system-appearance-for-scrollbars",
+                    use_system_appearance_for_scrollbars,
+                ));
+            }
+        }
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref website_data_manager) = self.website_data_manager {
+                properties.push(("website-data-manager", website_data_manager));
+            }
+        }
+        let ret = glib::Object::new(WebContext::static_type(), &properties)
+            .expect("object new")
+            .downcast::<WebContext>()
+            .expect("downcast");
+        ret
+    }
+
+    #[cfg(any(feature = "v2_8", feature = "dox"))]
+    pub fn local_storage_directory(mut self, local_storage_directory: &str) -> Self {
+        self.local_storage_directory = Some(local_storage_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    pub fn process_swap_on_cross_site_navigation_enabled(
+        mut self,
+        process_swap_on_cross_site_navigation_enabled: bool,
+    ) -> Self {
+        self.process_swap_on_cross_site_navigation_enabled =
+            Some(process_swap_on_cross_site_navigation_enabled);
+        self
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn use_system_appearance_for_scrollbars(
+        mut self,
+        use_system_appearance_for_scrollbars: bool,
+    ) -> Self {
+        self.use_system_appearance_for_scrollbars = Some(use_system_appearance_for_scrollbars);
+        self
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn website_data_manager<P: IsA<WebsiteDataManager>>(
+        mut self,
+        website_data_manager: &P,
+    ) -> Self {
+        self.website_data_manager = Some(website_data_manager.clone().upcast());
+        self
     }
 }
 

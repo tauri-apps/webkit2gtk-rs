@@ -2,10 +2,11 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
-#[cfg(any(feature = "v2_30", feature = "dox"))]
 use glib::StaticType;
+use glib::ToValue;
 #[cfg(any(feature = "v2_30", feature = "dox"))]
 use glib::Value;
 #[cfg(any(feature = "v2_30", feature = "dox"))]
@@ -40,6 +41,39 @@ impl WebsitePolicies {
 impl Default for WebsitePolicies {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct WebsitePoliciesBuilder {
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    autoplay: Option<AutoplayPolicy>,
+}
+
+impl WebsitePoliciesBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn build(self) -> WebsitePolicies {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        #[cfg(any(feature = "v2_30", feature = "dox"))]
+        {
+            if let Some(ref autoplay) = self.autoplay {
+                properties.push(("autoplay", autoplay));
+            }
+        }
+        let ret = glib::Object::new(WebsitePolicies::static_type(), &properties)
+            .expect("object new")
+            .downcast::<WebsitePolicies>()
+            .expect("downcast");
+        ret
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn autoplay(mut self, autoplay: AutoplayPolicy) -> Self {
+        self.autoplay = Some(autoplay);
+        self
     }
 }
 

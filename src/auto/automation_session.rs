@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v2_18", feature = "dox"))]
 use glib::object::Cast;
 use glib::object::IsA;
 #[cfg(any(feature = "v2_18", feature = "dox"))]
@@ -12,6 +11,8 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 #[cfg(any(feature = "v2_18", feature = "dox"))]
 use glib::GString;
+use glib::StaticType;
+use glib::ToValue;
 #[cfg(any(feature = "v2_18", feature = "dox"))]
 use glib_sys;
 #[cfg(any(feature = "v2_18", feature = "dox"))]
@@ -30,6 +31,39 @@ glib_wrapper! {
 
     match fn {
         get_type => || webkit2_sys::webkit_automation_session_get_type(),
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct AutomationSessionBuilder {
+    #[cfg(any(feature = "v2_18", feature = "dox"))]
+    id: Option<String>,
+}
+
+impl AutomationSessionBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn build(self) -> AutomationSession {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        #[cfg(any(feature = "v2_18", feature = "dox"))]
+        {
+            if let Some(ref id) = self.id {
+                properties.push(("id", id));
+            }
+        }
+        let ret = glib::Object::new(AutomationSession::static_type(), &properties)
+            .expect("object new")
+            .downcast::<AutomationSession>()
+            .expect("downcast");
+        ret
+    }
+
+    #[cfg(any(feature = "v2_18", feature = "dox"))]
+    pub fn id(mut self, id: &str) -> Self {
+        self.id = Some(id.to_string());
+        self
     }
 }
 

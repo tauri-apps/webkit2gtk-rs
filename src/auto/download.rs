@@ -9,6 +9,8 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::GString;
+use glib::StaticType;
+use glib::ToValue;
 use glib_sys;
 use libc;
 use std::boxed::Box as Box_;
@@ -24,6 +26,39 @@ glib_wrapper! {
 
     match fn {
         get_type => || webkit2_sys::webkit_download_get_type(),
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct DownloadBuilder {
+    #[cfg(any(feature = "v2_6", feature = "dox"))]
+    allow_overwrite: Option<bool>,
+}
+
+impl DownloadBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn build(self) -> Download {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        #[cfg(any(feature = "v2_6", feature = "dox"))]
+        {
+            if let Some(ref allow_overwrite) = self.allow_overwrite {
+                properties.push(("allow-overwrite", allow_overwrite));
+            }
+        }
+        let ret = glib::Object::new(Download::static_type(), &properties)
+            .expect("object new")
+            .downcast::<Download>()
+            .expect("downcast");
+        ret
+    }
+
+    #[cfg(any(feature = "v2_6", feature = "dox"))]
+    pub fn allow_overwrite(mut self, allow_overwrite: bool) -> Self {
+        self.allow_overwrite = Some(allow_overwrite);
+        self
     }
 }
 

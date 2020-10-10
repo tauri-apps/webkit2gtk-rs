@@ -8,12 +8,13 @@ use gio;
 use gio_sys;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 use glib::GString;
-#[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib::StaticType;
+use glib::ToValue;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib::Value;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
@@ -55,6 +56,211 @@ impl WebsiteDataManager {
     pub fn new_ephemeral() -> WebsiteDataManager {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(webkit2_sys::webkit_website_data_manager_new_ephemeral()) }
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct WebsiteDataManagerBuilder {
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    base_cache_directory: Option<String>,
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    base_data_directory: Option<String>,
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    disk_cache_directory: Option<String>,
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    dom_cache_directory: Option<String>,
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    hsts_cache_directory: Option<String>,
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    indexeddb_directory: Option<String>,
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    is_ephemeral: Option<bool>,
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    itp_directory: Option<String>,
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    local_storage_directory: Option<String>,
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    offline_application_cache_directory: Option<String>,
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    service_worker_registrations_directory: Option<String>,
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    websql_directory: Option<String>,
+}
+
+impl WebsiteDataManagerBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn build(self) -> WebsiteDataManager {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref base_cache_directory) = self.base_cache_directory {
+                properties.push(("base-cache-directory", base_cache_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref base_data_directory) = self.base_data_directory {
+                properties.push(("base-data-directory", base_data_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref disk_cache_directory) = self.disk_cache_directory {
+                properties.push(("disk-cache-directory", disk_cache_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_30", feature = "dox"))]
+        {
+            if let Some(ref dom_cache_directory) = self.dom_cache_directory {
+                properties.push(("dom-cache-directory", dom_cache_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_26", feature = "dox"))]
+        {
+            if let Some(ref hsts_cache_directory) = self.hsts_cache_directory {
+                properties.push(("hsts-cache-directory", hsts_cache_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref indexeddb_directory) = self.indexeddb_directory {
+                properties.push(("indexeddb-directory", indexeddb_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_16", feature = "dox"))]
+        {
+            if let Some(ref is_ephemeral) = self.is_ephemeral {
+                properties.push(("is-ephemeral", is_ephemeral));
+            }
+        }
+        #[cfg(any(feature = "v2_30", feature = "dox"))]
+        {
+            if let Some(ref itp_directory) = self.itp_directory {
+                properties.push(("itp-directory", itp_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref local_storage_directory) = self.local_storage_directory {
+                properties.push(("local-storage-directory", local_storage_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref offline_application_cache_directory) =
+                self.offline_application_cache_directory
+            {
+                properties.push((
+                    "offline-application-cache-directory",
+                    offline_application_cache_directory,
+                ));
+            }
+        }
+        #[cfg(any(feature = "v2_30", feature = "dox"))]
+        {
+            if let Some(ref service_worker_registrations_directory) =
+                self.service_worker_registrations_directory
+            {
+                properties.push((
+                    "service-worker-registrations-directory",
+                    service_worker_registrations_directory,
+                ));
+            }
+        }
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref websql_directory) = self.websql_directory {
+                properties.push(("websql-directory", websql_directory));
+            }
+        }
+        let ret = glib::Object::new(WebsiteDataManager::static_type(), &properties)
+            .expect("object new")
+            .downcast::<WebsiteDataManager>()
+            .expect("downcast");
+        ret
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn base_cache_directory(mut self, base_cache_directory: &str) -> Self {
+        self.base_cache_directory = Some(base_cache_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn base_data_directory(mut self, base_data_directory: &str) -> Self {
+        self.base_data_directory = Some(base_data_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn disk_cache_directory(mut self, disk_cache_directory: &str) -> Self {
+        self.disk_cache_directory = Some(disk_cache_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn dom_cache_directory(mut self, dom_cache_directory: &str) -> Self {
+        self.dom_cache_directory = Some(dom_cache_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn hsts_cache_directory(mut self, hsts_cache_directory: &str) -> Self {
+        self.hsts_cache_directory = Some(hsts_cache_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn indexeddb_directory(mut self, indexeddb_directory: &str) -> Self {
+        self.indexeddb_directory = Some(indexeddb_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    pub fn is_ephemeral(mut self, is_ephemeral: bool) -> Self {
+        self.is_ephemeral = Some(is_ephemeral);
+        self
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn itp_directory(mut self, itp_directory: &str) -> Self {
+        self.itp_directory = Some(itp_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn local_storage_directory(mut self, local_storage_directory: &str) -> Self {
+        self.local_storage_directory = Some(local_storage_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn offline_application_cache_directory(
+        mut self,
+        offline_application_cache_directory: &str,
+    ) -> Self {
+        self.offline_application_cache_directory =
+            Some(offline_application_cache_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn service_worker_registrations_directory(
+        mut self,
+        service_worker_registrations_directory: &str,
+    ) -> Self {
+        self.service_worker_registrations_directory =
+            Some(service_worker_registrations_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn websql_directory(mut self, websql_directory: &str) -> Self {
+        self.websql_directory = Some(websql_directory.to_string());
+        self
     }
 }
 
