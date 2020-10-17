@@ -6,6 +6,8 @@ use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
 use webkit2_sys;
+#[cfg(any(feature = "v2_30", feature = "dox"))]
+use WebsitePolicies;
 
 glib_wrapper! {
     pub struct PolicyDecision(Object<webkit2_sys::WebKitPolicyDecision, webkit2_sys::WebKitPolicyDecisionClass, PolicyDecisionClass>);
@@ -23,6 +25,9 @@ pub trait PolicyDecisionExt: 'static {
     fn ignore(&self);
 
     fn use_(&self);
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn use_with_policies<P: IsA<WebsitePolicies>>(&self, policies: &P);
 }
 
 impl<O: IsA<PolicyDecision>> PolicyDecisionExt for O {
@@ -41,6 +46,16 @@ impl<O: IsA<PolicyDecision>> PolicyDecisionExt for O {
     fn use_(&self) {
         unsafe {
             webkit2_sys::webkit_policy_decision_use(self.as_ref().to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn use_with_policies<P: IsA<WebsitePolicies>>(&self, policies: &P) {
+        unsafe {
+            webkit2_sys::webkit_policy_decision_use_with_policies(
+                self.as_ref().to_glib_none().0,
+                policies.as_ref().to_glib_none().0,
+            );
         }
     }
 }

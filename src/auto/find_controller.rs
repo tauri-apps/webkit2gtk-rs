@@ -9,6 +9,7 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::GString;
 use glib::StaticType;
+use glib::ToValue;
 use glib::Value;
 use glib_sys;
 use gobject_sys;
@@ -24,6 +25,34 @@ glib_wrapper! {
 
     match fn {
         get_type => || webkit2_sys::webkit_find_controller_get_type(),
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct FindControllerBuilder {
+    web_view: Option<WebView>,
+}
+
+impl FindControllerBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn build(self) -> FindController {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref web_view) = self.web_view {
+            properties.push(("web-view", web_view));
+        }
+        let ret = glib::Object::new(FindController::static_type(), &properties)
+            .expect("object new")
+            .downcast::<FindController>()
+            .expect("downcast");
+        ret
+    }
+
+    pub fn web_view<P: IsA<WebView>>(mut self, web_view: &P) -> Self {
+        self.web_view = Some(web_view.clone().upcast());
+        self
     }
 }
 

@@ -27,8 +27,8 @@ impl UserScript {
         source: &str,
         injected_frames: UserContentInjectedFrames,
         injection_time: UserScriptInjectionTime,
-        whitelist: &[&str],
-        blacklist: &[&str],
+        allow_list: &[&str],
+        block_list: &[&str],
     ) -> UserScript {
         assert_initialized_main_thread!();
         unsafe {
@@ -36,8 +36,8 @@ impl UserScript {
                 source.to_glib_none().0,
                 injected_frames.to_glib(),
                 injection_time.to_glib(),
-                whitelist.to_glib_none().0,
-                blacklist.to_glib_none().0,
+                allow_list.to_glib_none().0,
+                block_list.to_glib_none().0,
             ))
         }
     }
@@ -48,8 +48,8 @@ impl UserScript {
         injected_frames: UserContentInjectedFrames,
         injection_time: UserScriptInjectionTime,
         world_name: &str,
-        whitelist: &[&str],
-        blacklist: &[&str],
+        allow_list: &[&str],
+        block_list: &[&str],
     ) -> UserScript {
         assert_initialized_main_thread!();
         unsafe {
@@ -58,8 +58,8 @@ impl UserScript {
                 injected_frames.to_glib(),
                 injection_time.to_glib(),
                 world_name.to_glib_none().0,
-                whitelist.to_glib_none().0,
-                blacklist.to_glib_none().0,
+                allow_list.to_glib_none().0,
+                block_list.to_glib_none().0,
             ))
         }
     }

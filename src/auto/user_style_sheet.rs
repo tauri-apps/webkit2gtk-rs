@@ -27,8 +27,8 @@ impl UserStyleSheet {
         source: &str,
         injected_frames: UserContentInjectedFrames,
         level: UserStyleLevel,
-        whitelist: &[&str],
-        blacklist: &[&str],
+        allow_list: &[&str],
+        block_list: &[&str],
     ) -> UserStyleSheet {
         assert_initialized_main_thread!();
         unsafe {
@@ -36,8 +36,8 @@ impl UserStyleSheet {
                 source.to_glib_none().0,
                 injected_frames.to_glib(),
                 level.to_glib(),
-                whitelist.to_glib_none().0,
-                blacklist.to_glib_none().0,
+                allow_list.to_glib_none().0,
+                block_list.to_glib_none().0,
             ))
         }
     }
@@ -48,8 +48,8 @@ impl UserStyleSheet {
         injected_frames: UserContentInjectedFrames,
         level: UserStyleLevel,
         world_name: &str,
-        whitelist: &[&str],
-        blacklist: &[&str],
+        allow_list: &[&str],
+        block_list: &[&str],
     ) -> UserStyleSheet {
         assert_initialized_main_thread!();
         unsafe {
@@ -58,8 +58,8 @@ impl UserStyleSheet {
                 injected_frames.to_glib(),
                 level.to_glib(),
                 world_name.to_glib_none().0,
-                whitelist.to_glib_none().0,
-                blacklist.to_glib_none().0,
+                allow_list.to_glib_none().0,
+                block_list.to_glib_none().0,
             ))
         }
     }

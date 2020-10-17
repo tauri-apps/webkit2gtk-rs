@@ -24,6 +24,8 @@ use webkit2_sys;
 use AuthenticationScheme;
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 use Credential;
+#[cfg(any(feature = "v2_30", feature = "dox"))]
+use SecurityOrigin;
 
 glib_wrapper! {
     pub struct AuthenticationRequest(Object<webkit2_sys::WebKitAuthenticationRequest, webkit2_sys::WebKitAuthenticationRequestClass, AuthenticationRequestClass>);
@@ -57,11 +59,23 @@ pub trait AuthenticationRequestExt: 'static {
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     fn get_scheme(&self) -> AuthenticationScheme;
 
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_security_origin(&self) -> Option<SecurityOrigin>;
+
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     fn is_for_proxy(&self) -> bool;
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     fn is_retry(&self) -> bool;
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_can_save_credentials(&self, enabled: bool);
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_proposed_credential(&self, credential: &mut Credential);
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn connect_authenticated<F: Fn(&Self, &Credential) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     fn connect_cancelled<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -131,6 +145,17 @@ impl<O: IsA<AuthenticationRequest>> AuthenticationRequestExt for O {
         }
     }
 
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_security_origin(&self) -> Option<SecurityOrigin> {
+        unsafe {
+            from_glib_full(
+                webkit2_sys::webkit_authentication_request_get_security_origin(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
+        }
+    }
+
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     fn is_for_proxy(&self) -> bool {
         unsafe {
@@ -146,6 +171,54 @@ impl<O: IsA<AuthenticationRequest>> AuthenticationRequestExt for O {
             from_glib(webkit2_sys::webkit_authentication_request_is_retry(
                 self.as_ref().to_glib_none().0,
             ))
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_can_save_credentials(&self, enabled: bool) {
+        unsafe {
+            webkit2_sys::webkit_authentication_request_set_can_save_credentials(
+                self.as_ref().to_glib_none().0,
+                enabled.to_glib(),
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_proposed_credential(&self, credential: &mut Credential) {
+        unsafe {
+            webkit2_sys::webkit_authentication_request_set_proposed_credential(
+                self.as_ref().to_glib_none().0,
+                credential.to_glib_none_mut().0,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn connect_authenticated<F: Fn(&Self, &Credential) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn authenticated_trampoline<P, F: Fn(&P, &Credential) + 'static>(
+            this: *mut webkit2_sys::WebKitAuthenticationRequest,
+            credential: *mut webkit2_sys::WebKitCredential,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<AuthenticationRequest>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &AuthenticationRequest::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(credential),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"authenticated\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    authenticated_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 

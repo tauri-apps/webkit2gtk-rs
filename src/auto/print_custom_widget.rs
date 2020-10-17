@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib::object::Cast;
 use glib::object::IsA;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
@@ -12,6 +11,8 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib::GString;
+use glib::StaticType;
+use glib::ToValue;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib_sys;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
@@ -43,6 +44,53 @@ impl PrintCustomWidget {
                 title.to_glib_none().0,
             ))
         }
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct PrintCustomWidgetBuilder {
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    title: Option<String>,
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    widget: Option<gtk::Widget>,
+}
+
+impl PrintCustomWidgetBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn build(self) -> PrintCustomWidget {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        #[cfg(any(feature = "v2_16", feature = "dox"))]
+        {
+            if let Some(ref title) = self.title {
+                properties.push(("title", title));
+            }
+        }
+        #[cfg(any(feature = "v2_16", feature = "dox"))]
+        {
+            if let Some(ref widget) = self.widget {
+                properties.push(("widget", widget));
+            }
+        }
+        let ret = glib::Object::new(PrintCustomWidget::static_type(), &properties)
+            .expect("object new")
+            .downcast::<PrintCustomWidget>()
+            .expect("downcast");
+        ret
+    }
+
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    pub fn title(mut self, title: &str) -> Self {
+        self.title = Some(title.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    pub fn widget<P: IsA<gtk::Widget>>(mut self, widget: &P) -> Self {
+        self.widget = Some(widget.clone().upcast());
+        self
     }
 }
 

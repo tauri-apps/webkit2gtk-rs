@@ -15,6 +15,7 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::GString;
 use glib::StaticType;
+use glib::ToValue;
 use glib::Value;
 use glib_sys;
 use gobject_sys;
@@ -32,6 +33,8 @@ use std::ptr;
 use webkit2_sys;
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 use AuthenticationRequest;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+use AutomationBrowsingContextPresentation;
 use BackForwardList;
 use BackForwardListItem;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
@@ -44,6 +47,8 @@ use FileChooserRequest;
 use FindController;
 use FormSubmissionRequest;
 use HitTestResult;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+use InputMethodContext;
 use InsecureContentEvent;
 use JavascriptResult;
 use LoadEvent;
@@ -51,6 +56,8 @@ use LoadEvent;
 use NavigationAction;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 use Notification;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+use OptionMenu;
 use PermissionRequest;
 use PolicyDecision;
 use PolicyDecisionType;
@@ -63,14 +70,20 @@ use SnapshotRegion;
 use URIRequest;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 use UserContentManager;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+use UserMessage;
 use WebContext;
 use WebInspector;
+#[cfg(any(feature = "v2_20", feature = "dox"))]
+use WebProcessTerminationReason;
 use WebResource;
 use WebViewBase;
 #[cfg(any(feature = "v2_12", feature = "dox"))]
 use WebViewSessionState;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use WebsiteDataManager;
+#[cfg(any(feature = "v2_30", feature = "dox"))]
+use WebsitePolicies;
 use WindowProperties;
 
 glib_wrapper! {
@@ -139,6 +152,576 @@ impl Default for WebView {
     }
 }
 
+#[derive(Clone, Default)]
+pub struct WebViewBuilder {
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    automation_presentation_type: Option<AutomationBrowsingContextPresentation>,
+    #[cfg(any(feature = "v2_8", feature = "dox"))]
+    editable: Option<bool>,
+    #[cfg(any(feature = "v2_18", feature = "dox"))]
+    is_controlled_by_automation: Option<bool>,
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    is_ephemeral: Option<bool>,
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    is_muted: Option<bool>,
+    #[cfg(any(feature = "v2_4", feature = "dox"))]
+    related_view: Option<WebView>,
+    #[cfg(any(feature = "v2_6", feature = "dox"))]
+    settings: Option<Settings>,
+    #[cfg(any(feature = "v2_6", feature = "dox"))]
+    user_content_manager: Option<UserContentManager>,
+    web_context: Option<WebContext>,
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    website_policies: Option<WebsitePolicies>,
+    zoom_level: Option<f64>,
+    border_width: Option<u32>,
+    child: Option<gtk::Widget>,
+    //resize-mode: /*Unknown type*/,
+    app_paintable: Option<bool>,
+    can_default: Option<bool>,
+    can_focus: Option<bool>,
+    #[cfg(any(feature = "v2_18", feature = "dox"))]
+    double_buffered: Option<bool>,
+    //events: /*Unknown type*/,
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    expand: Option<bool>,
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    focus_on_click: Option<bool>,
+    //halign: /*Unknown type*/,
+    has_default: Option<bool>,
+    has_focus: Option<bool>,
+    #[cfg(any(feature = "v2_12", feature = "dox"))]
+    has_tooltip: Option<bool>,
+    height_request: Option<i32>,
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    hexpand: Option<bool>,
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    hexpand_set: Option<bool>,
+    is_focus: Option<bool>,
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    margin: Option<i32>,
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    margin_bottom: Option<i32>,
+    #[cfg(any(feature = "v3_12", feature = "dox"))]
+    margin_end: Option<i32>,
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    margin_left: Option<i32>,
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    margin_right: Option<i32>,
+    #[cfg(any(feature = "v3_12", feature = "dox"))]
+    margin_start: Option<i32>,
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    margin_top: Option<i32>,
+    name: Option<String>,
+    no_show_all: Option<bool>,
+    #[cfg(any(feature = "v3_8", feature = "dox"))]
+    opacity: Option<f64>,
+    parent: Option<gtk::Container>,
+    receives_default: Option<bool>,
+    sensitive: Option<bool>,
+    //style: /*Unknown type*/,
+    #[cfg(any(feature = "v2_12", feature = "dox"))]
+    tooltip_markup: Option<String>,
+    #[cfg(any(feature = "v2_12", feature = "dox"))]
+    tooltip_text: Option<String>,
+    //valign: /*Unknown type*/,
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    vexpand: Option<bool>,
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    vexpand_set: Option<bool>,
+    visible: Option<bool>,
+    width_request: Option<i32>,
+}
+
+impl WebViewBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn build(self) -> WebView {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        #[cfg(any(feature = "v2_28", feature = "dox"))]
+        {
+            if let Some(ref automation_presentation_type) = self.automation_presentation_type {
+                properties.push(("automation-presentation-type", automation_presentation_type));
+            }
+        }
+        #[cfg(any(feature = "v2_8", feature = "dox"))]
+        {
+            if let Some(ref editable) = self.editable {
+                properties.push(("editable", editable));
+            }
+        }
+        #[cfg(any(feature = "v2_18", feature = "dox"))]
+        {
+            if let Some(ref is_controlled_by_automation) = self.is_controlled_by_automation {
+                properties.push(("is-controlled-by-automation", is_controlled_by_automation));
+            }
+        }
+        #[cfg(any(feature = "v2_16", feature = "dox"))]
+        {
+            if let Some(ref is_ephemeral) = self.is_ephemeral {
+                properties.push(("is-ephemeral", is_ephemeral));
+            }
+        }
+        #[cfg(any(feature = "v2_30", feature = "dox"))]
+        {
+            if let Some(ref is_muted) = self.is_muted {
+                properties.push(("is-muted", is_muted));
+            }
+        }
+        #[cfg(any(feature = "v2_4", feature = "dox"))]
+        {
+            if let Some(ref related_view) = self.related_view {
+                properties.push(("related-view", related_view));
+            }
+        }
+        #[cfg(any(feature = "v2_6", feature = "dox"))]
+        {
+            if let Some(ref settings) = self.settings {
+                properties.push(("settings", settings));
+            }
+        }
+        #[cfg(any(feature = "v2_6", feature = "dox"))]
+        {
+            if let Some(ref user_content_manager) = self.user_content_manager {
+                properties.push(("user-content-manager", user_content_manager));
+            }
+        }
+        if let Some(ref web_context) = self.web_context {
+            properties.push(("web-context", web_context));
+        }
+        #[cfg(any(feature = "v2_30", feature = "dox"))]
+        {
+            if let Some(ref website_policies) = self.website_policies {
+                properties.push(("website-policies", website_policies));
+            }
+        }
+        if let Some(ref zoom_level) = self.zoom_level {
+            properties.push(("zoom-level", zoom_level));
+        }
+        if let Some(ref border_width) = self.border_width {
+            properties.push(("border-width", border_width));
+        }
+        if let Some(ref child) = self.child {
+            properties.push(("child", child));
+        }
+        if let Some(ref app_paintable) = self.app_paintable {
+            properties.push(("app-paintable", app_paintable));
+        }
+        if let Some(ref can_default) = self.can_default {
+            properties.push(("can-default", can_default));
+        }
+        if let Some(ref can_focus) = self.can_focus {
+            properties.push(("can-focus", can_focus));
+        }
+        #[cfg(any(feature = "v2_18", feature = "dox"))]
+        {
+            if let Some(ref double_buffered) = self.double_buffered {
+                properties.push(("double-buffered", double_buffered));
+            }
+        }
+        #[cfg(any(feature = "v3_0", feature = "dox"))]
+        {
+            if let Some(ref expand) = self.expand {
+                properties.push(("expand", expand));
+            }
+        }
+        #[cfg(any(feature = "v3_20", feature = "dox"))]
+        {
+            if let Some(ref focus_on_click) = self.focus_on_click {
+                properties.push(("focus-on-click", focus_on_click));
+            }
+        }
+        if let Some(ref has_default) = self.has_default {
+            properties.push(("has-default", has_default));
+        }
+        if let Some(ref has_focus) = self.has_focus {
+            properties.push(("has-focus", has_focus));
+        }
+        #[cfg(any(feature = "v2_12", feature = "dox"))]
+        {
+            if let Some(ref has_tooltip) = self.has_tooltip {
+                properties.push(("has-tooltip", has_tooltip));
+            }
+        }
+        if let Some(ref height_request) = self.height_request {
+            properties.push(("height-request", height_request));
+        }
+        #[cfg(any(feature = "v3_0", feature = "dox"))]
+        {
+            if let Some(ref hexpand) = self.hexpand {
+                properties.push(("hexpand", hexpand));
+            }
+        }
+        #[cfg(any(feature = "v3_0", feature = "dox"))]
+        {
+            if let Some(ref hexpand_set) = self.hexpand_set {
+                properties.push(("hexpand-set", hexpand_set));
+            }
+        }
+        if let Some(ref is_focus) = self.is_focus {
+            properties.push(("is-focus", is_focus));
+        }
+        #[cfg(any(feature = "v3_0", feature = "dox"))]
+        {
+            if let Some(ref margin) = self.margin {
+                properties.push(("margin", margin));
+            }
+        }
+        #[cfg(any(feature = "v3_0", feature = "dox"))]
+        {
+            if let Some(ref margin_bottom) = self.margin_bottom {
+                properties.push(("margin-bottom", margin_bottom));
+            }
+        }
+        #[cfg(any(feature = "v3_12", feature = "dox"))]
+        {
+            if let Some(ref margin_end) = self.margin_end {
+                properties.push(("margin-end", margin_end));
+            }
+        }
+        #[cfg(any(feature = "v3_0", feature = "dox"))]
+        {
+            if let Some(ref margin_left) = self.margin_left {
+                properties.push(("margin-left", margin_left));
+            }
+        }
+        #[cfg(any(feature = "v3_0", feature = "dox"))]
+        {
+            if let Some(ref margin_right) = self.margin_right {
+                properties.push(("margin-right", margin_right));
+            }
+        }
+        #[cfg(any(feature = "v3_12", feature = "dox"))]
+        {
+            if let Some(ref margin_start) = self.margin_start {
+                properties.push(("margin-start", margin_start));
+            }
+        }
+        #[cfg(any(feature = "v3_0", feature = "dox"))]
+        {
+            if let Some(ref margin_top) = self.margin_top {
+                properties.push(("margin-top", margin_top));
+            }
+        }
+        if let Some(ref name) = self.name {
+            properties.push(("name", name));
+        }
+        if let Some(ref no_show_all) = self.no_show_all {
+            properties.push(("no-show-all", no_show_all));
+        }
+        #[cfg(any(feature = "v3_8", feature = "dox"))]
+        {
+            if let Some(ref opacity) = self.opacity {
+                properties.push(("opacity", opacity));
+            }
+        }
+        if let Some(ref parent) = self.parent {
+            properties.push(("parent", parent));
+        }
+        if let Some(ref receives_default) = self.receives_default {
+            properties.push(("receives-default", receives_default));
+        }
+        if let Some(ref sensitive) = self.sensitive {
+            properties.push(("sensitive", sensitive));
+        }
+        #[cfg(any(feature = "v2_12", feature = "dox"))]
+        {
+            if let Some(ref tooltip_markup) = self.tooltip_markup {
+                properties.push(("tooltip-markup", tooltip_markup));
+            }
+        }
+        #[cfg(any(feature = "v2_12", feature = "dox"))]
+        {
+            if let Some(ref tooltip_text) = self.tooltip_text {
+                properties.push(("tooltip-text", tooltip_text));
+            }
+        }
+        #[cfg(any(feature = "v3_0", feature = "dox"))]
+        {
+            if let Some(ref vexpand) = self.vexpand {
+                properties.push(("vexpand", vexpand));
+            }
+        }
+        #[cfg(any(feature = "v3_0", feature = "dox"))]
+        {
+            if let Some(ref vexpand_set) = self.vexpand_set {
+                properties.push(("vexpand-set", vexpand_set));
+            }
+        }
+        if let Some(ref visible) = self.visible {
+            properties.push(("visible", visible));
+        }
+        if let Some(ref width_request) = self.width_request {
+            properties.push(("width-request", width_request));
+        }
+        let ret = glib::Object::new(WebView::static_type(), &properties)
+            .expect("object new")
+            .downcast::<WebView>()
+            .expect("downcast");
+        ret
+    }
+
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    pub fn automation_presentation_type(
+        mut self,
+        automation_presentation_type: AutomationBrowsingContextPresentation,
+    ) -> Self {
+        self.automation_presentation_type = Some(automation_presentation_type);
+        self
+    }
+
+    #[cfg(any(feature = "v2_8", feature = "dox"))]
+    pub fn editable(mut self, editable: bool) -> Self {
+        self.editable = Some(editable);
+        self
+    }
+
+    #[cfg(any(feature = "v2_18", feature = "dox"))]
+    pub fn is_controlled_by_automation(mut self, is_controlled_by_automation: bool) -> Self {
+        self.is_controlled_by_automation = Some(is_controlled_by_automation);
+        self
+    }
+
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    pub fn is_ephemeral(mut self, is_ephemeral: bool) -> Self {
+        self.is_ephemeral = Some(is_ephemeral);
+        self
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn is_muted(mut self, is_muted: bool) -> Self {
+        self.is_muted = Some(is_muted);
+        self
+    }
+
+    #[cfg(any(feature = "v2_4", feature = "dox"))]
+    pub fn related_view<P: IsA<WebView>>(mut self, related_view: &P) -> Self {
+        self.related_view = Some(related_view.clone().upcast());
+        self
+    }
+
+    #[cfg(any(feature = "v2_6", feature = "dox"))]
+    pub fn settings<P: IsA<Settings>>(mut self, settings: &P) -> Self {
+        self.settings = Some(settings.clone().upcast());
+        self
+    }
+
+    #[cfg(any(feature = "v2_6", feature = "dox"))]
+    pub fn user_content_manager<P: IsA<UserContentManager>>(
+        mut self,
+        user_content_manager: &P,
+    ) -> Self {
+        self.user_content_manager = Some(user_content_manager.clone().upcast());
+        self
+    }
+
+    pub fn web_context<P: IsA<WebContext>>(mut self, web_context: &P) -> Self {
+        self.web_context = Some(web_context.clone().upcast());
+        self
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn website_policies<P: IsA<WebsitePolicies>>(mut self, website_policies: &P) -> Self {
+        self.website_policies = Some(website_policies.clone().upcast());
+        self
+    }
+
+    pub fn zoom_level(mut self, zoom_level: f64) -> Self {
+        self.zoom_level = Some(zoom_level);
+        self
+    }
+
+    pub fn border_width(mut self, border_width: u32) -> Self {
+        self.border_width = Some(border_width);
+        self
+    }
+
+    pub fn child<P: IsA<gtk::Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
+        self
+    }
+
+    pub fn app_paintable(mut self, app_paintable: bool) -> Self {
+        self.app_paintable = Some(app_paintable);
+        self
+    }
+
+    pub fn can_default(mut self, can_default: bool) -> Self {
+        self.can_default = Some(can_default);
+        self
+    }
+
+    pub fn can_focus(mut self, can_focus: bool) -> Self {
+        self.can_focus = Some(can_focus);
+        self
+    }
+
+    #[cfg(any(feature = "v2_18", feature = "dox"))]
+    pub fn double_buffered(mut self, double_buffered: bool) -> Self {
+        self.double_buffered = Some(double_buffered);
+        self
+    }
+
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    pub fn expand(mut self, expand: bool) -> Self {
+        self.expand = Some(expand);
+        self
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn focus_on_click(mut self, focus_on_click: bool) -> Self {
+        self.focus_on_click = Some(focus_on_click);
+        self
+    }
+
+    pub fn has_default(mut self, has_default: bool) -> Self {
+        self.has_default = Some(has_default);
+        self
+    }
+
+    pub fn has_focus(mut self, has_focus: bool) -> Self {
+        self.has_focus = Some(has_focus);
+        self
+    }
+
+    #[cfg(any(feature = "v2_12", feature = "dox"))]
+    pub fn has_tooltip(mut self, has_tooltip: bool) -> Self {
+        self.has_tooltip = Some(has_tooltip);
+        self
+    }
+
+    pub fn height_request(mut self, height_request: i32) -> Self {
+        self.height_request = Some(height_request);
+        self
+    }
+
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    pub fn hexpand(mut self, hexpand: bool) -> Self {
+        self.hexpand = Some(hexpand);
+        self
+    }
+
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    pub fn hexpand_set(mut self, hexpand_set: bool) -> Self {
+        self.hexpand_set = Some(hexpand_set);
+        self
+    }
+
+    pub fn is_focus(mut self, is_focus: bool) -> Self {
+        self.is_focus = Some(is_focus);
+        self
+    }
+
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    pub fn margin(mut self, margin: i32) -> Self {
+        self.margin = Some(margin);
+        self
+    }
+
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    pub fn margin_bottom(mut self, margin_bottom: i32) -> Self {
+        self.margin_bottom = Some(margin_bottom);
+        self
+    }
+
+    #[cfg(any(feature = "v3_12", feature = "dox"))]
+    pub fn margin_end(mut self, margin_end: i32) -> Self {
+        self.margin_end = Some(margin_end);
+        self
+    }
+
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    pub fn margin_left(mut self, margin_left: i32) -> Self {
+        self.margin_left = Some(margin_left);
+        self
+    }
+
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    pub fn margin_right(mut self, margin_right: i32) -> Self {
+        self.margin_right = Some(margin_right);
+        self
+    }
+
+    #[cfg(any(feature = "v3_12", feature = "dox"))]
+    pub fn margin_start(mut self, margin_start: i32) -> Self {
+        self.margin_start = Some(margin_start);
+        self
+    }
+
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    pub fn margin_top(mut self, margin_top: i32) -> Self {
+        self.margin_top = Some(margin_top);
+        self
+    }
+
+    pub fn name(mut self, name: &str) -> Self {
+        self.name = Some(name.to_string());
+        self
+    }
+
+    pub fn no_show_all(mut self, no_show_all: bool) -> Self {
+        self.no_show_all = Some(no_show_all);
+        self
+    }
+
+    #[cfg(any(feature = "v3_8", feature = "dox"))]
+    pub fn opacity(mut self, opacity: f64) -> Self {
+        self.opacity = Some(opacity);
+        self
+    }
+
+    pub fn parent<P: IsA<gtk::Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
+        self
+    }
+
+    pub fn receives_default(mut self, receives_default: bool) -> Self {
+        self.receives_default = Some(receives_default);
+        self
+    }
+
+    pub fn sensitive(mut self, sensitive: bool) -> Self {
+        self.sensitive = Some(sensitive);
+        self
+    }
+
+    #[cfg(any(feature = "v2_12", feature = "dox"))]
+    pub fn tooltip_markup(mut self, tooltip_markup: &str) -> Self {
+        self.tooltip_markup = Some(tooltip_markup.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_12", feature = "dox"))]
+    pub fn tooltip_text(mut self, tooltip_text: &str) -> Self {
+        self.tooltip_text = Some(tooltip_text.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    pub fn vexpand(mut self, vexpand: bool) -> Self {
+        self.vexpand = Some(vexpand);
+        self
+    }
+
+    #[cfg(any(feature = "v3_0", feature = "dox"))]
+    pub fn vexpand_set(mut self, vexpand_set: bool) -> Self {
+        self.vexpand_set = Some(vexpand_set);
+        self
+    }
+
+    pub fn visible(mut self, visible: bool) -> Self {
+        self.visible = Some(visible);
+        self
+    }
+
+    pub fn width_request(mut self, width_request: i32) -> Self {
+        self.width_request = Some(width_request);
+        self
+    }
+}
+
 pub const NONE_WEB_VIEW: Option<&WebView> = None;
 
 pub trait WebViewExt: 'static {
@@ -170,8 +753,8 @@ pub trait WebViewExt: 'static {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn execute_editing_command_with_argument(&self, command: &str, argument: &str);
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn get_automation_presentation_type(&self) -> /*Ignored*/AutomationBrowsingContextPresentation;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn get_automation_presentation_type(&self) -> AutomationBrowsingContextPresentation;
 
     fn get_back_forward_list(&self) -> Option<BackForwardList>;
 
@@ -191,10 +774,13 @@ pub trait WebViewExt: 'static {
 
     fn get_find_controller(&self) -> Option<FindController>;
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn get_input_method_context(&self) -> /*Ignored*/Option<InputMethodContext>;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn get_input_method_context(&self) -> Option<InputMethodContext>;
 
     fn get_inspector(&self) -> Option<WebInspector>;
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_is_muted(&self) -> bool;
 
     #[cfg_attr(feature = "v2_22", deprecated)]
     fn get_javascript_global_context(&self) -> Option<java_script_core::GlobalContextRef>;
@@ -236,6 +822,9 @@ pub trait WebViewExt: 'static {
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_website_data_manager(&self) -> Option<WebsiteDataManager>;
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_website_policies(&self) -> Option<WebsitePolicies>;
 
     fn get_window_properties(&self) -> Option<WindowProperties>;
 
@@ -350,17 +939,41 @@ pub trait WebViewExt: 'static {
         save_mode: SaveMode,
     ) -> Pin<Box_<dyn std::future::Future<Output = Result<gio::InputStream, glib::Error>> + 'static>>;
 
-    //fn save_to_file<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode, cancellable: Option<&P>, callback: Q);
+    fn save_to_file<
+        P: IsA<gio::File>,
+        Q: IsA<gio::Cancellable>,
+        R: FnOnce(Result<(), glib::Error>) + Send + 'static,
+    >(
+        &self,
+        file: &P,
+        save_mode: SaveMode,
+        cancellable: Option<&Q>,
+        callback: R,
+    );
 
-    //
-    //fn save_to_file_future(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
+    fn save_to_file_future<P: IsA<gio::File> + Clone + 'static>(
+        &self,
+        file: &P,
+        save_mode: SaveMode,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn send_message_to_page<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/UserMessage, glib::Error>) + Send + 'static>(&self, message: /*Ignored*/&UserMessage, cancellable: Option<&P>, callback: Q);
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn send_message_to_page<
+        P: IsA<UserMessage>,
+        Q: IsA<gio::Cancellable>,
+        R: FnOnce(Result<UserMessage, glib::Error>) + Send + 'static,
+    >(
+        &self,
+        message: &P,
+        cancellable: Option<&Q>,
+        callback: R,
+    );
 
-    //
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn send_message_to_page_future(&self, message: /*Ignored*/&UserMessage) -> Pin<Box_<dyn std::future::Future<Output = Result</*Ignored*/UserMessage, glib::Error>> + 'static>>;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn send_message_to_page_future<P: IsA<UserMessage> + Clone + 'static>(
+        &self,
+        message: &P,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<UserMessage, glib::Error>> + 'static>>;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn set_background_color(&self, rgba: &gdk::RGBA);
@@ -370,8 +983,11 @@ pub trait WebViewExt: 'static {
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn set_editable(&self, editable: bool);
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn set_input_method_context(&self, context: /*Ignored*/Option<&InputMethodContext>);
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn set_input_method_context<P: IsA<InputMethodContext>>(&self, context: Option<&P>);
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_is_muted(&self, muted: bool);
 
     fn set_settings<P: IsA<Settings>>(&self, settings: &P);
 
@@ -496,22 +1112,33 @@ pub trait WebViewExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn connect_show_option_menu<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn connect_show_option_menu<
+        F: Fn(&Self, &OptionMenu, &gdk::Event, &gdk::Rectangle) -> bool + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_submit_form<F: Fn(&Self, &FormSubmissionRequest) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn connect_user_message_received<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn connect_user_message_received<F: Fn(&Self, &UserMessage) -> bool + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[cfg_attr(feature = "v2_20", deprecated)]
     fn connect_web_process_crashed<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v2_20", feature = "dox"))]
-    //fn connect_web_process_terminated<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v2_20", feature = "dox"))]
+    fn connect_web_process_terminated<F: Fn(&Self, WebProcessTerminationReason) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_property_editable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -524,6 +1151,9 @@ pub trait WebViewExt: 'static {
     fn connect_property_favicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_is_loading_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn connect_property_is_muted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_property_is_playing_audio_notify<F: Fn(&Self) + 'static>(
@@ -657,10 +1287,16 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn get_automation_presentation_type(&self) -> /*Ignored*/AutomationBrowsingContextPresentation {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_view_get_automation_presentation_type() }
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn get_automation_presentation_type(&self) -> AutomationBrowsingContextPresentation {
+        unsafe {
+            from_glib(
+                webkit2_sys::webkit_web_view_get_automation_presentation_type(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
+        }
+    }
 
     fn get_back_forward_list(&self) -> Option<BackForwardList> {
         unsafe {
@@ -729,14 +1365,27 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn get_input_method_context(&self) -> /*Ignored*/Option<InputMethodContext> {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_view_get_input_method_context() }
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn get_input_method_context(&self) -> Option<InputMethodContext> {
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_web_view_get_input_method_context(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
     fn get_inspector(&self) -> Option<WebInspector> {
         unsafe {
             from_glib_none(webkit2_sys::webkit_web_view_get_inspector(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_is_muted(&self) -> bool {
+        unsafe {
+            from_glib(webkit2_sys::webkit_web_view_get_is_muted(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -887,6 +1536,15 @@ impl<O: IsA<WebView>> WebViewExt for O {
     fn get_website_data_manager(&self) -> Option<WebsiteDataManager> {
         unsafe {
             from_glib_none(webkit2_sys::webkit_web_view_get_website_data_manager(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn get_website_policies(&self) -> Option<WebsitePolicies> {
+        unsafe {
+            from_glib_none(webkit2_sys::webkit_web_view_get_website_policies(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1295,52 +1953,129 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }))
     }
 
-    //fn save_to_file<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_view_save_to_file() }
-    //}
+    fn save_to_file<
+        P: IsA<gio::File>,
+        Q: IsA<gio::Cancellable>,
+        R: FnOnce(Result<(), glib::Error>) + Send + 'static,
+    >(
+        &self,
+        file: &P,
+        save_mode: SaveMode,
+        cancellable: Option<&Q>,
+        callback: R,
+    ) {
+        let user_data: Box_<R> = Box_::new(callback);
+        unsafe extern "C" fn save_to_file_trampoline<
+            R: FnOnce(Result<(), glib::Error>) + Send + 'static,
+        >(
+            _source_object: *mut gobject_sys::GObject,
+            res: *mut gio_sys::GAsyncResult,
+            user_data: glib_sys::gpointer,
+        ) {
+            let mut error = ptr::null_mut();
+            let _ = webkit2_sys::webkit_web_view_save_to_file_finish(
+                _source_object as *mut _,
+                res,
+                &mut error,
+            );
+            let result = if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            };
+            let callback: Box_<R> = Box_::from_raw(user_data as *mut _);
+            callback(result);
+        }
+        let callback = save_to_file_trampoline::<R>;
+        unsafe {
+            webkit2_sys::webkit_web_view_save_to_file(
+                self.as_ref().to_glib_none().0,
+                file.as_ref().to_glib_none().0,
+                save_mode.to_glib(),
+                cancellable.map(|p| p.as_ref()).to_glib_none().0,
+                Some(callback),
+                Box_::into_raw(user_data) as *mut _,
+            );
+        }
+    }
 
-    //
-    //fn save_to_file_future(&self, file: /*Ignored*/&gio::File, save_mode: SaveMode) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
+    fn save_to_file_future<P: IsA<gio::File> + Clone + 'static>(
+        &self,
+        file: &P,
+        save_mode: SaveMode,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
+        let file = file.clone();
+        Box_::pin(gio::GioFuture::new(self, move |obj, send| {
+            let cancellable = gio::Cancellable::new();
+            obj.save_to_file(&file, save_mode, Some(&cancellable), move |res| {
+                send.resolve(res);
+            });
 
-    //let file = file.clone();
-    //Box_::pin(gio::GioFuture::new(self, move |obj, send| {
-    //    let cancellable = gio::Cancellable::new();
-    //    obj.save_to_file(
-    //        &file,
-    //        save_mode,
-    //        Some(&cancellable),
-    //        move |res| {
-    //            send.resolve(res);
-    //        },
-    //    );
+            cancellable
+        }))
+    }
 
-    //    cancellable
-    //}))
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn send_message_to_page<
+        P: IsA<UserMessage>,
+        Q: IsA<gio::Cancellable>,
+        R: FnOnce(Result<UserMessage, glib::Error>) + Send + 'static,
+    >(
+        &self,
+        message: &P,
+        cancellable: Option<&Q>,
+        callback: R,
+    ) {
+        let user_data: Box_<R> = Box_::new(callback);
+        unsafe extern "C" fn send_message_to_page_trampoline<
+            R: FnOnce(Result<UserMessage, glib::Error>) + Send + 'static,
+        >(
+            _source_object: *mut gobject_sys::GObject,
+            res: *mut gio_sys::GAsyncResult,
+            user_data: glib_sys::gpointer,
+        ) {
+            let mut error = ptr::null_mut();
+            let ret = webkit2_sys::webkit_web_view_send_message_to_page_finish(
+                _source_object as *mut _,
+                res,
+                &mut error,
+            );
+            let result = if error.is_null() {
+                Ok(from_glib_full(ret))
+            } else {
+                Err(from_glib_full(error))
+            };
+            let callback: Box_<R> = Box_::from_raw(user_data as *mut _);
+            callback(result);
+        }
+        let callback = send_message_to_page_trampoline::<R>;
+        unsafe {
+            webkit2_sys::webkit_web_view_send_message_to_page(
+                self.as_ref().to_glib_none().0,
+                message.as_ref().to_glib_none().0,
+                cancellable.map(|p| p.as_ref()).to_glib_none().0,
+                Some(callback),
+                Box_::into_raw(user_data) as *mut _,
+            );
+        }
+    }
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn send_message_to_page<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/UserMessage, glib::Error>) + Send + 'static>(&self, message: /*Ignored*/&UserMessage, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_view_send_message_to_page() }
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn send_message_to_page_future<P: IsA<UserMessage> + Clone + 'static>(
+        &self,
+        message: &P,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<UserMessage, glib::Error>> + 'static>>
+    {
+        let message = message.clone();
+        Box_::pin(gio::GioFuture::new(self, move |obj, send| {
+            let cancellable = gio::Cancellable::new();
+            obj.send_message_to_page(&message, Some(&cancellable), move |res| {
+                send.resolve(res);
+            });
 
-    //
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn send_message_to_page_future(&self, message: /*Ignored*/&UserMessage) -> Pin<Box_<dyn std::future::Future<Output = Result</*Ignored*/UserMessage, glib::Error>> + 'static>> {
-
-    //let message = message.clone();
-    //Box_::pin(gio::GioFuture::new(self, move |obj, send| {
-    //    let cancellable = gio::Cancellable::new();
-    //    obj.send_message_to_page(
-    //        &message,
-    //        Some(&cancellable),
-    //        move |res| {
-    //            send.resolve(res);
-    //        },
-    //    );
-
-    //    cancellable
-    //}))
-    //}
+            cancellable
+        }))
+    }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn set_background_color(&self, rgba: &gdk::RGBA) {
@@ -1371,10 +2106,25 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn set_input_method_context(&self, context: /*Ignored*/Option<&InputMethodContext>) {
-    //    unsafe { TODO: call webkit2_sys:webkit_web_view_set_input_method_context() }
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn set_input_method_context<P: IsA<InputMethodContext>>(&self, context: Option<&P>) {
+        unsafe {
+            webkit2_sys::webkit_web_view_set_input_method_context(
+                self.as_ref().to_glib_none().0,
+                context.map(|p| p.as_ref()).to_glib_none().0,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn set_is_muted(&self, muted: bool) {
+        unsafe {
+            webkit2_sys::webkit_web_view_set_is_muted(
+                self.as_ref().to_glib_none().0,
+                muted.to_glib(),
+            );
+        }
+    }
 
     fn set_settings<P: IsA<Settings>>(&self, settings: &P) {
         unsafe {
@@ -2209,10 +2959,47 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn connect_show_option_menu<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored object: WebKit2.OptionMenu
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn connect_show_option_menu<
+        F: Fn(&Self, &OptionMenu, &gdk::Event, &gdk::Rectangle) -> bool + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn show_option_menu_trampoline<
+            P,
+            F: Fn(&P, &OptionMenu, &gdk::Event, &gdk::Rectangle) -> bool + 'static,
+        >(
+            this: *mut webkit2_sys::WebKitWebView,
+            object: *mut webkit2_sys::WebKitOptionMenu,
+            p0: *mut gdk_sys::GdkEvent,
+            p1: *mut gdk_sys::GdkRectangle,
+            f: glib_sys::gpointer,
+        ) -> glib_sys::gboolean
+        where
+            P: IsA<WebView>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &WebView::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(object),
+                &from_glib_none(p0),
+                &from_glib_borrow(p1),
+            )
+            .to_glib()
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"show-option-menu\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    show_option_menu_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 
     fn connect_submit_form<F: Fn(&Self, &FormSubmissionRequest) + 'static>(
         &self,
@@ -2247,10 +3034,41 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn connect_user_message_received<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored message: WebKit2.UserMessage
-    //}
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    fn connect_user_message_received<F: Fn(&Self, &UserMessage) -> bool + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn user_message_received_trampoline<
+            P,
+            F: Fn(&P, &UserMessage) -> bool + 'static,
+        >(
+            this: *mut webkit2_sys::WebKitWebView,
+            message: *mut webkit2_sys::WebKitUserMessage,
+            f: glib_sys::gpointer,
+        ) -> glib_sys::gboolean
+        where
+            P: IsA<WebView>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &WebView::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(message),
+            )
+            .to_glib()
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"user-message-received\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    user_message_received_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 
     fn connect_web_process_crashed<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn web_process_crashed_trampoline<P, F: Fn(&P) -> bool + 'static>(
@@ -2276,10 +3094,39 @@ impl<O: IsA<WebView>> WebViewExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_20", feature = "dox"))]
-    //fn connect_web_process_terminated<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored reason: WebKit2.WebProcessTerminationReason
-    //}
+    #[cfg(any(feature = "v2_20", feature = "dox"))]
+    fn connect_web_process_terminated<F: Fn(&Self, WebProcessTerminationReason) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn web_process_terminated_trampoline<
+            P,
+            F: Fn(&P, WebProcessTerminationReason) + 'static,
+        >(
+            this: *mut webkit2_sys::WebKitWebView,
+            reason: webkit2_sys::WebKitWebProcessTerminationReason,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<WebView>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &WebView::from_glib_borrow(this).unsafe_cast_ref(),
+                from_glib(reason),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"web-process-terminated\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    web_process_terminated_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     fn connect_property_editable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
@@ -2375,6 +3222,31 @@ impl<O: IsA<WebView>> WebViewExt for O {
                 b"notify::is-loading\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_is_loading_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    fn connect_property_is_muted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_is_muted_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut webkit2_sys::WebKitWebView,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<WebView>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&WebView::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::is-muted\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_is_muted_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

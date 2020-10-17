@@ -50,6 +50,11 @@ pub const WEBKIT_AUTOMATION_BROWSING_CONTEXT_PRESENTATION_WINDOW:
 pub const WEBKIT_AUTOMATION_BROWSING_CONTEXT_PRESENTATION_TAB:
     WebKitAutomationBrowsingContextPresentation = 1;
 
+pub type WebKitAutoplayPolicy = c_int;
+pub const WEBKIT_AUTOPLAY_ALLOW: WebKitAutoplayPolicy = 0;
+pub const WEBKIT_AUTOPLAY_ALLOW_WITHOUT_SOUND: WebKitAutoplayPolicy = 1;
+pub const WEBKIT_AUTOPLAY_DENY: WebKitAutoplayPolicy = 2;
+
 pub type WebKitCacheModel = c_int;
 pub const WEBKIT_CACHE_MODEL_DOCUMENT_VIEWER: WebKitCacheModel = 0;
 pub const WEBKIT_CACHE_MODEL_WEB_BROWSER: WebKitCacheModel = 1;
@@ -101,6 +106,7 @@ pub const WEBKIT_CONTEXT_MENU_ACTION_MEDIA_MUTE: WebKitContextMenuAction = 41;
 pub const WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_VIDEO_TO_DISK: WebKitContextMenuAction = 42;
 pub const WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_AUDIO_TO_DISK: WebKitContextMenuAction = 43;
 pub const WEBKIT_CONTEXT_MENU_ACTION_INSERT_EMOJI: WebKitContextMenuAction = 44;
+pub const WEBKIT_CONTEXT_MENU_ACTION_PASTE_AS_PLAIN_TEXT: WebKitContextMenuAction = 45;
 pub const WEBKIT_CONTEXT_MENU_ACTION_CUSTOM: WebKitContextMenuAction = 10000;
 
 pub type WebKitCookieAcceptPolicy = c_int;
@@ -258,13 +264,15 @@ pub const WEBKIT_EDITING_COMMAND_CUT: *const c_char = b"Cut\0" as *const u8 as *
 pub const WEBKIT_EDITING_COMMAND_INSERT_IMAGE: *const c_char =
     b"InsertImage\0" as *const u8 as *const c_char;
 pub const WEBKIT_EDITING_COMMAND_PASTE: *const c_char = b"Paste\0" as *const u8 as *const c_char;
+pub const WEBKIT_EDITING_COMMAND_PASTE_AS_PLAIN_TEXT: *const c_char =
+    b"PasteAsPlainText\0" as *const u8 as *const c_char;
 pub const WEBKIT_EDITING_COMMAND_REDO: *const c_char = b"Redo\0" as *const u8 as *const c_char;
 pub const WEBKIT_EDITING_COMMAND_SELECT_ALL: *const c_char =
     b"SelectAll\0" as *const u8 as *const c_char;
 pub const WEBKIT_EDITING_COMMAND_UNDO: *const c_char = b"Undo\0" as *const u8 as *const c_char;
 pub const WEBKIT_MAJOR_VERSION: c_int = 2;
-pub const WEBKIT_MICRO_VERSION: c_int = 2;
-pub const WEBKIT_MINOR_VERSION: c_int = 28;
+pub const WEBKIT_MICRO_VERSION: c_int = 1;
+pub const WEBKIT_MINOR_VERSION: c_int = 30;
 
 // Flags
 pub type WebKitEditorTypingAttributes = c_uint;
@@ -317,7 +325,10 @@ pub const WEBKIT_WEBSITE_DATA_PLUGIN_DATA: WebKitWebsiteDataTypes = 128;
 pub const WEBKIT_WEBSITE_DATA_COOKIES: WebKitWebsiteDataTypes = 256;
 pub const WEBKIT_WEBSITE_DATA_DEVICE_ID_HASH_SALT: WebKitWebsiteDataTypes = 512;
 pub const WEBKIT_WEBSITE_DATA_HSTS_CACHE: WebKitWebsiteDataTypes = 1024;
-pub const WEBKIT_WEBSITE_DATA_ALL: WebKitWebsiteDataTypes = 2047;
+pub const WEBKIT_WEBSITE_DATA_ITP: WebKitWebsiteDataTypes = 2048;
+pub const WEBKIT_WEBSITE_DATA_SERVICE_WORKER_REGISTRATIONS: WebKitWebsiteDataTypes = 4096;
+pub const WEBKIT_WEBSITE_DATA_DOM_CACHE: WebKitWebsiteDataTypes = 8192;
+pub const WEBKIT_WEBSITE_DATA_ALL: WebKitWebsiteDataTypes = 16383;
 
 // Callbacks
 pub type WebKitURISchemeRequestCallback =
@@ -883,6 +894,26 @@ impl ::std::fmt::Debug for WebKitHitTestResultClass {
 pub struct _WebKitHitTestResultPrivate(c_void);
 
 pub type WebKitHitTestResultPrivate = *mut _WebKitHitTestResultPrivate;
+
+#[repr(C)]
+pub struct WebKitITPFirstParty(c_void);
+
+impl ::std::fmt::Debug for WebKitITPFirstParty {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("WebKitITPFirstParty @ {:?}", self as *const _))
+            .finish()
+    }
+}
+
+#[repr(C)]
+pub struct WebKitITPThirdParty(c_void);
+
+impl ::std::fmt::Debug for WebKitITPThirdParty {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("WebKitITPThirdParty @ {:?}", self as *const _))
+            .finish()
+    }
+}
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1965,6 +1996,37 @@ impl ::std::fmt::Debug for WebKitWebsiteData {
 
 #[repr(C)]
 #[derive(Copy, Clone)]
+pub struct WebKitWebsiteDataAccessPermissionRequestClass {
+    pub parent_class: gobject::GObjectClass,
+    pub _webkit_reserved0: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved1: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved2: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved3: Option<unsafe extern "C" fn()>,
+}
+
+impl ::std::fmt::Debug for WebKitWebsiteDataAccessPermissionRequestClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!(
+            "WebKitWebsiteDataAccessPermissionRequestClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .field("_webkit_reserved0", &self._webkit_reserved0)
+        .field("_webkit_reserved1", &self._webkit_reserved1)
+        .field("_webkit_reserved2", &self._webkit_reserved2)
+        .field("_webkit_reserved3", &self._webkit_reserved3)
+        .finish()
+    }
+}
+
+#[repr(C)]
+pub struct _WebKitWebsiteDataAccessPermissionRequestPrivate(c_void);
+
+pub type WebKitWebsiteDataAccessPermissionRequestPrivate =
+    *mut _WebKitWebsiteDataAccessPermissionRequestPrivate;
+
+#[repr(C)]
+#[derive(Copy, Clone)]
 pub struct WebKitWebsiteDataManagerClass {
     pub parent_class: gobject::GObjectClass,
     pub _webkit_reserved0: Option<unsafe extern "C" fn()>,
@@ -1992,6 +2054,36 @@ impl ::std::fmt::Debug for WebKitWebsiteDataManagerClass {
 pub struct _WebKitWebsiteDataManagerPrivate(c_void);
 
 pub type WebKitWebsiteDataManagerPrivate = *mut _WebKitWebsiteDataManagerPrivate;
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct WebKitWebsitePoliciesClass {
+    pub parent_class: gobject::GObjectClass,
+    pub _webkit_reserved0: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved1: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved2: Option<unsafe extern "C" fn()>,
+    pub _webkit_reserved3: Option<unsafe extern "C" fn()>,
+}
+
+impl ::std::fmt::Debug for WebKitWebsitePoliciesClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!(
+            "WebKitWebsitePoliciesClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .field("_webkit_reserved0", &self._webkit_reserved0)
+        .field("_webkit_reserved1", &self._webkit_reserved1)
+        .field("_webkit_reserved2", &self._webkit_reserved2)
+        .field("_webkit_reserved3", &self._webkit_reserved3)
+        .finish()
+    }
+}
+
+#[repr(C)]
+pub struct _WebKitWebsitePoliciesPrivate(c_void);
+
+pub type WebKitWebsitePoliciesPrivate = *mut _WebKitWebsitePoliciesPrivate;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -2759,6 +2851,24 @@ impl ::std::fmt::Debug for WebKitWebViewBase {
 
 #[repr(C)]
 #[derive(Copy, Clone)]
+pub struct WebKitWebsiteDataAccessPermissionRequest {
+    pub parent: gobject::GObject,
+    pub priv_: *mut WebKitWebsiteDataAccessPermissionRequestPrivate,
+}
+
+impl ::std::fmt::Debug for WebKitWebsiteDataAccessPermissionRequest {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!(
+            "WebKitWebsiteDataAccessPermissionRequest @ {:?}",
+            self as *const _
+        ))
+        .field("parent", &self.parent)
+        .finish()
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone)]
 pub struct WebKitWebsiteDataManager {
     pub parent: gobject::GObject,
     pub priv_: *mut WebKitWebsiteDataManagerPrivate,
@@ -2773,6 +2883,22 @@ impl ::std::fmt::Debug for WebKitWebsiteDataManager {
         .field("parent", &self.parent)
         .field("priv_", &self.priv_)
         .finish()
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct WebKitWebsitePolicies {
+    pub parent: gobject::GObject,
+    pub priv_: *mut WebKitWebsitePoliciesPrivate,
+}
+
+impl ::std::fmt::Debug for WebKitWebsitePolicies {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("WebKitWebsitePolicies @ {:?}", self as *const _))
+            .field("parent", &self.parent)
+            .field("priv_", &self.priv_)
+            .finish()
     }
 }
 
@@ -2801,6 +2927,8 @@ impl ::std::fmt::Debug for WebKitPermissionRequest {
     }
 }
 
+#[link(name = "webkit2gtk-4.0")]
+#[link(name = "javascriptcoregtk-4.0")]
 extern "C" {
 
     //=========================================================================
@@ -2813,6 +2941,12 @@ extern "C" {
     //=========================================================================
     #[cfg(any(feature = "v2_28", feature = "dox"))]
     pub fn webkit_automation_browsing_context_presentation_get_type() -> GType;
+
+    //=========================================================================
+    // WebKitAutoplayPolicy
+    //=========================================================================
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_autoplay_policy_get_type() -> GType;
 
     //=========================================================================
     // WebKitCacheModel
@@ -3121,6 +3255,48 @@ extern "C" {
     );
 
     //=========================================================================
+    // WebKitITPFirstParty
+    //=========================================================================
+    pub fn webkit_itp_first_party_get_type() -> GType;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_itp_first_party_get_domain(
+        itp_first_party: *mut WebKitITPFirstParty,
+    ) -> *const c_char;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_itp_first_party_get_last_update_time(
+        itp_first_party: *mut WebKitITPFirstParty,
+    ) -> *mut glib::GDateTime;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_itp_first_party_get_website_data_access_allowed(
+        itp_first_party: *mut WebKitITPFirstParty,
+    ) -> gboolean;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_itp_first_party_ref(
+        itp_first_party: *mut WebKitITPFirstParty,
+    ) -> *mut WebKitITPFirstParty;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_itp_first_party_unref(itp_first_party: *mut WebKitITPFirstParty);
+
+    //=========================================================================
+    // WebKitITPThirdParty
+    //=========================================================================
+    pub fn webkit_itp_third_party_get_type() -> GType;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_itp_third_party_get_domain(
+        itp_third_party: *mut WebKitITPThirdParty,
+    ) -> *const c_char;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_itp_third_party_get_first_parties(
+        itp_third_party: *mut WebKitITPThirdParty,
+    ) -> *mut glib::GList;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_itp_third_party_ref(
+        itp_third_party: *mut WebKitITPThirdParty,
+    ) -> *mut WebKitITPThirdParty;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_itp_third_party_unref(itp_third_party: *mut WebKitITPThirdParty);
+
+    //=========================================================================
     // WebKitInputMethodUnderline
     //=========================================================================
     pub fn webkit_input_method_underline_get_type() -> GType;
@@ -3329,8 +3505,8 @@ extern "C" {
         source: *const c_char,
         injected_frames: WebKitUserContentInjectedFrames,
         injection_time: WebKitUserScriptInjectionTime,
-        whitelist: *const *const c_char,
-        blacklist: *const *const c_char,
+        allow_list: *const *const c_char,
+        block_list: *const *const c_char,
     ) -> *mut WebKitUserScript;
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     pub fn webkit_user_script_new_for_world(
@@ -3338,8 +3514,8 @@ extern "C" {
         injected_frames: WebKitUserContentInjectedFrames,
         injection_time: WebKitUserScriptInjectionTime,
         world_name: *const c_char,
-        whitelist: *const *const c_char,
-        blacklist: *const *const c_char,
+        allow_list: *const *const c_char,
+        block_list: *const *const c_char,
     ) -> *mut WebKitUserScript;
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn webkit_user_script_ref(user_script: *mut WebKitUserScript) -> *mut WebKitUserScript;
@@ -3355,8 +3531,8 @@ extern "C" {
         source: *const c_char,
         injected_frames: WebKitUserContentInjectedFrames,
         level: WebKitUserStyleLevel,
-        whitelist: *const *const c_char,
-        blacklist: *const *const c_char,
+        allow_list: *const *const c_char,
+        block_list: *const *const c_char,
     ) -> *mut WebKitUserStyleSheet;
     #[cfg(any(feature = "v2_22", feature = "dox"))]
     pub fn webkit_user_style_sheet_new_for_world(
@@ -3364,8 +3540,8 @@ extern "C" {
         injected_frames: WebKitUserContentInjectedFrames,
         level: WebKitUserStyleLevel,
         world_name: *const c_char,
-        whitelist: *const *const c_char,
-        blacklist: *const *const c_char,
+        allow_list: *const *const c_char,
+        block_list: *const *const c_char,
     ) -> *mut WebKitUserStyleSheet;
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub fn webkit_user_style_sheet_ref(
@@ -3440,12 +3616,26 @@ extern "C" {
     pub fn webkit_authentication_request_get_scheme(
         request: *mut WebKitAuthenticationRequest,
     ) -> WebKitAuthenticationScheme;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_authentication_request_get_security_origin(
+        request: *mut WebKitAuthenticationRequest,
+    ) -> *mut WebKitSecurityOrigin;
     pub fn webkit_authentication_request_is_for_proxy(
         request: *mut WebKitAuthenticationRequest,
     ) -> gboolean;
     pub fn webkit_authentication_request_is_retry(
         request: *mut WebKitAuthenticationRequest,
     ) -> gboolean;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_authentication_request_set_can_save_credentials(
+        request: *mut WebKitAuthenticationRequest,
+        enabled: gboolean,
+    );
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_authentication_request_set_proposed_credential(
+        request: *mut WebKitAuthenticationRequest,
+        credential: *mut WebKitCredential,
+    );
 
     //=========================================================================
     // WebKitAutomationSession
@@ -4059,6 +4249,11 @@ extern "C" {
     pub fn webkit_policy_decision_download(decision: *mut WebKitPolicyDecision);
     pub fn webkit_policy_decision_ignore(decision: *mut WebKitPolicyDecision);
     pub fn webkit_policy_decision_use(decision: *mut WebKitPolicyDecision);
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_policy_decision_use_with_policies(
+        decision: *mut WebKitPolicyDecision,
+        policies: *mut WebKitWebsitePolicies,
+    );
 
     //=========================================================================
     // WebKitPrintCustomWidget
@@ -4276,6 +4471,10 @@ extern "C" {
     pub fn webkit_settings_get_load_icons_ignoring_image_load_setting(
         settings: *mut WebKitSettings,
     ) -> gboolean;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_settings_get_media_content_types_requiring_hardware_support(
+        settings: *mut WebKitSettings,
+    ) -> *const c_char;
     pub fn webkit_settings_get_media_playback_allows_inline(
         settings: *mut WebKitSettings,
     ) -> gboolean;
@@ -4460,6 +4659,11 @@ extern "C" {
     pub fn webkit_settings_set_load_icons_ignoring_image_load_setting(
         settings: *mut WebKitSettings,
         enabled: gboolean,
+    );
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_settings_set_media_content_types_requiring_hardware_support(
+        settings: *mut WebKitSettings,
+        content_types: *const c_char,
     );
     pub fn webkit_settings_set_media_playback_allows_inline(
         settings: *mut WebKitSettings,
@@ -4808,6 +5012,10 @@ extern "C" {
     pub fn webkit_web_context_get_tls_errors_policy(
         context: *mut WebKitWebContext,
     ) -> WebKitTLSErrorsPolicy;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_web_context_get_use_system_appearance_for_scrollbars(
+        context: *mut WebKitWebContext,
+    ) -> gboolean;
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     pub fn webkit_web_context_get_web_process_count_limit(context: *mut WebKitWebContext)
         -> c_uint;
@@ -4889,6 +5097,11 @@ extern "C" {
     pub fn webkit_web_context_set_tls_errors_policy(
         context: *mut WebKitWebContext,
         policy: WebKitTLSErrorsPolicy,
+    );
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_web_context_set_use_system_appearance_for_scrollbars(
+        context: *mut WebKitWebContext,
+        enabled: gboolean,
     );
     pub fn webkit_web_context_set_web_extensions_directory(
         context: *mut WebKitWebContext,
@@ -5019,6 +5232,8 @@ extern "C" {
         web_view: *mut WebKitWebView,
     ) -> *mut WebKitInputMethodContext;
     pub fn webkit_web_view_get_inspector(web_view: *mut WebKitWebView) -> *mut WebKitWebInspector;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_web_view_get_is_muted(web_view: *mut WebKitWebView) -> gboolean;
     pub fn webkit_web_view_get_javascript_global_context(
         web_view: *mut WebKitWebView,
     ) -> java_script_core::JSGlobalContextRef;
@@ -5059,6 +5274,10 @@ extern "C" {
     pub fn webkit_web_view_get_website_data_manager(
         web_view: *mut WebKitWebView,
     ) -> *mut WebKitWebsiteDataManager;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_web_view_get_website_policies(
+        web_view: *mut WebKitWebView,
+    ) -> *mut WebKitWebsitePolicies;
     pub fn webkit_web_view_get_window_properties(
         web_view: *mut WebKitWebView,
     ) -> *mut WebKitWindowProperties;
@@ -5200,6 +5419,8 @@ extern "C" {
         web_view: *mut WebKitWebView,
         context: *mut WebKitInputMethodContext,
     );
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_web_view_set_is_muted(web_view: *mut WebKitWebView, muted: gboolean);
     pub fn webkit_web_view_set_settings(
         web_view: *mut WebKitWebView,
         settings: *mut WebKitSettings,
@@ -5213,6 +5434,19 @@ extern "C" {
     // WebKitWebViewBase
     //=========================================================================
     pub fn webkit_web_view_base_get_type() -> GType;
+
+    //=========================================================================
+    // WebKitWebsiteDataAccessPermissionRequest
+    //=========================================================================
+    pub fn webkit_website_data_access_permission_request_get_type() -> GType;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_website_data_access_permission_request_get_current_domain(
+        request: *mut WebKitWebsiteDataAccessPermissionRequest,
+    ) -> *const c_char;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_website_data_access_permission_request_get_requesting_domain(
+        request: *mut WebKitWebsiteDataAccessPermissionRequest,
+    ) -> *const c_char;
 
     //=========================================================================
     // WebKitWebsiteDataManager
@@ -5270,6 +5504,10 @@ extern "C" {
     pub fn webkit_website_data_manager_get_disk_cache_directory(
         manager: *mut WebKitWebsiteDataManager,
     ) -> *const c_char;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_website_data_manager_get_dom_cache_directory(
+        manager: *mut WebKitWebsiteDataManager,
+    ) -> *const c_char;
     #[cfg(any(feature = "v2_26", feature = "dox"))]
     pub fn webkit_website_data_manager_get_hsts_cache_directory(
         manager: *mut WebKitWebsiteDataManager,
@@ -5278,12 +5516,41 @@ extern "C" {
     pub fn webkit_website_data_manager_get_indexeddb_directory(
         manager: *mut WebKitWebsiteDataManager,
     ) -> *const c_char;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_website_data_manager_get_itp_directory(
+        manager: *mut WebKitWebsiteDataManager,
+    ) -> *const c_char;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_website_data_manager_get_itp_enabled(
+        manager: *mut WebKitWebsiteDataManager,
+    ) -> gboolean;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_website_data_manager_get_itp_summary(
+        manager: *mut WebKitWebsiteDataManager,
+        cancellable: *mut gio::GCancellable,
+        callback: gio::GAsyncReadyCallback,
+        user_data: gpointer,
+    );
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_website_data_manager_get_itp_summary_finish(
+        manager: *mut WebKitWebsiteDataManager,
+        result: *mut gio::GAsyncResult,
+        error: *mut *mut glib::GError,
+    ) -> *mut glib::GList;
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     pub fn webkit_website_data_manager_get_local_storage_directory(
         manager: *mut WebKitWebsiteDataManager,
     ) -> *const c_char;
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     pub fn webkit_website_data_manager_get_offline_application_cache_directory(
+        manager: *mut WebKitWebsiteDataManager,
+    ) -> *const c_char;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_website_data_manager_get_persistent_credential_storage_enabled(
+        manager: *mut WebKitWebsiteDataManager,
+    ) -> gboolean;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_website_data_manager_get_service_worker_registrations_directory(
         manager: *mut WebKitWebsiteDataManager,
     ) -> *const c_char;
     #[cfg(any(feature = "v2_10", feature = "dox"))]
@@ -5309,6 +5576,32 @@ extern "C" {
         result: *mut gio::GAsyncResult,
         error: *mut *mut glib::GError,
     ) -> gboolean;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_website_data_manager_set_itp_enabled(
+        manager: *mut WebKitWebsiteDataManager,
+        enabled: gboolean,
+    );
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_website_data_manager_set_persistent_credential_storage_enabled(
+        manager: *mut WebKitWebsiteDataManager,
+        enabled: gboolean,
+    );
+
+    //=========================================================================
+    // WebKitWebsitePolicies
+    //=========================================================================
+    pub fn webkit_website_policies_get_type() -> GType;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_website_policies_new() -> *mut WebKitWebsitePolicies;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_website_policies_new_with_policies(
+        first_policy_name: *const c_char,
+        ...
+    ) -> *mut WebKitWebsitePolicies;
+    #[cfg(any(feature = "v2_30", feature = "dox"))]
+    pub fn webkit_website_policies_get_autoplay_policy(
+        policies: *mut WebKitWebsitePolicies,
+    ) -> WebKitAutoplayPolicy;
 
     //=========================================================================
     // WebKitWindowProperties
