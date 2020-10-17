@@ -223,8 +223,11 @@ pub use self::uri_scheme_request::{
     URISchemeRequest, URISchemeRequestClass, NONE_URI_SCHEME_REQUEST,
 };
 
+#[cfg(any(feature = "v2_6", feature = "dox"))]
 mod user_content_manager;
+#[cfg(any(feature = "v2_6", feature = "dox"))]
 pub use self::user_content_manager::UserContentManagerExt;
+#[cfg(any(feature = "v2_6", feature = "dox"))]
 pub use self::user_content_manager::{
     UserContentManager, UserContentManagerClass, NONE_USER_CONTENT_MANAGER,
 };
@@ -358,11 +361,6 @@ mod security_origin;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 pub use self::security_origin::SecurityOrigin;
 
-#[cfg(any(feature = "v2_24", feature = "dox"))]
-mod user_content_filter;
-#[cfg(any(feature = "v2_24", feature = "dox"))]
-pub use self::user_content_filter::UserContentFilter;
-
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 mod user_script;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
@@ -489,6 +487,7 @@ pub mod traits {
     pub use super::URIRequestExt;
     pub use super::URIResponseExt;
     pub use super::URISchemeRequestExt;
+    #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub use super::UserContentManagerExt;
     pub use super::UserMediaPermissionRequestExt;
     #[cfg(any(feature = "v2_28", feature = "dox"))]

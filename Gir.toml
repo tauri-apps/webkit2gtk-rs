@@ -84,7 +84,7 @@ generate = [
     "WebKit2.SnapshotOptions",
     "WebKit2.SnapshotRegion",
     "WebKit2.TLSErrorsPolicy",
-    "WebKit2.UserContentFilter",
+    # "WebKit2.UserContentFilter",
     "WebKit2.UserContentFilterError",
     # "WebKit2.UserContentFilterStore",
     "WebKit2.UserContentInjectedFrames",
@@ -263,6 +263,9 @@ generate_builder = true
 name = "WebKit2.WebsiteDataManager"
 status = "generate"
 generate_builder = true
+    [[object.function]]
+    name = "remove"
+    ignore = true # to be generated manually
 
 [[object]]
 name = "WebKit2.WebsitePolicies"

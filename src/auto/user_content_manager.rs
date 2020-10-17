@@ -20,7 +20,6 @@ use std::mem::transmute;
 use webkit2_sys;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 use JavascriptResult;
-use UserContentFilter;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 use UserScript;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
@@ -52,8 +51,8 @@ impl Default for UserContentManager {
 pub const NONE_USER_CONTENT_MANAGER: Option<&UserContentManager> = None;
 
 pub trait UserContentManagerExt: 'static {
-    #[cfg(any(feature = "v2_24", feature = "dox"))]
-    fn add_filter(&self, filter: &UserContentFilter);
+    //#[cfg(any(feature = "v2_24", feature = "dox"))]
+    //fn add_filter(&self, filter: /*Ignored*/&UserContentFilter);
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn add_script(&self, script: &UserScript);
@@ -76,7 +75,7 @@ pub trait UserContentManagerExt: 'static {
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn remove_all_style_sheets(&self);
 
-    fn remove_filter(&self, filter: &UserContentFilter);
+    //fn remove_filter(&self, filter: /*Ignored*/&UserContentFilter);
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
     fn remove_filter_by_id(&self, filter_id: &str);
@@ -95,15 +94,10 @@ pub trait UserContentManagerExt: 'static {
 }
 
 impl<O: IsA<UserContentManager>> UserContentManagerExt for O {
-    #[cfg(any(feature = "v2_24", feature = "dox"))]
-    fn add_filter(&self, filter: &UserContentFilter) {
-        unsafe {
-            webkit2_sys::webkit_user_content_manager_add_filter(
-                self.as_ref().to_glib_none().0,
-                filter.to_glib_none().0,
-            );
-        }
-    }
+    //#[cfg(any(feature = "v2_24", feature = "dox"))]
+    //fn add_filter(&self, filter: /*Ignored*/&UserContentFilter) {
+    //    unsafe { TODO: call webkit2_sys:webkit_user_content_manager_add_filter() }
+    //}
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     fn add_script(&self, script: &UserScript) {
@@ -177,14 +171,9 @@ impl<O: IsA<UserContentManager>> UserContentManagerExt for O {
         }
     }
 
-    fn remove_filter(&self, filter: &UserContentFilter) {
-        unsafe {
-            webkit2_sys::webkit_user_content_manager_remove_filter(
-                self.as_ref().to_glib_none().0,
-                filter.to_glib_none().0,
-            );
-        }
-    }
+    //fn remove_filter(&self, filter: /*Ignored*/&UserContentFilter) {
+    //    unsafe { TODO: call webkit2_sys:webkit_user_content_manager_remove_filter() }
+    //}
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
     fn remove_filter_by_id(&self, filter_id: &str) {
