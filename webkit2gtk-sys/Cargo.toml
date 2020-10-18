@@ -67,6 +67,7 @@ license = "MIT"
 links = "web_kit2"
 name = "webkit2gtk-sys"
 version = "0.7.0"
+documentation = "https://gtk-rs.github.io/webkit2gtk-rs/webkit2gtk_sys"
 [package.metadata.docs.rs]
 features = ["dox"]
 [package.metadata.system-deps.webkit2gtk_4_0]
