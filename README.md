@@ -1,4 +1,4 @@
-# webkit2gtk [![Build Status](https://travis-ci.org/gtk-rs/webkit2gtk-rs.png?branch=master)](https://travis-ci.org/gtk-rs/webkit2gtk-rs) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/gtk-rs/gtk)
+# webkit2gtk ![CI](https://github.com/gtk-rs/webkit2gtk/workflows/CI/badge.svg) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/gtk-rs/gtk)
 
 [Project site](https://gtk-rs.org/) | [Online documentation](https://gtk-rs.org/docs/)
 
