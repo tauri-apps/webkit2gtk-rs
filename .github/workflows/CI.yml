@@ -31,7 +31,6 @@ jobs:
         with:
           command: build
           args: --features=v2_28
-      - run: git diff -R --exit-code
 
   fmt:
     name: Regen Check
