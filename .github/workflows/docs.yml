@@ -18,7 +18,11 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: doc
+<<<<<<< HEAD
           args: --package webkit2gtk --package webkit2gtk-sys --features=v2_28 --no-deps
+=======
+          args: --package webkit2gtk --package webkit2gtk-sys --no-deps
+>>>>>>> a5a97f7... make_regen & remove unused UserContentFilter
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v2
