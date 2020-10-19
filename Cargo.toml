@@ -7,7 +7,7 @@ description = "Rust bindings for webkit-gtk library"
 repository = "https://github.com/gtk-rs/webkit2gtk-rs"
 license = "MIT"
 homepage = "https://gtk-rs.org/"
-documentation = "https://gtk-rs.org/docs/webkit2gtk"
+documentation = "https://gtk-rs.github.io/webkit2gtk-rs/webkit2gtk"
 keywords = ["webkit", "gtk-rs", "gnome", "GUI"]
 exclude = [
     "gir-files/*",

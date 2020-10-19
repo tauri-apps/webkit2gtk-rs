@@ -40,9 +40,9 @@ fn main() {
     context.set_web_extensions_directory("../webkit2gtk-webextension-rs/example/target/debug/");
     #[cfg(feature = "v2_6")]
     let webview =
-        WebView::new_with_context_and_user_content_manager(&context, &UserContentManager::new());
+        WebView::with_context_and_user_content_manager(&context, &UserContentManager::new());
     #[cfg(not(feature = "v2_6"))]
-    let webview = WebView::new_with_context(&context);
+    let webview = WebView::with_context(&context);
     webview.load_uri("https://crates.io/");
     window.add(&webview);
 
