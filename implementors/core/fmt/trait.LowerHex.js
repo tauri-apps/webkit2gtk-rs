@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["webkit2gtk"] = [{"text":"impl LowerHex for EditorTypingAttributes","synthetic":false,"types":[]},{"text":"impl LowerHex for FindOptions","synthetic":false,"types":[]},{"text":"impl LowerHex for HitTestResultContext","synthetic":false,"types":[]},{"text":"impl LowerHex for InputHints","synthetic":false,"types":[]},{"text":"impl LowerHex for SnapshotOptions","synthetic":false,"types":[]},{"text":"impl LowerHex for WebsiteDataTypes","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
