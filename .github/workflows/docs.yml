@@ -1,20 +1,27 @@
 name: github pages
 
 on:
-  push: 
+  push:
     branches: [master]
-      
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
       - run: sudo apt-get install libwebkit2gtk-4.0-dev -y
       - uses: actions/checkout@v2
+        with:
+          submodules: "recursive"
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
           override: true
+      - working-directory: gir
+        run: cargo build --release
+      - run: "./gir/target/release/gir  -c ./Gir.toml -d ./gir-files --doc-target-path docs.md -m doc"
+      - run: cargo install rustdoc-stripper
+      - run: rustdoc-stripper -g -o ./docs.md
       - uses: actions-rs/cargo@v1
         with:
           command: doc
