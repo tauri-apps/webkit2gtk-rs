@@ -1,4 +1,4 @@
-# webkit2gtk ![CI](https://github.com/gtk-rs/webkit2gtk/workflows/CI/badge.svg) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/gtk-rs/gtk)
+# webkit2gtk ![CI](https://github.com/gtk-rs/webkit2gtk-rs/workflows/CI/badge.svg) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/gtk-rs/gtk)
 
 [Project site](https://gtk-rs.org/) | [Online documentation](https://gtk-rs.github.io/webkit2gtk-rs/webkit2gtk)
 
