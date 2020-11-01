@@ -52,4 +52,4 @@ javascriptcore-rs = "0.10"
 
 [dependencies.webkit2gtk-sys]
 path = "./webkit2gtk-sys"
-version = "^0.12"
+version = "^0.13"
