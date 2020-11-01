@@ -1,6 +1,6 @@
 [package]
 name = "webkit2gtk"
-version = "0.10.0"
+version = "0.11.0"
 authors = ["The Gtk-rs Project Developers"]
 
 categories = ["api-bindings", "gui"]
