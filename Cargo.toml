@@ -34,8 +34,6 @@ v2_22 = ["v2_20", "webkit2gtk-sys/v2_22"]
 v2_24 = ["v2_22", "webkit2gtk-sys/v2_24"]
 v2_26 = ["v2_24", "webkit2gtk-sys/v2_26"]
 v2_28 = ["v2_26", "webkit2gtk-sys/v2_28"]
-v2_30 = ["v2_28", "webkit2gtk-sys/v2_30"]
-
 
 [dependencies]
 bitflags = "^1.0"
