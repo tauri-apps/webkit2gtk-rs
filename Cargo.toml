@@ -19,6 +19,7 @@ travis-ci = { repository = "gtk-rs/webkit2gtk-rs" }
 name = "webkit2gtk"
 
 [features]
+#default = ["v2_22"]
 v2_2 = []
 v2_4 = ["v2_2"]
 v2_6 = ["v2_4", "webkit2gtk-sys/v2_6"]
@@ -27,6 +28,12 @@ v2_10 = ["v2_8", "webkit2gtk-sys/v2_10"]
 v2_12 = ["v2_10", "webkit2gtk-sys/v2_12"]
 v2_14 = ["v2_12", "webkit2gtk-sys/v2_14"]
 v2_16 = ["v2_14", "webkit2gtk-sys/v2_16"]
+v2_18 = ["v2_16", "webkit2gtk-sys/v2_18"]
+v2_20 = ["v2_18", "webkit2gtk-sys/v2_20"]
+v2_22 = ["v2_20", "webkit2gtk-sys/v2_22"]
+v2_24 = ["v2_22", "webkit2gtk-sys/v2_24"]
+v2_26 = ["v2_24", "webkit2gtk-sys/v2_26"]
+v2_28 = ["v2_26", "webkit2gtk-sys/v2_28"]
 
 [dependencies]
 bitflags = "^1.0"
