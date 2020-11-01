@@ -9,6 +9,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use glib::Value;
 use glib_sys;
 use gobject_sys;
@@ -36,6 +37,53 @@ impl PrintOperation {
         unsafe {
             from_glib_full(webkit2_sys::webkit_print_operation_new(web_view.as_ref().to_glib_none().0))
         }
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct PrintOperationBuilder {
+    page_setup: Option<gtk::PageSetup>,
+    print_settings: Option<gtk::PrintSettings>,
+    web_view: Option<WebView>,
+}
+
+impl PrintOperationBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+
+    pub fn build(self) -> PrintOperation {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref page_setup) = self.page_setup {
+            properties.push(("page-setup", page_setup));
+        }
+        if let Some(ref print_settings) = self.print_settings {
+            properties.push(("print-settings", print_settings));
+        }
+        if let Some(ref web_view) = self.web_view {
+            properties.push(("web-view", web_view));
+        }
+        let ret = glib::Object::new(PrintOperation::static_type(), &properties)
+            .expect("object new")
+            .downcast::<PrintOperation>()
+            .expect("downcast");
+    ret
+    }
+
+    pub fn page_setup(mut self, page_setup: &gtk::PageSetup) -> Self {
+        self.page_setup = Some(page_setup.clone());
+        self
+    }
+
+    pub fn print_settings(mut self, print_settings: &gtk::PrintSettings) -> Self {
+        self.print_settings = Some(print_settings.clone());
+        self
+    }
+
+    pub fn web_view<P: IsA<WebView>>(mut self, web_view: &P) -> Self {
+        self.web_view = Some(web_view.clone().upcast());
+        self
     }
 }
 

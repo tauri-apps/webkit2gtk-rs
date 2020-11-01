@@ -8,12 +8,13 @@ use gio;
 use gio_sys;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 use glib::GString;
-#[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib::StaticType;
+use glib::ToValue;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use glib::Value;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
@@ -30,6 +31,8 @@ use std::ptr;
 use webkit2_sys;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use CookieManager;
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+use WebsiteData;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 use WebsiteDataTypes;
 
@@ -56,6 +59,152 @@ impl WebsiteDataManager {
     }
 }
 
+#[derive(Clone, Default)]
+pub struct WebsiteDataManagerBuilder {
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    base_cache_directory: Option<String>,
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    base_data_directory: Option<String>,
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    disk_cache_directory: Option<String>,
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    hsts_cache_directory: Option<String>,
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    indexeddb_directory: Option<String>,
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    is_ephemeral: Option<bool>,
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    local_storage_directory: Option<String>,
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    offline_application_cache_directory: Option<String>,
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    websql_directory: Option<String>,
+}
+
+impl WebsiteDataManagerBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+
+    pub fn build(self) -> WebsiteDataManager {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref base_cache_directory) = self.base_cache_directory {
+                properties.push(("base-cache-directory", base_cache_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref base_data_directory) = self.base_data_directory {
+                properties.push(("base-data-directory", base_data_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref disk_cache_directory) = self.disk_cache_directory {
+                properties.push(("disk-cache-directory", disk_cache_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_26", feature = "dox"))]
+        {
+            if let Some(ref hsts_cache_directory) = self.hsts_cache_directory {
+                properties.push(("hsts-cache-directory", hsts_cache_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref indexeddb_directory) = self.indexeddb_directory {
+                properties.push(("indexeddb-directory", indexeddb_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_16", feature = "dox"))]
+        {
+            if let Some(ref is_ephemeral) = self.is_ephemeral {
+                properties.push(("is-ephemeral", is_ephemeral));
+            }
+        }
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref local_storage_directory) = self.local_storage_directory {
+                properties.push(("local-storage-directory", local_storage_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref offline_application_cache_directory) = self.offline_application_cache_directory {
+                properties.push(("offline-application-cache-directory", offline_application_cache_directory));
+            }
+        }
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref websql_directory) = self.websql_directory {
+                properties.push(("websql-directory", websql_directory));
+            }
+        }
+        let ret = glib::Object::new(WebsiteDataManager::static_type(), &properties)
+            .expect("object new")
+            .downcast::<WebsiteDataManager>()
+            .expect("downcast");
+    ret
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn base_cache_directory(mut self, base_cache_directory: &str) -> Self {
+        self.base_cache_directory = Some(base_cache_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn base_data_directory(mut self, base_data_directory: &str) -> Self {
+        self.base_data_directory = Some(base_data_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn disk_cache_directory(mut self, disk_cache_directory: &str) -> Self {
+        self.disk_cache_directory = Some(disk_cache_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn hsts_cache_directory(mut self, hsts_cache_directory: &str) -> Self {
+        self.hsts_cache_directory = Some(hsts_cache_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn indexeddb_directory(mut self, indexeddb_directory: &str) -> Self {
+        self.indexeddb_directory = Some(indexeddb_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    pub fn is_ephemeral(mut self, is_ephemeral: bool) -> Self {
+        self.is_ephemeral = Some(is_ephemeral);
+        self
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn local_storage_directory(mut self, local_storage_directory: &str) -> Self {
+        self.local_storage_directory = Some(local_storage_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn offline_application_cache_directory(mut self, offline_application_cache_directory: &str) -> Self {
+        self.offline_application_cache_directory = Some(offline_application_cache_directory.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn websql_directory(mut self, websql_directory: &str) -> Self {
+        self.websql_directory = Some(websql_directory.to_string());
+        self
+    }
+}
+
 pub const NONE_WEBSITE_DATA_MANAGER: Option<&WebsiteDataManager> = None;
 
 pub trait WebsiteDataManagerExt: 'static {
@@ -66,12 +215,12 @@ pub trait WebsiteDataManagerExt: 'static {
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn clear_future(&self, types: WebsiteDataTypes, timespan: glib::TimeSpan) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
 
-    //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn fetch<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/Vec<WebsiteData>, glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q);
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    fn fetch<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<WebsiteData>, glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q);
 
-    //
-    //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn fetch_future(&self, types: WebsiteDataTypes) -> Pin<Box_<dyn std::future::Future<Output = Result</*Ignored*/Vec<WebsiteData>, glib::Error>> + 'static>>;
+    
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    fn fetch_future(&self, types: WebsiteDataTypes) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<WebsiteData>, glib::Error>> + 'static>>;
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_base_cache_directory(&self) -> Option<GString>;
@@ -103,13 +252,6 @@ pub trait WebsiteDataManagerExt: 'static {
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn is_ephemeral(&self) -> bool;
-
-    //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn remove<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q);
-
-    //
-    //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn remove_future(&self, types: WebsiteDataTypes) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_property_is_ephemeral(&self) -> bool;
@@ -151,28 +293,39 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
         }))
     }
 
-    //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn fetch<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/Vec<WebsiteData>, glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call webkit2_sys:webkit_website_data_manager_fetch() }
-    //}
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    fn fetch<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<WebsiteData>, glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q) {
+        let user_data: Box_<Q> = Box_::new(callback);
+        unsafe extern "C" fn fetch_trampoline<Q: FnOnce(Result<Vec<WebsiteData>, glib::Error>) + Send + 'static>(_source_object: *mut gobject_sys::GObject, res: *mut gio_sys::GAsyncResult, user_data: glib_sys::gpointer) {
+            let mut error = ptr::null_mut();
+            let ret = webkit2_sys::webkit_website_data_manager_fetch_finish(_source_object as *mut _, res, &mut error);
+            let result = if error.is_null() { Ok(FromGlibPtrContainer::from_glib_full(ret)) } else { Err(from_glib_full(error)) };
+            let callback: Box_<Q> = Box_::from_raw(user_data as *mut _);
+            callback(result);
+        }
+        let callback = fetch_trampoline::<Q>;
+        unsafe {
+            webkit2_sys::webkit_website_data_manager_fetch(self.as_ref().to_glib_none().0, types.to_glib(), cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box_::into_raw(user_data) as *mut _);
+        }
+    }
 
-    //
-    //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn fetch_future(&self, types: WebsiteDataTypes) -> Pin<Box_<dyn std::future::Future<Output = Result</*Ignored*/Vec<WebsiteData>, glib::Error>> + 'static>> {
+    
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    fn fetch_future(&self, types: WebsiteDataTypes) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<WebsiteData>, glib::Error>> + 'static>> {
 
-        //Box_::pin(gio::GioFuture::new(self, move |obj, send| {
-        //    let cancellable = gio::Cancellable::new();
-        //    obj.fetch(
-        //        types,
-        //        Some(&cancellable),
-        //        move |res| {
-        //            send.resolve(res);
-        //        },
-        //    );
+        Box_::pin(gio::GioFuture::new(self, move |obj, send| {
+            let cancellable = gio::Cancellable::new();
+            obj.fetch(
+                types,
+                Some(&cancellable),
+                move |res| {
+                    send.resolve(res);
+                },
+            );
 
-        //    cancellable
-        //}))
-    //}
+            cancellable
+        }))
+    }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn get_base_cache_directory(&self) -> Option<GString> {
@@ -243,29 +396,6 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
             from_glib(webkit2_sys::webkit_website_data_manager_is_ephemeral(self.as_ref().to_glib_none().0))
         }
     }
-
-    //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn remove<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call webkit2_sys:webkit_website_data_manager_remove() }
-    //}
-
-    //
-    //#[cfg(any(feature = "v2_16", feature = "dox"))]
-    //fn remove_future(&self, types: WebsiteDataTypes) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
-
-        //Box_::pin(gio::GioFuture::new(self, move |obj, send| {
-        //    let cancellable = gio::Cancellable::new();
-        //    obj.remove(
-        //        types,
-        //        Some(&cancellable),
-        //        move |res| {
-        //            send.resolve(res);
-        //        },
-        //    );
-
-        //    cancellable
-        //}))
-    //}
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     fn get_property_is_ephemeral(&self) -> bool {

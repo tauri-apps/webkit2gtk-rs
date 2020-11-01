@@ -8,6 +8,8 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::GString;
+use glib::StaticType;
+use glib::ToValue;
 use glib_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
@@ -56,6 +58,623 @@ impl Settings {
 impl Default for Settings {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct SettingsBuilder {
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    allow_file_access_from_file_urls: Option<bool>,
+    allow_modal_dialogs: Option<bool>,
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    allow_top_navigation_to_data_urls: Option<bool>,
+    #[cfg(any(feature = "v2_14", feature = "dox"))]
+    allow_universal_access_from_file_urls: Option<bool>,
+    auto_load_images: Option<bool>,
+    cursive_font_family: Option<String>,
+    default_charset: Option<String>,
+    default_font_family: Option<String>,
+    default_font_size: Option<u32>,
+    default_monospace_font_size: Option<u32>,
+    draw_compositing_indicators: Option<bool>,
+    #[cfg(any(feature = "v2_2", feature = "dox"))]
+    enable_accelerated_2d_canvas: Option<bool>,
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    enable_back_forward_navigation_gestures: Option<bool>,
+    enable_caret_browsing: Option<bool>,
+    enable_developer_extras: Option<bool>,
+    enable_dns_prefetching: Option<bool>,
+    #[cfg(any(feature = "v2_20", feature = "dox"))]
+    enable_encrypted_media: Option<bool>,
+    enable_frame_flattening: Option<bool>,
+    enable_fullscreen: Option<bool>,
+    enable_html5_database: Option<bool>,
+    enable_html5_local_storage: Option<bool>,
+    enable_hyperlink_auditing: Option<bool>,
+    enable_java: Option<bool>,
+    enable_javascript: Option<bool>,
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    enable_javascript_markup: Option<bool>,
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    enable_media: Option<bool>,
+    #[cfg(any(feature = "v2_22", feature = "dox"))]
+    enable_media_capabilities: Option<bool>,
+    #[cfg(any(feature = "v2_4", feature = "dox"))]
+    enable_media_stream: Option<bool>,
+    #[cfg(any(feature = "v2_4", feature = "dox"))]
+    enable_mediasource: Option<bool>,
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    enable_mock_capture_devices: Option<bool>,
+    enable_offline_web_application_cache: Option<bool>,
+    enable_page_cache: Option<bool>,
+    enable_plugins: Option<bool>,
+    enable_private_browsing: Option<bool>,
+    enable_resizable_text_areas: Option<bool>,
+    enable_site_specific_quirks: Option<bool>,
+    enable_smooth_scrolling: Option<bool>,
+    #[cfg(any(feature = "v2_4", feature = "dox"))]
+    enable_spatial_navigation: Option<bool>,
+    enable_tabs_to_links: Option<bool>,
+    enable_webaudio: Option<bool>,
+    enable_webgl: Option<bool>,
+    #[cfg(any(feature = "v2_2", feature = "dox"))]
+    enable_write_console_messages_to_stdout: Option<bool>,
+    enable_xss_auditor: Option<bool>,
+    fantasy_font_family: Option<String>,
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    hardware_acceleration_policy: Option<HardwareAccelerationPolicy>,
+    javascript_can_access_clipboard: Option<bool>,
+    javascript_can_open_windows_automatically: Option<bool>,
+    load_icons_ignoring_image_load_setting: Option<bool>,
+    media_playback_allows_inline: Option<bool>,
+    media_playback_requires_user_gesture: Option<bool>,
+    minimum_font_size: Option<u32>,
+    monospace_font_family: Option<String>,
+    pictograph_font_family: Option<String>,
+    print_backgrounds: Option<bool>,
+    sans_serif_font_family: Option<String>,
+    serif_font_family: Option<String>,
+    user_agent: Option<String>,
+    zoom_text_only: Option<bool>,
+}
+
+impl SettingsBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+
+    pub fn build(self) -> Settings {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        #[cfg(any(feature = "v2_10", feature = "dox"))]
+        {
+            if let Some(ref allow_file_access_from_file_urls) = self.allow_file_access_from_file_urls {
+                properties.push(("allow-file-access-from-file-urls", allow_file_access_from_file_urls));
+            }
+        }
+        if let Some(ref allow_modal_dialogs) = self.allow_modal_dialogs {
+            properties.push(("allow-modal-dialogs", allow_modal_dialogs));
+        }
+        #[cfg(any(feature = "v2_28", feature = "dox"))]
+        {
+            if let Some(ref allow_top_navigation_to_data_urls) = self.allow_top_navigation_to_data_urls {
+                properties.push(("allow-top-navigation-to-data-urls", allow_top_navigation_to_data_urls));
+            }
+        }
+        #[cfg(any(feature = "v2_14", feature = "dox"))]
+        {
+            if let Some(ref allow_universal_access_from_file_urls) = self.allow_universal_access_from_file_urls {
+                properties.push(("allow-universal-access-from-file-urls", allow_universal_access_from_file_urls));
+            }
+        }
+        if let Some(ref auto_load_images) = self.auto_load_images {
+            properties.push(("auto-load-images", auto_load_images));
+        }
+        if let Some(ref cursive_font_family) = self.cursive_font_family {
+            properties.push(("cursive-font-family", cursive_font_family));
+        }
+        if let Some(ref default_charset) = self.default_charset {
+            properties.push(("default-charset", default_charset));
+        }
+        if let Some(ref default_font_family) = self.default_font_family {
+            properties.push(("default-font-family", default_font_family));
+        }
+        if let Some(ref default_font_size) = self.default_font_size {
+            properties.push(("default-font-size", default_font_size));
+        }
+        if let Some(ref default_monospace_font_size) = self.default_monospace_font_size {
+            properties.push(("default-monospace-font-size", default_monospace_font_size));
+        }
+        if let Some(ref draw_compositing_indicators) = self.draw_compositing_indicators {
+            properties.push(("draw-compositing-indicators", draw_compositing_indicators));
+        }
+        #[cfg(any(feature = "v2_2", feature = "dox"))]
+        {
+            if let Some(ref enable_accelerated_2d_canvas) = self.enable_accelerated_2d_canvas {
+                properties.push(("enable-accelerated-2d-canvas", enable_accelerated_2d_canvas));
+            }
+        }
+        #[cfg(any(feature = "v2_24", feature = "dox"))]
+        {
+            if let Some(ref enable_back_forward_navigation_gestures) = self.enable_back_forward_navigation_gestures {
+                properties.push(("enable-back-forward-navigation-gestures", enable_back_forward_navigation_gestures));
+            }
+        }
+        if let Some(ref enable_caret_browsing) = self.enable_caret_browsing {
+            properties.push(("enable-caret-browsing", enable_caret_browsing));
+        }
+        if let Some(ref enable_developer_extras) = self.enable_developer_extras {
+            properties.push(("enable-developer-extras", enable_developer_extras));
+        }
+        if let Some(ref enable_dns_prefetching) = self.enable_dns_prefetching {
+            properties.push(("enable-dns-prefetching", enable_dns_prefetching));
+        }
+        #[cfg(any(feature = "v2_20", feature = "dox"))]
+        {
+            if let Some(ref enable_encrypted_media) = self.enable_encrypted_media {
+                properties.push(("enable-encrypted-media", enable_encrypted_media));
+            }
+        }
+        if let Some(ref enable_frame_flattening) = self.enable_frame_flattening {
+            properties.push(("enable-frame-flattening", enable_frame_flattening));
+        }
+        if let Some(ref enable_fullscreen) = self.enable_fullscreen {
+            properties.push(("enable-fullscreen", enable_fullscreen));
+        }
+        if let Some(ref enable_html5_database) = self.enable_html5_database {
+            properties.push(("enable-html5-database", enable_html5_database));
+        }
+        if let Some(ref enable_html5_local_storage) = self.enable_html5_local_storage {
+            properties.push(("enable-html5-local-storage", enable_html5_local_storage));
+        }
+        if let Some(ref enable_hyperlink_auditing) = self.enable_hyperlink_auditing {
+            properties.push(("enable-hyperlink-auditing", enable_hyperlink_auditing));
+        }
+        if let Some(ref enable_java) = self.enable_java {
+            properties.push(("enable-java", enable_java));
+        }
+        if let Some(ref enable_javascript) = self.enable_javascript {
+            properties.push(("enable-javascript", enable_javascript));
+        }
+        #[cfg(any(feature = "v2_24", feature = "dox"))]
+        {
+            if let Some(ref enable_javascript_markup) = self.enable_javascript_markup {
+                properties.push(("enable-javascript-markup", enable_javascript_markup));
+            }
+        }
+        #[cfg(any(feature = "v2_26", feature = "dox"))]
+        {
+            if let Some(ref enable_media) = self.enable_media {
+                properties.push(("enable-media", enable_media));
+            }
+        }
+        #[cfg(any(feature = "v2_22", feature = "dox"))]
+        {
+            if let Some(ref enable_media_capabilities) = self.enable_media_capabilities {
+                properties.push(("enable-media-capabilities", enable_media_capabilities));
+            }
+        }
+        #[cfg(any(feature = "v2_4", feature = "dox"))]
+        {
+            if let Some(ref enable_media_stream) = self.enable_media_stream {
+                properties.push(("enable-media-stream", enable_media_stream));
+            }
+        }
+        #[cfg(any(feature = "v2_4", feature = "dox"))]
+        {
+            if let Some(ref enable_mediasource) = self.enable_mediasource {
+                properties.push(("enable-mediasource", enable_mediasource));
+            }
+        }
+        #[cfg(any(feature = "v2_24", feature = "dox"))]
+        {
+            if let Some(ref enable_mock_capture_devices) = self.enable_mock_capture_devices {
+                properties.push(("enable-mock-capture-devices", enable_mock_capture_devices));
+            }
+        }
+        if let Some(ref enable_offline_web_application_cache) = self.enable_offline_web_application_cache {
+            properties.push(("enable-offline-web-application-cache", enable_offline_web_application_cache));
+        }
+        if let Some(ref enable_page_cache) = self.enable_page_cache {
+            properties.push(("enable-page-cache", enable_page_cache));
+        }
+        if let Some(ref enable_plugins) = self.enable_plugins {
+            properties.push(("enable-plugins", enable_plugins));
+        }
+        if let Some(ref enable_private_browsing) = self.enable_private_browsing {
+            properties.push(("enable-private-browsing", enable_private_browsing));
+        }
+        if let Some(ref enable_resizable_text_areas) = self.enable_resizable_text_areas {
+            properties.push(("enable-resizable-text-areas", enable_resizable_text_areas));
+        }
+        if let Some(ref enable_site_specific_quirks) = self.enable_site_specific_quirks {
+            properties.push(("enable-site-specific-quirks", enable_site_specific_quirks));
+        }
+        if let Some(ref enable_smooth_scrolling) = self.enable_smooth_scrolling {
+            properties.push(("enable-smooth-scrolling", enable_smooth_scrolling));
+        }
+        #[cfg(any(feature = "v2_4", feature = "dox"))]
+        {
+            if let Some(ref enable_spatial_navigation) = self.enable_spatial_navigation {
+                properties.push(("enable-spatial-navigation", enable_spatial_navigation));
+            }
+        }
+        if let Some(ref enable_tabs_to_links) = self.enable_tabs_to_links {
+            properties.push(("enable-tabs-to-links", enable_tabs_to_links));
+        }
+        if let Some(ref enable_webaudio) = self.enable_webaudio {
+            properties.push(("enable-webaudio", enable_webaudio));
+        }
+        if let Some(ref enable_webgl) = self.enable_webgl {
+            properties.push(("enable-webgl", enable_webgl));
+        }
+        #[cfg(any(feature = "v2_2", feature = "dox"))]
+        {
+            if let Some(ref enable_write_console_messages_to_stdout) = self.enable_write_console_messages_to_stdout {
+                properties.push(("enable-write-console-messages-to-stdout", enable_write_console_messages_to_stdout));
+            }
+        }
+        if let Some(ref enable_xss_auditor) = self.enable_xss_auditor {
+            properties.push(("enable-xss-auditor", enable_xss_auditor));
+        }
+        if let Some(ref fantasy_font_family) = self.fantasy_font_family {
+            properties.push(("fantasy-font-family", fantasy_font_family));
+        }
+        #[cfg(any(feature = "v2_16", feature = "dox"))]
+        {
+            if let Some(ref hardware_acceleration_policy) = self.hardware_acceleration_policy {
+                properties.push(("hardware-acceleration-policy", hardware_acceleration_policy));
+            }
+        }
+        if let Some(ref javascript_can_access_clipboard) = self.javascript_can_access_clipboard {
+            properties.push(("javascript-can-access-clipboard", javascript_can_access_clipboard));
+        }
+        if let Some(ref javascript_can_open_windows_automatically) = self.javascript_can_open_windows_automatically {
+            properties.push(("javascript-can-open-windows-automatically", javascript_can_open_windows_automatically));
+        }
+        if let Some(ref load_icons_ignoring_image_load_setting) = self.load_icons_ignoring_image_load_setting {
+            properties.push(("load-icons-ignoring-image-load-setting", load_icons_ignoring_image_load_setting));
+        }
+        if let Some(ref media_playback_allows_inline) = self.media_playback_allows_inline {
+            properties.push(("media-playback-allows-inline", media_playback_allows_inline));
+        }
+        if let Some(ref media_playback_requires_user_gesture) = self.media_playback_requires_user_gesture {
+            properties.push(("media-playback-requires-user-gesture", media_playback_requires_user_gesture));
+        }
+        if let Some(ref minimum_font_size) = self.minimum_font_size {
+            properties.push(("minimum-font-size", minimum_font_size));
+        }
+        if let Some(ref monospace_font_family) = self.monospace_font_family {
+            properties.push(("monospace-font-family", monospace_font_family));
+        }
+        if let Some(ref pictograph_font_family) = self.pictograph_font_family {
+            properties.push(("pictograph-font-family", pictograph_font_family));
+        }
+        if let Some(ref print_backgrounds) = self.print_backgrounds {
+            properties.push(("print-backgrounds", print_backgrounds));
+        }
+        if let Some(ref sans_serif_font_family) = self.sans_serif_font_family {
+            properties.push(("sans-serif-font-family", sans_serif_font_family));
+        }
+        if let Some(ref serif_font_family) = self.serif_font_family {
+            properties.push(("serif-font-family", serif_font_family));
+        }
+        if let Some(ref user_agent) = self.user_agent {
+            properties.push(("user-agent", user_agent));
+        }
+        if let Some(ref zoom_text_only) = self.zoom_text_only {
+            properties.push(("zoom-text-only", zoom_text_only));
+        }
+        let ret = glib::Object::new(Settings::static_type(), &properties)
+            .expect("object new")
+            .downcast::<Settings>()
+            .expect("downcast");
+    ret
+    }
+
+    #[cfg(any(feature = "v2_10", feature = "dox"))]
+    pub fn allow_file_access_from_file_urls(mut self, allow_file_access_from_file_urls: bool) -> Self {
+        self.allow_file_access_from_file_urls = Some(allow_file_access_from_file_urls);
+        self
+    }
+
+    pub fn allow_modal_dialogs(mut self, allow_modal_dialogs: bool) -> Self {
+        self.allow_modal_dialogs = Some(allow_modal_dialogs);
+        self
+    }
+
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    pub fn allow_top_navigation_to_data_urls(mut self, allow_top_navigation_to_data_urls: bool) -> Self {
+        self.allow_top_navigation_to_data_urls = Some(allow_top_navigation_to_data_urls);
+        self
+    }
+
+    #[cfg(any(feature = "v2_14", feature = "dox"))]
+    pub fn allow_universal_access_from_file_urls(mut self, allow_universal_access_from_file_urls: bool) -> Self {
+        self.allow_universal_access_from_file_urls = Some(allow_universal_access_from_file_urls);
+        self
+    }
+
+    pub fn auto_load_images(mut self, auto_load_images: bool) -> Self {
+        self.auto_load_images = Some(auto_load_images);
+        self
+    }
+
+    pub fn cursive_font_family(mut self, cursive_font_family: &str) -> Self {
+        self.cursive_font_family = Some(cursive_font_family.to_string());
+        self
+    }
+
+    pub fn default_charset(mut self, default_charset: &str) -> Self {
+        self.default_charset = Some(default_charset.to_string());
+        self
+    }
+
+    pub fn default_font_family(mut self, default_font_family: &str) -> Self {
+        self.default_font_family = Some(default_font_family.to_string());
+        self
+    }
+
+    pub fn default_font_size(mut self, default_font_size: u32) -> Self {
+        self.default_font_size = Some(default_font_size);
+        self
+    }
+
+    pub fn default_monospace_font_size(mut self, default_monospace_font_size: u32) -> Self {
+        self.default_monospace_font_size = Some(default_monospace_font_size);
+        self
+    }
+
+    pub fn draw_compositing_indicators(mut self, draw_compositing_indicators: bool) -> Self {
+        self.draw_compositing_indicators = Some(draw_compositing_indicators);
+        self
+    }
+
+    #[cfg(any(feature = "v2_2", feature = "dox"))]
+    pub fn enable_accelerated_2d_canvas(mut self, enable_accelerated_2d_canvas: bool) -> Self {
+        self.enable_accelerated_2d_canvas = Some(enable_accelerated_2d_canvas);
+        self
+    }
+
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn enable_back_forward_navigation_gestures(mut self, enable_back_forward_navigation_gestures: bool) -> Self {
+        self.enable_back_forward_navigation_gestures = Some(enable_back_forward_navigation_gestures);
+        self
+    }
+
+    pub fn enable_caret_browsing(mut self, enable_caret_browsing: bool) -> Self {
+        self.enable_caret_browsing = Some(enable_caret_browsing);
+        self
+    }
+
+    pub fn enable_developer_extras(mut self, enable_developer_extras: bool) -> Self {
+        self.enable_developer_extras = Some(enable_developer_extras);
+        self
+    }
+
+    pub fn enable_dns_prefetching(mut self, enable_dns_prefetching: bool) -> Self {
+        self.enable_dns_prefetching = Some(enable_dns_prefetching);
+        self
+    }
+
+    #[cfg(any(feature = "v2_20", feature = "dox"))]
+    pub fn enable_encrypted_media(mut self, enable_encrypted_media: bool) -> Self {
+        self.enable_encrypted_media = Some(enable_encrypted_media);
+        self
+    }
+
+    pub fn enable_frame_flattening(mut self, enable_frame_flattening: bool) -> Self {
+        self.enable_frame_flattening = Some(enable_frame_flattening);
+        self
+    }
+
+    pub fn enable_fullscreen(mut self, enable_fullscreen: bool) -> Self {
+        self.enable_fullscreen = Some(enable_fullscreen);
+        self
+    }
+
+    pub fn enable_html5_database(mut self, enable_html5_database: bool) -> Self {
+        self.enable_html5_database = Some(enable_html5_database);
+        self
+    }
+
+    pub fn enable_html5_local_storage(mut self, enable_html5_local_storage: bool) -> Self {
+        self.enable_html5_local_storage = Some(enable_html5_local_storage);
+        self
+    }
+
+    pub fn enable_hyperlink_auditing(mut self, enable_hyperlink_auditing: bool) -> Self {
+        self.enable_hyperlink_auditing = Some(enable_hyperlink_auditing);
+        self
+    }
+
+    pub fn enable_java(mut self, enable_java: bool) -> Self {
+        self.enable_java = Some(enable_java);
+        self
+    }
+
+    pub fn enable_javascript(mut self, enable_javascript: bool) -> Self {
+        self.enable_javascript = Some(enable_javascript);
+        self
+    }
+
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn enable_javascript_markup(mut self, enable_javascript_markup: bool) -> Self {
+        self.enable_javascript_markup = Some(enable_javascript_markup);
+        self
+    }
+
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    pub fn enable_media(mut self, enable_media: bool) -> Self {
+        self.enable_media = Some(enable_media);
+        self
+    }
+
+    #[cfg(any(feature = "v2_22", feature = "dox"))]
+    pub fn enable_media_capabilities(mut self, enable_media_capabilities: bool) -> Self {
+        self.enable_media_capabilities = Some(enable_media_capabilities);
+        self
+    }
+
+    #[cfg(any(feature = "v2_4", feature = "dox"))]
+    pub fn enable_media_stream(mut self, enable_media_stream: bool) -> Self {
+        self.enable_media_stream = Some(enable_media_stream);
+        self
+    }
+
+    #[cfg(any(feature = "v2_4", feature = "dox"))]
+    pub fn enable_mediasource(mut self, enable_mediasource: bool) -> Self {
+        self.enable_mediasource = Some(enable_mediasource);
+        self
+    }
+
+    #[cfg(any(feature = "v2_24", feature = "dox"))]
+    pub fn enable_mock_capture_devices(mut self, enable_mock_capture_devices: bool) -> Self {
+        self.enable_mock_capture_devices = Some(enable_mock_capture_devices);
+        self
+    }
+
+    pub fn enable_offline_web_application_cache(mut self, enable_offline_web_application_cache: bool) -> Self {
+        self.enable_offline_web_application_cache = Some(enable_offline_web_application_cache);
+        self
+    }
+
+    pub fn enable_page_cache(mut self, enable_page_cache: bool) -> Self {
+        self.enable_page_cache = Some(enable_page_cache);
+        self
+    }
+
+    pub fn enable_plugins(mut self, enable_plugins: bool) -> Self {
+        self.enable_plugins = Some(enable_plugins);
+        self
+    }
+
+    pub fn enable_private_browsing(mut self, enable_private_browsing: bool) -> Self {
+        self.enable_private_browsing = Some(enable_private_browsing);
+        self
+    }
+
+    pub fn enable_resizable_text_areas(mut self, enable_resizable_text_areas: bool) -> Self {
+        self.enable_resizable_text_areas = Some(enable_resizable_text_areas);
+        self
+    }
+
+    pub fn enable_site_specific_quirks(mut self, enable_site_specific_quirks: bool) -> Self {
+        self.enable_site_specific_quirks = Some(enable_site_specific_quirks);
+        self
+    }
+
+    pub fn enable_smooth_scrolling(mut self, enable_smooth_scrolling: bool) -> Self {
+        self.enable_smooth_scrolling = Some(enable_smooth_scrolling);
+        self
+    }
+
+    #[cfg(any(feature = "v2_4", feature = "dox"))]
+    pub fn enable_spatial_navigation(mut self, enable_spatial_navigation: bool) -> Self {
+        self.enable_spatial_navigation = Some(enable_spatial_navigation);
+        self
+    }
+
+    pub fn enable_tabs_to_links(mut self, enable_tabs_to_links: bool) -> Self {
+        self.enable_tabs_to_links = Some(enable_tabs_to_links);
+        self
+    }
+
+    pub fn enable_webaudio(mut self, enable_webaudio: bool) -> Self {
+        self.enable_webaudio = Some(enable_webaudio);
+        self
+    }
+
+    pub fn enable_webgl(mut self, enable_webgl: bool) -> Self {
+        self.enable_webgl = Some(enable_webgl);
+        self
+    }
+
+    #[cfg(any(feature = "v2_2", feature = "dox"))]
+    pub fn enable_write_console_messages_to_stdout(mut self, enable_write_console_messages_to_stdout: bool) -> Self {
+        self.enable_write_console_messages_to_stdout = Some(enable_write_console_messages_to_stdout);
+        self
+    }
+
+    pub fn enable_xss_auditor(mut self, enable_xss_auditor: bool) -> Self {
+        self.enable_xss_auditor = Some(enable_xss_auditor);
+        self
+    }
+
+    pub fn fantasy_font_family(mut self, fantasy_font_family: &str) -> Self {
+        self.fantasy_font_family = Some(fantasy_font_family.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    pub fn hardware_acceleration_policy(mut self, hardware_acceleration_policy: HardwareAccelerationPolicy) -> Self {
+        self.hardware_acceleration_policy = Some(hardware_acceleration_policy);
+        self
+    }
+
+    pub fn javascript_can_access_clipboard(mut self, javascript_can_access_clipboard: bool) -> Self {
+        self.javascript_can_access_clipboard = Some(javascript_can_access_clipboard);
+        self
+    }
+
+    pub fn javascript_can_open_windows_automatically(mut self, javascript_can_open_windows_automatically: bool) -> Self {
+        self.javascript_can_open_windows_automatically = Some(javascript_can_open_windows_automatically);
+        self
+    }
+
+    pub fn load_icons_ignoring_image_load_setting(mut self, load_icons_ignoring_image_load_setting: bool) -> Self {
+        self.load_icons_ignoring_image_load_setting = Some(load_icons_ignoring_image_load_setting);
+        self
+    }
+
+    pub fn media_playback_allows_inline(mut self, media_playback_allows_inline: bool) -> Self {
+        self.media_playback_allows_inline = Some(media_playback_allows_inline);
+        self
+    }
+
+    pub fn media_playback_requires_user_gesture(mut self, media_playback_requires_user_gesture: bool) -> Self {
+        self.media_playback_requires_user_gesture = Some(media_playback_requires_user_gesture);
+        self
+    }
+
+    pub fn minimum_font_size(mut self, minimum_font_size: u32) -> Self {
+        self.minimum_font_size = Some(minimum_font_size);
+        self
+    }
+
+    pub fn monospace_font_family(mut self, monospace_font_family: &str) -> Self {
+        self.monospace_font_family = Some(monospace_font_family.to_string());
+        self
+    }
+
+    pub fn pictograph_font_family(mut self, pictograph_font_family: &str) -> Self {
+        self.pictograph_font_family = Some(pictograph_font_family.to_string());
+        self
+    }
+
+    pub fn print_backgrounds(mut self, print_backgrounds: bool) -> Self {
+        self.print_backgrounds = Some(print_backgrounds);
+        self
+    }
+
+    pub fn sans_serif_font_family(mut self, sans_serif_font_family: &str) -> Self {
+        self.sans_serif_font_family = Some(sans_serif_font_family.to_string());
+        self
+    }
+
+    pub fn serif_font_family(mut self, serif_font_family: &str) -> Self {
+        self.serif_font_family = Some(serif_font_family.to_string());
+        self
+    }
+
+    pub fn user_agent(mut self, user_agent: &str) -> Self {
+        self.user_agent = Some(user_agent.to_string());
+        self
+    }
+
+    pub fn zoom_text_only(mut self, zoom_text_only: bool) -> Self {
+        self.zoom_text_only = Some(zoom_text_only);
+        self
     }
 }
 

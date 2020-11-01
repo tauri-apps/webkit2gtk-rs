@@ -175,6 +175,66 @@ impl SetValue for HitTestResultContext {
     }
 }
 
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+bitflags! {
+    pub struct InputHints: u32 {
+        const NONE = 0;
+        const SPELLCHECK = 1;
+        const LOWERCASE = 2;
+        const UPPERCASE_CHARS = 4;
+        const UPPERCASE_WORDS = 8;
+        const UPPERCASE_SENTENCES = 16;
+        const INHIBIT_OSK = 32;
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+#[doc(hidden)]
+impl ToGlib for InputHints {
+    type GlibType = webkit2_sys::WebKitInputHints;
+
+    fn to_glib(&self) -> webkit2_sys::WebKitInputHints {
+        self.bits()
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+#[doc(hidden)]
+impl FromGlib<webkit2_sys::WebKitInputHints> for InputHints {
+    fn from_glib(value: webkit2_sys::WebKitInputHints) -> InputHints {
+        skip_assert_initialized!();
+        InputHints::from_bits_truncate(value)
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl StaticType for InputHints {
+    fn static_type() -> Type {
+        unsafe { from_glib(webkit2_sys::webkit_input_hints_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl<'a> FromValueOptional<'a> for InputHints {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl<'a> FromValue<'a> for InputHints {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+impl SetValue for InputHints {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 bitflags! {
     pub struct SnapshotOptions: u32 {
         const NONE = 0;

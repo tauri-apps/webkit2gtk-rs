@@ -9,6 +9,15 @@ pub use self::authentication_request::{AuthenticationRequest, AuthenticationRequ
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 pub use self::authentication_request::AuthenticationRequestExt;
 
+#[cfg(any(feature = "v2_18", feature = "dox"))]
+mod automation_session;
+#[cfg(any(feature = "v2_18", feature = "dox"))]
+pub use self::automation_session::{AutomationSession, AutomationSessionClass, NONE_AUTOMATION_SESSION};
+#[cfg(any(feature = "v2_18", feature = "dox"))]
+pub use self::automation_session::AutomationSessionExt;
+#[cfg(any(feature = "v2_18", feature = "dox"))]
+pub use self::automation_session::AutomationSessionBuilder;
+
 mod back_forward_list;
 pub use self::back_forward_list::{BackForwardList, BackForwardListClass, NONE_BACK_FORWARD_LIST};
 pub use self::back_forward_list::BackForwardListExt;
@@ -23,6 +32,8 @@ mod color_chooser_request;
 pub use self::color_chooser_request::{ColorChooserRequest, ColorChooserRequestClass, NONE_COLOR_CHOOSER_REQUEST};
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 pub use self::color_chooser_request::ColorChooserRequestExt;
+#[cfg(any(feature = "v2_8", feature = "dox"))]
+pub use self::color_chooser_request::ColorChooserRequestBuilder;
 
 mod context_menu;
 pub use self::context_menu::{ContextMenu, ContextMenuClass, NONE_CONTEXT_MENU};
@@ -36,9 +47,13 @@ mod cookie_manager;
 pub use self::cookie_manager::{CookieManager, CookieManagerClass, NONE_COOKIE_MANAGER};
 pub use self::cookie_manager::CookieManagerExt;
 
+mod device_info_permission_request;
+pub use self::device_info_permission_request::{DeviceInfoPermissionRequest, DeviceInfoPermissionRequestClass, NONE_DEVICE_INFO_PERMISSION_REQUEST};
+
 mod download;
 pub use self::download::{Download, DownloadClass, NONE_DOWNLOAD};
 pub use self::download::DownloadExt;
+pub use self::download::DownloadBuilder;
 
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 mod editor_state;
@@ -58,6 +73,7 @@ pub use self::file_chooser_request::FileChooserRequestExt;
 mod find_controller;
 pub use self::find_controller::{FindController, FindControllerClass, NONE_FIND_CONTROLLER};
 pub use self::find_controller::FindControllerExt;
+pub use self::find_controller::FindControllerBuilder;
 
 mod form_submission_request;
 pub use self::form_submission_request::{FormSubmissionRequest, FormSubmissionRequestClass, NONE_FORM_SUBMISSION_REQUEST};
@@ -76,6 +92,14 @@ pub use self::geolocation_permission_request::{GeolocationPermissionRequest, Geo
 mod hit_test_result;
 pub use self::hit_test_result::{HitTestResult, HitTestResultClass, NONE_HIT_TEST_RESULT};
 pub use self::hit_test_result::HitTestResultExt;
+pub use self::hit_test_result::HitTestResultBuilder;
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+mod input_method_context;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+pub use self::input_method_context::{InputMethodContext, InputMethodContextClass, NONE_INPUT_METHOD_CONTEXT};
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+pub use self::input_method_context::InputMethodContextExt;
 
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 mod install_missing_media_plugins_permission_request;
@@ -98,6 +122,13 @@ pub use self::notification::NotificationExt;
 mod notification_permission_request;
 pub use self::notification_permission_request::{NotificationPermissionRequest, NotificationPermissionRequestClass, NONE_NOTIFICATION_PERMISSION_REQUEST};
 
+#[cfg(any(feature = "v2_18", feature = "dox"))]
+mod option_menu;
+#[cfg(any(feature = "v2_18", feature = "dox"))]
+pub use self::option_menu::{OptionMenu, OptionMenuClass, NONE_OPTION_MENU};
+#[cfg(any(feature = "v2_18", feature = "dox"))]
+pub use self::option_menu::OptionMenuExt;
+
 mod permission_request;
 pub use self::permission_request::{PermissionRequest, NONE_PERMISSION_REQUEST};
 pub use self::permission_request::PermissionRequestExt;
@@ -105,6 +136,9 @@ pub use self::permission_request::PermissionRequestExt;
 mod plugin;
 pub use self::plugin::{Plugin, PluginClass, NONE_PLUGIN};
 pub use self::plugin::PluginExt;
+
+mod pointer_lock_permission_request;
+pub use self::pointer_lock_permission_request::{PointerLockPermissionRequest, PointerLockPermissionRequestClass, NONE_POINTER_LOCK_PERMISSION_REQUEST};
 
 mod policy_decision;
 pub use self::policy_decision::{PolicyDecision, PolicyDecisionClass, NONE_POLICY_DECISION};
@@ -116,10 +150,13 @@ mod print_custom_widget;
 pub use self::print_custom_widget::{PrintCustomWidget, PrintCustomWidgetClass, NONE_PRINT_CUSTOM_WIDGET};
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 pub use self::print_custom_widget::PrintCustomWidgetExt;
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+pub use self::print_custom_widget::PrintCustomWidgetBuilder;
 
 mod print_operation;
 pub use self::print_operation::{PrintOperation, PrintOperationClass, NONE_PRINT_OPERATION};
 pub use self::print_operation::PrintOperationExt;
+pub use self::print_operation::PrintOperationBuilder;
 
 mod response_policy_decision;
 pub use self::response_policy_decision::{ResponsePolicyDecision, ResponsePolicyDecisionClass, NONE_RESPONSE_POLICY_DECISION};
@@ -132,10 +169,12 @@ pub use self::security_manager::SecurityManagerExt;
 mod settings;
 pub use self::settings::{Settings, SettingsClass, NONE_SETTINGS};
 pub use self::settings::SettingsExt;
+pub use self::settings::SettingsBuilder;
 
 mod uri_request;
 pub use self::uri_request::{URIRequest, URIRequestClass, NONE_URI_REQUEST};
 pub use self::uri_request::URIRequestExt;
+pub use self::uri_request::URIRequestBuilder;
 
 mod uri_response;
 pub use self::uri_response::{URIResponse, URIResponseClass, NONE_URI_RESPONSE};
@@ -156,9 +195,19 @@ mod user_media_permission_request;
 pub use self::user_media_permission_request::{UserMediaPermissionRequest, UserMediaPermissionRequestClass, NONE_USER_MEDIA_PERMISSION_REQUEST};
 pub use self::user_media_permission_request::UserMediaPermissionRequestExt;
 
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+mod user_message;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+pub use self::user_message::{UserMessage, UserMessageClass, NONE_USER_MESSAGE};
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+pub use self::user_message::UserMessageExt;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+pub use self::user_message::UserMessageBuilder;
+
 mod web_context;
 pub use self::web_context::{WebContext, WebContextClass, NONE_WEB_CONTEXT};
 pub use self::web_context::WebContextExt;
+pub use self::web_context::WebContextBuilder;
 
 mod web_inspector;
 pub use self::web_inspector::{WebInspector, WebInspectorClass, NONE_WEB_INSPECTOR};
@@ -171,6 +220,7 @@ pub use self::web_resource::WebResourceExt;
 mod web_view;
 pub use self::web_view::{WebView, WebViewClass, NONE_WEB_VIEW};
 pub use self::web_view::WebViewExt;
+pub use self::web_view::WebViewBuilder;
 
 mod web_view_base;
 pub use self::web_view_base::{WebViewBase, WebViewBaseClass, NONE_WEB_VIEW_BASE};
@@ -181,15 +231,33 @@ mod website_data_manager;
 pub use self::website_data_manager::{WebsiteDataManager, WebsiteDataManagerClass, NONE_WEBSITE_DATA_MANAGER};
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 pub use self::website_data_manager::WebsiteDataManagerExt;
+#[cfg(any(feature = "v2_10", feature = "dox"))]
+pub use self::website_data_manager::WebsiteDataManagerBuilder;
 
 mod window_properties;
 pub use self::window_properties::{WindowProperties, WindowPropertiesClass, NONE_WINDOW_PROPERTIES};
 pub use self::window_properties::WindowPropertiesExt;
+pub use self::window_properties::WindowPropertiesBuilder;
+
+#[cfg(any(feature = "v2_18", feature = "dox"))]
+mod application_info;
+#[cfg(any(feature = "v2_18", feature = "dox"))]
+pub use self::application_info::ApplicationInfo;
 
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 mod credential;
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 pub use self::credential::Credential;
+
+#[cfg(any(feature = "v2_26", feature = "dox"))]
+mod geolocation_position;
+#[cfg(any(feature = "v2_26", feature = "dox"))]
+pub use self::geolocation_position::GeolocationPosition;
+
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+mod input_method_underline;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+pub use self::input_method_underline::InputMethodUnderline;
 
 mod javascript_result;
 pub use self::javascript_result::JavascriptResult;
@@ -206,6 +274,11 @@ pub use self::navigation_action::NavigationAction;
 mod network_proxy_settings;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 pub use self::network_proxy_settings::NetworkProxySettings;
+
+#[cfg(any(feature = "v2_18", feature = "dox"))]
+mod option_menu_item;
+#[cfg(any(feature = "v2_18", feature = "dox"))]
+pub use self::option_menu_item::OptionMenuItem;
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 mod security_origin;
@@ -227,9 +300,16 @@ mod web_view_session_state;
 #[cfg(any(feature = "v2_12", feature = "dox"))]
 pub use self::web_view_session_state::WebViewSessionState;
 
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+mod website_data;
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+pub use self::website_data::WebsiteData;
+
 mod enums;
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 pub use self::enums::AuthenticationScheme;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+pub use self::enums::AutomationBrowsingContextPresentation;
 pub use self::enums::CacheModel;
 pub use self::enums::ContextMenuAction;
 pub use self::enums::CookieAcceptPolicy;
@@ -240,6 +320,8 @@ pub use self::enums::DownloadError;
 pub use self::enums::FaviconDatabaseError;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 pub use self::enums::HardwareAccelerationPolicy;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+pub use self::enums::InputPurpose;
 pub use self::enums::InsecureContentEvent;
 pub use self::enums::JavascriptError;
 pub use self::enums::LoadEvent;
@@ -259,18 +341,26 @@ pub use self::enums::ScriptDialogType;
 pub use self::enums::SnapshotError;
 pub use self::enums::SnapshotRegion;
 pub use self::enums::TLSErrorsPolicy;
+#[cfg(any(feature = "v2_24", feature = "dox"))]
+pub use self::enums::UserContentFilterError;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 pub use self::enums::UserContentInjectedFrames;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+pub use self::enums::UserMessageError;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 pub use self::enums::UserScriptInjectionTime;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 pub use self::enums::UserStyleLevel;
+#[cfg(any(feature = "v2_20", feature = "dox"))]
+pub use self::enums::WebProcessTerminationReason;
 
 mod flags;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 pub use self::flags::EditorTypingAttributes;
 pub use self::flags::FindOptions;
 pub use self::flags::HitTestResultContext;
+#[cfg(any(feature = "v2_28", feature = "dox"))]
+pub use self::flags::InputHints;
 pub use self::flags::SnapshotOptions;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 pub use self::flags::WebsiteDataTypes;
@@ -279,6 +369,8 @@ pub use self::flags::WebsiteDataTypes;
 pub mod traits {
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     pub use super::AuthenticationRequestExt;
+    #[cfg(any(feature = "v2_18", feature = "dox"))]
+    pub use super::AutomationSessionExt;
     pub use super::BackForwardListExt;
     pub use super::BackForwardListItemExt;
     #[cfg(any(feature = "v2_8", feature = "dox"))]
@@ -296,11 +388,15 @@ pub mod traits {
     #[cfg(any(feature = "v2_26", feature = "dox"))]
     pub use super::GeolocationManagerExt;
     pub use super::HitTestResultExt;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    pub use super::InputMethodContextExt;
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     pub use super::InstallMissingMediaPluginsPermissionRequestExt;
     pub use super::NavigationPolicyDecisionExt;
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     pub use super::NotificationExt;
+    #[cfg(any(feature = "v2_18", feature = "dox"))]
+    pub use super::OptionMenuExt;
     pub use super::PermissionRequestExt;
     pub use super::PluginExt;
     pub use super::PolicyDecisionExt;
@@ -316,6 +412,8 @@ pub mod traits {
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     pub use super::UserContentManagerExt;
     pub use super::UserMediaPermissionRequestExt;
+    #[cfg(any(feature = "v2_28", feature = "dox"))]
+    pub use super::UserMessageExt;
     pub use super::WebContextExt;
     pub use super::WebInspectorExt;
     pub use super::WebResourceExt;
