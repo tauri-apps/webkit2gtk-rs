@@ -18,6 +18,8 @@ use std::fmt;
 #[cfg(any(feature = "v2_26", feature = "dox"))]
 use std::mem::transmute;
 use webkit2_sys;
+#[cfg(any(feature = "v2_26", feature = "dox"))]
+use GeolocationPosition;
 
 glib_wrapper! {
     pub struct GeolocationManager(Object<webkit2_sys::WebKitGeolocationManager, webkit2_sys::WebKitGeolocationManagerClass, GeolocationManagerClass>);
@@ -36,8 +38,8 @@ pub trait GeolocationManagerExt: 'static {
     #[cfg(any(feature = "v2_26", feature = "dox"))]
     fn get_enable_high_accuracy(&self) -> bool;
 
-    //#[cfg(any(feature = "v2_26", feature = "dox"))]
-    //fn update_position(&self, position: /*Ignored*/&mut GeolocationPosition);
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn update_position(&self, position: &mut GeolocationPosition);
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
     fn connect_start<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId;
@@ -64,10 +66,12 @@ impl<O: IsA<GeolocationManager>> GeolocationManagerExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_26", feature = "dox"))]
-    //fn update_position(&self, position: /*Ignored*/&mut GeolocationPosition) {
-    //    unsafe { TODO: call webkit2_sys:webkit_geolocation_manager_update_position() }
-    //}
+    #[cfg(any(feature = "v2_26", feature = "dox"))]
+    fn update_position(&self, position: &mut GeolocationPosition) {
+        unsafe {
+            webkit2_sys::webkit_geolocation_manager_update_position(self.as_ref().to_glib_none().0, position.to_glib_none_mut().0);
+        }
+    }
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
     fn connect_start<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {

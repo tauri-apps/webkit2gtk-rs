@@ -3,8 +3,11 @@
 // DO NOT EDIT
 
 use gdk;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
+use glib::StaticType;
+use glib::ToValue;
 use std::fmt;
 use webkit2_sys;
 
@@ -13,6 +16,98 @@ glib_wrapper! {
 
     match fn {
         get_type => || webkit2_sys::webkit_window_properties_get_type(),
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct WindowPropertiesBuilder {
+    fullscreen: Option<bool>,
+    geometry: Option<gdk::Rectangle>,
+    locationbar_visible: Option<bool>,
+    menubar_visible: Option<bool>,
+    resizable: Option<bool>,
+    scrollbars_visible: Option<bool>,
+    statusbar_visible: Option<bool>,
+    toolbar_visible: Option<bool>,
+}
+
+impl WindowPropertiesBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+
+    pub fn build(self) -> WindowProperties {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref fullscreen) = self.fullscreen {
+            properties.push(("fullscreen", fullscreen));
+        }
+        if let Some(ref geometry) = self.geometry {
+            properties.push(("geometry", geometry));
+        }
+        if let Some(ref locationbar_visible) = self.locationbar_visible {
+            properties.push(("locationbar-visible", locationbar_visible));
+        }
+        if let Some(ref menubar_visible) = self.menubar_visible {
+            properties.push(("menubar-visible", menubar_visible));
+        }
+        if let Some(ref resizable) = self.resizable {
+            properties.push(("resizable", resizable));
+        }
+        if let Some(ref scrollbars_visible) = self.scrollbars_visible {
+            properties.push(("scrollbars-visible", scrollbars_visible));
+        }
+        if let Some(ref statusbar_visible) = self.statusbar_visible {
+            properties.push(("statusbar-visible", statusbar_visible));
+        }
+        if let Some(ref toolbar_visible) = self.toolbar_visible {
+            properties.push(("toolbar-visible", toolbar_visible));
+        }
+        let ret = glib::Object::new(WindowProperties::static_type(), &properties)
+            .expect("object new")
+            .downcast::<WindowProperties>()
+            .expect("downcast");
+    ret
+    }
+
+    pub fn fullscreen(mut self, fullscreen: bool) -> Self {
+        self.fullscreen = Some(fullscreen);
+        self
+    }
+
+    pub fn geometry(mut self, geometry: &gdk::Rectangle) -> Self {
+        self.geometry = Some(geometry.clone());
+        self
+    }
+
+    pub fn locationbar_visible(mut self, locationbar_visible: bool) -> Self {
+        self.locationbar_visible = Some(locationbar_visible);
+        self
+    }
+
+    pub fn menubar_visible(mut self, menubar_visible: bool) -> Self {
+        self.menubar_visible = Some(menubar_visible);
+        self
+    }
+
+    pub fn resizable(mut self, resizable: bool) -> Self {
+        self.resizable = Some(resizable);
+        self
+    }
+
+    pub fn scrollbars_visible(mut self, scrollbars_visible: bool) -> Self {
+        self.scrollbars_visible = Some(scrollbars_visible);
+        self
+    }
+
+    pub fn statusbar_visible(mut self, statusbar_visible: bool) -> Self {
+        self.statusbar_visible = Some(statusbar_visible);
+        self
+    }
+
+    pub fn toolbar_visible(mut self, toolbar_visible: bool) -> Self {
+        self.toolbar_visible = Some(toolbar_visible);
+        self
     }
 }
 

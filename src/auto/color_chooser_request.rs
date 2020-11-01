@@ -9,6 +9,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use glib::Value;
 use glib_sys;
 use gobject_sys;
@@ -22,6 +23,35 @@ glib_wrapper! {
 
     match fn {
         get_type => || webkit2_sys::webkit_color_chooser_request_get_type(),
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct ColorChooserRequestBuilder {
+    rgba: Option<gdk::RGBA>,
+}
+
+impl ColorChooserRequestBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+
+    pub fn build(self) -> ColorChooserRequest {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref rgba) = self.rgba {
+            properties.push(("rgba", rgba));
+        }
+        let ret = glib::Object::new(ColorChooserRequest::static_type(), &properties)
+            .expect("object new")
+            .downcast::<ColorChooserRequest>()
+            .expect("downcast");
+    ret
+    }
+
+    pub fn rgba(mut self, rgba: &gdk::RGBA) -> Self {
+        self.rgba = Some(rgba.clone());
+        self
     }
 }
 
