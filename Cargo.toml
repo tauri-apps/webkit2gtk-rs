@@ -74,6 +74,7 @@ git = "https://github.com/gtk-rs/gtk-rs.git"
 [dependencies.gtk-sys]
 git = "https://github.com/gtk-rs/gtk-rs.git"
 
-[dependencies.javascriptcore-rs]
+[dependencies.java_script_core]
+package = "javascriptcore-rs"
 git = "https://github.com/gtk-rs/javascriptcore-rs"
 

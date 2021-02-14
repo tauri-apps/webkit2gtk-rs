@@ -22,7 +22,6 @@ use glib_sys;
 use gobject_sys;
 use gtk;
 use gtk_sys;
-use javascriptcore as java_script_core;
 use libc;
 
 macro_rules! assert_initialized_main_thread {
