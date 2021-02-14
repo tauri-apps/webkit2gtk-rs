@@ -7,6 +7,8 @@
 
 #![allow(unused_imports)]
 
+pub use ffi;
+
 #[macro_use]
 use bitflags;
 use cairo;
@@ -22,7 +24,6 @@ use gtk;
 use gtk_sys;
 use javascriptcore as java_script_core;
 use libc;
-use webkit2gtk_sys as webkit2_sys;
 
 macro_rules! assert_initialized_main_thread {
     () => {

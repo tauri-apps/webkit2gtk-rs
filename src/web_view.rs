@@ -4,6 +4,7 @@ use std::error::Error;
 use std::ffi::CString;
 use std::ptr;
 
+use ffi;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::{from_glib_full, FromGlibPtrNone, ToGlib, ToGlibPtr};
@@ -11,7 +12,6 @@ use glib::StaticType;
 use gobject_sys;
 use gtk;
 use libc::c_void;
-use webkit2_sys;
 #[cfg(feature = "v2_6")]
 use UserContentManager;
 use WebContext;
@@ -29,9 +29,9 @@ impl WebView {
         assert_initialized_main_thread!();
         let user_content_manager_property = CString::new("user-content-manager").unwrap();
         let web_context_property = CString::new("web-context").unwrap();
-        let glib_user_content_manager: *mut webkit2_sys::WebKitUserContentManager =
+        let glib_user_content_manager: *mut ffi::WebKitUserContentManager =
             user_content_manager.as_ref().to_glib_none().0;
-        let glib_context: *mut webkit2_sys::WebKitWebContext = context.as_ref().to_glib_none().0;
+        let glib_context: *mut ffi::WebKitWebContext = context.as_ref().to_glib_none().0;
         let null: *mut gobject_sys::GObject = ptr::null_mut();
         unsafe {
             gtk::Widget::from_glib_none(gobject_sys::g_object_new(
