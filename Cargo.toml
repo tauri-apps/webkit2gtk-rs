@@ -42,36 +42,35 @@ bitflags = "^1.0"
 libc = "^0.2"
 
 [dependencies.cairo-rs]
-git = "https://github.com/gtk-rs/cairo"
+git = "https://github.com/gtk-rs/gtk-rs.git"
 
 [dependencies.gdk]
-git = "https://github.com/gtk-rs/gdk"
+git = "https://github.com/gtk-rs/gtk-rs.git"
 
 [dependencies.gdk-sys]
-git = "https://github.com/gtk-rs/sys"
+git = "https://github.com/gtk-rs/gtk-rs.git"
 
 [dependencies.gio]
-git = "https://github.com/gtk-rs/gio"
+git = "https://github.com/gtk-rs/gtk-rs.git"
 
 [dependencies.gio-sys]
-git = "https://github.com/gtk-rs/sys"
+git = "https://github.com/gtk-rs/gtk-rs.git"
 
 [dependencies.glib]
-git = "https://github.com/gtk-rs/glib"
+git = "https://github.com/gtk-rs/gtk-rs.git"
 
 [dependencies.glib-sys]
-git = "https://github.com/gtk-rs/sys"
+git = "https://github.com/gtk-rs/gtk-rs.git"
 
 [dependencies.gobject-sys]
-git = "https://github.com/gtk-rs/sys"
+git = "https://github.com/gtk-rs/gtk-rs.git"
 
 [dependencies.gtk]
-git = "https://github.com/gtk-rs/gtk"
+git = "https://github.com/gtk-rs/gtk-rs.git"
 
 [dependencies.gtk-sys]
-git = "https://github.com/gtk-rs/sys"
+git = "https://github.com/gtk-rs/gtk-rs.git"
 
-# TODO: regenerate the crate (not working with latest gir).
 [dependencies.javascriptcore-rs]
 git = "https://github.com/gtk-rs/javascriptcore-rs"
 
