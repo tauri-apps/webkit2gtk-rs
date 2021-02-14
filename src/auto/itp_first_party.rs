@@ -3,51 +3,51 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_30", feature = "dox"))]
-use glib;
-#[cfg(any(feature = "v2_30", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
 use glib::translate::*;
-#[cfg(any(feature = "v2_30", feature = "dox"))]
-use glib::GString;
-use webkit2_sys;
 
-glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct ITPFirstParty(Shared<webkit2_sys::WebKitITPFirstParty>);
+    pub struct ITPFirstParty(Shared<ffi::WebKitITPFirstParty>);
 
     match fn {
-        ref => |ptr| webkit2_sys::webkit_itp_first_party_ref(ptr),
-        unref => |ptr| webkit2_sys::webkit_itp_first_party_unref(ptr),
-        get_type => || webkit2_sys::webkit_itp_first_party_get_type(),
+        ref => |ptr| ffi::webkit_itp_first_party_ref(ptr),
+        unref => |ptr| ffi::webkit_itp_first_party_unref(ptr),
+        get_type => || ffi::webkit_itp_first_party_get_type(),
     }
 }
 
 impl ITPFirstParty {
     #[cfg(any(feature = "v2_30", feature = "dox"))]
-    pub fn get_domain(&self) -> Option<GString> {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+    #[doc(alias = "webkit_itp_first_party_get_domain")]
+    pub fn get_domain(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_itp_first_party_get_domain(
+            from_glib_none(ffi::webkit_itp_first_party_get_domain(
                 self.to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+    #[doc(alias = "webkit_itp_first_party_get_last_update_time")]
     pub fn get_last_update_time(&self) -> Option<glib::DateTime> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_itp_first_party_get_last_update_time(
+            from_glib_none(ffi::webkit_itp_first_party_get_last_update_time(
                 self.to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+    #[doc(alias = "webkit_itp_first_party_get_website_data_access_allowed")]
     pub fn get_website_data_access_allowed(&self) -> bool {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_itp_first_party_get_website_data_access_allowed(
-                    self.to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_itp_first_party_get_website_data_access_allowed(
+                self.to_glib_none().0,
+            ))
         }
     }
 }

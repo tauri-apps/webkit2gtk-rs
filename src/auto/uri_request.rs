@@ -7,27 +7,25 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
 use glib::StaticType;
 use glib::ToValue;
-use glib_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
-use webkit2_sys;
 
-glib_wrapper! {
-    pub struct URIRequest(Object<webkit2_sys::WebKitURIRequest, webkit2_sys::WebKitURIRequestClass, URIRequestClass>);
+glib::wrapper! {
+    pub struct URIRequest(Object<ffi::WebKitURIRequest, ffi::WebKitURIRequestClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_uri_request_get_type(),
+        get_type => || ffi::webkit_uri_request_get_type(),
     }
 }
 
 impl URIRequest {
+    #[doc(alias = "webkit_uri_request_new")]
     pub fn new(uri: &str) -> URIRequest {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(webkit2_sys::webkit_uri_request_new(uri.to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::webkit_uri_request_new(uri.to_glib_none().0)) }
     }
 }
 
@@ -46,10 +44,7 @@ impl URIRequestBuilder {
         if let Some(ref uri) = self.uri {
             properties.push(("uri", uri));
         }
-        let ret = glib::Object::new(URIRequest::static_type(), &properties)
-            .expect("object new")
-            .downcast::<URIRequest>()
-            .expect("downcast");
+        let ret = glib::Object::new::<URIRequest>(&properties).expect("object new");
         ret
     }
 
@@ -62,13 +57,18 @@ impl URIRequestBuilder {
 pub const NONE_URI_REQUEST: Option<&URIRequest> = None;
 
 pub trait URIRequestExt: 'static {
+    //#[doc(alias = "webkit_uri_request_get_http_headers")]
     //fn get_http_headers(&self) -> /*Ignored*/Option<soup::MessageHeaders>;
 
     #[cfg(any(feature = "v2_12", feature = "dox"))]
-    fn get_http_method(&self) -> Option<GString>;
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_12")))]
+    #[doc(alias = "webkit_uri_request_get_http_method")]
+    fn get_http_method(&self) -> Option<glib::GString>;
 
-    fn get_uri(&self) -> Option<GString>;
+    #[doc(alias = "webkit_uri_request_get_uri")]
+    fn get_uri(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "webkit_uri_request_set_uri")]
     fn set_uri(&self, uri: &str);
 
     fn connect_property_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -76,21 +76,22 @@ pub trait URIRequestExt: 'static {
 
 impl<O: IsA<URIRequest>> URIRequestExt for O {
     //fn get_http_headers(&self) -> /*Ignored*/Option<soup::MessageHeaders> {
-    //    unsafe { TODO: call webkit2_sys:webkit_uri_request_get_http_headers() }
+    //    unsafe { TODO: call ffi:webkit_uri_request_get_http_headers() }
     //}
 
     #[cfg(any(feature = "v2_12", feature = "dox"))]
-    fn get_http_method(&self) -> Option<GString> {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_12")))]
+    fn get_http_method(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_uri_request_get_http_method(
+            from_glib_none(ffi::webkit_uri_request_get_http_method(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_uri(&self) -> Option<GString> {
+    fn get_uri(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_uri_request_get_uri(
+            from_glib_none(ffi::webkit_uri_request_get_uri(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -98,18 +99,15 @@ impl<O: IsA<URIRequest>> URIRequestExt for O {
 
     fn set_uri(&self, uri: &str) {
         unsafe {
-            webkit2_sys::webkit_uri_request_set_uri(
-                self.as_ref().to_glib_none().0,
-                uri.to_glib_none().0,
-            );
+            ffi::webkit_uri_request_set_uri(self.as_ref().to_glib_none().0, uri.to_glib_none().0);
         }
     }
 
     fn connect_property_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_uri_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitURIRequest,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitURIRequest,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<URIRequest>,
         {
@@ -132,6 +130,6 @@ impl<O: IsA<URIRequest>> URIRequestExt for O {
 
 impl fmt::Display for URIRequest {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "URIRequest")
+        f.write_str("URIRequest")
     }
 }

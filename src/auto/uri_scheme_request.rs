@@ -2,27 +2,23 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use gio;
-#[cfg(any(feature = "v2_2", feature = "dox"))]
-use glib;
+use crate::WebView;
 use glib::object::IsA;
 use glib::translate::*;
-use glib::GString;
 use std::fmt;
-use webkit2_sys;
-use WebView;
 
-glib_wrapper! {
-    pub struct URISchemeRequest(Object<webkit2_sys::WebKitURISchemeRequest, webkit2_sys::WebKitURISchemeRequestClass, URISchemeRequestClass>);
+glib::wrapper! {
+    pub struct URISchemeRequest(Object<ffi::WebKitURISchemeRequest, ffi::WebKitURISchemeRequestClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_uri_scheme_request_get_type(),
+        get_type => || ffi::webkit_uri_scheme_request_get_type(),
     }
 }
 
 pub const NONE_URI_SCHEME_REQUEST: Option<&URISchemeRequest> = None;
 
 pub trait URISchemeRequestExt: 'static {
+    #[doc(alias = "webkit_uri_scheme_request_finish")]
     fn finish<P: IsA<gio::InputStream>>(
         &self,
         stream: &P,
@@ -31,14 +27,20 @@ pub trait URISchemeRequestExt: 'static {
     );
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
+    #[doc(alias = "webkit_uri_scheme_request_finish_error")]
     fn finish_error(&self, error: &mut glib::Error);
 
-    fn get_path(&self) -> Option<GString>;
+    #[doc(alias = "webkit_uri_scheme_request_get_path")]
+    fn get_path(&self) -> Option<glib::GString>;
 
-    fn get_scheme(&self) -> Option<GString>;
+    #[doc(alias = "webkit_uri_scheme_request_get_scheme")]
+    fn get_scheme(&self) -> Option<glib::GString>;
 
-    fn get_uri(&self) -> Option<GString>;
+    #[doc(alias = "webkit_uri_scheme_request_get_uri")]
+    fn get_uri(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "webkit_uri_scheme_request_get_web_view")]
     fn get_web_view(&self) -> Option<WebView>;
 }
 
@@ -50,7 +52,7 @@ impl<O: IsA<URISchemeRequest>> URISchemeRequestExt for O {
         content_type: Option<&str>,
     ) {
         unsafe {
-            webkit2_sys::webkit_uri_scheme_request_finish(
+            ffi::webkit_uri_scheme_request_finish(
                 self.as_ref().to_glib_none().0,
                 stream.as_ref().to_glib_none().0,
                 stream_length,
@@ -60,34 +62,35 @@ impl<O: IsA<URISchemeRequest>> URISchemeRequestExt for O {
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     fn finish_error(&self, error: &mut glib::Error) {
         unsafe {
-            webkit2_sys::webkit_uri_scheme_request_finish_error(
+            ffi::webkit_uri_scheme_request_finish_error(
                 self.as_ref().to_glib_none().0,
                 error.to_glib_none_mut().0,
             );
         }
     }
 
-    fn get_path(&self) -> Option<GString> {
+    fn get_path(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_uri_scheme_request_get_path(
+            from_glib_none(ffi::webkit_uri_scheme_request_get_path(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_scheme(&self) -> Option<GString> {
+    fn get_scheme(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_uri_scheme_request_get_scheme(
+            from_glib_none(ffi::webkit_uri_scheme_request_get_scheme(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_uri(&self) -> Option<GString> {
+    fn get_uri(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_uri_scheme_request_get_uri(
+            from_glib_none(ffi::webkit_uri_scheme_request_get_uri(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -95,7 +98,7 @@ impl<O: IsA<URISchemeRequest>> URISchemeRequestExt for O {
 
     fn get_web_view(&self) -> Option<WebView> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_uri_scheme_request_get_web_view(
+            from_glib_none(ffi::webkit_uri_scheme_request_get_web_view(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -104,6 +107,6 @@ impl<O: IsA<URISchemeRequest>> URISchemeRequestExt for O {
 
 impl fmt::Display for URISchemeRequest {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "URISchemeRequest")
+        f.write_str("URISchemeRequest")
     }
 }

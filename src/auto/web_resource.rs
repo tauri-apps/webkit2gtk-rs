@@ -2,38 +2,32 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use gio;
-use gio_sys;
-use glib;
+use crate::URIRequest;
+use crate::URIResponse;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
-use glib_sys;
-use gobject_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::pin::Pin;
 use std::ptr;
-use webkit2_sys;
-use URIRequest;
-use URIResponse;
 
-glib_wrapper! {
-    pub struct WebResource(Object<webkit2_sys::WebKitWebResource, webkit2_sys::WebKitWebResourceClass, WebResourceClass>);
+glib::wrapper! {
+    pub struct WebResource(Object<ffi::WebKitWebResource, ffi::WebKitWebResourceClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_web_resource_get_type(),
+        get_type => || ffi::webkit_web_resource_get_type(),
     }
 }
 
 pub const NONE_WEB_RESOURCE: Option<&WebResource> = None;
 
 pub trait WebResourceExt: 'static {
+    #[doc(alias = "webkit_web_resource_get_data")]
     fn get_data<
         P: IsA<gio::Cancellable>,
         Q: FnOnce(Result<Vec<u8>, glib::Error>) + Send + 'static,
@@ -47,13 +41,16 @@ pub trait WebResourceExt: 'static {
         &self,
     ) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<u8>, glib::Error>> + 'static>>;
 
+    #[doc(alias = "webkit_web_resource_get_response")]
     fn get_response(&self) -> Option<URIResponse>;
 
-    fn get_uri(&self) -> Option<GString>;
+    #[doc(alias = "webkit_web_resource_get_uri")]
+    fn get_uri(&self) -> Option<glib::GString>;
 
     fn connect_failed<F: Fn(&Self, &glib::Error) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn connect_failed_with_tls_errors<
         F: Fn(&Self, &gio::TlsCertificate, gio::TlsCertificateFlags) + 'static,
     >(
@@ -88,13 +85,13 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
         unsafe extern "C" fn get_data_trampoline<
             Q: FnOnce(Result<Vec<u8>, glib::Error>) + Send + 'static,
         >(
-            _source_object: *mut gobject_sys::GObject,
-            res: *mut gio_sys::GAsyncResult,
-            user_data: glib_sys::gpointer,
+            _source_object: *mut glib::gobject_ffi::GObject,
+            res: *mut gio::ffi::GAsyncResult,
+            user_data: glib::ffi::gpointer,
         ) {
             let mut error = ptr::null_mut();
             let mut length = mem::MaybeUninit::uninit();
-            let ret = webkit2_sys::webkit_web_resource_get_data_finish(
+            let ret = ffi::webkit_web_resource_get_data_finish(
                 _source_object as *mut _,
                 res,
                 length.as_mut_ptr(),
@@ -113,7 +110,7 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
         }
         let callback = get_data_trampoline::<Q>;
         unsafe {
-            webkit2_sys::webkit_web_resource_get_data(
+            ffi::webkit_web_resource_get_data(
                 self.as_ref().to_glib_none().0,
                 cancellable.map(|p| p.as_ref()).to_glib_none().0,
                 Some(callback),
@@ -137,15 +134,15 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
 
     fn get_response(&self) -> Option<URIResponse> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_web_resource_get_response(
+            from_glib_none(ffi::webkit_web_resource_get_response(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_uri(&self) -> Option<GString> {
+    fn get_uri(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_web_resource_get_uri(
+            from_glib_none(ffi::webkit_web_resource_get_uri(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -153,9 +150,9 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
 
     fn connect_failed<F: Fn(&Self, &glib::Error) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn failed_trampoline<P, F: Fn(&P, &glib::Error) + 'static>(
-            this: *mut webkit2_sys::WebKitWebResource,
-            error: *mut glib_sys::GError,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitWebResource,
+            error: *mut glib::ffi::GError,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<WebResource>,
         {
@@ -179,6 +176,7 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn connect_failed_with_tls_errors<
         F: Fn(&Self, &gio::TlsCertificate, gio::TlsCertificateFlags) + 'static,
     >(
@@ -189,10 +187,10 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
             P,
             F: Fn(&P, &gio::TlsCertificate, gio::TlsCertificateFlags) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitWebResource,
-            certificate: *mut gio_sys::GTlsCertificate,
-            errors: gio_sys::GTlsCertificateFlags,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitWebResource,
+            certificate: *mut gio::ffi::GTlsCertificate,
+            errors: gio::ffi::GTlsCertificateFlags,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<WebResource>,
         {
@@ -218,8 +216,8 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
 
     fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitWebResource,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitWebResource,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<WebResource>,
         {
@@ -241,9 +239,9 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
 
     fn connect_received_data<F: Fn(&Self, u64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn received_data_trampoline<P, F: Fn(&P, u64) + 'static>(
-            this: *mut webkit2_sys::WebKitWebResource,
+            this: *mut ffi::WebKitWebResource,
             data_length: u64,
-            f: glib_sys::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<WebResource>,
         {
@@ -274,10 +272,10 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
             P,
             F: Fn(&P, &URIRequest, &URIResponse) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitWebResource,
-            request: *mut webkit2_sys::WebKitURIRequest,
-            redirected_response: *mut webkit2_sys::WebKitURIResponse,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitWebResource,
+            request: *mut ffi::WebKitURIRequest,
+            redirected_response: *mut ffi::WebKitURIResponse,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<WebResource>,
         {
@@ -303,9 +301,9 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
 
     fn connect_property_response_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_response_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitWebResource,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitWebResource,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<WebResource>,
         {
@@ -327,9 +325,9 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
 
     fn connect_property_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_uri_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitWebResource,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitWebResource,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<WebResource>,
         {
@@ -352,6 +350,6 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
 
 impl fmt::Display for WebResource {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "WebResource")
+        f.write_str("WebResource")
     }
 }

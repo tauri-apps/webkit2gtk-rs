@@ -2,37 +2,39 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::MimeInfo;
 use glib::object::IsA;
 use glib::translate::*;
-use glib::GString;
 use std::fmt;
-use webkit2_sys;
-use MimeInfo;
 
-glib_wrapper! {
-    pub struct Plugin(Object<webkit2_sys::WebKitPlugin, webkit2_sys::WebKitPluginClass, PluginClass>);
+glib::wrapper! {
+    pub struct Plugin(Object<ffi::WebKitPlugin, ffi::WebKitPluginClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_plugin_get_type(),
+        get_type => || ffi::webkit_plugin_get_type(),
     }
 }
 
 pub const NONE_PLUGIN: Option<&Plugin> = None;
 
 pub trait PluginExt: 'static {
-    fn get_description(&self) -> Option<GString>;
+    #[doc(alias = "webkit_plugin_get_description")]
+    fn get_description(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "webkit_plugin_get_mime_info_list")]
     fn get_mime_info_list(&self) -> Vec<MimeInfo>;
 
-    fn get_name(&self) -> Option<GString>;
+    #[doc(alias = "webkit_plugin_get_name")]
+    fn get_name(&self) -> Option<glib::GString>;
 
-    fn get_path(&self) -> Option<GString>;
+    #[doc(alias = "webkit_plugin_get_path")]
+    fn get_path(&self) -> Option<glib::GString>;
 }
 
 impl<O: IsA<Plugin>> PluginExt for O {
-    fn get_description(&self) -> Option<GString> {
+    fn get_description(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_plugin_get_description(
+            from_glib_none(ffi::webkit_plugin_get_description(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -40,31 +42,23 @@ impl<O: IsA<Plugin>> PluginExt for O {
 
     fn get_mime_info_list(&self) -> Vec<MimeInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(webkit2_sys::webkit_plugin_get_mime_info_list(
+            FromGlibPtrContainer::from_glib_none(ffi::webkit_plugin_get_mime_info_list(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_name(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(webkit2_sys::webkit_plugin_get_name(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+    fn get_name(&self) -> Option<glib::GString> {
+        unsafe { from_glib_none(ffi::webkit_plugin_get_name(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_path(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(webkit2_sys::webkit_plugin_get_path(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+    fn get_path(&self) -> Option<glib::GString> {
+        unsafe { from_glib_none(ffi::webkit_plugin_get_path(self.as_ref().to_glib_none().0)) }
     }
 }
 
 impl fmt::Display for Plugin {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Plugin")
+        f.write_str("Plugin")
     }
 }

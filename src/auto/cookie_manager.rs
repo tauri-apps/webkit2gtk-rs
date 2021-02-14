@@ -2,31 +2,24 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use gio;
-use gio_sys;
-use glib;
+use crate::CookieAcceptPolicy;
+use crate::CookiePersistentStorage;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
-use glib_sys;
-use gobject_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 use std::pin::Pin;
 use std::ptr;
-use webkit2_sys;
-use CookieAcceptPolicy;
-use CookiePersistentStorage;
 
-glib_wrapper! {
-    pub struct CookieManager(Object<webkit2_sys::WebKitCookieManager, webkit2_sys::WebKitCookieManagerClass, CookieManagerClass>);
+glib::wrapper! {
+    pub struct CookieManager(Object<ffi::WebKitCookieManager, ffi::WebKitCookieManagerClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_cookie_manager_get_type(),
+        get_type => || ffi::webkit_cookie_manager_get_type(),
     }
 }
 
@@ -34,25 +27,34 @@ pub const NONE_COOKIE_MANAGER: Option<&CookieManager> = None;
 
 pub trait CookieManagerExt: 'static {
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
+    //#[doc(alias = "webkit_cookie_manager_add_cookie")]
     //fn add_cookie<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, cookie: /*Ignored*/&mut soup::Cookie, cancellable: Option<&P>, callback: Q);
 
     //
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     //fn add_cookie_future(&self, cookie: /*Ignored*/&mut soup::Cookie) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
 
     #[cfg_attr(feature = "v2_16", deprecated)]
+    #[doc(alias = "webkit_cookie_manager_delete_all_cookies")]
     fn delete_all_cookies(&self);
 
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
+    //#[doc(alias = "webkit_cookie_manager_delete_cookie")]
     //fn delete_cookie<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, cookie: /*Ignored*/&mut soup::Cookie, cancellable: Option<&P>, callback: Q);
 
     //
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     //fn delete_cookie_future(&self, cookie: /*Ignored*/&mut soup::Cookie) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
 
     #[cfg_attr(feature = "v2_16", deprecated)]
+    #[doc(alias = "webkit_cookie_manager_delete_cookies_for_domain")]
     fn delete_cookies_for_domain(&self, domain: &str);
 
+    #[doc(alias = "webkit_cookie_manager_get_accept_policy")]
     fn get_accept_policy<
         P: IsA<gio::Cancellable>,
         Q: FnOnce(Result<CookieAcceptPolicy, glib::Error>) + Send + 'static,
@@ -69,16 +71,20 @@ pub trait CookieManagerExt: 'static {
     >;
 
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
+    //#[doc(alias = "webkit_cookie_manager_get_cookies")]
     //fn get_cookies<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/Vec<soup::Cookie>, glib::Error>) + Send + 'static>(&self, uri: &str, cancellable: Option<&P>, callback: Q);
 
     //
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     //fn get_cookies_future(&self, uri: &str) -> Pin<Box_<dyn std::future::Future<Output = Result</*Ignored*/Vec<soup::Cookie>, glib::Error>> + 'static>>;
 
     #[cfg_attr(feature = "v2_16", deprecated)]
+    #[doc(alias = "webkit_cookie_manager_get_domains_with_cookies")]
     fn get_domains_with_cookies<
         P: IsA<gio::Cancellable>,
-        Q: FnOnce(Result<Vec<GString>, glib::Error>) + Send + 'static,
+        Q: FnOnce(Result<Vec<glib::GString>, glib::Error>) + Send + 'static,
     >(
         &self,
         cancellable: Option<&P>,
@@ -89,10 +95,14 @@ pub trait CookieManagerExt: 'static {
 
     fn get_domains_with_cookies_future(
         &self,
-    ) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<GString>, glib::Error>> + 'static>>;
+    ) -> Pin<
+        Box_<dyn std::future::Future<Output = Result<Vec<glib::GString>, glib::Error>> + 'static>,
+    >;
 
+    #[doc(alias = "webkit_cookie_manager_set_accept_policy")]
     fn set_accept_policy(&self, policy: CookieAcceptPolicy);
 
+    #[doc(alias = "webkit_cookie_manager_set_persistent_storage")]
     fn set_persistent_storage(&self, filename: &str, storage: CookiePersistentStorage);
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -100,12 +110,14 @@ pub trait CookieManagerExt: 'static {
 
 impl<O: IsA<CookieManager>> CookieManagerExt for O {
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     //fn add_cookie<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, cookie: /*Ignored*/&mut soup::Cookie, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call webkit2_sys:webkit_cookie_manager_add_cookie() }
+    //    unsafe { TODO: call ffi:webkit_cookie_manager_add_cookie() }
     //}
 
     //
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     //fn add_cookie_future(&self, cookie: /*Ignored*/&mut soup::Cookie) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
 
     //let cookie = cookie.clone();
@@ -125,17 +137,19 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
 
     fn delete_all_cookies(&self) {
         unsafe {
-            webkit2_sys::webkit_cookie_manager_delete_all_cookies(self.as_ref().to_glib_none().0);
+            ffi::webkit_cookie_manager_delete_all_cookies(self.as_ref().to_glib_none().0);
         }
     }
 
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     //fn delete_cookie<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, cookie: /*Ignored*/&mut soup::Cookie, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call webkit2_sys:webkit_cookie_manager_delete_cookie() }
+    //    unsafe { TODO: call ffi:webkit_cookie_manager_delete_cookie() }
     //}
 
     //
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     //fn delete_cookie_future(&self, cookie: /*Ignored*/&mut soup::Cookie) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
 
     //let cookie = cookie.clone();
@@ -155,7 +169,7 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
 
     fn delete_cookies_for_domain(&self, domain: &str) {
         unsafe {
-            webkit2_sys::webkit_cookie_manager_delete_cookies_for_domain(
+            ffi::webkit_cookie_manager_delete_cookies_for_domain(
                 self.as_ref().to_glib_none().0,
                 domain.to_glib_none().0,
             );
@@ -174,12 +188,12 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
         unsafe extern "C" fn get_accept_policy_trampoline<
             Q: FnOnce(Result<CookieAcceptPolicy, glib::Error>) + Send + 'static,
         >(
-            _source_object: *mut gobject_sys::GObject,
-            res: *mut gio_sys::GAsyncResult,
-            user_data: glib_sys::gpointer,
+            _source_object: *mut glib::gobject_ffi::GObject,
+            res: *mut gio::ffi::GAsyncResult,
+            user_data: glib::ffi::gpointer,
         ) {
             let mut error = ptr::null_mut();
-            let ret = webkit2_sys::webkit_cookie_manager_get_accept_policy_finish(
+            let ret = ffi::webkit_cookie_manager_get_accept_policy_finish(
                 _source_object as *mut _,
                 res,
                 &mut error,
@@ -194,7 +208,7 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
         }
         let callback = get_accept_policy_trampoline::<Q>;
         unsafe {
-            webkit2_sys::webkit_cookie_manager_get_accept_policy(
+            ffi::webkit_cookie_manager_get_accept_policy(
                 self.as_ref().to_glib_none().0,
                 cancellable.map(|p| p.as_ref()).to_glib_none().0,
                 Some(callback),
@@ -219,12 +233,14 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
     }
 
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     //fn get_cookies<P: IsA<gio::Cancellable>, Q: FnOnce(Result</*Ignored*/Vec<soup::Cookie>, glib::Error>) + Send + 'static>(&self, uri: &str, cancellable: Option<&P>, callback: Q) {
-    //    unsafe { TODO: call webkit2_sys:webkit_cookie_manager_get_cookies() }
+    //    unsafe { TODO: call ffi:webkit_cookie_manager_get_cookies() }
     //}
 
     //
     //#[cfg(any(feature = "v2_20", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     //fn get_cookies_future(&self, uri: &str) -> Pin<Box_<dyn std::future::Future<Output = Result</*Ignored*/Vec<soup::Cookie>, glib::Error>> + 'static>> {
 
     //let uri = String::from(uri);
@@ -244,7 +260,7 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
 
     fn get_domains_with_cookies<
         P: IsA<gio::Cancellable>,
-        Q: FnOnce(Result<Vec<GString>, glib::Error>) + Send + 'static,
+        Q: FnOnce(Result<Vec<glib::GString>, glib::Error>) + Send + 'static,
     >(
         &self,
         cancellable: Option<&P>,
@@ -252,14 +268,14 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
     ) {
         let user_data: Box_<Q> = Box_::new(callback);
         unsafe extern "C" fn get_domains_with_cookies_trampoline<
-            Q: FnOnce(Result<Vec<GString>, glib::Error>) + Send + 'static,
+            Q: FnOnce(Result<Vec<glib::GString>, glib::Error>) + Send + 'static,
         >(
-            _source_object: *mut gobject_sys::GObject,
-            res: *mut gio_sys::GAsyncResult,
-            user_data: glib_sys::gpointer,
+            _source_object: *mut glib::gobject_ffi::GObject,
+            res: *mut gio::ffi::GAsyncResult,
+            user_data: glib::ffi::gpointer,
         ) {
             let mut error = ptr::null_mut();
-            let ret = webkit2_sys::webkit_cookie_manager_get_domains_with_cookies_finish(
+            let ret = ffi::webkit_cookie_manager_get_domains_with_cookies_finish(
                 _source_object as *mut _,
                 res,
                 &mut error,
@@ -274,7 +290,7 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
         }
         let callback = get_domains_with_cookies_trampoline::<Q>;
         unsafe {
-            webkit2_sys::webkit_cookie_manager_get_domains_with_cookies(
+            ffi::webkit_cookie_manager_get_domains_with_cookies(
                 self.as_ref().to_glib_none().0,
                 cancellable.map(|p| p.as_ref()).to_glib_none().0,
                 Some(callback),
@@ -285,8 +301,9 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
 
     fn get_domains_with_cookies_future(
         &self,
-    ) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<GString>, glib::Error>> + 'static>>
-    {
+    ) -> Pin<
+        Box_<dyn std::future::Future<Output = Result<Vec<glib::GString>, glib::Error>> + 'static>,
+    > {
         Box_::pin(gio::GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
             obj.get_domains_with_cookies(Some(&cancellable), move |res| {
@@ -299,7 +316,7 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
 
     fn set_accept_policy(&self, policy: CookieAcceptPolicy) {
         unsafe {
-            webkit2_sys::webkit_cookie_manager_set_accept_policy(
+            ffi::webkit_cookie_manager_set_accept_policy(
                 self.as_ref().to_glib_none().0,
                 policy.to_glib(),
             );
@@ -308,7 +325,7 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
 
     fn set_persistent_storage(&self, filename: &str, storage: CookiePersistentStorage) {
         unsafe {
-            webkit2_sys::webkit_cookie_manager_set_persistent_storage(
+            ffi::webkit_cookie_manager_set_persistent_storage(
                 self.as_ref().to_glib_none().0,
                 filename.to_glib_none().0,
                 storage.to_glib(),
@@ -318,8 +335,8 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn changed_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitCookieManager,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitCookieManager,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<CookieManager>,
         {
@@ -342,6 +359,6 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
 
 impl fmt::Display for CookieManager {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "CookieManager")
+        f.write_str("CookieManager")
     }
 }

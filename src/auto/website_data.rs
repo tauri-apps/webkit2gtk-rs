@@ -3,45 +3,42 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+use crate::WebsiteDataTypes;
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
 use glib::translate::*;
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-use glib::GString;
-use webkit2_sys;
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-use WebsiteDataTypes;
 
-glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct WebsiteData(Shared<webkit2_sys::WebKitWebsiteData>);
+    pub struct WebsiteData(Shared<ffi::WebKitWebsiteData>);
 
     match fn {
-        ref => |ptr| webkit2_sys::webkit_website_data_ref(ptr),
-        unref => |ptr| webkit2_sys::webkit_website_data_unref(ptr),
-        get_type => || webkit2_sys::webkit_website_data_get_type(),
+        ref => |ptr| ffi::webkit_website_data_ref(ptr),
+        unref => |ptr| ffi::webkit_website_data_unref(ptr),
+        get_type => || ffi::webkit_website_data_get_type(),
     }
 }
 
 impl WebsiteData {
     #[cfg(any(feature = "v2_16", feature = "dox"))]
-    pub fn get_name(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(webkit2_sys::webkit_website_data_get_name(
-                self.to_glib_none().0,
-            ))
-        }
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    #[doc(alias = "webkit_website_data_get_name")]
+    pub fn get_name(&self) -> Option<glib::GString> {
+        unsafe { from_glib_none(ffi::webkit_website_data_get_name(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    #[doc(alias = "webkit_website_data_get_size")]
     pub fn get_size(&self, types: WebsiteDataTypes) -> u64 {
-        unsafe { webkit2_sys::webkit_website_data_get_size(self.to_glib_none().0, types.to_glib()) }
+        unsafe { ffi::webkit_website_data_get_size(self.to_glib_none().0, types.to_glib()) }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    #[doc(alias = "webkit_website_data_get_types")]
     pub fn get_types(&self) -> WebsiteDataTypes {
-        unsafe {
-            from_glib(webkit2_sys::webkit_website_data_get_types(
-                self.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::webkit_website_data_get_types(self.to_glib_none().0)) }
     }
 }

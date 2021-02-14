@@ -2,36 +2,38 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::PolicyDecision;
+use crate::URIRequest;
+use crate::URIResponse;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
-use webkit2_sys;
-use PolicyDecision;
-use URIRequest;
-use URIResponse;
 
-glib_wrapper! {
-    pub struct ResponsePolicyDecision(Object<webkit2_sys::WebKitResponsePolicyDecision, webkit2_sys::WebKitResponsePolicyDecisionClass, ResponsePolicyDecisionClass>) @extends PolicyDecision;
+glib::wrapper! {
+    pub struct ResponsePolicyDecision(Object<ffi::WebKitResponsePolicyDecision, ffi::WebKitResponsePolicyDecisionClass>) @extends PolicyDecision;
 
     match fn {
-        get_type => || webkit2_sys::webkit_response_policy_decision_get_type(),
+        get_type => || ffi::webkit_response_policy_decision_get_type(),
     }
 }
 
 pub const NONE_RESPONSE_POLICY_DECISION: Option<&ResponsePolicyDecision> = None;
 
 pub trait ResponsePolicyDecisionExt: 'static {
+    #[doc(alias = "webkit_response_policy_decision_get_request")]
     fn get_request(&self) -> Option<URIRequest>;
 
+    #[doc(alias = "webkit_response_policy_decision_get_response")]
     fn get_response(&self) -> Option<URIResponse>;
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
+    #[doc(alias = "webkit_response_policy_decision_is_mime_type_supported")]
     fn is_mime_type_supported(&self) -> bool;
 
     fn connect_property_request_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -42,7 +44,7 @@ pub trait ResponsePolicyDecisionExt: 'static {
 impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
     fn get_request(&self) -> Option<URIRequest> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_response_policy_decision_get_request(
+            from_glib_none(ffi::webkit_response_policy_decision_get_request(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -50,28 +52,27 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
 
     fn get_response(&self) -> Option<URIResponse> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_response_policy_decision_get_response(
+            from_glib_none(ffi::webkit_response_policy_decision_get_response(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     fn is_mime_type_supported(&self) -> bool {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_response_policy_decision_is_mime_type_supported(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_response_policy_decision_is_mime_type_supported(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn connect_property_request_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_request_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitResponsePolicyDecision,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitResponsePolicyDecision,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<ResponsePolicyDecision>,
         {
@@ -93,9 +94,9 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
 
     fn connect_property_response_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_response_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitResponsePolicyDecision,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitResponsePolicyDecision,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<ResponsePolicyDecision>,
         {
@@ -118,6 +119,6 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
 
 impl fmt::Display for ResponsePolicyDecision {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "ResponsePolicyDecision")
+        f.write_str("ResponsePolicyDecision")
     }
 }

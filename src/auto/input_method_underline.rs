@@ -3,28 +3,28 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_28", feature = "dox"))]
-use gdk;
-#[cfg(any(feature = "v2_28", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
 use glib::translate::*;
-use webkit2_sys;
 
-glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct InputMethodUnderline(Boxed<webkit2_sys::WebKitInputMethodUnderline>);
+    pub struct InputMethodUnderline(Boxed<ffi::WebKitInputMethodUnderline>);
 
     match fn {
-        copy => |ptr| webkit2_sys::webkit_input_method_underline_copy(mut_override(ptr)),
-        free => |ptr| webkit2_sys::webkit_input_method_underline_free(ptr),
-        get_type => || webkit2_sys::webkit_input_method_underline_get_type(),
+        copy => |ptr| ffi::webkit_input_method_underline_copy(mut_override(ptr)),
+        free => |ptr| ffi::webkit_input_method_underline_free(ptr),
+        get_type => || ffi::webkit_input_method_underline_get_type(),
     }
 }
 
 impl InputMethodUnderline {
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_input_method_underline_new")]
     pub fn new(start_offset: u32, end_offset: u32) -> InputMethodUnderline {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(webkit2_sys::webkit_input_method_underline_new(
+            from_glib_full(ffi::webkit_input_method_underline_new(
                 start_offset,
                 end_offset,
             ))
@@ -32,9 +32,11 @@ impl InputMethodUnderline {
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_input_method_underline_set_color")]
     pub fn set_color(&mut self, rgba: Option<&gdk::RGBA>) {
         unsafe {
-            webkit2_sys::webkit_input_method_underline_set_color(
+            ffi::webkit_input_method_underline_set_color(
                 self.to_glib_none_mut().0,
                 rgba.to_glib_none().0,
             );

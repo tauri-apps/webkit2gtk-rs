@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use gdk;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -10,19 +9,15 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
 use glib::ToValue;
-use glib::Value;
-use glib_sys;
-use gobject_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
-use webkit2_sys;
 
-glib_wrapper! {
-    pub struct ColorChooserRequest(Object<webkit2_sys::WebKitColorChooserRequest, webkit2_sys::WebKitColorChooserRequestClass, ColorChooserRequestClass>);
+glib::wrapper! {
+    pub struct ColorChooserRequest(Object<ffi::WebKitColorChooserRequest, ffi::WebKitColorChooserRequestClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_color_chooser_request_get_type(),
+        get_type => || ffi::webkit_color_chooser_request_get_type(),
     }
 }
 
@@ -41,10 +36,7 @@ impl ColorChooserRequestBuilder {
         if let Some(ref rgba) = self.rgba {
             properties.push(("rgba", rgba));
         }
-        let ret = glib::Object::new(ColorChooserRequest::static_type(), &properties)
-            .expect("object new")
-            .downcast::<ColorChooserRequest>()
-            .expect("downcast");
+        let ret = glib::Object::new::<ColorChooserRequest>(&properties).expect("object new");
         ret
     }
 
@@ -58,18 +50,28 @@ pub const NONE_COLOR_CHOOSER_REQUEST: Option<&ColorChooserRequest> = None;
 
 pub trait ColorChooserRequestExt: 'static {
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+    #[doc(alias = "webkit_color_chooser_request_cancel")]
     fn cancel(&self);
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+    #[doc(alias = "webkit_color_chooser_request_finish")]
     fn finish(&self);
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+    #[doc(alias = "webkit_color_chooser_request_get_element_rectangle")]
     fn get_element_rectangle(&self) -> gdk::Rectangle;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+    #[doc(alias = "webkit_color_chooser_request_get_rgba")]
     fn get_rgba(&self) -> gdk::RGBA;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+    #[doc(alias = "webkit_color_chooser_request_set_rgba")]
     fn set_rgba(&self, rgba: &gdk::RGBA);
 
     fn get_property_rgba(&self) -> Option<gdk::RGBA>;
@@ -77,6 +79,7 @@ pub trait ColorChooserRequestExt: 'static {
     fn set_property_rgba(&self, rgba: Option<&gdk::RGBA>);
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_rgba_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -84,24 +87,27 @@ pub trait ColorChooserRequestExt: 'static {
 
 impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn cancel(&self) {
         unsafe {
-            webkit2_sys::webkit_color_chooser_request_cancel(self.as_ref().to_glib_none().0);
+            ffi::webkit_color_chooser_request_cancel(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn finish(&self) {
         unsafe {
-            webkit2_sys::webkit_color_chooser_request_finish(self.as_ref().to_glib_none().0);
+            ffi::webkit_color_chooser_request_finish(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn get_element_rectangle(&self) -> gdk::Rectangle {
         unsafe {
             let mut rect = gdk::Rectangle::uninitialized();
-            webkit2_sys::webkit_color_chooser_request_get_element_rectangle(
+            ffi::webkit_color_chooser_request_get_element_rectangle(
                 self.as_ref().to_glib_none().0,
                 rect.to_glib_none_mut().0,
             );
@@ -110,10 +116,11 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn get_rgba(&self) -> gdk::RGBA {
         unsafe {
             let mut rgba = gdk::RGBA::uninitialized();
-            webkit2_sys::webkit_color_chooser_request_get_rgba(
+            ffi::webkit_color_chooser_request_get_rgba(
                 self.as_ref().to_glib_none().0,
                 rgba.to_glib_none_mut().0,
             );
@@ -122,9 +129,10 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn set_rgba(&self, rgba: &gdk::RGBA) {
         unsafe {
-            webkit2_sys::webkit_color_chooser_request_set_rgba(
+            ffi::webkit_color_chooser_request_set_rgba(
                 self.as_ref().to_glib_none().0,
                 rgba.to_glib_none().0,
             );
@@ -133,9 +141,9 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
 
     fn get_property_rgba(&self) -> Option<gdk::RGBA> {
         unsafe {
-            let mut value = Value::from_type(<gdk::RGBA as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            let mut value = glib::Value::from_type(<gdk::RGBA as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"rgba\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -147,19 +155,20 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
 
     fn set_property_rgba(&self, rgba: Option<&gdk::RGBA>) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"rgba\0".as_ptr() as *const _,
-                Value::from(rgba).to_glib_none().0,
+                glib::Value::from(rgba).to_glib_none().0,
             );
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitColorChooserRequest,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitColorChooserRequest,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<ColorChooserRequest>,
         {
@@ -181,9 +190,9 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
 
     fn connect_property_rgba_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_rgba_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitColorChooserRequest,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitColorChooserRequest,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<ColorChooserRequest>,
         {
@@ -206,6 +215,6 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
 
 impl fmt::Display for ColorChooserRequest {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "ColorChooserRequest")
+        f.write_str("ColorChooserRequest")
     }
 }

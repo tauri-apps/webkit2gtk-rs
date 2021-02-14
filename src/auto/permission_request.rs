@@ -5,40 +5,41 @@
 use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
-use webkit2_sys;
 
-glib_wrapper! {
-    pub struct PermissionRequest(Interface<webkit2_sys::WebKitPermissionRequest>);
+glib::wrapper! {
+    pub struct PermissionRequest(Interface<ffi::WebKitPermissionRequest>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_permission_request_get_type(),
+        get_type => || ffi::webkit_permission_request_get_type(),
     }
 }
 
 pub const NONE_PERMISSION_REQUEST: Option<&PermissionRequest> = None;
 
 pub trait PermissionRequestExt: 'static {
+    #[doc(alias = "webkit_permission_request_allow")]
     fn allow(&self);
 
+    #[doc(alias = "webkit_permission_request_deny")]
     fn deny(&self);
 }
 
 impl<O: IsA<PermissionRequest>> PermissionRequestExt for O {
     fn allow(&self) {
         unsafe {
-            webkit2_sys::webkit_permission_request_allow(self.as_ref().to_glib_none().0);
+            ffi::webkit_permission_request_allow(self.as_ref().to_glib_none().0);
         }
     }
 
     fn deny(&self) {
         unsafe {
-            webkit2_sys::webkit_permission_request_deny(self.as_ref().to_glib_none().0);
+            ffi::webkit_permission_request_deny(self.as_ref().to_glib_none().0);
         }
     }
 }
 
 impl fmt::Display for PermissionRequest {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "PermissionRequest")
+        f.write_str("PermissionRequest")
     }
 }

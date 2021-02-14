@@ -3,45 +3,48 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_26", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
 use glib::translate::*;
-use webkit2_sys;
 
-glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct GeolocationPosition(Boxed<webkit2_sys::WebKitGeolocationPosition>);
+    pub struct GeolocationPosition(Boxed<ffi::WebKitGeolocationPosition>);
 
     match fn {
-        copy => |ptr| webkit2_sys::webkit_geolocation_position_copy(mut_override(ptr)),
-        free => |ptr| webkit2_sys::webkit_geolocation_position_free(ptr),
-        get_type => || webkit2_sys::webkit_geolocation_position_get_type(),
+        copy => |ptr| ffi::webkit_geolocation_position_copy(mut_override(ptr)),
+        free => |ptr| ffi::webkit_geolocation_position_free(ptr),
+        get_type => || ffi::webkit_geolocation_position_get_type(),
     }
 }
 
 impl GeolocationPosition {
     #[cfg(any(feature = "v2_26", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
+    #[doc(alias = "webkit_geolocation_position_new")]
     pub fn new(latitude: f64, longitude: f64, accuracy: f64) -> GeolocationPosition {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(webkit2_sys::webkit_geolocation_position_new(
+            from_glib_full(ffi::webkit_geolocation_position_new(
                 latitude, longitude, accuracy,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
+    #[doc(alias = "webkit_geolocation_position_set_altitude")]
     pub fn set_altitude(&mut self, altitude: f64) {
         unsafe {
-            webkit2_sys::webkit_geolocation_position_set_altitude(
-                self.to_glib_none_mut().0,
-                altitude,
-            );
+            ffi::webkit_geolocation_position_set_altitude(self.to_glib_none_mut().0, altitude);
         }
     }
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
+    #[doc(alias = "webkit_geolocation_position_set_altitude_accuracy")]
     pub fn set_altitude_accuracy(&mut self, altitude_accuracy: f64) {
         unsafe {
-            webkit2_sys::webkit_geolocation_position_set_altitude_accuracy(
+            ffi::webkit_geolocation_position_set_altitude_accuracy(
                 self.to_glib_none_mut().0,
                 altitude_accuracy,
             );
@@ -49,29 +52,29 @@ impl GeolocationPosition {
     }
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
+    #[doc(alias = "webkit_geolocation_position_set_heading")]
     pub fn set_heading(&mut self, heading: f64) {
         unsafe {
-            webkit2_sys::webkit_geolocation_position_set_heading(
-                self.to_glib_none_mut().0,
-                heading,
-            );
+            ffi::webkit_geolocation_position_set_heading(self.to_glib_none_mut().0, heading);
         }
     }
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
+    #[doc(alias = "webkit_geolocation_position_set_speed")]
     pub fn set_speed(&mut self, speed: f64) {
         unsafe {
-            webkit2_sys::webkit_geolocation_position_set_speed(self.to_glib_none_mut().0, speed);
+            ffi::webkit_geolocation_position_set_speed(self.to_glib_none_mut().0, speed);
         }
     }
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
+    #[doc(alias = "webkit_geolocation_position_set_timestamp")]
     pub fn set_timestamp(&mut self, timestamp: u64) {
         unsafe {
-            webkit2_sys::webkit_geolocation_position_set_timestamp(
-                self.to_glib_none_mut().0,
-                timestamp,
-            );
+            ffi::webkit_geolocation_position_set_timestamp(self.to_glib_none_mut().0, timestamp);
         }
     }
 }

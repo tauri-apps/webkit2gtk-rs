@@ -2,47 +2,54 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::WebViewBase;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
-use glib_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
-use webkit2_sys;
-use WebViewBase;
 
-glib_wrapper! {
-    pub struct WebInspector(Object<webkit2_sys::WebKitWebInspector, webkit2_sys::WebKitWebInspectorClass, WebInspectorClass>);
+glib::wrapper! {
+    pub struct WebInspector(Object<ffi::WebKitWebInspector, ffi::WebKitWebInspectorClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_web_inspector_get_type(),
+        get_type => || ffi::webkit_web_inspector_get_type(),
     }
 }
 
 pub const NONE_WEB_INSPECTOR: Option<&WebInspector> = None;
 
 pub trait WebInspectorExt: 'static {
+    #[doc(alias = "webkit_web_inspector_attach")]
     fn attach(&self);
 
+    #[doc(alias = "webkit_web_inspector_close")]
     fn close(&self);
 
+    #[doc(alias = "webkit_web_inspector_detach")]
     fn detach(&self);
 
+    #[doc(alias = "webkit_web_inspector_get_attached_height")]
     fn get_attached_height(&self) -> u32;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+    #[doc(alias = "webkit_web_inspector_get_can_attach")]
     fn get_can_attach(&self) -> bool;
 
-    fn get_inspected_uri(&self) -> Option<GString>;
+    #[doc(alias = "webkit_web_inspector_get_inspected_uri")]
+    fn get_inspected_uri(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "webkit_web_inspector_get_web_view")]
     fn get_web_view(&self) -> Option<WebViewBase>;
 
+    #[doc(alias = "webkit_web_inspector_is_attached")]
     fn is_attached(&self) -> bool;
 
+    #[doc(alias = "webkit_web_inspector_show")]
     fn show(&self);
 
     fn connect_attach<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId;
@@ -61,6 +68,7 @@ pub trait WebInspectorExt: 'static {
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn connect_property_can_attach_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_inspected_uri_notify<F: Fn(&Self) + 'static>(
@@ -72,40 +80,39 @@ pub trait WebInspectorExt: 'static {
 impl<O: IsA<WebInspector>> WebInspectorExt for O {
     fn attach(&self) {
         unsafe {
-            webkit2_sys::webkit_web_inspector_attach(self.as_ref().to_glib_none().0);
+            ffi::webkit_web_inspector_attach(self.as_ref().to_glib_none().0);
         }
     }
 
     fn close(&self) {
         unsafe {
-            webkit2_sys::webkit_web_inspector_close(self.as_ref().to_glib_none().0);
+            ffi::webkit_web_inspector_close(self.as_ref().to_glib_none().0);
         }
     }
 
     fn detach(&self) {
         unsafe {
-            webkit2_sys::webkit_web_inspector_detach(self.as_ref().to_glib_none().0);
+            ffi::webkit_web_inspector_detach(self.as_ref().to_glib_none().0);
         }
     }
 
     fn get_attached_height(&self) -> u32 {
-        unsafe {
-            webkit2_sys::webkit_web_inspector_get_attached_height(self.as_ref().to_glib_none().0)
-        }
+        unsafe { ffi::webkit_web_inspector_get_attached_height(self.as_ref().to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn get_can_attach(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_web_inspector_get_can_attach(
+            from_glib(ffi::webkit_web_inspector_get_can_attach(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_inspected_uri(&self) -> Option<GString> {
+    fn get_inspected_uri(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_web_inspector_get_inspected_uri(
+            from_glib_none(ffi::webkit_web_inspector_get_inspected_uri(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -113,7 +120,7 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
 
     fn get_web_view(&self) -> Option<WebViewBase> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_web_inspector_get_web_view(
+            from_glib_none(ffi::webkit_web_inspector_get_web_view(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -121,7 +128,7 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
 
     fn is_attached(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_web_inspector_is_attached(
+            from_glib(ffi::webkit_web_inspector_is_attached(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -129,15 +136,15 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
 
     fn show(&self) {
         unsafe {
-            webkit2_sys::webkit_web_inspector_show(self.as_ref().to_glib_none().0);
+            ffi::webkit_web_inspector_show(self.as_ref().to_glib_none().0);
         }
     }
 
     fn connect_attach<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn attach_trampoline<P, F: Fn(&P) -> bool + 'static>(
-            this: *mut webkit2_sys::WebKitWebInspector,
-            f: glib_sys::gpointer,
-        ) -> glib_sys::gboolean
+            this: *mut ffi::WebKitWebInspector,
+            f: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean
         where
             P: IsA<WebInspector>,
         {
@@ -159,9 +166,9 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
 
     fn connect_bring_to_front<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn bring_to_front_trampoline<P, F: Fn(&P) -> bool + 'static>(
-            this: *mut webkit2_sys::WebKitWebInspector,
-            f: glib_sys::gpointer,
-        ) -> glib_sys::gboolean
+            this: *mut ffi::WebKitWebInspector,
+            f: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean
         where
             P: IsA<WebInspector>,
         {
@@ -183,8 +190,8 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
 
     fn connect_closed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn closed_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitWebInspector,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitWebInspector,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<WebInspector>,
         {
@@ -206,9 +213,9 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
 
     fn connect_detach<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn detach_trampoline<P, F: Fn(&P) -> bool + 'static>(
-            this: *mut webkit2_sys::WebKitWebInspector,
-            f: glib_sys::gpointer,
-        ) -> glib_sys::gboolean
+            this: *mut ffi::WebKitWebInspector,
+            f: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean
         where
             P: IsA<WebInspector>,
         {
@@ -230,9 +237,9 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
 
     fn connect_open_window<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn open_window_trampoline<P, F: Fn(&P) -> bool + 'static>(
-            this: *mut webkit2_sys::WebKitWebInspector,
-            f: glib_sys::gpointer,
-        ) -> glib_sys::gboolean
+            this: *mut ffi::WebKitWebInspector,
+            f: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean
         where
             P: IsA<WebInspector>,
         {
@@ -257,9 +264,9 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_attached_height_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitWebInspector,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitWebInspector,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<WebInspector>,
         {
@@ -280,11 +287,12 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn connect_property_can_attach_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_can_attach_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitWebInspector,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitWebInspector,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<WebInspector>,
         {
@@ -309,9 +317,9 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_inspected_uri_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitWebInspector,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitWebInspector,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<WebInspector>,
         {
@@ -334,6 +342,6 @@ impl<O: IsA<WebInspector>> WebInspectorExt for O {
 
 impl fmt::Display for WebInspector {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "WebInspector")
+        f.write_str("WebInspector")
     }
 }

@@ -2,16 +2,14 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::translate::*;
+use crate::PermissionRequest;
 use std::fmt;
-use webkit2_sys;
-use PermissionRequest;
 
-glib_wrapper! {
-    pub struct PointerLockPermissionRequest(Object<webkit2_sys::WebKitPointerLockPermissionRequest, webkit2_sys::WebKitPointerLockPermissionRequestClass, PointerLockPermissionRequestClass>) @implements PermissionRequest;
+glib::wrapper! {
+    pub struct PointerLockPermissionRequest(Object<ffi::WebKitPointerLockPermissionRequest, ffi::WebKitPointerLockPermissionRequestClass>) @implements PermissionRequest;
 
     match fn {
-        get_type => || webkit2_sys::webkit_pointer_lock_permission_request_get_type(),
+        get_type => || ffi::webkit_pointer_lock_permission_request_get_type(),
     }
 }
 
@@ -21,6 +19,6 @@ pub const NONE_POINTER_LOCK_PERMISSION_REQUEST: Option<&PointerLockPermissionReq
 
 impl fmt::Display for PointerLockPermissionRequest {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "PointerLockPermissionRequest")
+        f.write_str("PointerLockPermissionRequest")
     }
 }

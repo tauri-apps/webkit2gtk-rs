@@ -3,29 +3,31 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
 use glib::translate::*;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
-use glib::GString;
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
 use std::fmt;
-use webkit2_sys;
 
-glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct SecurityOrigin(Shared<webkit2_sys::WebKitSecurityOrigin>);
+    pub struct SecurityOrigin(Shared<ffi::WebKitSecurityOrigin>);
 
     match fn {
-        ref => |ptr| webkit2_sys::webkit_security_origin_ref(ptr),
-        unref => |ptr| webkit2_sys::webkit_security_origin_unref(ptr),
-        get_type => || webkit2_sys::webkit_security_origin_get_type(),
+        ref => |ptr| ffi::webkit_security_origin_ref(ptr),
+        unref => |ptr| ffi::webkit_security_origin_unref(ptr),
+        get_type => || ffi::webkit_security_origin_get_type(),
     }
 }
 
 impl SecurityOrigin {
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    #[doc(alias = "webkit_security_origin_new")]
     pub fn new(protocol: &str, host: &str, port: u16) -> SecurityOrigin {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(webkit2_sys::webkit_security_origin_new(
+            from_glib_full(ffi::webkit_security_origin_new(
                 protocol.to_glib_none().0,
                 host.to_glib_none().0,
                 port,
@@ -34,60 +36,62 @@ impl SecurityOrigin {
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    #[doc(alias = "webkit_security_origin_new_for_uri")]
     pub fn new_for_uri(uri: &str) -> SecurityOrigin {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(webkit2_sys::webkit_security_origin_new_for_uri(
+            from_glib_full(ffi::webkit_security_origin_new_for_uri(
                 uri.to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
-    pub fn get_host(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(webkit2_sys::webkit_security_origin_get_host(
-                self.to_glib_none().0,
-            ))
-        }
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    #[doc(alias = "webkit_security_origin_get_host")]
+    pub fn get_host(&self) -> Option<glib::GString> {
+        unsafe { from_glib_none(ffi::webkit_security_origin_get_host(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    #[doc(alias = "webkit_security_origin_get_port")]
     pub fn get_port(&self) -> u16 {
-        unsafe { webkit2_sys::webkit_security_origin_get_port(self.to_glib_none().0) }
+        unsafe { ffi::webkit_security_origin_get_port(self.to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
-    pub fn get_protocol(&self) -> Option<GString> {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    #[doc(alias = "webkit_security_origin_get_protocol")]
+    pub fn get_protocol(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_security_origin_get_protocol(
+            from_glib_none(ffi::webkit_security_origin_get_protocol(
                 self.to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    #[doc(alias = "webkit_security_origin_is_opaque")]
     pub fn is_opaque(&self) -> bool {
-        unsafe {
-            from_glib(webkit2_sys::webkit_security_origin_is_opaque(
-                self.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::webkit_security_origin_is_opaque(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
-    fn to_string(&self) -> GString {
-        unsafe {
-            from_glib_full(webkit2_sys::webkit_security_origin_to_string(
-                self.to_glib_none().0,
-            ))
-        }
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    #[doc(alias = "webkit_security_origin_to_string")]
+    pub fn to_str(&self) -> glib::GString {
+        unsafe { from_glib_full(ffi::webkit_security_origin_to_string(self.to_glib_none().0)) }
     }
 }
 
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
 impl fmt::Display for SecurityOrigin {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.to_string())
+        f.write_str(&self.to_str())
     }
 }

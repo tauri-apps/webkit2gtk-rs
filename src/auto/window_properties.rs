@@ -2,20 +2,18 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use gdk;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
 use glib::StaticType;
 use glib::ToValue;
 use std::fmt;
-use webkit2_sys;
 
-glib_wrapper! {
-    pub struct WindowProperties(Object<webkit2_sys::WebKitWindowProperties, webkit2_sys::WebKitWindowPropertiesClass, WindowPropertiesClass>);
+glib::wrapper! {
+    pub struct WindowProperties(Object<ffi::WebKitWindowProperties, ffi::WebKitWindowPropertiesClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_window_properties_get_type(),
+        get_type => || ffi::webkit_window_properties_get_type(),
     }
 }
 
@@ -62,10 +60,7 @@ impl WindowPropertiesBuilder {
         if let Some(ref toolbar_visible) = self.toolbar_visible {
             properties.push(("toolbar-visible", toolbar_visible));
         }
-        let ret = glib::Object::new(WindowProperties::static_type(), &properties)
-            .expect("object new")
-            .downcast::<WindowProperties>()
-            .expect("downcast");
+        let ret = glib::Object::new::<WindowProperties>(&properties).expect("object new");
         ret
     }
 
@@ -113,27 +108,35 @@ impl WindowPropertiesBuilder {
 pub const NONE_WINDOW_PROPERTIES: Option<&WindowProperties> = None;
 
 pub trait WindowPropertiesExt: 'static {
+    #[doc(alias = "webkit_window_properties_get_fullscreen")]
     fn get_fullscreen(&self) -> bool;
 
+    #[doc(alias = "webkit_window_properties_get_geometry")]
     fn get_geometry(&self) -> gdk::Rectangle;
 
+    #[doc(alias = "webkit_window_properties_get_locationbar_visible")]
     fn get_locationbar_visible(&self) -> bool;
 
+    #[doc(alias = "webkit_window_properties_get_menubar_visible")]
     fn get_menubar_visible(&self) -> bool;
 
+    #[doc(alias = "webkit_window_properties_get_resizable")]
     fn get_resizable(&self) -> bool;
 
+    #[doc(alias = "webkit_window_properties_get_scrollbars_visible")]
     fn get_scrollbars_visible(&self) -> bool;
 
+    #[doc(alias = "webkit_window_properties_get_statusbar_visible")]
     fn get_statusbar_visible(&self) -> bool;
 
+    #[doc(alias = "webkit_window_properties_get_toolbar_visible")]
     fn get_toolbar_visible(&self) -> bool;
 }
 
 impl<O: IsA<WindowProperties>> WindowPropertiesExt for O {
     fn get_fullscreen(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_window_properties_get_fullscreen(
+            from_glib(ffi::webkit_window_properties_get_fullscreen(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -142,7 +145,7 @@ impl<O: IsA<WindowProperties>> WindowPropertiesExt for O {
     fn get_geometry(&self) -> gdk::Rectangle {
         unsafe {
             let mut geometry = gdk::Rectangle::uninitialized();
-            webkit2_sys::webkit_window_properties_get_geometry(
+            ffi::webkit_window_properties_get_geometry(
                 self.as_ref().to_glib_none().0,
                 geometry.to_glib_none_mut().0,
             );
@@ -152,17 +155,15 @@ impl<O: IsA<WindowProperties>> WindowPropertiesExt for O {
 
     fn get_locationbar_visible(&self) -> bool {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_window_properties_get_locationbar_visible(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_window_properties_get_locationbar_visible(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_menubar_visible(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_window_properties_get_menubar_visible(
+            from_glib(ffi::webkit_window_properties_get_menubar_visible(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -170,7 +171,7 @@ impl<O: IsA<WindowProperties>> WindowPropertiesExt for O {
 
     fn get_resizable(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_window_properties_get_resizable(
+            from_glib(ffi::webkit_window_properties_get_resizable(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -178,17 +179,15 @@ impl<O: IsA<WindowProperties>> WindowPropertiesExt for O {
 
     fn get_scrollbars_visible(&self) -> bool {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_window_properties_get_scrollbars_visible(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_window_properties_get_scrollbars_visible(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_statusbar_visible(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_window_properties_get_statusbar_visible(
+            from_glib(ffi::webkit_window_properties_get_statusbar_visible(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -196,7 +195,7 @@ impl<O: IsA<WindowProperties>> WindowPropertiesExt for O {
 
     fn get_toolbar_visible(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_window_properties_get_toolbar_visible(
+            from_glib(ffi::webkit_window_properties_get_toolbar_visible(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -205,6 +204,6 @@ impl<O: IsA<WindowProperties>> WindowPropertiesExt for O {
 
 impl fmt::Display for WindowProperties {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "WindowProperties")
+        f.write_str("WindowProperties")
     }
 }

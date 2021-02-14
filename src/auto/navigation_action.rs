@@ -3,74 +3,84 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+use crate::NavigationType;
+#[cfg(any(feature = "v2_6", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+use crate::URIRequest;
+#[cfg(any(feature = "v2_6", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
 use glib::translate::*;
-use webkit2_sys;
-#[cfg(any(feature = "v2_6", feature = "dox"))]
-use NavigationType;
-#[cfg(any(feature = "v2_6", feature = "dox"))]
-use URIRequest;
 
-glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct NavigationAction(Boxed<webkit2_sys::WebKitNavigationAction>);
+    pub struct NavigationAction(Boxed<ffi::WebKitNavigationAction>);
 
     match fn {
-        copy => |ptr| webkit2_sys::webkit_navigation_action_copy(mut_override(ptr)),
-        free => |ptr| webkit2_sys::webkit_navigation_action_free(ptr),
-        get_type => || webkit2_sys::webkit_navigation_action_get_type(),
+        copy => |ptr| ffi::webkit_navigation_action_copy(mut_override(ptr)),
+        free => |ptr| ffi::webkit_navigation_action_free(ptr),
+        get_type => || ffi::webkit_navigation_action_get_type(),
     }
 }
 
 impl NavigationAction {
     #[cfg(any(feature = "v2_6", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+    #[doc(alias = "webkit_navigation_action_get_modifiers")]
     pub fn get_modifiers(&self) -> u32 {
-        unsafe {
-            webkit2_sys::webkit_navigation_action_get_modifiers(mut_override(self.to_glib_none().0))
-        }
+        unsafe { ffi::webkit_navigation_action_get_modifiers(mut_override(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+    #[doc(alias = "webkit_navigation_action_get_mouse_button")]
     pub fn get_mouse_button(&self) -> u32 {
         unsafe {
-            webkit2_sys::webkit_navigation_action_get_mouse_button(mut_override(
-                self.to_glib_none().0,
-            ))
+            ffi::webkit_navigation_action_get_mouse_button(mut_override(self.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+    #[doc(alias = "webkit_navigation_action_get_navigation_type")]
     pub fn get_navigation_type(&self) -> NavigationType {
         unsafe {
-            from_glib(webkit2_sys::webkit_navigation_action_get_navigation_type(
+            from_glib(ffi::webkit_navigation_action_get_navigation_type(
                 mut_override(self.to_glib_none().0),
             ))
         }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+    #[doc(alias = "webkit_navigation_action_get_request")]
     pub fn get_request(&self) -> Option<URIRequest> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_navigation_action_get_request(
-                mut_override(self.to_glib_none().0),
-            ))
+            from_glib_none(ffi::webkit_navigation_action_get_request(mut_override(
+                self.to_glib_none().0,
+            )))
         }
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
+    #[doc(alias = "webkit_navigation_action_is_redirect")]
     pub fn is_redirect(&mut self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_navigation_action_is_redirect(
+            from_glib(ffi::webkit_navigation_action_is_redirect(
                 self.to_glib_none_mut().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+    #[doc(alias = "webkit_navigation_action_is_user_gesture")]
     pub fn is_user_gesture(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_navigation_action_is_user_gesture(
-                mut_override(self.to_glib_none().0),
-            ))
+            from_glib(ffi::webkit_navigation_action_is_user_gesture(mut_override(
+                self.to_glib_none().0,
+            )))
         }
     }
 }

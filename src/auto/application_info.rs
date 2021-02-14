@@ -3,47 +3,48 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
 use glib::translate::*;
 #[cfg(any(feature = "v2_18", feature = "dox"))]
-use glib::GString;
-#[cfg(any(feature = "v2_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
 use std::mem;
-use webkit2_sys;
 
-glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct ApplicationInfo(Shared<webkit2_sys::WebKitApplicationInfo>);
+    pub struct ApplicationInfo(Shared<ffi::WebKitApplicationInfo>);
 
     match fn {
-        ref => |ptr| webkit2_sys::webkit_application_info_ref(ptr),
-        unref => |ptr| webkit2_sys::webkit_application_info_unref(ptr),
-        get_type => || webkit2_sys::webkit_application_info_get_type(),
+        ref => |ptr| ffi::webkit_application_info_ref(ptr),
+        unref => |ptr| ffi::webkit_application_info_unref(ptr),
+        get_type => || ffi::webkit_application_info_get_type(),
     }
 }
 
 impl ApplicationInfo {
     #[cfg(any(feature = "v2_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
+    #[doc(alias = "webkit_application_info_new")]
     pub fn new() -> ApplicationInfo {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(webkit2_sys::webkit_application_info_new()) }
+        unsafe { from_glib_full(ffi::webkit_application_info_new()) }
     }
 
     #[cfg(any(feature = "v2_18", feature = "dox"))]
-    pub fn get_name(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(webkit2_sys::webkit_application_info_get_name(
-                self.to_glib_none().0,
-            ))
-        }
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
+    #[doc(alias = "webkit_application_info_get_name")]
+    pub fn get_name(&self) -> Option<glib::GString> {
+        unsafe { from_glib_none(ffi::webkit_application_info_get_name(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v2_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
+    #[doc(alias = "webkit_application_info_get_version")]
     pub fn get_version(&self) -> (u64, u64, u64) {
         unsafe {
             let mut major = mem::MaybeUninit::uninit();
             let mut minor = mem::MaybeUninit::uninit();
             let mut micro = mem::MaybeUninit::uninit();
-            webkit2_sys::webkit_application_info_get_version(
+            ffi::webkit_application_info_get_version(
                 self.to_glib_none().0,
                 major.as_mut_ptr(),
                 minor.as_mut_ptr(),
@@ -57,29 +58,26 @@ impl ApplicationInfo {
     }
 
     #[cfg(any(feature = "v2_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
+    #[doc(alias = "webkit_application_info_set_name")]
     pub fn set_name(&self, name: &str) {
         unsafe {
-            webkit2_sys::webkit_application_info_set_name(
-                self.to_glib_none().0,
-                name.to_glib_none().0,
-            );
+            ffi::webkit_application_info_set_name(self.to_glib_none().0, name.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
+    #[doc(alias = "webkit_application_info_set_version")]
     pub fn set_version(&self, major: u64, minor: u64, micro: u64) {
         unsafe {
-            webkit2_sys::webkit_application_info_set_version(
-                self.to_glib_none().0,
-                major,
-                minor,
-                micro,
-            );
+            ffi::webkit_application_info_set_version(self.to_glib_none().0, major, minor, micro);
         }
     }
 }
 
 #[cfg(any(feature = "v2_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
 impl Default for ApplicationInfo {
     fn default() -> Self {
         Self::new()
