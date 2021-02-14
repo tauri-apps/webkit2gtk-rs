@@ -1,5 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use crate::WebView;
+
 use std::error::Error;
 use std::ffi::CString;
 use std::ptr;
@@ -12,10 +14,6 @@ use glib::StaticType;
 use gobject_sys;
 use gtk;
 use libc::c_void;
-#[cfg(feature = "v2_6")]
-use UserContentManager;
-use WebContext;
-use WebView;
 
 impl WebView {
     #[cfg(feature = "v2_6")]
