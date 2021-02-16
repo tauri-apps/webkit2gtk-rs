@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/auto/back_forward_list.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>back_forward_list.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../webkit2gtk/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/auto/back_forward_list.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>back_forward_list.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../webkit2gtk/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
                 <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -203,7 +205,7 @@
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BackForwardList</span>(<span class="ident">Object</span><span class="op">&lt;</span><span class="ident">webkit2_sys</span>::<span class="ident">WebKitBackForwardList</span>, <span class="ident">webkit2_sys</span>::<span class="ident">WebKitBackForwardListClass</span>, <span class="ident">BackForwardListClass</span><span class="op">&gt;</span>);
 
     <span class="kw">match</span> <span class="kw">fn</span> {
-        <span class="ident">get_type</span> <span class="op">=&gt;</span> <span class="op">||</span> <span class="ident">webkit2_sys</span>::<span class="ident">webkit_back_forward_list_get_type</span>(),
+        <span class="ident">get_type</span> <span class="op">=</span><span class="op">&gt;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">webkit2_sys</span>::<span class="ident">webkit_back_forward_list_get_type</span>(),
     }
 }
 
@@ -221,14 +223,14 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// the `BackForwardListItem`</span>
     <span class="doccomment">///  preceding the current item or `None`.</span>
-    <span class="kw">fn</span> <span class="ident">get_back_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">get_back_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
 
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Returns</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// a `glib::List` of</span>
     <span class="doccomment">///  items preceding the current item.</span>
-    <span class="kw">fn</span> <span class="ident">get_back_list</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">get_back_list</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// ## `limit`</span>
     <span class="doccomment">/// the number of items to retrieve</span>
@@ -237,7 +239,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// a `glib::List` of</span>
     <span class="doccomment">///  items preceding the current item limited by `limit`.</span>
-    <span class="kw">fn</span> <span class="ident">get_back_list_with_limit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">get_back_list_with_limit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Returns the current item in `self`.</span>
     <span class="doccomment">///</span>
@@ -245,7 +247,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// a `BackForwardListItem`</span>
     <span class="doccomment">///  or `None` if `self` is empty.</span>
-    <span class="kw">fn</span> <span class="ident">get_current_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">get_current_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Returns the item that follows the current item.</span>
     <span class="doccomment">///</span>
@@ -253,14 +255,14 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// the `BackForwardListItem`</span>
     <span class="doccomment">///  following the current item or `None`.</span>
-    <span class="kw">fn</span> <span class="ident">get_forward_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">get_forward_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
 
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Returns</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// a `glib::List` of</span>
     <span class="doccomment">///  items following the current item.</span>
-    <span class="kw">fn</span> <span class="ident">get_forward_list</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">get_forward_list</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// ## `limit`</span>
     <span class="doccomment">/// the number of items to retrieve</span>
@@ -269,13 +271,13 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// a `glib::List` of</span>
     <span class="doccomment">///  items following the current item limited by `limit`.</span>
-    <span class="kw">fn</span> <span class="ident">get_forward_list_with_limit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">get_forward_list_with_limit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
 
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Returns</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// the length of `self`.</span>
-    <span class="kw">fn</span> <span class="ident">get_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">u32</span>;
+    <span class="kw">fn</span> <span class="ident">get_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span>;
 
     <span class="doccomment">/// Returns the item at a given index relative to the current item.</span>
     <span class="doccomment">/// ## `index`</span>
@@ -285,13 +287,13 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// the `BackForwardListItem`</span>
     <span class="doccomment">///  located at the specified index relative to the current item or `None`.</span>
-    <span class="kw">fn</span> <span class="ident">get_nth_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">index</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">get_nth_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">index</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span>;
 
     <span class="comment">//fn connect_changed&lt;Unsupported or ignored types&gt;(&amp;self, f: F) -&gt; SignalHandlerId;</span>
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">O</span>: <span class="ident">IsA</span><span class="op">&lt;</span><span class="ident">BackForwardList</span><span class="op">&gt;&gt;</span> <span class="ident">BackForwardListExt</span> <span class="kw">for</span> <span class="ident">O</span> {
-    <span class="kw">fn</span> <span class="ident">get_back_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">O</span>: <span class="ident">IsA</span><span class="op">&lt;</span><span class="ident">BackForwardList</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">BackForwardListExt</span> <span class="kw">for</span> <span class="ident">O</span> {
+    <span class="kw">fn</span> <span class="ident">get_back_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">from_glib_none</span>(<span class="ident">webkit2_sys</span>::<span class="ident">webkit_back_forward_list_get_back_item</span>(
                 <span class="self">self</span>.<span class="ident">as_ref</span>().<span class="ident">to_glib_none</span>().<span class="number">0</span>,
@@ -299,7 +301,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_back_list</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_back_list</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">FromGlibPtrContainer</span>::<span class="ident">from_glib_container</span>(
                 <span class="ident">webkit2_sys</span>::<span class="ident">webkit_back_forward_list_get_back_list</span>(<span class="self">self</span>.<span class="ident">as_ref</span>().<span class="ident">to_glib_none</span>().<span class="number">0</span>),
@@ -307,7 +309,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_back_list_with_limit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_back_list_with_limit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">FromGlibPtrContainer</span>::<span class="ident">from_glib_container</span>(
                 <span class="ident">webkit2_sys</span>::<span class="ident">webkit_back_forward_list_get_back_list_with_limit</span>(
@@ -318,7 +320,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_current_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_current_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">from_glib_none</span>(<span class="ident">webkit2_sys</span>::<span class="ident">webkit_back_forward_list_get_current_item</span>(
                 <span class="self">self</span>.<span class="ident">as_ref</span>().<span class="ident">to_glib_none</span>().<span class="number">0</span>,
@@ -326,7 +328,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_forward_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_forward_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">from_glib_none</span>(<span class="ident">webkit2_sys</span>::<span class="ident">webkit_back_forward_list_get_forward_item</span>(
                 <span class="self">self</span>.<span class="ident">as_ref</span>().<span class="ident">to_glib_none</span>().<span class="number">0</span>,
@@ -334,7 +336,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_forward_list</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_forward_list</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">FromGlibPtrContainer</span>::<span class="ident">from_glib_container</span>(
                 <span class="ident">webkit2_sys</span>::<span class="ident">webkit_back_forward_list_get_forward_list</span>(
@@ -344,7 +346,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_forward_list_with_limit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_forward_list_with_limit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">limit</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">FromGlibPtrContainer</span>::<span class="ident">from_glib_container</span>(
                 <span class="ident">webkit2_sys</span>::<span class="ident">webkit_back_forward_list_get_forward_list_with_limit</span>(
@@ -355,11 +357,11 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+    <span class="kw">fn</span> <span class="ident">get_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
         <span class="kw">unsafe</span> { <span class="ident">webkit2_sys</span>::<span class="ident">webkit_back_forward_list_get_length</span>(<span class="self">self</span>.<span class="ident">as_ref</span>().<span class="ident">to_glib_none</span>().<span class="number">0</span>) }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_nth_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">index</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_nth_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">index</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BackForwardListItem</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">from_glib_none</span>(<span class="ident">webkit2_sys</span>::<span class="ident">webkit_back_forward_list_get_nth_item</span>(
                 <span class="self">self</span>.<span class="ident">as_ref</span>().<span class="ident">to_glib_none</span>().<span class="number">0</span>,
@@ -374,7 +376,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">BackForwardList</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;BackForwardList&quot;</span>)
     }
 }
