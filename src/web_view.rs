@@ -1,5 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+#[cfg(feature = "v2_6")]
+use crate::UserContentManager;
+#[cfg(feature = "v2_6")]
+use crate::WebContext;
 use crate::WebView;
 
 use std::error::Error;
