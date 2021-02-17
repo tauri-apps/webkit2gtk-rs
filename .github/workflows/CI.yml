@@ -30,7 +30,7 @@ jobs:
         name: "Build"
         with:
           command: build
-          args: --features=v2_28
+          args: --features=v2_30
 
   fmt:
     name: Regen Check
