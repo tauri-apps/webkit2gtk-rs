@@ -62,22 +62,22 @@
 
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">unused_imports</span>)]</span>
 
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ffi</span>;
+
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">bitflags</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">cairo</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">gdk</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">gdk_sys</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">gio</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">gio_sys</span>;
+<span class="kw">use</span> <span class="ident">bitflags</span>;
+<span class="kw">use</span> <span class="ident">cairo</span>;
+<span class="kw">use</span> <span class="ident">gdk</span>;
+<span class="kw">use</span> <span class="ident">gdk_sys</span>;
+<span class="kw">use</span> <span class="ident">gio</span>;
+<span class="kw">use</span> <span class="ident">gio_sys</span>;
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">glib</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">glib_sys</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">gobject_sys</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">gtk</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">gtk_sys</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">javascriptcore</span> <span class="kw">as</span> <span class="ident">java_script_core</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">libc</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">webkit2gtk_sys</span> <span class="kw">as</span> <span class="ident">webkit2_sys</span>;
+<span class="kw">use</span> <span class="ident">glib</span>;
+<span class="kw">use</span> <span class="ident">glib_sys</span>;
+<span class="kw">use</span> <span class="ident">gobject_sys</span>;
+<span class="kw">use</span> <span class="ident">gtk</span>;
+<span class="kw">use</span> <span class="ident">gtk_sys</span>;
+<span class="kw">use</span> <span class="ident">libc</span>;
 
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">assert_initialized_main_thread</span> {
     () <span class="op">=</span><span class="op">&gt;</span> {
