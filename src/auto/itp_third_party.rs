@@ -3,40 +3,43 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_30", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+use crate::ITPFirstParty;
+#[cfg(any(feature = "v2_30", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
 use glib::translate::*;
-#[cfg(any(feature = "v2_30", feature = "dox"))]
-use glib::GString;
-use webkit2_sys;
-#[cfg(any(feature = "v2_30", feature = "dox"))]
-use ITPFirstParty;
 
-glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct ITPThirdParty(Shared<webkit2_sys::WebKitITPThirdParty>);
+    pub struct ITPThirdParty(Shared<ffi::WebKitITPThirdParty>);
 
     match fn {
-        ref => |ptr| webkit2_sys::webkit_itp_third_party_ref(ptr),
-        unref => |ptr| webkit2_sys::webkit_itp_third_party_unref(ptr),
-        get_type => || webkit2_sys::webkit_itp_third_party_get_type(),
+        ref => |ptr| ffi::webkit_itp_third_party_ref(ptr),
+        unref => |ptr| ffi::webkit_itp_third_party_unref(ptr),
+        get_type => || ffi::webkit_itp_third_party_get_type(),
     }
 }
 
 impl ITPThirdParty {
     #[cfg(any(feature = "v2_30", feature = "dox"))]
-    pub fn get_domain(&self) -> Option<GString> {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+    #[doc(alias = "webkit_itp_third_party_get_domain")]
+    pub fn get_domain(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_itp_third_party_get_domain(
+            from_glib_none(ffi::webkit_itp_third_party_get_domain(
                 self.to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+    #[doc(alias = "webkit_itp_third_party_get_first_parties")]
     pub fn get_first_parties(&self) -> Vec<ITPFirstParty> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(
-                webkit2_sys::webkit_itp_third_party_get_first_parties(self.to_glib_none().0),
-            )
+            FromGlibPtrContainer::from_glib_none(ffi::webkit_itp_third_party_get_first_parties(
+                self.to_glib_none().0,
+            ))
         }
     }
 }

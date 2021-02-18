@@ -2,33 +2,23 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v2_28", feature = "dox"))]
-use gdk;
+use crate::InputHints;
+use crate::InputPurpose;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-#[cfg(any(feature = "v2_28", feature = "dox"))]
-use glib::GString;
 use glib::StaticType;
-use glib::Value;
-use glib_sys;
-use gobject_sys;
-#[cfg(any(feature = "v2_28", feature = "dox"))]
-use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
-use webkit2_sys;
-use InputHints;
-use InputPurpose;
 
-glib_wrapper! {
-    pub struct InputMethodContext(Object<webkit2_sys::WebKitInputMethodContext, webkit2_sys::WebKitInputMethodContextClass, InputMethodContextClass>);
+glib::wrapper! {
+    pub struct InputMethodContext(Object<ffi::WebKitInputMethodContext, ffi::WebKitInputMethodContextClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_input_method_context_get_type(),
+        get_type => || ffi::webkit_input_method_context_get_type(),
     }
 }
 
@@ -36,39 +26,63 @@ pub const NONE_INPUT_METHOD_CONTEXT: Option<&InputMethodContext> = None;
 
 pub trait InputMethodContextExt: 'static {
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_input_method_context_filter_key_event")]
     fn filter_key_event(&self, key_event: &mut gdk::EventKey) -> bool;
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_input_method_context_get_input_hints")]
     fn get_input_hints(&self) -> InputHints;
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_input_method_context_get_input_purpose")]
     fn get_input_purpose(&self) -> InputPurpose;
 
     //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn get_preedit(&self, underlines: /*Unimplemented*/Vec<InputMethodUnderline>) -> (Option<GString>, u32);
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    //#[doc(alias = "webkit_input_method_context_get_preedit")]
+    //fn get_preedit(&self, underlines: /*Unimplemented*/Vec<InputMethodUnderline>) -> (Option<glib::GString>, u32);
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_input_method_context_notify_cursor_area")]
     fn notify_cursor_area(&self, x: i32, y: i32, width: i32, height: i32);
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_input_method_context_notify_focus_in")]
     fn notify_focus_in(&self);
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_input_method_context_notify_focus_out")]
     fn notify_focus_out(&self);
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_input_method_context_notify_surrounding")]
     fn notify_surrounding(&self, text: &str, cursor_index: u32, selection_index: u32);
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_input_method_context_reset")]
     fn reset(&self);
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_input_method_context_set_enable_preedit")]
     fn set_enable_preedit(&self, enabled: bool);
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_input_method_context_set_input_hints")]
     fn set_input_hints(&self, hints: InputHints);
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_input_method_context_set_input_purpose")]
     fn set_input_purpose(&self, purpose: InputPurpose);
 
     fn get_property_input_hints(&self) -> InputHints;
@@ -80,19 +94,24 @@ pub trait InputMethodContextExt: 'static {
     fn set_property_input_purpose(&self, input_purpose: InputPurpose);
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn connect_committed<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn connect_delete_surrounding<F: Fn(&Self, i32, u32) + 'static>(&self, f: F)
         -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn connect_preedit_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn connect_preedit_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn connect_preedit_started<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -105,9 +124,10 @@ pub trait InputMethodContextExt: 'static {
 
 impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn filter_key_event(&self, key_event: &mut gdk::EventKey) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_input_method_context_filter_key_event(
+            from_glib(ffi::webkit_input_method_context_filter_key_event(
                 self.as_ref().to_glib_none().0,
                 key_event.to_glib_none_mut().0,
             ))
@@ -115,32 +135,36 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn get_input_hints(&self) -> InputHints {
         unsafe {
-            from_glib(webkit2_sys::webkit_input_method_context_get_input_hints(
+            from_glib(ffi::webkit_input_method_context_get_input_hints(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn get_input_purpose(&self) -> InputPurpose {
         unsafe {
-            from_glib(webkit2_sys::webkit_input_method_context_get_input_purpose(
+            from_glib(ffi::webkit_input_method_context_get_input_purpose(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     //#[cfg(any(feature = "v2_28", feature = "dox"))]
-    //fn get_preedit(&self, underlines: /*Unimplemented*/Vec<InputMethodUnderline>) -> (Option<GString>, u32) {
-    //    unsafe { TODO: call webkit2_sys:webkit_input_method_context_get_preedit() }
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    //fn get_preedit(&self, underlines: /*Unimplemented*/Vec<InputMethodUnderline>) -> (Option<glib::GString>, u32) {
+    //    unsafe { TODO: call ffi:webkit_input_method_context_get_preedit() }
     //}
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn notify_cursor_area(&self, x: i32, y: i32, width: i32, height: i32) {
         unsafe {
-            webkit2_sys::webkit_input_method_context_notify_cursor_area(
+            ffi::webkit_input_method_context_notify_cursor_area(
                 self.as_ref().to_glib_none().0,
                 x,
                 y,
@@ -151,28 +175,27 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn notify_focus_in(&self) {
         unsafe {
-            webkit2_sys::webkit_input_method_context_notify_focus_in(
-                self.as_ref().to_glib_none().0,
-            );
+            ffi::webkit_input_method_context_notify_focus_in(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn notify_focus_out(&self) {
         unsafe {
-            webkit2_sys::webkit_input_method_context_notify_focus_out(
-                self.as_ref().to_glib_none().0,
-            );
+            ffi::webkit_input_method_context_notify_focus_out(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn notify_surrounding(&self, text: &str, cursor_index: u32, selection_index: u32) {
         let length = text.len() as i32;
         unsafe {
-            webkit2_sys::webkit_input_method_context_notify_surrounding(
+            ffi::webkit_input_method_context_notify_surrounding(
                 self.as_ref().to_glib_none().0,
                 text.to_glib_none().0,
                 length,
@@ -183,16 +206,18 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn reset(&self) {
         unsafe {
-            webkit2_sys::webkit_input_method_context_reset(self.as_ref().to_glib_none().0);
+            ffi::webkit_input_method_context_reset(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn set_enable_preedit(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_input_method_context_set_enable_preedit(
+            ffi::webkit_input_method_context_set_enable_preedit(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -200,9 +225,10 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn set_input_hints(&self, hints: InputHints) {
         unsafe {
-            webkit2_sys::webkit_input_method_context_set_input_hints(
+            ffi::webkit_input_method_context_set_input_hints(
                 self.as_ref().to_glib_none().0,
                 hints.to_glib(),
             );
@@ -210,9 +236,10 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn set_input_purpose(&self, purpose: InputPurpose) {
         unsafe {
-            webkit2_sys::webkit_input_method_context_set_input_purpose(
+            ffi::webkit_input_method_context_set_input_purpose(
                 self.as_ref().to_glib_none().0,
                 purpose.to_glib(),
             );
@@ -221,9 +248,9 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
 
     fn get_property_input_hints(&self) -> InputHints {
         unsafe {
-            let mut value = Value::from_type(<InputHints as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            let mut value = glib::Value::from_type(<InputHints as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"input-hints\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -236,19 +263,19 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
 
     fn set_property_input_hints(&self, input_hints: InputHints) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"input-hints\0".as_ptr() as *const _,
-                Value::from(&input_hints).to_glib_none().0,
+                glib::Value::from(&input_hints).to_glib_none().0,
             );
         }
     }
 
     fn get_property_input_purpose(&self) -> InputPurpose {
         unsafe {
-            let mut value = Value::from_type(<InputPurpose as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            let mut value = glib::Value::from_type(<InputPurpose as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"input-purpose\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -261,27 +288,28 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
 
     fn set_property_input_purpose(&self, input_purpose: InputPurpose) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"input-purpose\0".as_ptr() as *const _,
-                Value::from(&input_purpose).to_glib_none().0,
+                glib::Value::from(&input_purpose).to_glib_none().0,
             );
         }
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn connect_committed<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn committed_trampoline<P, F: Fn(&P, &str) + 'static>(
-            this: *mut webkit2_sys::WebKitInputMethodContext,
+            this: *mut ffi::WebKitInputMethodContext,
             text: *mut libc::c_char,
-            f: glib_sys::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<InputMethodContext>,
         {
             let f: &F = &*(f as *const F);
             f(
                 &InputMethodContext::from_glib_borrow(this).unsafe_cast_ref(),
-                &GString::from_glib_borrow(text),
+                &glib::GString::from_glib_borrow(text),
             )
         }
         unsafe {
@@ -298,15 +326,16 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn connect_delete_surrounding<F: Fn(&Self, i32, u32) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn delete_surrounding_trampoline<P, F: Fn(&P, i32, u32) + 'static>(
-            this: *mut webkit2_sys::WebKitInputMethodContext,
+            this: *mut ffi::WebKitInputMethodContext,
             offset: libc::c_int,
             n_chars: libc::c_uint,
-            f: glib_sys::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<InputMethodContext>,
         {
@@ -331,10 +360,11 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn connect_preedit_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn preedit_changed_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitInputMethodContext,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitInputMethodContext,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<InputMethodContext>,
         {
@@ -355,10 +385,11 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn connect_preedit_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn preedit_finished_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitInputMethodContext,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitInputMethodContext,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<InputMethodContext>,
         {
@@ -379,10 +410,11 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn connect_preedit_started<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn preedit_started_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitInputMethodContext,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitInputMethodContext,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<InputMethodContext>,
         {
@@ -404,9 +436,9 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
 
     fn connect_property_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_input_hints_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitInputMethodContext,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitInputMethodContext,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<InputMethodContext>,
         {
@@ -431,9 +463,9 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_input_purpose_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitInputMethodContext,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitInputMethodContext,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<InputMethodContext>,
         {
@@ -456,6 +488,6 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
 
 impl fmt::Display for InputMethodContext {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "InputMethodContext")
+        f.write_str("InputMethodContext")
     }
 }

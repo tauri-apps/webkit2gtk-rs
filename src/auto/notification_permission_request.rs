@@ -2,16 +2,14 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::translate::*;
+use crate::PermissionRequest;
 use std::fmt;
-use webkit2_sys;
-use PermissionRequest;
 
-glib_wrapper! {
-    pub struct NotificationPermissionRequest(Object<webkit2_sys::WebKitNotificationPermissionRequest, webkit2_sys::WebKitNotificationPermissionRequestClass, NotificationPermissionRequestClass>) @implements PermissionRequest;
+glib::wrapper! {
+    pub struct NotificationPermissionRequest(Object<ffi::WebKitNotificationPermissionRequest, ffi::WebKitNotificationPermissionRequestClass>) @implements PermissionRequest;
 
     match fn {
-        get_type => || webkit2_sys::webkit_notification_permission_request_get_type(),
+        get_type => || ffi::webkit_notification_permission_request_get_type(),
     }
 }
 
@@ -21,6 +19,6 @@ pub const NONE_NOTIFICATION_PERMISSION_REQUEST: Option<&NotificationPermissionRe
 
 impl fmt::Display for NotificationPermissionRequest {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "NotificationPermissionRequest")
+        f.write_str("NotificationPermissionRequest")
     }
 }

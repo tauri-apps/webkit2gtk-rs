@@ -3,25 +3,27 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
 use glib::translate::*;
-use webkit2_sys;
 
-glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct NetworkProxySettings(Boxed<webkit2_sys::WebKitNetworkProxySettings>);
+    pub struct NetworkProxySettings(Boxed<ffi::WebKitNetworkProxySettings>);
 
     match fn {
-        copy => |ptr| webkit2_sys::webkit_network_proxy_settings_copy(mut_override(ptr)),
-        free => |ptr| webkit2_sys::webkit_network_proxy_settings_free(ptr),
-        get_type => || webkit2_sys::webkit_network_proxy_settings_get_type(),
+        copy => |ptr| ffi::webkit_network_proxy_settings_copy(mut_override(ptr)),
+        free => |ptr| ffi::webkit_network_proxy_settings_free(ptr),
+        get_type => || ffi::webkit_network_proxy_settings_get_type(),
     }
 }
 
 impl NetworkProxySettings {
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    #[doc(alias = "webkit_network_proxy_settings_add_proxy_for_scheme")]
     pub fn add_proxy_for_scheme(&mut self, scheme: &str, proxy_uri: &str) {
         unsafe {
-            webkit2_sys::webkit_network_proxy_settings_add_proxy_for_scheme(
+            ffi::webkit_network_proxy_settings_add_proxy_for_scheme(
                 self.to_glib_none_mut().0,
                 scheme.to_glib_none().0,
                 proxy_uri.to_glib_none().0,

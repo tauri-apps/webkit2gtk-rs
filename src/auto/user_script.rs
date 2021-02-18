@@ -3,26 +3,30 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+use crate::UserContentInjectedFrames;
+#[cfg(any(feature = "v2_6", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+use crate::UserScriptInjectionTime;
+#[cfg(any(feature = "v2_6", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
 use glib::translate::*;
-use webkit2_sys;
-#[cfg(any(feature = "v2_6", feature = "dox"))]
-use UserContentInjectedFrames;
-#[cfg(any(feature = "v2_6", feature = "dox"))]
-use UserScriptInjectionTime;
 
-glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct UserScript(Shared<webkit2_sys::WebKitUserScript>);
+    pub struct UserScript(Shared<ffi::WebKitUserScript>);
 
     match fn {
-        ref => |ptr| webkit2_sys::webkit_user_script_ref(ptr),
-        unref => |ptr| webkit2_sys::webkit_user_script_unref(ptr),
-        get_type => || webkit2_sys::webkit_user_script_get_type(),
+        ref => |ptr| ffi::webkit_user_script_ref(ptr),
+        unref => |ptr| ffi::webkit_user_script_unref(ptr),
+        get_type => || ffi::webkit_user_script_get_type(),
     }
 }
 
 impl UserScript {
     #[cfg(any(feature = "v2_6", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+    #[doc(alias = "webkit_user_script_new")]
     pub fn new(
         source: &str,
         injected_frames: UserContentInjectedFrames,
@@ -32,7 +36,7 @@ impl UserScript {
     ) -> UserScript {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(webkit2_sys::webkit_user_script_new(
+            from_glib_full(ffi::webkit_user_script_new(
                 source.to_glib_none().0,
                 injected_frames.to_glib(),
                 injection_time.to_glib(),
@@ -43,6 +47,8 @@ impl UserScript {
     }
 
     #[cfg(any(feature = "v2_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_22")))]
+    #[doc(alias = "webkit_user_script_new_for_world")]
     pub fn new_for_world(
         source: &str,
         injected_frames: UserContentInjectedFrames,
@@ -53,7 +59,7 @@ impl UserScript {
     ) -> UserScript {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(webkit2_sys::webkit_user_script_new_for_world(
+            from_glib_full(ffi::webkit_user_script_new_for_world(
                 source.to_glib_none().0,
                 injected_frames.to_glib(),
                 injection_time.to_glib(),

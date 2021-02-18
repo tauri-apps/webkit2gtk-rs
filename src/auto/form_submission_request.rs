@@ -5,13 +5,12 @@
 use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
-use webkit2_sys;
 
-glib_wrapper! {
-    pub struct FormSubmissionRequest(Object<webkit2_sys::WebKitFormSubmissionRequest, webkit2_sys::WebKitFormSubmissionRequestClass, FormSubmissionRequestClass>);
+glib::wrapper! {
+    pub struct FormSubmissionRequest(Object<ffi::WebKitFormSubmissionRequest, ffi::WebKitFormSubmissionRequestClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_form_submission_request_get_type(),
+        get_type => || ffi::webkit_form_submission_request_get_type(),
     }
 }
 
@@ -19,25 +18,27 @@ pub const NONE_FORM_SUBMISSION_REQUEST: Option<&FormSubmissionRequest> = None;
 
 pub trait FormSubmissionRequestExt: 'static {
     //#[cfg_attr(feature = "v2_20", deprecated)]
+    //#[doc(alias = "webkit_form_submission_request_get_text_fields")]
     //fn get_text_fields(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 25 }/TypeId { ns_id: 0, id: 25 };
 
+    #[doc(alias = "webkit_form_submission_request_submit")]
     fn submit(&self);
 }
 
 impl<O: IsA<FormSubmissionRequest>> FormSubmissionRequestExt for O {
     //fn get_text_fields(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 25 }/TypeId { ns_id: 0, id: 25 } {
-    //    unsafe { TODO: call webkit2_sys:webkit_form_submission_request_get_text_fields() }
+    //    unsafe { TODO: call ffi:webkit_form_submission_request_get_text_fields() }
     //}
 
     fn submit(&self) {
         unsafe {
-            webkit2_sys::webkit_form_submission_request_submit(self.as_ref().to_glib_none().0);
+            ffi::webkit_form_submission_request_submit(self.as_ref().to_glib_none().0);
         }
     }
 }
 
 impl fmt::Display for FormSubmissionRequest {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "FormSubmissionRequest")
+        f.write_str("FormSubmissionRequest")
     }
 }

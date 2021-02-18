@@ -7,38 +7,38 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
 use glib::StaticType;
-use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gtk;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
-use webkit2_sys;
 
-glib_wrapper! {
-    pub struct FileChooserRequest(Object<webkit2_sys::WebKitFileChooserRequest, webkit2_sys::WebKitFileChooserRequestClass, FileChooserRequestClass>);
+glib::wrapper! {
+    pub struct FileChooserRequest(Object<ffi::WebKitFileChooserRequest, ffi::WebKitFileChooserRequestClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_file_chooser_request_get_type(),
+        get_type => || ffi::webkit_file_chooser_request_get_type(),
     }
 }
 
 pub const NONE_FILE_CHOOSER_REQUEST: Option<&FileChooserRequest> = None;
 
 pub trait FileChooserRequestExt: 'static {
+    #[doc(alias = "webkit_file_chooser_request_cancel")]
     fn cancel(&self);
 
-    fn get_mime_types(&self) -> Vec<GString>;
+    #[doc(alias = "webkit_file_chooser_request_get_mime_types")]
+    fn get_mime_types(&self) -> Vec<glib::GString>;
 
+    #[doc(alias = "webkit_file_chooser_request_get_mime_types_filter")]
     fn get_mime_types_filter(&self) -> Option<gtk::FileFilter>;
 
+    #[doc(alias = "webkit_file_chooser_request_get_select_multiple")]
     fn get_select_multiple(&self) -> bool;
 
-    fn get_selected_files(&self) -> Vec<GString>;
+    #[doc(alias = "webkit_file_chooser_request_get_selected_files")]
+    fn get_selected_files(&self) -> Vec<glib::GString>;
 
+    #[doc(alias = "webkit_file_chooser_request_select_files")]
     fn select_files(&self, files: &[&str]);
 
     fn get_property_filter(&self) -> Option<gtk::FileFilter>;
@@ -61,53 +61,45 @@ pub trait FileChooserRequestExt: 'static {
 impl<O: IsA<FileChooserRequest>> FileChooserRequestExt for O {
     fn cancel(&self) {
         unsafe {
-            webkit2_sys::webkit_file_chooser_request_cancel(self.as_ref().to_glib_none().0);
+            ffi::webkit_file_chooser_request_cancel(self.as_ref().to_glib_none().0);
         }
     }
 
-    fn get_mime_types(&self) -> Vec<GString> {
+    fn get_mime_types(&self) -> Vec<glib::GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(
-                webkit2_sys::webkit_file_chooser_request_get_mime_types(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            FromGlibPtrContainer::from_glib_none(ffi::webkit_file_chooser_request_get_mime_types(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_mime_types_filter(&self) -> Option<gtk::FileFilter> {
         unsafe {
-            from_glib_none(
-                webkit2_sys::webkit_file_chooser_request_get_mime_types_filter(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib_none(ffi::webkit_file_chooser_request_get_mime_types_filter(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_select_multiple(&self) -> bool {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_file_chooser_request_get_select_multiple(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_file_chooser_request_get_select_multiple(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
-    fn get_selected_files(&self) -> Vec<GString> {
+    fn get_selected_files(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(
-                webkit2_sys::webkit_file_chooser_request_get_selected_files(
-                    self.as_ref().to_glib_none().0,
-                ),
+                ffi::webkit_file_chooser_request_get_selected_files(self.as_ref().to_glib_none().0),
             )
         }
     }
 
     fn select_files(&self, files: &[&str]) {
         unsafe {
-            webkit2_sys::webkit_file_chooser_request_select_files(
+            ffi::webkit_file_chooser_request_select_files(
                 self.as_ref().to_glib_none().0,
                 files.to_glib_none().0,
             );
@@ -116,9 +108,9 @@ impl<O: IsA<FileChooserRequest>> FileChooserRequestExt for O {
 
     fn get_property_filter(&self) -> Option<gtk::FileFilter> {
         unsafe {
-            let mut value = Value::from_type(<gtk::FileFilter as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            let mut value = glib::Value::from_type(<gtk::FileFilter as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"filter\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -130,9 +122,9 @@ impl<O: IsA<FileChooserRequest>> FileChooserRequestExt for O {
 
     fn connect_property_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_filter_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitFileChooserRequest,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitFileChooserRequest,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<FileChooserRequest>,
         {
@@ -154,9 +146,9 @@ impl<O: IsA<FileChooserRequest>> FileChooserRequestExt for O {
 
     fn connect_property_mime_types_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mime_types_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitFileChooserRequest,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitFileChooserRequest,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<FileChooserRequest>,
         {
@@ -181,9 +173,9 @@ impl<O: IsA<FileChooserRequest>> FileChooserRequestExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_select_multiple_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitFileChooserRequest,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitFileChooserRequest,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<FileChooserRequest>,
         {
@@ -208,9 +200,9 @@ impl<O: IsA<FileChooserRequest>> FileChooserRequestExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_selected_files_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitFileChooserRequest,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitFileChooserRequest,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<FileChooserRequest>,
         {
@@ -233,6 +225,6 @@ impl<O: IsA<FileChooserRequest>> FileChooserRequestExt for O {
 
 impl fmt::Display for FileChooserRequest {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "FileChooserRequest")
+        f.write_str("FileChooserRequest")
     }
 }

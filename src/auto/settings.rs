@@ -2,50 +2,54 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+use crate::HardwareAccelerationPolicy;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
 use glib::StaticType;
 use glib::ToValue;
-use glib_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
-use webkit2_sys;
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-use HardwareAccelerationPolicy;
 
-glib_wrapper! {
-    pub struct Settings(Object<webkit2_sys::WebKitSettings, webkit2_sys::WebKitSettingsClass, SettingsClass>);
+glib::wrapper! {
+    pub struct Settings(Object<ffi::WebKitSettings, ffi::WebKitSettingsClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_settings_get_type(),
+        get_type => || ffi::webkit_settings_get_type(),
     }
 }
 
 impl Settings {
+    #[doc(alias = "webkit_settings_new")]
     pub fn new() -> Settings {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(webkit2_sys::webkit_settings_new()) }
+        unsafe { from_glib_full(ffi::webkit_settings_new()) }
     }
 
+    //#[doc(alias = "webkit_settings_new_with_settings")]
     //pub fn with_settings(first_setting_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Settings {
-    //    unsafe { TODO: call webkit2_sys:webkit_settings_new_with_settings() }
+    //    unsafe { TODO: call ffi:webkit_settings_new_with_settings() }
     //}
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
+    #[doc(alias = "webkit_settings_font_size_to_pixels")]
     pub fn font_size_to_pixels(points: u32) -> u32 {
         assert_initialized_main_thread!();
-        unsafe { webkit2_sys::webkit_settings_font_size_to_pixels(points) }
+        unsafe { ffi::webkit_settings_font_size_to_pixels(points) }
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
+    #[doc(alias = "webkit_settings_font_size_to_points")]
     pub fn font_size_to_points(pixels: u32) -> u32 {
         assert_initialized_main_thread!();
-        unsafe { webkit2_sys::webkit_settings_font_size_to_points(pixels) }
+        unsafe { ffi::webkit_settings_font_size_to_points(pixels) }
     }
 }
 
@@ -58,11 +62,14 @@ impl Default for Settings {
 #[derive(Clone, Default)]
 pub struct SettingsBuilder {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
     allow_file_access_from_file_urls: Option<bool>,
     allow_modal_dialogs: Option<bool>,
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     allow_top_navigation_to_data_urls: Option<bool>,
     #[cfg(any(feature = "v2_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_14")))]
     allow_universal_access_from_file_urls: Option<bool>,
     auto_load_images: Option<bool>,
     cursive_font_family: Option<String>,
@@ -72,13 +79,16 @@ pub struct SettingsBuilder {
     default_monospace_font_size: Option<u32>,
     draw_compositing_indicators: Option<bool>,
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     enable_accelerated_2d_canvas: Option<bool>,
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     enable_back_forward_navigation_gestures: Option<bool>,
     enable_caret_browsing: Option<bool>,
     enable_developer_extras: Option<bool>,
     enable_dns_prefetching: Option<bool>,
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     enable_encrypted_media: Option<bool>,
     enable_frame_flattening: Option<bool>,
     enable_fullscreen: Option<bool>,
@@ -88,16 +98,22 @@ pub struct SettingsBuilder {
     enable_java: Option<bool>,
     enable_javascript: Option<bool>,
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     enable_javascript_markup: Option<bool>,
     #[cfg(any(feature = "v2_26", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
     enable_media: Option<bool>,
     #[cfg(any(feature = "v2_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_22")))]
     enable_media_capabilities: Option<bool>,
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     enable_media_stream: Option<bool>,
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     enable_mediasource: Option<bool>,
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     enable_mock_capture_devices: Option<bool>,
     enable_offline_web_application_cache: Option<bool>,
     enable_page_cache: Option<bool>,
@@ -107,20 +123,24 @@ pub struct SettingsBuilder {
     enable_site_specific_quirks: Option<bool>,
     enable_smooth_scrolling: Option<bool>,
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     enable_spatial_navigation: Option<bool>,
     enable_tabs_to_links: Option<bool>,
     enable_webaudio: Option<bool>,
     enable_webgl: Option<bool>,
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     enable_write_console_messages_to_stdout: Option<bool>,
     enable_xss_auditor: Option<bool>,
     fantasy_font_family: Option<String>,
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
     hardware_acceleration_policy: Option<HardwareAccelerationPolicy>,
     javascript_can_access_clipboard: Option<bool>,
     javascript_can_open_windows_automatically: Option<bool>,
     load_icons_ignoring_image_load_setting: Option<bool>,
     #[cfg(any(feature = "v2_30", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     media_content_types_requiring_hardware_support: Option<String>,
     media_playback_allows_inline: Option<bool>,
     media_playback_requires_user_gesture: Option<bool>,
@@ -142,40 +162,31 @@ impl SettingsBuilder {
     pub fn build(self) -> Settings {
         let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
         #[cfg(any(feature = "v2_10", feature = "dox"))]
-        {
-            if let Some(ref allow_file_access_from_file_urls) =
-                self.allow_file_access_from_file_urls
-            {
-                properties.push((
-                    "allow-file-access-from-file-urls",
-                    allow_file_access_from_file_urls,
-                ));
-            }
+        if let Some(ref allow_file_access_from_file_urls) = self.allow_file_access_from_file_urls {
+            properties.push((
+                "allow-file-access-from-file-urls",
+                allow_file_access_from_file_urls,
+            ));
         }
         if let Some(ref allow_modal_dialogs) = self.allow_modal_dialogs {
             properties.push(("allow-modal-dialogs", allow_modal_dialogs));
         }
         #[cfg(any(feature = "v2_28", feature = "dox"))]
+        if let Some(ref allow_top_navigation_to_data_urls) = self.allow_top_navigation_to_data_urls
         {
-            if let Some(ref allow_top_navigation_to_data_urls) =
-                self.allow_top_navigation_to_data_urls
-            {
-                properties.push((
-                    "allow-top-navigation-to-data-urls",
-                    allow_top_navigation_to_data_urls,
-                ));
-            }
+            properties.push((
+                "allow-top-navigation-to-data-urls",
+                allow_top_navigation_to_data_urls,
+            ));
         }
         #[cfg(any(feature = "v2_14", feature = "dox"))]
+        if let Some(ref allow_universal_access_from_file_urls) =
+            self.allow_universal_access_from_file_urls
         {
-            if let Some(ref allow_universal_access_from_file_urls) =
-                self.allow_universal_access_from_file_urls
-            {
-                properties.push((
-                    "allow-universal-access-from-file-urls",
-                    allow_universal_access_from_file_urls,
-                ));
-            }
+            properties.push((
+                "allow-universal-access-from-file-urls",
+                allow_universal_access_from_file_urls,
+            ));
         }
         if let Some(ref auto_load_images) = self.auto_load_images {
             properties.push(("auto-load-images", auto_load_images));
@@ -199,21 +210,17 @@ impl SettingsBuilder {
             properties.push(("draw-compositing-indicators", draw_compositing_indicators));
         }
         #[cfg(any(feature = "v2_2", feature = "dox"))]
-        {
-            if let Some(ref enable_accelerated_2d_canvas) = self.enable_accelerated_2d_canvas {
-                properties.push(("enable-accelerated-2d-canvas", enable_accelerated_2d_canvas));
-            }
+        if let Some(ref enable_accelerated_2d_canvas) = self.enable_accelerated_2d_canvas {
+            properties.push(("enable-accelerated-2d-canvas", enable_accelerated_2d_canvas));
         }
         #[cfg(any(feature = "v2_24", feature = "dox"))]
+        if let Some(ref enable_back_forward_navigation_gestures) =
+            self.enable_back_forward_navigation_gestures
         {
-            if let Some(ref enable_back_forward_navigation_gestures) =
-                self.enable_back_forward_navigation_gestures
-            {
-                properties.push((
-                    "enable-back-forward-navigation-gestures",
-                    enable_back_forward_navigation_gestures,
-                ));
-            }
+            properties.push((
+                "enable-back-forward-navigation-gestures",
+                enable_back_forward_navigation_gestures,
+            ));
         }
         if let Some(ref enable_caret_browsing) = self.enable_caret_browsing {
             properties.push(("enable-caret-browsing", enable_caret_browsing));
@@ -225,10 +232,8 @@ impl SettingsBuilder {
             properties.push(("enable-dns-prefetching", enable_dns_prefetching));
         }
         #[cfg(any(feature = "v2_20", feature = "dox"))]
-        {
-            if let Some(ref enable_encrypted_media) = self.enable_encrypted_media {
-                properties.push(("enable-encrypted-media", enable_encrypted_media));
-            }
+        if let Some(ref enable_encrypted_media) = self.enable_encrypted_media {
+            properties.push(("enable-encrypted-media", enable_encrypted_media));
         }
         if let Some(ref enable_frame_flattening) = self.enable_frame_flattening {
             properties.push(("enable-frame-flattening", enable_frame_flattening));
@@ -252,40 +257,28 @@ impl SettingsBuilder {
             properties.push(("enable-javascript", enable_javascript));
         }
         #[cfg(any(feature = "v2_24", feature = "dox"))]
-        {
-            if let Some(ref enable_javascript_markup) = self.enable_javascript_markup {
-                properties.push(("enable-javascript-markup", enable_javascript_markup));
-            }
+        if let Some(ref enable_javascript_markup) = self.enable_javascript_markup {
+            properties.push(("enable-javascript-markup", enable_javascript_markup));
         }
         #[cfg(any(feature = "v2_26", feature = "dox"))]
-        {
-            if let Some(ref enable_media) = self.enable_media {
-                properties.push(("enable-media", enable_media));
-            }
+        if let Some(ref enable_media) = self.enable_media {
+            properties.push(("enable-media", enable_media));
         }
         #[cfg(any(feature = "v2_22", feature = "dox"))]
-        {
-            if let Some(ref enable_media_capabilities) = self.enable_media_capabilities {
-                properties.push(("enable-media-capabilities", enable_media_capabilities));
-            }
+        if let Some(ref enable_media_capabilities) = self.enable_media_capabilities {
+            properties.push(("enable-media-capabilities", enable_media_capabilities));
         }
         #[cfg(any(feature = "v2_4", feature = "dox"))]
-        {
-            if let Some(ref enable_media_stream) = self.enable_media_stream {
-                properties.push(("enable-media-stream", enable_media_stream));
-            }
+        if let Some(ref enable_media_stream) = self.enable_media_stream {
+            properties.push(("enable-media-stream", enable_media_stream));
         }
         #[cfg(any(feature = "v2_4", feature = "dox"))]
-        {
-            if let Some(ref enable_mediasource) = self.enable_mediasource {
-                properties.push(("enable-mediasource", enable_mediasource));
-            }
+        if let Some(ref enable_mediasource) = self.enable_mediasource {
+            properties.push(("enable-mediasource", enable_mediasource));
         }
         #[cfg(any(feature = "v2_24", feature = "dox"))]
-        {
-            if let Some(ref enable_mock_capture_devices) = self.enable_mock_capture_devices {
-                properties.push(("enable-mock-capture-devices", enable_mock_capture_devices));
-            }
+        if let Some(ref enable_mock_capture_devices) = self.enable_mock_capture_devices {
+            properties.push(("enable-mock-capture-devices", enable_mock_capture_devices));
         }
         if let Some(ref enable_offline_web_application_cache) =
             self.enable_offline_web_application_cache
@@ -314,10 +307,8 @@ impl SettingsBuilder {
             properties.push(("enable-smooth-scrolling", enable_smooth_scrolling));
         }
         #[cfg(any(feature = "v2_4", feature = "dox"))]
-        {
-            if let Some(ref enable_spatial_navigation) = self.enable_spatial_navigation {
-                properties.push(("enable-spatial-navigation", enable_spatial_navigation));
-            }
+        if let Some(ref enable_spatial_navigation) = self.enable_spatial_navigation {
+            properties.push(("enable-spatial-navigation", enable_spatial_navigation));
         }
         if let Some(ref enable_tabs_to_links) = self.enable_tabs_to_links {
             properties.push(("enable-tabs-to-links", enable_tabs_to_links));
@@ -329,15 +320,13 @@ impl SettingsBuilder {
             properties.push(("enable-webgl", enable_webgl));
         }
         #[cfg(any(feature = "v2_2", feature = "dox"))]
+        if let Some(ref enable_write_console_messages_to_stdout) =
+            self.enable_write_console_messages_to_stdout
         {
-            if let Some(ref enable_write_console_messages_to_stdout) =
-                self.enable_write_console_messages_to_stdout
-            {
-                properties.push((
-                    "enable-write-console-messages-to-stdout",
-                    enable_write_console_messages_to_stdout,
-                ));
-            }
+            properties.push((
+                "enable-write-console-messages-to-stdout",
+                enable_write_console_messages_to_stdout,
+            ));
         }
         if let Some(ref enable_xss_auditor) = self.enable_xss_auditor {
             properties.push(("enable-xss-auditor", enable_xss_auditor));
@@ -346,10 +335,8 @@ impl SettingsBuilder {
             properties.push(("fantasy-font-family", fantasy_font_family));
         }
         #[cfg(any(feature = "v2_16", feature = "dox"))]
-        {
-            if let Some(ref hardware_acceleration_policy) = self.hardware_acceleration_policy {
-                properties.push(("hardware-acceleration-policy", hardware_acceleration_policy));
-            }
+        if let Some(ref hardware_acceleration_policy) = self.hardware_acceleration_policy {
+            properties.push(("hardware-acceleration-policy", hardware_acceleration_policy));
         }
         if let Some(ref javascript_can_access_clipboard) = self.javascript_can_access_clipboard {
             properties.push((
@@ -374,15 +361,13 @@ impl SettingsBuilder {
             ));
         }
         #[cfg(any(feature = "v2_30", feature = "dox"))]
+        if let Some(ref media_content_types_requiring_hardware_support) =
+            self.media_content_types_requiring_hardware_support
         {
-            if let Some(ref media_content_types_requiring_hardware_support) =
-                self.media_content_types_requiring_hardware_support
-            {
-                properties.push((
-                    "media-content-types-requiring-hardware-support",
-                    media_content_types_requiring_hardware_support,
-                ));
-            }
+            properties.push((
+                "media-content-types-requiring-hardware-support",
+                media_content_types_requiring_hardware_support,
+            ));
         }
         if let Some(ref media_playback_allows_inline) = self.media_playback_allows_inline {
             properties.push(("media-playback-allows-inline", media_playback_allows_inline));
@@ -419,14 +404,12 @@ impl SettingsBuilder {
         if let Some(ref zoom_text_only) = self.zoom_text_only {
             properties.push(("zoom-text-only", zoom_text_only));
         }
-        let ret = glib::Object::new(Settings::static_type(), &properties)
-            .expect("object new")
-            .downcast::<Settings>()
-            .expect("downcast");
+        let ret = glib::Object::new::<Settings>(&properties).expect("object new");
         ret
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
     pub fn allow_file_access_from_file_urls(
         mut self,
         allow_file_access_from_file_urls: bool,
@@ -441,6 +424,7 @@ impl SettingsBuilder {
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     pub fn allow_top_navigation_to_data_urls(
         mut self,
         allow_top_navigation_to_data_urls: bool,
@@ -450,6 +434,7 @@ impl SettingsBuilder {
     }
 
     #[cfg(any(feature = "v2_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_14")))]
     pub fn allow_universal_access_from_file_urls(
         mut self,
         allow_universal_access_from_file_urls: bool,
@@ -494,12 +479,14 @@ impl SettingsBuilder {
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     pub fn enable_accelerated_2d_canvas(mut self, enable_accelerated_2d_canvas: bool) -> Self {
         self.enable_accelerated_2d_canvas = Some(enable_accelerated_2d_canvas);
         self
     }
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     pub fn enable_back_forward_navigation_gestures(
         mut self,
         enable_back_forward_navigation_gestures: bool,
@@ -525,6 +512,7 @@ impl SettingsBuilder {
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     pub fn enable_encrypted_media(mut self, enable_encrypted_media: bool) -> Self {
         self.enable_encrypted_media = Some(enable_encrypted_media);
         self
@@ -566,36 +554,42 @@ impl SettingsBuilder {
     }
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     pub fn enable_javascript_markup(mut self, enable_javascript_markup: bool) -> Self {
         self.enable_javascript_markup = Some(enable_javascript_markup);
         self
     }
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
     pub fn enable_media(mut self, enable_media: bool) -> Self {
         self.enable_media = Some(enable_media);
         self
     }
 
     #[cfg(any(feature = "v2_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_22")))]
     pub fn enable_media_capabilities(mut self, enable_media_capabilities: bool) -> Self {
         self.enable_media_capabilities = Some(enable_media_capabilities);
         self
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     pub fn enable_media_stream(mut self, enable_media_stream: bool) -> Self {
         self.enable_media_stream = Some(enable_media_stream);
         self
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     pub fn enable_mediasource(mut self, enable_mediasource: bool) -> Self {
         self.enable_mediasource = Some(enable_mediasource);
         self
     }
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     pub fn enable_mock_capture_devices(mut self, enable_mock_capture_devices: bool) -> Self {
         self.enable_mock_capture_devices = Some(enable_mock_capture_devices);
         self
@@ -640,6 +634,7 @@ impl SettingsBuilder {
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     pub fn enable_spatial_navigation(mut self, enable_spatial_navigation: bool) -> Self {
         self.enable_spatial_navigation = Some(enable_spatial_navigation);
         self
@@ -661,6 +656,7 @@ impl SettingsBuilder {
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     pub fn enable_write_console_messages_to_stdout(
         mut self,
         enable_write_console_messages_to_stdout: bool,
@@ -681,6 +677,7 @@ impl SettingsBuilder {
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
     pub fn hardware_acceleration_policy(
         mut self,
         hardware_acceleration_policy: HardwareAccelerationPolicy,
@@ -715,6 +712,7 @@ impl SettingsBuilder {
     }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     pub fn media_content_types_requiring_hardware_support(
         mut self,
         media_content_types_requiring_hardware_support: &str,
@@ -782,282 +780,434 @@ pub const NONE_SETTINGS: Option<&Settings> = None;
 
 pub trait SettingsExt: 'static {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+    #[doc(alias = "webkit_settings_get_allow_file_access_from_file_urls")]
     fn get_allow_file_access_from_file_urls(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_allow_modal_dialogs")]
     fn get_allow_modal_dialogs(&self) -> bool;
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_settings_get_allow_top_navigation_to_data_urls")]
     fn get_allow_top_navigation_to_data_urls(&self) -> bool;
 
     #[cfg(any(feature = "v2_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_14")))]
+    #[doc(alias = "webkit_settings_get_allow_universal_access_from_file_urls")]
     fn get_allow_universal_access_from_file_urls(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_auto_load_images")]
     fn get_auto_load_images(&self) -> bool;
 
-    fn get_cursive_font_family(&self) -> Option<GString>;
+    #[doc(alias = "webkit_settings_get_cursive_font_family")]
+    fn get_cursive_font_family(&self) -> Option<glib::GString>;
 
-    fn get_default_charset(&self) -> Option<GString>;
+    #[doc(alias = "webkit_settings_get_default_charset")]
+    fn get_default_charset(&self) -> Option<glib::GString>;
 
-    fn get_default_font_family(&self) -> Option<GString>;
+    #[doc(alias = "webkit_settings_get_default_font_family")]
+    fn get_default_font_family(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "webkit_settings_get_default_font_size")]
     fn get_default_font_size(&self) -> u32;
 
+    #[doc(alias = "webkit_settings_get_default_monospace_font_size")]
     fn get_default_monospace_font_size(&self) -> u32;
 
+    #[doc(alias = "webkit_settings_get_draw_compositing_indicators")]
     fn get_draw_compositing_indicators(&self) -> bool;
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
+    #[doc(alias = "webkit_settings_get_enable_accelerated_2d_canvas")]
     fn get_enable_accelerated_2d_canvas(&self) -> bool;
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
+    #[doc(alias = "webkit_settings_get_enable_back_forward_navigation_gestures")]
     fn get_enable_back_forward_navigation_gestures(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_caret_browsing")]
     fn get_enable_caret_browsing(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_developer_extras")]
     fn get_enable_developer_extras(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_dns_prefetching")]
     fn get_enable_dns_prefetching(&self) -> bool;
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
+    #[doc(alias = "webkit_settings_get_enable_encrypted_media")]
     fn get_enable_encrypted_media(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_frame_flattening")]
     fn get_enable_frame_flattening(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_fullscreen")]
     fn get_enable_fullscreen(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_html5_database")]
     fn get_enable_html5_database(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_html5_local_storage")]
     fn get_enable_html5_local_storage(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_hyperlink_auditing")]
     fn get_enable_hyperlink_auditing(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_java")]
     fn get_enable_java(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_javascript")]
     fn get_enable_javascript(&self) -> bool;
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
+    #[doc(alias = "webkit_settings_get_enable_javascript_markup")]
     fn get_enable_javascript_markup(&self) -> bool;
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
+    #[doc(alias = "webkit_settings_get_enable_media")]
     fn get_enable_media(&self) -> bool;
 
     #[cfg(any(feature = "v2_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_22")))]
+    #[doc(alias = "webkit_settings_get_enable_media_capabilities")]
     fn get_enable_media_capabilities(&self) -> bool;
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
+    #[doc(alias = "webkit_settings_get_enable_media_stream")]
     fn get_enable_media_stream(&self) -> bool;
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
+    #[doc(alias = "webkit_settings_get_enable_mediasource")]
     fn get_enable_mediasource(&self) -> bool;
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
+    #[doc(alias = "webkit_settings_get_enable_mock_capture_devices")]
     fn get_enable_mock_capture_devices(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_offline_web_application_cache")]
     fn get_enable_offline_web_application_cache(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_page_cache")]
     fn get_enable_page_cache(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_plugins")]
     fn get_enable_plugins(&self) -> bool;
 
     #[cfg_attr(feature = "v2_16", deprecated)]
+    #[doc(alias = "webkit_settings_get_enable_private_browsing")]
     fn get_enable_private_browsing(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_resizable_text_areas")]
     fn get_enable_resizable_text_areas(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_site_specific_quirks")]
     fn get_enable_site_specific_quirks(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_smooth_scrolling")]
     fn get_enable_smooth_scrolling(&self) -> bool;
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
+    #[doc(alias = "webkit_settings_get_enable_spatial_navigation")]
     fn get_enable_spatial_navigation(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_tabs_to_links")]
     fn get_enable_tabs_to_links(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_webaudio")]
     fn get_enable_webaudio(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_webgl")]
     fn get_enable_webgl(&self) -> bool;
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
+    #[doc(alias = "webkit_settings_get_enable_write_console_messages_to_stdout")]
     fn get_enable_write_console_messages_to_stdout(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_enable_xss_auditor")]
     fn get_enable_xss_auditor(&self) -> bool;
 
-    fn get_fantasy_font_family(&self) -> Option<GString>;
+    #[doc(alias = "webkit_settings_get_fantasy_font_family")]
+    fn get_fantasy_font_family(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    #[doc(alias = "webkit_settings_get_hardware_acceleration_policy")]
     fn get_hardware_acceleration_policy(&self) -> HardwareAccelerationPolicy;
 
+    #[doc(alias = "webkit_settings_get_javascript_can_access_clipboard")]
     fn get_javascript_can_access_clipboard(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_javascript_can_open_windows_automatically")]
     fn get_javascript_can_open_windows_automatically(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_load_icons_ignoring_image_load_setting")]
     fn get_load_icons_ignoring_image_load_setting(&self) -> bool;
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
-    fn get_media_content_types_requiring_hardware_support(&self) -> Option<GString>;
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+    #[doc(alias = "webkit_settings_get_media_content_types_requiring_hardware_support")]
+    fn get_media_content_types_requiring_hardware_support(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "webkit_settings_get_media_playback_allows_inline")]
     fn get_media_playback_allows_inline(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_media_playback_requires_user_gesture")]
     fn get_media_playback_requires_user_gesture(&self) -> bool;
 
+    #[doc(alias = "webkit_settings_get_minimum_font_size")]
     fn get_minimum_font_size(&self) -> u32;
 
-    fn get_monospace_font_family(&self) -> Option<GString>;
+    #[doc(alias = "webkit_settings_get_monospace_font_family")]
+    fn get_monospace_font_family(&self) -> Option<glib::GString>;
 
-    fn get_pictograph_font_family(&self) -> Option<GString>;
+    #[doc(alias = "webkit_settings_get_pictograph_font_family")]
+    fn get_pictograph_font_family(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "webkit_settings_get_print_backgrounds")]
     fn get_print_backgrounds(&self) -> bool;
 
-    fn get_sans_serif_font_family(&self) -> Option<GString>;
+    #[doc(alias = "webkit_settings_get_sans_serif_font_family")]
+    fn get_sans_serif_font_family(&self) -> Option<glib::GString>;
 
-    fn get_serif_font_family(&self) -> Option<GString>;
+    #[doc(alias = "webkit_settings_get_serif_font_family")]
+    fn get_serif_font_family(&self) -> Option<glib::GString>;
 
-    fn get_user_agent(&self) -> Option<GString>;
+    #[doc(alias = "webkit_settings_get_user_agent")]
+    fn get_user_agent(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "webkit_settings_get_zoom_text_only")]
     fn get_zoom_text_only(&self) -> bool;
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+    #[doc(alias = "webkit_settings_set_allow_file_access_from_file_urls")]
     fn set_allow_file_access_from_file_urls(&self, allowed: bool);
 
+    #[doc(alias = "webkit_settings_set_allow_modal_dialogs")]
     fn set_allow_modal_dialogs(&self, allowed: bool);
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+    #[doc(alias = "webkit_settings_set_allow_top_navigation_to_data_urls")]
     fn set_allow_top_navigation_to_data_urls(&self, allowed: bool);
 
     #[cfg(any(feature = "v2_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_14")))]
+    #[doc(alias = "webkit_settings_set_allow_universal_access_from_file_urls")]
     fn set_allow_universal_access_from_file_urls(&self, allowed: bool);
 
+    #[doc(alias = "webkit_settings_set_auto_load_images")]
     fn set_auto_load_images(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_cursive_font_family")]
     fn set_cursive_font_family(&self, cursive_font_family: &str);
 
+    #[doc(alias = "webkit_settings_set_default_charset")]
     fn set_default_charset(&self, default_charset: &str);
 
+    #[doc(alias = "webkit_settings_set_default_font_family")]
     fn set_default_font_family(&self, default_font_family: &str);
 
+    #[doc(alias = "webkit_settings_set_default_font_size")]
     fn set_default_font_size(&self, font_size: u32);
 
+    #[doc(alias = "webkit_settings_set_default_monospace_font_size")]
     fn set_default_monospace_font_size(&self, font_size: u32);
 
+    #[doc(alias = "webkit_settings_set_draw_compositing_indicators")]
     fn set_draw_compositing_indicators(&self, enabled: bool);
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
+    #[doc(alias = "webkit_settings_set_enable_accelerated_2d_canvas")]
     fn set_enable_accelerated_2d_canvas(&self, enabled: bool);
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
+    #[doc(alias = "webkit_settings_set_enable_back_forward_navigation_gestures")]
     fn set_enable_back_forward_navigation_gestures(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_caret_browsing")]
     fn set_enable_caret_browsing(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_developer_extras")]
     fn set_enable_developer_extras(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_dns_prefetching")]
     fn set_enable_dns_prefetching(&self, enabled: bool);
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
+    #[doc(alias = "webkit_settings_set_enable_encrypted_media")]
     fn set_enable_encrypted_media(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_frame_flattening")]
     fn set_enable_frame_flattening(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_fullscreen")]
     fn set_enable_fullscreen(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_html5_database")]
     fn set_enable_html5_database(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_html5_local_storage")]
     fn set_enable_html5_local_storage(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_hyperlink_auditing")]
     fn set_enable_hyperlink_auditing(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_java")]
     fn set_enable_java(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_javascript")]
     fn set_enable_javascript(&self, enabled: bool);
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
+    #[doc(alias = "webkit_settings_set_enable_javascript_markup")]
     fn set_enable_javascript_markup(&self, enabled: bool);
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
+    #[doc(alias = "webkit_settings_set_enable_media")]
     fn set_enable_media(&self, enabled: bool);
 
     #[cfg(any(feature = "v2_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_22")))]
+    #[doc(alias = "webkit_settings_set_enable_media_capabilities")]
     fn set_enable_media_capabilities(&self, enabled: bool);
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
+    #[doc(alias = "webkit_settings_set_enable_media_stream")]
     fn set_enable_media_stream(&self, enabled: bool);
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
+    #[doc(alias = "webkit_settings_set_enable_mediasource")]
     fn set_enable_mediasource(&self, enabled: bool);
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
+    #[doc(alias = "webkit_settings_set_enable_mock_capture_devices")]
     fn set_enable_mock_capture_devices(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_offline_web_application_cache")]
     fn set_enable_offline_web_application_cache(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_page_cache")]
     fn set_enable_page_cache(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_plugins")]
     fn set_enable_plugins(&self, enabled: bool);
 
     #[cfg_attr(feature = "v2_16", deprecated)]
+    #[doc(alias = "webkit_settings_set_enable_private_browsing")]
     fn set_enable_private_browsing(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_resizable_text_areas")]
     fn set_enable_resizable_text_areas(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_site_specific_quirks")]
     fn set_enable_site_specific_quirks(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_smooth_scrolling")]
     fn set_enable_smooth_scrolling(&self, enabled: bool);
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
+    #[doc(alias = "webkit_settings_set_enable_spatial_navigation")]
     fn set_enable_spatial_navigation(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_tabs_to_links")]
     fn set_enable_tabs_to_links(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_webaudio")]
     fn set_enable_webaudio(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_webgl")]
     fn set_enable_webgl(&self, enabled: bool);
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
+    #[doc(alias = "webkit_settings_set_enable_write_console_messages_to_stdout")]
     fn set_enable_write_console_messages_to_stdout(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_enable_xss_auditor")]
     fn set_enable_xss_auditor(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_fantasy_font_family")]
     fn set_fantasy_font_family(&self, fantasy_font_family: &str);
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    #[doc(alias = "webkit_settings_set_hardware_acceleration_policy")]
     fn set_hardware_acceleration_policy(&self, policy: HardwareAccelerationPolicy);
 
+    #[doc(alias = "webkit_settings_set_javascript_can_access_clipboard")]
     fn set_javascript_can_access_clipboard(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_javascript_can_open_windows_automatically")]
     fn set_javascript_can_open_windows_automatically(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_load_icons_ignoring_image_load_setting")]
     fn set_load_icons_ignoring_image_load_setting(&self, enabled: bool);
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+    #[doc(alias = "webkit_settings_set_media_content_types_requiring_hardware_support")]
     fn set_media_content_types_requiring_hardware_support(&self, content_types: Option<&str>);
 
+    #[doc(alias = "webkit_settings_set_media_playback_allows_inline")]
     fn set_media_playback_allows_inline(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_media_playback_requires_user_gesture")]
     fn set_media_playback_requires_user_gesture(&self, enabled: bool);
 
+    #[doc(alias = "webkit_settings_set_minimum_font_size")]
     fn set_minimum_font_size(&self, font_size: u32);
 
+    #[doc(alias = "webkit_settings_set_monospace_font_family")]
     fn set_monospace_font_family(&self, monospace_font_family: &str);
 
+    #[doc(alias = "webkit_settings_set_pictograph_font_family")]
     fn set_pictograph_font_family(&self, pictograph_font_family: &str);
 
+    #[doc(alias = "webkit_settings_set_print_backgrounds")]
     fn set_print_backgrounds(&self, print_backgrounds: bool);
 
+    #[doc(alias = "webkit_settings_set_sans_serif_font_family")]
     fn set_sans_serif_font_family(&self, sans_serif_font_family: &str);
 
+    #[doc(alias = "webkit_settings_set_serif_font_family")]
     fn set_serif_font_family(&self, serif_font_family: &str);
 
+    #[doc(alias = "webkit_settings_set_user_agent")]
     fn set_user_agent(&self, user_agent: Option<&str>);
 
+    #[doc(alias = "webkit_settings_set_user_agent_with_application_details")]
     fn set_user_agent_with_application_details(
         &self,
         application_name: Option<&str>,
         application_version: Option<&str>,
     );
 
+    #[doc(alias = "webkit_settings_set_zoom_text_only")]
     fn set_zoom_text_only(&self, zoom_text_only: bool);
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
     fn connect_property_allow_file_access_from_file_urls_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -1069,12 +1219,14 @@ pub trait SettingsExt: 'static {
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn connect_property_allow_top_navigation_to_data_urls_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_14")))]
     fn connect_property_allow_universal_access_from_file_urls_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -1116,12 +1268,14 @@ pub trait SettingsExt: 'static {
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     fn connect_property_enable_accelerated_2d_canvas_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     fn connect_property_enable_back_forward_navigation_gestures_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -1143,6 +1297,7 @@ pub trait SettingsExt: 'static {
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     fn connect_property_enable_encrypted_media_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -1181,34 +1336,40 @@ pub trait SettingsExt: 'static {
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     fn connect_property_enable_javascript_markup_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
     fn connect_property_enable_media_notify<F: Fn(&Self) + 'static>(&self, f: F)
         -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_22")))]
     fn connect_property_enable_media_capabilities_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     fn connect_property_enable_media_stream_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     fn connect_property_enable_mediasource_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     fn connect_property_enable_mock_capture_devices_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -1251,6 +1412,7 @@ pub trait SettingsExt: 'static {
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     fn connect_property_enable_spatial_navigation_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -1270,6 +1432,7 @@ pub trait SettingsExt: 'static {
         -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     fn connect_property_enable_write_console_messages_to_stdout_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -1286,6 +1449,7 @@ pub trait SettingsExt: 'static {
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
     fn connect_property_hardware_acceleration_policy_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -1307,6 +1471,7 @@ pub trait SettingsExt: 'static {
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn connect_property_media_content_types_requiring_hardware_support_notify<
         F: Fn(&Self) + 'static,
     >(
@@ -1364,40 +1529,39 @@ pub trait SettingsExt: 'static {
 
 impl<O: IsA<Settings>> SettingsExt for O {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
     fn get_allow_file_access_from_file_urls(&self) -> bool {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_settings_get_allow_file_access_from_file_urls(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_settings_get_allow_file_access_from_file_urls(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_allow_modal_dialogs(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_allow_modal_dialogs(
+            from_glib(ffi::webkit_settings_get_allow_modal_dialogs(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn get_allow_top_navigation_to_data_urls(&self) -> bool {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_settings_get_allow_top_navigation_to_data_urls(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_settings_get_allow_top_navigation_to_data_urls(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_14")))]
     fn get_allow_universal_access_from_file_urls(&self) -> bool {
         unsafe {
             from_glib(
-                webkit2_sys::webkit_settings_get_allow_universal_access_from_file_urls(
+                ffi::webkit_settings_get_allow_universal_access_from_file_urls(
                     self.as_ref().to_glib_none().0,
                 ),
             )
@@ -1406,76 +1570,70 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_auto_load_images(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_auto_load_images(
+            from_glib(ffi::webkit_settings_get_auto_load_images(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_cursive_font_family(&self) -> Option<GString> {
+    fn get_cursive_font_family(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_settings_get_cursive_font_family(
+            from_glib_none(ffi::webkit_settings_get_cursive_font_family(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_default_charset(&self) -> Option<GString> {
+    fn get_default_charset(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_settings_get_default_charset(
+            from_glib_none(ffi::webkit_settings_get_default_charset(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_default_font_family(&self) -> Option<GString> {
+    fn get_default_font_family(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_settings_get_default_font_family(
+            from_glib_none(ffi::webkit_settings_get_default_font_family(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn get_default_font_size(&self) -> u32 {
-        unsafe {
-            webkit2_sys::webkit_settings_get_default_font_size(self.as_ref().to_glib_none().0)
-        }
+        unsafe { ffi::webkit_settings_get_default_font_size(self.as_ref().to_glib_none().0) }
     }
 
     fn get_default_monospace_font_size(&self) -> u32 {
         unsafe {
-            webkit2_sys::webkit_settings_get_default_monospace_font_size(
-                self.as_ref().to_glib_none().0,
-            )
+            ffi::webkit_settings_get_default_monospace_font_size(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_draw_compositing_indicators(&self) -> bool {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_settings_get_draw_compositing_indicators(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_settings_get_draw_compositing_indicators(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     fn get_enable_accelerated_2d_canvas(&self) -> bool {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_settings_get_enable_accelerated_2d_canvas(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_settings_get_enable_accelerated_2d_canvas(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     fn get_enable_back_forward_navigation_gestures(&self) -> bool {
         unsafe {
             from_glib(
-                webkit2_sys::webkit_settings_get_enable_back_forward_navigation_gestures(
+                ffi::webkit_settings_get_enable_back_forward_navigation_gestures(
                     self.as_ref().to_glib_none().0,
                 ),
             )
@@ -1484,7 +1642,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_caret_browsing(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_caret_browsing(
+            from_glib(ffi::webkit_settings_get_enable_caret_browsing(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1492,7 +1650,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_developer_extras(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_developer_extras(
+            from_glib(ffi::webkit_settings_get_enable_developer_extras(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1500,16 +1658,17 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_dns_prefetching(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_dns_prefetching(
+            from_glib(ffi::webkit_settings_get_enable_dns_prefetching(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     fn get_enable_encrypted_media(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_encrypted_media(
+            from_glib(ffi::webkit_settings_get_enable_encrypted_media(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1517,7 +1676,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_frame_flattening(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_frame_flattening(
+            from_glib(ffi::webkit_settings_get_enable_frame_flattening(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1525,7 +1684,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_fullscreen(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_fullscreen(
+            from_glib(ffi::webkit_settings_get_enable_fullscreen(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1533,7 +1692,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_html5_database(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_html5_database(
+            from_glib(ffi::webkit_settings_get_enable_html5_database(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1541,7 +1700,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_html5_local_storage(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_html5_local_storage(
+            from_glib(ffi::webkit_settings_get_enable_html5_local_storage(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1549,7 +1708,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_hyperlink_auditing(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_hyperlink_auditing(
+            from_glib(ffi::webkit_settings_get_enable_hyperlink_auditing(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1557,7 +1716,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_java(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_java(
+            from_glib(ffi::webkit_settings_get_enable_java(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1565,72 +1724,76 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_javascript(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_javascript(
+            from_glib(ffi::webkit_settings_get_enable_javascript(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     fn get_enable_javascript_markup(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_javascript_markup(
+            from_glib(ffi::webkit_settings_get_enable_javascript_markup(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
     fn get_enable_media(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_media(
+            from_glib(ffi::webkit_settings_get_enable_media(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_22")))]
     fn get_enable_media_capabilities(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_media_capabilities(
+            from_glib(ffi::webkit_settings_get_enable_media_capabilities(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     fn get_enable_media_stream(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_media_stream(
+            from_glib(ffi::webkit_settings_get_enable_media_stream(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     fn get_enable_mediasource(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_mediasource(
+            from_glib(ffi::webkit_settings_get_enable_mediasource(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     fn get_enable_mock_capture_devices(&self) -> bool {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_settings_get_enable_mock_capture_devices(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_settings_get_enable_mock_capture_devices(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_enable_offline_web_application_cache(&self) -> bool {
         unsafe {
             from_glib(
-                webkit2_sys::webkit_settings_get_enable_offline_web_application_cache(
+                ffi::webkit_settings_get_enable_offline_web_application_cache(
                     self.as_ref().to_glib_none().0,
                 ),
             )
@@ -1639,7 +1802,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_page_cache(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_page_cache(
+            from_glib(ffi::webkit_settings_get_enable_page_cache(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1647,7 +1810,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_plugins(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_plugins(
+            from_glib(ffi::webkit_settings_get_enable_plugins(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1655,7 +1818,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_private_browsing(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_private_browsing(
+            from_glib(ffi::webkit_settings_get_enable_private_browsing(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1663,36 +1826,33 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_resizable_text_areas(&self) -> bool {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_settings_get_enable_resizable_text_areas(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_settings_get_enable_resizable_text_areas(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_enable_site_specific_quirks(&self) -> bool {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_settings_get_enable_site_specific_quirks(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_settings_get_enable_site_specific_quirks(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_enable_smooth_scrolling(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_smooth_scrolling(
+            from_glib(ffi::webkit_settings_get_enable_smooth_scrolling(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     fn get_enable_spatial_navigation(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_spatial_navigation(
+            from_glib(ffi::webkit_settings_get_enable_spatial_navigation(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1700,7 +1860,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_tabs_to_links(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_tabs_to_links(
+            from_glib(ffi::webkit_settings_get_enable_tabs_to_links(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1708,7 +1868,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_webaudio(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_webaudio(
+            from_glib(ffi::webkit_settings_get_enable_webaudio(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1716,17 +1876,18 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_webgl(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_webgl(
+            from_glib(ffi::webkit_settings_get_enable_webgl(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     fn get_enable_write_console_messages_to_stdout(&self) -> bool {
         unsafe {
             from_glib(
-                webkit2_sys::webkit_settings_get_enable_write_console_messages_to_stdout(
+                ffi::webkit_settings_get_enable_write_console_messages_to_stdout(
                     self.as_ref().to_glib_none().0,
                 ),
             )
@@ -1735,45 +1896,42 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_enable_xss_auditor(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_enable_xss_auditor(
+            from_glib(ffi::webkit_settings_get_enable_xss_auditor(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_fantasy_font_family(&self) -> Option<GString> {
+    fn get_fantasy_font_family(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_settings_get_fantasy_font_family(
+            from_glib_none(ffi::webkit_settings_get_fantasy_font_family(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
     fn get_hardware_acceleration_policy(&self) -> HardwareAccelerationPolicy {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_settings_get_hardware_acceleration_policy(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_settings_get_hardware_acceleration_policy(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_javascript_can_access_clipboard(&self) -> bool {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_settings_get_javascript_can_access_clipboard(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_settings_get_javascript_can_access_clipboard(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_javascript_can_open_windows_automatically(&self) -> bool {
         unsafe {
             from_glib(
-                webkit2_sys::webkit_settings_get_javascript_can_open_windows_automatically(
+                ffi::webkit_settings_get_javascript_can_open_windows_automatically(
                     self.as_ref().to_glib_none().0,
                 ),
             )
@@ -1783,7 +1941,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
     fn get_load_icons_ignoring_image_load_setting(&self) -> bool {
         unsafe {
             from_glib(
-                webkit2_sys::webkit_settings_get_load_icons_ignoring_image_load_setting(
+                ffi::webkit_settings_get_load_icons_ignoring_image_load_setting(
                     self.as_ref().to_glib_none().0,
                 ),
             )
@@ -1791,10 +1949,11 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
-    fn get_media_content_types_requiring_hardware_support(&self) -> Option<GString> {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+    fn get_media_content_types_requiring_hardware_support(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(
-                webkit2_sys::webkit_settings_get_media_content_types_requiring_hardware_support(
+                ffi::webkit_settings_get_media_content_types_requiring_hardware_support(
                     self.as_ref().to_glib_none().0,
                 ),
             )
@@ -1803,18 +1962,16 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_media_playback_allows_inline(&self) -> bool {
         unsafe {
-            from_glib(
-                webkit2_sys::webkit_settings_get_media_playback_allows_inline(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::webkit_settings_get_media_playback_allows_inline(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_media_playback_requires_user_gesture(&self) -> bool {
         unsafe {
             from_glib(
-                webkit2_sys::webkit_settings_get_media_playback_requires_user_gesture(
+                ffi::webkit_settings_get_media_playback_requires_user_gesture(
                     self.as_ref().to_glib_none().0,
                 ),
             )
@@ -1822,22 +1979,20 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     fn get_minimum_font_size(&self) -> u32 {
-        unsafe {
-            webkit2_sys::webkit_settings_get_minimum_font_size(self.as_ref().to_glib_none().0)
-        }
+        unsafe { ffi::webkit_settings_get_minimum_font_size(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_monospace_font_family(&self) -> Option<GString> {
+    fn get_monospace_font_family(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_settings_get_monospace_font_family(
+            from_glib_none(ffi::webkit_settings_get_monospace_font_family(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_pictograph_font_family(&self) -> Option<GString> {
+    fn get_pictograph_font_family(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_settings_get_pictograph_font_family(
+            from_glib_none(ffi::webkit_settings_get_pictograph_font_family(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1845,31 +2000,31 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_print_backgrounds(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_print_backgrounds(
+            from_glib(ffi::webkit_settings_get_print_backgrounds(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_sans_serif_font_family(&self) -> Option<GString> {
+    fn get_sans_serif_font_family(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_settings_get_sans_serif_font_family(
+            from_glib_none(ffi::webkit_settings_get_sans_serif_font_family(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_serif_font_family(&self) -> Option<GString> {
+    fn get_serif_font_family(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_settings_get_serif_font_family(
+            from_glib_none(ffi::webkit_settings_get_serif_font_family(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_user_agent(&self) -> Option<GString> {
+    fn get_user_agent(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_settings_get_user_agent(
+            from_glib_none(ffi::webkit_settings_get_user_agent(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -1877,16 +2032,17 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn get_zoom_text_only(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_settings_get_zoom_text_only(
+            from_glib(ffi::webkit_settings_get_zoom_text_only(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
     fn set_allow_file_access_from_file_urls(&self, allowed: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_allow_file_access_from_file_urls(
+            ffi::webkit_settings_set_allow_file_access_from_file_urls(
                 self.as_ref().to_glib_none().0,
                 allowed.to_glib(),
             );
@@ -1895,7 +2051,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_allow_modal_dialogs(&self, allowed: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_allow_modal_dialogs(
+            ffi::webkit_settings_set_allow_modal_dialogs(
                 self.as_ref().to_glib_none().0,
                 allowed.to_glib(),
             );
@@ -1903,9 +2059,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn set_allow_top_navigation_to_data_urls(&self, allowed: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_allow_top_navigation_to_data_urls(
+            ffi::webkit_settings_set_allow_top_navigation_to_data_urls(
                 self.as_ref().to_glib_none().0,
                 allowed.to_glib(),
             );
@@ -1913,9 +2070,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_14")))]
     fn set_allow_universal_access_from_file_urls(&self, allowed: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_allow_universal_access_from_file_urls(
+            ffi::webkit_settings_set_allow_universal_access_from_file_urls(
                 self.as_ref().to_glib_none().0,
                 allowed.to_glib(),
             );
@@ -1924,7 +2082,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_auto_load_images(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_auto_load_images(
+            ffi::webkit_settings_set_auto_load_images(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -1933,7 +2091,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_cursive_font_family(&self, cursive_font_family: &str) {
         unsafe {
-            webkit2_sys::webkit_settings_set_cursive_font_family(
+            ffi::webkit_settings_set_cursive_font_family(
                 self.as_ref().to_glib_none().0,
                 cursive_font_family.to_glib_none().0,
             );
@@ -1942,7 +2100,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_default_charset(&self, default_charset: &str) {
         unsafe {
-            webkit2_sys::webkit_settings_set_default_charset(
+            ffi::webkit_settings_set_default_charset(
                 self.as_ref().to_glib_none().0,
                 default_charset.to_glib_none().0,
             );
@@ -1951,7 +2109,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_default_font_family(&self, default_font_family: &str) {
         unsafe {
-            webkit2_sys::webkit_settings_set_default_font_family(
+            ffi::webkit_settings_set_default_font_family(
                 self.as_ref().to_glib_none().0,
                 default_font_family.to_glib_none().0,
             );
@@ -1960,16 +2118,13 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_default_font_size(&self, font_size: u32) {
         unsafe {
-            webkit2_sys::webkit_settings_set_default_font_size(
-                self.as_ref().to_glib_none().0,
-                font_size,
-            );
+            ffi::webkit_settings_set_default_font_size(self.as_ref().to_glib_none().0, font_size);
         }
     }
 
     fn set_default_monospace_font_size(&self, font_size: u32) {
         unsafe {
-            webkit2_sys::webkit_settings_set_default_monospace_font_size(
+            ffi::webkit_settings_set_default_monospace_font_size(
                 self.as_ref().to_glib_none().0,
                 font_size,
             );
@@ -1978,7 +2133,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_draw_compositing_indicators(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_draw_compositing_indicators(
+            ffi::webkit_settings_set_draw_compositing_indicators(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -1986,9 +2141,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     fn set_enable_accelerated_2d_canvas(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_accelerated_2d_canvas(
+            ffi::webkit_settings_set_enable_accelerated_2d_canvas(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -1996,9 +2152,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     fn set_enable_back_forward_navigation_gestures(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_back_forward_navigation_gestures(
+            ffi::webkit_settings_set_enable_back_forward_navigation_gestures(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2007,7 +2164,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_caret_browsing(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_caret_browsing(
+            ffi::webkit_settings_set_enable_caret_browsing(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2016,7 +2173,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_developer_extras(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_developer_extras(
+            ffi::webkit_settings_set_enable_developer_extras(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2025,7 +2182,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_dns_prefetching(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_dns_prefetching(
+            ffi::webkit_settings_set_enable_dns_prefetching(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2033,9 +2190,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     fn set_enable_encrypted_media(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_encrypted_media(
+            ffi::webkit_settings_set_enable_encrypted_media(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2044,7 +2202,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_frame_flattening(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_frame_flattening(
+            ffi::webkit_settings_set_enable_frame_flattening(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2053,7 +2211,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_fullscreen(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_fullscreen(
+            ffi::webkit_settings_set_enable_fullscreen(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2062,7 +2220,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_html5_database(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_html5_database(
+            ffi::webkit_settings_set_enable_html5_database(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2071,7 +2229,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_html5_local_storage(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_html5_local_storage(
+            ffi::webkit_settings_set_enable_html5_local_storage(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2080,7 +2238,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_hyperlink_auditing(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_hyperlink_auditing(
+            ffi::webkit_settings_set_enable_hyperlink_auditing(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2089,16 +2247,13 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_java(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_java(
-                self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
-            );
+            ffi::webkit_settings_set_enable_java(self.as_ref().to_glib_none().0, enabled.to_glib());
         }
     }
 
     fn set_enable_javascript(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_javascript(
+            ffi::webkit_settings_set_enable_javascript(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2106,9 +2261,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     fn set_enable_javascript_markup(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_javascript_markup(
+            ffi::webkit_settings_set_enable_javascript_markup(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2116,9 +2272,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
     fn set_enable_media(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_media(
+            ffi::webkit_settings_set_enable_media(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2126,9 +2283,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_22")))]
     fn set_enable_media_capabilities(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_media_capabilities(
+            ffi::webkit_settings_set_enable_media_capabilities(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2136,9 +2294,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     fn set_enable_media_stream(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_media_stream(
+            ffi::webkit_settings_set_enable_media_stream(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2146,9 +2305,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     fn set_enable_mediasource(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_mediasource(
+            ffi::webkit_settings_set_enable_mediasource(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2156,9 +2316,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     fn set_enable_mock_capture_devices(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_mock_capture_devices(
+            ffi::webkit_settings_set_enable_mock_capture_devices(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2167,7 +2328,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_offline_web_application_cache(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_offline_web_application_cache(
+            ffi::webkit_settings_set_enable_offline_web_application_cache(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2176,7 +2337,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_page_cache(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_page_cache(
+            ffi::webkit_settings_set_enable_page_cache(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2185,7 +2346,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_plugins(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_plugins(
+            ffi::webkit_settings_set_enable_plugins(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2194,7 +2355,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_private_browsing(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_private_browsing(
+            ffi::webkit_settings_set_enable_private_browsing(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2203,7 +2364,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_resizable_text_areas(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_resizable_text_areas(
+            ffi::webkit_settings_set_enable_resizable_text_areas(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2212,7 +2373,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_site_specific_quirks(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_site_specific_quirks(
+            ffi::webkit_settings_set_enable_site_specific_quirks(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2221,7 +2382,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_smooth_scrolling(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_smooth_scrolling(
+            ffi::webkit_settings_set_enable_smooth_scrolling(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2229,9 +2390,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     fn set_enable_spatial_navigation(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_spatial_navigation(
+            ffi::webkit_settings_set_enable_spatial_navigation(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2240,7 +2402,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_tabs_to_links(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_tabs_to_links(
+            ffi::webkit_settings_set_enable_tabs_to_links(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2249,7 +2411,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_webaudio(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_webaudio(
+            ffi::webkit_settings_set_enable_webaudio(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2258,7 +2420,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_webgl(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_webgl(
+            ffi::webkit_settings_set_enable_webgl(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2266,9 +2428,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     fn set_enable_write_console_messages_to_stdout(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_write_console_messages_to_stdout(
+            ffi::webkit_settings_set_enable_write_console_messages_to_stdout(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2277,7 +2440,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_enable_xss_auditor(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_enable_xss_auditor(
+            ffi::webkit_settings_set_enable_xss_auditor(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2286,7 +2449,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_fantasy_font_family(&self, fantasy_font_family: &str) {
         unsafe {
-            webkit2_sys::webkit_settings_set_fantasy_font_family(
+            ffi::webkit_settings_set_fantasy_font_family(
                 self.as_ref().to_glib_none().0,
                 fantasy_font_family.to_glib_none().0,
             );
@@ -2294,9 +2457,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
     fn set_hardware_acceleration_policy(&self, policy: HardwareAccelerationPolicy) {
         unsafe {
-            webkit2_sys::webkit_settings_set_hardware_acceleration_policy(
+            ffi::webkit_settings_set_hardware_acceleration_policy(
                 self.as_ref().to_glib_none().0,
                 policy.to_glib(),
             );
@@ -2305,7 +2469,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_javascript_can_access_clipboard(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_javascript_can_access_clipboard(
+            ffi::webkit_settings_set_javascript_can_access_clipboard(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2314,7 +2478,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_javascript_can_open_windows_automatically(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_javascript_can_open_windows_automatically(
+            ffi::webkit_settings_set_javascript_can_open_windows_automatically(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2323,7 +2487,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_load_icons_ignoring_image_load_setting(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_load_icons_ignoring_image_load_setting(
+            ffi::webkit_settings_set_load_icons_ignoring_image_load_setting(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2331,9 +2495,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn set_media_content_types_requiring_hardware_support(&self, content_types: Option<&str>) {
         unsafe {
-            webkit2_sys::webkit_settings_set_media_content_types_requiring_hardware_support(
+            ffi::webkit_settings_set_media_content_types_requiring_hardware_support(
                 self.as_ref().to_glib_none().0,
                 content_types.to_glib_none().0,
             );
@@ -2342,7 +2507,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_media_playback_allows_inline(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_media_playback_allows_inline(
+            ffi::webkit_settings_set_media_playback_allows_inline(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2351,7 +2516,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_media_playback_requires_user_gesture(&self, enabled: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_media_playback_requires_user_gesture(
+            ffi::webkit_settings_set_media_playback_requires_user_gesture(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -2360,16 +2525,13 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_minimum_font_size(&self, font_size: u32) {
         unsafe {
-            webkit2_sys::webkit_settings_set_minimum_font_size(
-                self.as_ref().to_glib_none().0,
-                font_size,
-            );
+            ffi::webkit_settings_set_minimum_font_size(self.as_ref().to_glib_none().0, font_size);
         }
     }
 
     fn set_monospace_font_family(&self, monospace_font_family: &str) {
         unsafe {
-            webkit2_sys::webkit_settings_set_monospace_font_family(
+            ffi::webkit_settings_set_monospace_font_family(
                 self.as_ref().to_glib_none().0,
                 monospace_font_family.to_glib_none().0,
             );
@@ -2378,7 +2540,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_pictograph_font_family(&self, pictograph_font_family: &str) {
         unsafe {
-            webkit2_sys::webkit_settings_set_pictograph_font_family(
+            ffi::webkit_settings_set_pictograph_font_family(
                 self.as_ref().to_glib_none().0,
                 pictograph_font_family.to_glib_none().0,
             );
@@ -2387,7 +2549,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_print_backgrounds(&self, print_backgrounds: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_print_backgrounds(
+            ffi::webkit_settings_set_print_backgrounds(
                 self.as_ref().to_glib_none().0,
                 print_backgrounds.to_glib(),
             );
@@ -2396,7 +2558,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_sans_serif_font_family(&self, sans_serif_font_family: &str) {
         unsafe {
-            webkit2_sys::webkit_settings_set_sans_serif_font_family(
+            ffi::webkit_settings_set_sans_serif_font_family(
                 self.as_ref().to_glib_none().0,
                 sans_serif_font_family.to_glib_none().0,
             );
@@ -2405,7 +2567,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_serif_font_family(&self, serif_font_family: &str) {
         unsafe {
-            webkit2_sys::webkit_settings_set_serif_font_family(
+            ffi::webkit_settings_set_serif_font_family(
                 self.as_ref().to_glib_none().0,
                 serif_font_family.to_glib_none().0,
             );
@@ -2414,7 +2576,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_user_agent(&self, user_agent: Option<&str>) {
         unsafe {
-            webkit2_sys::webkit_settings_set_user_agent(
+            ffi::webkit_settings_set_user_agent(
                 self.as_ref().to_glib_none().0,
                 user_agent.to_glib_none().0,
             );
@@ -2427,7 +2589,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         application_version: Option<&str>,
     ) {
         unsafe {
-            webkit2_sys::webkit_settings_set_user_agent_with_application_details(
+            ffi::webkit_settings_set_user_agent_with_application_details(
                 self.as_ref().to_glib_none().0,
                 application_name.to_glib_none().0,
                 application_version.to_glib_none().0,
@@ -2437,7 +2599,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn set_zoom_text_only(&self, zoom_text_only: bool) {
         unsafe {
-            webkit2_sys::webkit_settings_set_zoom_text_only(
+            ffi::webkit_settings_set_zoom_text_only(
                 self.as_ref().to_glib_none().0,
                 zoom_text_only.to_glib(),
             );
@@ -2445,6 +2607,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
     fn connect_property_allow_file_access_from_file_urls_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -2453,9 +2616,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P,
             F: Fn(&P) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2480,9 +2643,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_allow_modal_dialogs_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2503,6 +2666,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
     fn connect_property_allow_top_navigation_to_data_urls_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -2511,9 +2675,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P,
             F: Fn(&P) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2534,6 +2698,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_14")))]
     fn connect_property_allow_universal_access_from_file_urls_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -2542,9 +2707,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P,
             F: Fn(&P) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2569,9 +2734,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_auto_load_images_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2596,9 +2761,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_cursive_font_family_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2623,9 +2788,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_default_charset_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2650,9 +2815,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_default_font_family_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2677,9 +2842,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_default_font_size_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2704,9 +2869,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_default_monospace_font_size_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2731,9 +2896,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_draw_compositing_indicators_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2754,6 +2919,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     fn connect_property_enable_accelerated_2d_canvas_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -2762,9 +2928,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P,
             F: Fn(&P) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2785,6 +2951,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     fn connect_property_enable_back_forward_navigation_gestures_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -2793,9 +2960,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P,
             F: Fn(&P) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2821,9 +2988,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_caret_browsing_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2848,9 +3015,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_developer_extras_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2875,9 +3042,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_dns_prefetching_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2898,14 +3065,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     fn connect_property_enable_encrypted_media_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_encrypted_media_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2930,9 +3098,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_frame_flattening_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2957,9 +3125,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_fullscreen_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -2984,9 +3152,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_html5_database_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3011,9 +3179,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_html5_local_storage_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3038,9 +3206,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_hyperlink_auditing_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3062,9 +3230,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn connect_property_enable_java_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_java_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3089,9 +3257,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_javascript_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3112,14 +3280,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     fn connect_property_enable_javascript_markup_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_javascript_markup_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3140,14 +3309,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_26", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
     fn connect_property_enable_media_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_media_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3168,14 +3338,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_22")))]
     fn connect_property_enable_media_capabilities_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_media_capabilities_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3196,14 +3367,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     fn connect_property_enable_media_stream_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_media_stream_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3224,14 +3396,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     fn connect_property_enable_mediasource_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_mediasource_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3252,14 +3425,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_24", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
     fn connect_property_enable_mock_capture_devices_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_mock_capture_devices_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3287,9 +3461,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P,
             F: Fn(&P) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3314,9 +3488,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_page_cache_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3341,9 +3515,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_plugins_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3368,9 +3542,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_private_browsing_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3395,9 +3569,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_resizable_text_areas_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3422,9 +3596,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_site_specific_quirks_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3449,9 +3623,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_smooth_scrolling_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3472,14 +3646,15 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_4", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
     fn connect_property_enable_spatial_navigation_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_spatial_navigation_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3504,9 +3679,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_tabs_to_links_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3531,9 +3706,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_webaudio_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3558,9 +3733,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_webgl_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3581,6 +3756,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     fn connect_property_enable_write_console_messages_to_stdout_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -3589,9 +3765,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P,
             F: Fn(&P) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3617,9 +3793,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_enable_xss_auditor_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3644,9 +3820,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_fantasy_font_family_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3667,6 +3843,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
     fn connect_property_hardware_acceleration_policy_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -3675,9 +3852,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P,
             F: Fn(&P) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3705,9 +3882,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P,
             F: Fn(&P) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3735,9 +3912,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P,
             F: Fn(&P) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3766,9 +3943,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P,
             F: Fn(&P) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3790,6 +3967,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn connect_property_media_content_types_requiring_hardware_support_notify<
         F: Fn(&Self) + 'static,
     >(
@@ -3800,9 +3978,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P,
             F: Fn(&P) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3831,9 +4009,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P,
             F: Fn(&P) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3861,9 +4039,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P,
             F: Fn(&P) + 'static,
         >(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3888,9 +4066,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_minimum_font_size_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3915,9 +4093,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_monospace_font_family_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3942,9 +4120,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_pictograph_font_family_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3969,9 +4147,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_print_backgrounds_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -3996,9 +4174,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_sans_serif_font_family_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -4023,9 +4201,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_serif_font_family_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -4047,9 +4225,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn connect_property_user_agent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_user_agent_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -4074,9 +4252,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_zoom_text_only_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitSettings,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitSettings,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Settings>,
         {
@@ -4099,6 +4277,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
 impl fmt::Display for Settings {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Settings")
+        f.write_str("Settings")
     }
 }

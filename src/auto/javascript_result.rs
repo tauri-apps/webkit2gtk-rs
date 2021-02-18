@@ -3,43 +3,45 @@
 // DO NOT EDIT
 
 use glib::translate::*;
-use java_script_core;
-use webkit2_sys;
 
-glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct JavascriptResult(Shared<webkit2_sys::WebKitJavascriptResult>);
+    pub struct JavascriptResult(Shared<ffi::WebKitJavascriptResult>);
 
     match fn {
-        ref => |ptr| webkit2_sys::webkit_javascript_result_ref(ptr),
-        unref => |ptr| webkit2_sys::webkit_javascript_result_unref(ptr),
-        get_type => || webkit2_sys::webkit_javascript_result_get_type(),
+        ref => |ptr| ffi::webkit_javascript_result_ref(ptr),
+        unref => |ptr| ffi::webkit_javascript_result_unref(ptr),
+        get_type => || ffi::webkit_javascript_result_get_type(),
     }
 }
 
 impl JavascriptResult {
     #[cfg_attr(feature = "v2_22", deprecated)]
+    #[doc(alias = "webkit_javascript_result_get_global_context")]
     pub fn get_global_context(&self) -> Option<java_script_core::GlobalContextRef> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_javascript_result_get_global_context(
+            from_glib_none(ffi::webkit_javascript_result_get_global_context(
                 self.to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_22", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_22")))]
+    #[doc(alias = "webkit_javascript_result_get_js_value")]
     pub fn get_js_value(&self) -> Option<java_script_core::Value> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_javascript_result_get_js_value(
+            from_glib_none(ffi::webkit_javascript_result_get_js_value(
                 self.to_glib_none().0,
             ))
         }
     }
 
     #[cfg_attr(feature = "v2_22", deprecated)]
+    #[doc(alias = "webkit_javascript_result_get_value")]
     pub fn get_value(&self) -> Option<java_script_core::ValueRef> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_javascript_result_get_value(
+            from_glib_none(ffi::webkit_javascript_result_get_value(
                 self.to_glib_none().0,
             ))
         }

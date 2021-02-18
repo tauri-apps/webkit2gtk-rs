@@ -2,39 +2,32 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use cairo;
-use gio;
-use gio_sys;
-use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
-use glib_sys;
-use gobject_sys;
-use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 use std::pin::Pin;
 use std::ptr;
-use webkit2_sys;
 
-glib_wrapper! {
-    pub struct FaviconDatabase(Object<webkit2_sys::WebKitFaviconDatabase, webkit2_sys::WebKitFaviconDatabaseClass, FaviconDatabaseClass>);
+glib::wrapper! {
+    pub struct FaviconDatabase(Object<ffi::WebKitFaviconDatabase, ffi::WebKitFaviconDatabaseClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_favicon_database_get_type(),
+        get_type => || ffi::webkit_favicon_database_get_type(),
     }
 }
 
 pub const NONE_FAVICON_DATABASE: Option<&FaviconDatabase> = None;
 
 pub trait FaviconDatabaseExt: 'static {
+    #[doc(alias = "webkit_favicon_database_clear")]
     fn clear(&self);
 
+    #[doc(alias = "webkit_favicon_database_get_favicon")]
     fn get_favicon<
         P: IsA<gio::Cancellable>,
         Q: FnOnce(Result<cairo::Surface, glib::Error>) + Send + 'static,
@@ -50,7 +43,8 @@ pub trait FaviconDatabaseExt: 'static {
         page_uri: &str,
     ) -> Pin<Box_<dyn std::future::Future<Output = Result<cairo::Surface, glib::Error>> + 'static>>;
 
-    fn get_favicon_uri(&self, page_uri: &str) -> Option<GString>;
+    #[doc(alias = "webkit_favicon_database_get_favicon_uri")]
+    fn get_favicon_uri(&self, page_uri: &str) -> Option<glib::GString>;
 
     fn connect_favicon_changed<F: Fn(&Self, &str, &str) + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -58,7 +52,7 @@ pub trait FaviconDatabaseExt: 'static {
 impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
     fn clear(&self) {
         unsafe {
-            webkit2_sys::webkit_favicon_database_clear(self.as_ref().to_glib_none().0);
+            ffi::webkit_favicon_database_clear(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -75,12 +69,12 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
         unsafe extern "C" fn get_favicon_trampoline<
             Q: FnOnce(Result<cairo::Surface, glib::Error>) + Send + 'static,
         >(
-            _source_object: *mut gobject_sys::GObject,
-            res: *mut gio_sys::GAsyncResult,
-            user_data: glib_sys::gpointer,
+            _source_object: *mut glib::gobject_ffi::GObject,
+            res: *mut gio::ffi::GAsyncResult,
+            user_data: glib::ffi::gpointer,
         ) {
             let mut error = ptr::null_mut();
-            let ret = webkit2_sys::webkit_favicon_database_get_favicon_finish(
+            let ret = ffi::webkit_favicon_database_get_favicon_finish(
                 _source_object as *mut _,
                 res,
                 &mut error,
@@ -95,7 +89,7 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
         }
         let callback = get_favicon_trampoline::<Q>;
         unsafe {
-            webkit2_sys::webkit_favicon_database_get_favicon(
+            ffi::webkit_favicon_database_get_favicon(
                 self.as_ref().to_glib_none().0,
                 page_uri.to_glib_none().0,
                 cancellable.map(|p| p.as_ref()).to_glib_none().0,
@@ -121,9 +115,9 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
         }))
     }
 
-    fn get_favicon_uri(&self, page_uri: &str) -> Option<GString> {
+    fn get_favicon_uri(&self, page_uri: &str) -> Option<glib::GString> {
         unsafe {
-            from_glib_full(webkit2_sys::webkit_favicon_database_get_favicon_uri(
+            from_glib_full(ffi::webkit_favicon_database_get_favicon_uri(
                 self.as_ref().to_glib_none().0,
                 page_uri.to_glib_none().0,
             ))
@@ -132,18 +126,18 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
 
     fn connect_favicon_changed<F: Fn(&Self, &str, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn favicon_changed_trampoline<P, F: Fn(&P, &str, &str) + 'static>(
-            this: *mut webkit2_sys::WebKitFaviconDatabase,
+            this: *mut ffi::WebKitFaviconDatabase,
             page_uri: *mut libc::c_char,
             favicon_uri: *mut libc::c_char,
-            f: glib_sys::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<FaviconDatabase>,
         {
             let f: &F = &*(f as *const F);
             f(
                 &FaviconDatabase::from_glib_borrow(this).unsafe_cast_ref(),
-                &GString::from_glib_borrow(page_uri),
-                &GString::from_glib_borrow(favicon_uri),
+                &glib::GString::from_glib_borrow(page_uri),
+                &glib::GString::from_glib_borrow(favicon_uri),
             )
         }
         unsafe {
@@ -162,6 +156,6 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
 
 impl fmt::Display for FaviconDatabase {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "FaviconDatabase")
+        f.write_str("FaviconDatabase")
     }
 }

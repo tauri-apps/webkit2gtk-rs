@@ -19,9 +19,9 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-extern crate glib;
-extern crate gtk;
-extern crate webkit2gtk;
+use glib;
+use gtk;
+use webkit2gtk;
 
 #[cfg(feature = "v2_4")]
 use glib::ToVariant;

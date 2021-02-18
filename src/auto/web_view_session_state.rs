@@ -3,37 +3,39 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_12", feature = "dox"))]
-use glib;
-#[cfg(any(feature = "v2_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_12")))]
 use glib::translate::*;
-use webkit2_sys;
 
-glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct WebViewSessionState(Shared<webkit2_sys::WebKitWebViewSessionState>);
+    pub struct WebViewSessionState(Shared<ffi::WebKitWebViewSessionState>);
 
     match fn {
-        ref => |ptr| webkit2_sys::webkit_web_view_session_state_ref(ptr),
-        unref => |ptr| webkit2_sys::webkit_web_view_session_state_unref(ptr),
-        get_type => || webkit2_sys::webkit_web_view_session_state_get_type(),
+        ref => |ptr| ffi::webkit_web_view_session_state_ref(ptr),
+        unref => |ptr| ffi::webkit_web_view_session_state_unref(ptr),
+        get_type => || ffi::webkit_web_view_session_state_get_type(),
     }
 }
 
 impl WebViewSessionState {
     #[cfg(any(feature = "v2_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_12")))]
+    #[doc(alias = "webkit_web_view_session_state_new")]
     pub fn new(data: &glib::Bytes) -> WebViewSessionState {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(webkit2_sys::webkit_web_view_session_state_new(
+            from_glib_full(ffi::webkit_web_view_session_state_new(
                 data.to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_12")))]
+    #[doc(alias = "webkit_web_view_session_state_serialize")]
     pub fn serialize(&self) -> Option<glib::Bytes> {
         unsafe {
-            from_glib_full(webkit2_sys::webkit_web_view_session_state_serialize(
+            from_glib_full(ffi::webkit_web_view_session_state_serialize(
                 self.to_glib_none().0,
             ))
         }

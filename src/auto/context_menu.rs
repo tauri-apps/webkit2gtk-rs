@@ -2,32 +2,31 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v2_8", feature = "dox"))]
-use glib;
+use crate::ContextMenuItem;
 use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
-use webkit2_sys;
-use ContextMenuItem;
 
-glib_wrapper! {
-    pub struct ContextMenu(Object<webkit2_sys::WebKitContextMenu, webkit2_sys::WebKitContextMenuClass, ContextMenuClass>);
+glib::wrapper! {
+    pub struct ContextMenu(Object<ffi::WebKitContextMenu, ffi::WebKitContextMenuClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_context_menu_get_type(),
+        get_type => || ffi::webkit_context_menu_get_type(),
     }
 }
 
 impl ContextMenu {
+    #[doc(alias = "webkit_context_menu_new")]
     pub fn new() -> ContextMenu {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(webkit2_sys::webkit_context_menu_new()) }
+        unsafe { from_glib_full(ffi::webkit_context_menu_new()) }
     }
 
+    #[doc(alias = "webkit_context_menu_new_with_items")]
     pub fn with_items(items: &[ContextMenuItem]) -> ContextMenu {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(webkit2_sys::webkit_context_menu_new_with_items(
+            from_glib_full(ffi::webkit_context_menu_new_with_items(
                 items.to_glib_none().0,
             ))
         }
@@ -43,39 +42,54 @@ impl Default for ContextMenu {
 pub const NONE_CONTEXT_MENU: Option<&ContextMenu> = None;
 
 pub trait ContextMenuExt: 'static {
+    #[doc(alias = "webkit_context_menu_append")]
     fn append<P: IsA<ContextMenuItem>>(&self, item: &P);
 
+    #[doc(alias = "webkit_context_menu_first")]
     fn first(&self) -> Option<ContextMenuItem>;
 
+    #[doc(alias = "webkit_context_menu_get_item_at_position")]
     fn get_item_at_position(&self, position: u32) -> Option<ContextMenuItem>;
 
+    #[doc(alias = "webkit_context_menu_get_items")]
     fn get_items(&self) -> Vec<ContextMenuItem>;
 
+    #[doc(alias = "webkit_context_menu_get_n_items")]
     fn get_n_items(&self) -> u32;
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+    #[doc(alias = "webkit_context_menu_get_user_data")]
     fn get_user_data(&self) -> Option<glib::Variant>;
 
+    #[doc(alias = "webkit_context_menu_insert")]
     fn insert<P: IsA<ContextMenuItem>>(&self, item: &P, position: i32);
 
+    #[doc(alias = "webkit_context_menu_last")]
     fn last(&self) -> Option<ContextMenuItem>;
 
+    #[doc(alias = "webkit_context_menu_move_item")]
     fn move_item<P: IsA<ContextMenuItem>>(&self, item: &P, position: i32);
 
+    #[doc(alias = "webkit_context_menu_prepend")]
     fn prepend<P: IsA<ContextMenuItem>>(&self, item: &P);
 
+    #[doc(alias = "webkit_context_menu_remove")]
     fn remove<P: IsA<ContextMenuItem>>(&self, item: &P);
 
+    #[doc(alias = "webkit_context_menu_remove_all")]
     fn remove_all(&self);
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+    #[doc(alias = "webkit_context_menu_set_user_data")]
     fn set_user_data(&self, user_data: &glib::Variant);
 }
 
 impl<O: IsA<ContextMenu>> ContextMenuExt for O {
     fn append<P: IsA<ContextMenuItem>>(&self, item: &P) {
         unsafe {
-            webkit2_sys::webkit_context_menu_append(
+            ffi::webkit_context_menu_append(
                 self.as_ref().to_glib_none().0,
                 item.as_ref().to_glib_none().0,
             );
@@ -84,7 +98,7 @@ impl<O: IsA<ContextMenu>> ContextMenuExt for O {
 
     fn first(&self) -> Option<ContextMenuItem> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_context_menu_first(
+            from_glib_none(ffi::webkit_context_menu_first(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -92,7 +106,7 @@ impl<O: IsA<ContextMenu>> ContextMenuExt for O {
 
     fn get_item_at_position(&self, position: u32) -> Option<ContextMenuItem> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_context_menu_get_item_at_position(
+            from_glib_none(ffi::webkit_context_menu_get_item_at_position(
                 self.as_ref().to_glib_none().0,
                 position,
             ))
@@ -101,20 +115,21 @@ impl<O: IsA<ContextMenu>> ContextMenuExt for O {
 
     fn get_items(&self) -> Vec<ContextMenuItem> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(webkit2_sys::webkit_context_menu_get_items(
+            FromGlibPtrContainer::from_glib_none(ffi::webkit_context_menu_get_items(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn get_n_items(&self) -> u32 {
-        unsafe { webkit2_sys::webkit_context_menu_get_n_items(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::webkit_context_menu_get_n_items(self.as_ref().to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn get_user_data(&self) -> Option<glib::Variant> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_context_menu_get_user_data(
+            from_glib_none(ffi::webkit_context_menu_get_user_data(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -122,7 +137,7 @@ impl<O: IsA<ContextMenu>> ContextMenuExt for O {
 
     fn insert<P: IsA<ContextMenuItem>>(&self, item: &P, position: i32) {
         unsafe {
-            webkit2_sys::webkit_context_menu_insert(
+            ffi::webkit_context_menu_insert(
                 self.as_ref().to_glib_none().0,
                 item.as_ref().to_glib_none().0,
                 position,
@@ -132,7 +147,7 @@ impl<O: IsA<ContextMenu>> ContextMenuExt for O {
 
     fn last(&self) -> Option<ContextMenuItem> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_context_menu_last(
+            from_glib_none(ffi::webkit_context_menu_last(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -140,7 +155,7 @@ impl<O: IsA<ContextMenu>> ContextMenuExt for O {
 
     fn move_item<P: IsA<ContextMenuItem>>(&self, item: &P, position: i32) {
         unsafe {
-            webkit2_sys::webkit_context_menu_move_item(
+            ffi::webkit_context_menu_move_item(
                 self.as_ref().to_glib_none().0,
                 item.as_ref().to_glib_none().0,
                 position,
@@ -150,7 +165,7 @@ impl<O: IsA<ContextMenu>> ContextMenuExt for O {
 
     fn prepend<P: IsA<ContextMenuItem>>(&self, item: &P) {
         unsafe {
-            webkit2_sys::webkit_context_menu_prepend(
+            ffi::webkit_context_menu_prepend(
                 self.as_ref().to_glib_none().0,
                 item.as_ref().to_glib_none().0,
             );
@@ -159,7 +174,7 @@ impl<O: IsA<ContextMenu>> ContextMenuExt for O {
 
     fn remove<P: IsA<ContextMenuItem>>(&self, item: &P) {
         unsafe {
-            webkit2_sys::webkit_context_menu_remove(
+            ffi::webkit_context_menu_remove(
                 self.as_ref().to_glib_none().0,
                 item.as_ref().to_glib_none().0,
             );
@@ -168,14 +183,15 @@ impl<O: IsA<ContextMenu>> ContextMenuExt for O {
 
     fn remove_all(&self) {
         unsafe {
-            webkit2_sys::webkit_context_menu_remove_all(self.as_ref().to_glib_none().0);
+            ffi::webkit_context_menu_remove_all(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn set_user_data(&self, user_data: &glib::Variant) {
         unsafe {
-            webkit2_sys::webkit_context_menu_set_user_data(
+            ffi::webkit_context_menu_set_user_data(
                 self.as_ref().to_glib_none().0,
                 user_data.to_glib_none().0,
             );
@@ -185,6 +201,6 @@ impl<O: IsA<ContextMenu>> ContextMenuExt for O {
 
 impl fmt::Display for ContextMenu {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "ContextMenu")
+        f.write_str("ContextMenu")
     }
 }

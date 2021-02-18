@@ -2,19 +2,18 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::PermissionRequest;
 use glib::object::IsA;
-use glib::translate::*;
 #[cfg(any(feature = "v2_30", feature = "dox"))]
-use glib::GString;
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+use glib::translate::*;
 use std::fmt;
-use webkit2_sys;
-use PermissionRequest;
 
-glib_wrapper! {
-    pub struct WebsiteDataAccessPermissionRequest(Object<webkit2_sys::WebKitWebsiteDataAccessPermissionRequest, webkit2_sys::WebKitWebsiteDataAccessPermissionRequestClass, WebsiteDataAccessPermissionRequestClass>) @implements PermissionRequest;
+glib::wrapper! {
+    pub struct WebsiteDataAccessPermissionRequest(Object<ffi::WebKitWebsiteDataAccessPermissionRequest, ffi::WebKitWebsiteDataAccessPermissionRequestClass>) @implements PermissionRequest;
 
     match fn {
-        get_type => || webkit2_sys::webkit_website_data_access_permission_request_get_type(),
+        get_type => || ffi::webkit_website_data_access_permission_request_get_type(),
     }
 }
 
@@ -23,18 +22,23 @@ pub const NONE_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST: Option<&WebsiteDataAccess
 
 pub trait WebsiteDataAccessPermissionRequestExt: 'static {
     #[cfg(any(feature = "v2_30", feature = "dox"))]
-    fn get_current_domain(&self) -> Option<GString>;
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+    #[doc(alias = "webkit_website_data_access_permission_request_get_current_domain")]
+    fn get_current_domain(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
-    fn get_requesting_domain(&self) -> Option<GString>;
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+    #[doc(alias = "webkit_website_data_access_permission_request_get_requesting_domain")]
+    fn get_requesting_domain(&self) -> Option<glib::GString>;
 }
 
 impl<O: IsA<WebsiteDataAccessPermissionRequest>> WebsiteDataAccessPermissionRequestExt for O {
     #[cfg(any(feature = "v2_30", feature = "dox"))]
-    fn get_current_domain(&self) -> Option<GString> {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+    fn get_current_domain(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(
-                webkit2_sys::webkit_website_data_access_permission_request_get_current_domain(
+                ffi::webkit_website_data_access_permission_request_get_current_domain(
                     self.as_ref().to_glib_none().0,
                 ),
             )
@@ -42,10 +46,11 @@ impl<O: IsA<WebsiteDataAccessPermissionRequest>> WebsiteDataAccessPermissionRequ
     }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
-    fn get_requesting_domain(&self) -> Option<GString> {
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+    fn get_requesting_domain(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(
-                webkit2_sys::webkit_website_data_access_permission_request_get_requesting_domain(
+                ffi::webkit_website_data_access_permission_request_get_requesting_domain(
                     self.as_ref().to_glib_none().0,
                 ),
             )
@@ -55,6 +60,6 @@ impl<O: IsA<WebsiteDataAccessPermissionRequest>> WebsiteDataAccessPermissionRequ
 
 impl fmt::Display for WebsiteDataAccessPermissionRequest {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "WebsiteDataAccessPermissionRequest")
+        f.write_str("WebsiteDataAccessPermissionRequest")
     }
 }

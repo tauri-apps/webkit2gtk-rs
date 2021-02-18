@@ -2,7 +2,11 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+use crate::PrintCustomWidget;
+use crate::PrintOperationResponse;
+use crate::WebView;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -10,32 +14,24 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
 use glib::ToValue;
-use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gtk;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
-use webkit2_sys;
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-use PrintCustomWidget;
-use PrintOperationResponse;
-use WebView;
 
-glib_wrapper! {
-    pub struct PrintOperation(Object<webkit2_sys::WebKitPrintOperation, webkit2_sys::WebKitPrintOperationClass, PrintOperationClass>);
+glib::wrapper! {
+    pub struct PrintOperation(Object<ffi::WebKitPrintOperation, ffi::WebKitPrintOperationClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_print_operation_get_type(),
+        get_type => || ffi::webkit_print_operation_get_type(),
     }
 }
 
 impl PrintOperation {
+    #[doc(alias = "webkit_print_operation_new")]
     pub fn new<P: IsA<WebView>>(web_view: &P) -> PrintOperation {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(webkit2_sys::webkit_print_operation_new(
+            from_glib_full(ffi::webkit_print_operation_new(
                 web_view.as_ref().to_glib_none().0,
             ))
         }
@@ -65,10 +61,7 @@ impl PrintOperationBuilder {
         if let Some(ref web_view) = self.web_view {
             properties.push(("web-view", web_view));
         }
-        let ret = glib::Object::new(PrintOperation::static_type(), &properties)
-            .expect("object new")
-            .downcast::<PrintOperation>()
-            .expect("downcast");
+        let ret = glib::Object::new::<PrintOperation>(&properties).expect("object new");
         ret
     }
 
@@ -91,21 +84,28 @@ impl PrintOperationBuilder {
 pub const NONE_PRINT_OPERATION: Option<&PrintOperation> = None;
 
 pub trait PrintOperationExt: 'static {
+    #[doc(alias = "webkit_print_operation_get_page_setup")]
     fn get_page_setup(&self) -> Option<gtk::PageSetup>;
 
+    #[doc(alias = "webkit_print_operation_get_print_settings")]
     fn get_print_settings(&self) -> Option<gtk::PrintSettings>;
 
+    #[doc(alias = "webkit_print_operation_print")]
     fn print(&self);
 
+    #[doc(alias = "webkit_print_operation_run_dialog")]
     fn run_dialog<P: IsA<gtk::Window>>(&self, parent: Option<&P>) -> PrintOperationResponse;
 
+    #[doc(alias = "webkit_print_operation_set_page_setup")]
     fn set_page_setup(&self, page_setup: &gtk::PageSetup);
 
+    #[doc(alias = "webkit_print_operation_set_print_settings")]
     fn set_print_settings(&self, print_settings: &gtk::PrintSettings);
 
     fn get_property_web_view(&self) -> Option<WebView>;
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
     fn connect_create_custom_widget<F: Fn(&Self) -> PrintCustomWidget + 'static>(
         &self,
         f: F,
@@ -126,7 +126,7 @@ pub trait PrintOperationExt: 'static {
 impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     fn get_page_setup(&self) -> Option<gtk::PageSetup> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_print_operation_get_page_setup(
+            from_glib_none(ffi::webkit_print_operation_get_page_setup(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -134,7 +134,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
 
     fn get_print_settings(&self) -> Option<gtk::PrintSettings> {
         unsafe {
-            from_glib_none(webkit2_sys::webkit_print_operation_get_print_settings(
+            from_glib_none(ffi::webkit_print_operation_get_print_settings(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -142,13 +142,13 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
 
     fn print(&self) {
         unsafe {
-            webkit2_sys::webkit_print_operation_print(self.as_ref().to_glib_none().0);
+            ffi::webkit_print_operation_print(self.as_ref().to_glib_none().0);
         }
     }
 
     fn run_dialog<P: IsA<gtk::Window>>(&self, parent: Option<&P>) -> PrintOperationResponse {
         unsafe {
-            from_glib(webkit2_sys::webkit_print_operation_run_dialog(
+            from_glib(ffi::webkit_print_operation_run_dialog(
                 self.as_ref().to_glib_none().0,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
             ))
@@ -157,7 +157,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
 
     fn set_page_setup(&self, page_setup: &gtk::PageSetup) {
         unsafe {
-            webkit2_sys::webkit_print_operation_set_page_setup(
+            ffi::webkit_print_operation_set_page_setup(
                 self.as_ref().to_glib_none().0,
                 page_setup.to_glib_none().0,
             );
@@ -166,7 +166,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
 
     fn set_print_settings(&self, print_settings: &gtk::PrintSettings) {
         unsafe {
-            webkit2_sys::webkit_print_operation_set_print_settings(
+            ffi::webkit_print_operation_set_print_settings(
                 self.as_ref().to_glib_none().0,
                 print_settings.to_glib_none().0,
             );
@@ -175,9 +175,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
 
     fn get_property_web_view(&self) -> Option<WebView> {
         unsafe {
-            let mut value = Value::from_type(<WebView as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            let mut value = glib::Value::from_type(<WebView as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"web-view\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -188,6 +188,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
     fn connect_create_custom_widget<F: Fn(&Self) -> PrintCustomWidget + 'static>(
         &self,
         f: F,
@@ -196,9 +197,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P,
             F: Fn(&P) -> PrintCustomWidget + 'static,
         >(
-            this: *mut webkit2_sys::WebKitPrintOperation,
-            f: glib_sys::gpointer,
-        ) -> *mut webkit2_sys::WebKitPrintCustomWidget
+            this: *mut ffi::WebKitPrintOperation,
+            f: glib::ffi::gpointer,
+        ) -> *mut ffi::WebKitPrintCustomWidget
         where
             P: IsA<PrintOperation>,
         {
@@ -220,9 +221,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
 
     fn connect_failed<F: Fn(&Self, &glib::Error) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn failed_trampoline<P, F: Fn(&P, &glib::Error) + 'static>(
-            this: *mut webkit2_sys::WebKitPrintOperation,
-            error: *mut glib_sys::GError,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitPrintOperation,
+            error: *mut glib::ffi::GError,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<PrintOperation>,
         {
@@ -247,8 +248,8 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
 
     fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitPrintOperation,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitPrintOperation,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<PrintOperation>,
         {
@@ -270,9 +271,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
 
     fn connect_property_page_setup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_page_setup_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitPrintOperation,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitPrintOperation,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<PrintOperation>,
         {
@@ -297,9 +298,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_print_settings_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitPrintOperation,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitPrintOperation,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<PrintOperation>,
         {
@@ -322,6 +323,6 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
 
 impl fmt::Display for PrintOperation {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "PrintOperation")
+        f.write_str("PrintOperation")
     }
 }

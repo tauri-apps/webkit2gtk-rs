@@ -2,16 +2,14 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::translate::*;
+use crate::PermissionRequest;
 use std::fmt;
-use webkit2_sys;
-use PermissionRequest;
 
-glib_wrapper! {
-    pub struct DeviceInfoPermissionRequest(Object<webkit2_sys::WebKitDeviceInfoPermissionRequest, webkit2_sys::WebKitDeviceInfoPermissionRequestClass, DeviceInfoPermissionRequestClass>) @implements PermissionRequest;
+glib::wrapper! {
+    pub struct DeviceInfoPermissionRequest(Object<ffi::WebKitDeviceInfoPermissionRequest, ffi::WebKitDeviceInfoPermissionRequestClass>) @implements PermissionRequest;
 
     match fn {
-        get_type => || webkit2_sys::webkit_device_info_permission_request_get_type(),
+        get_type => || ffi::webkit_device_info_permission_request_get_type(),
     }
 }
 
@@ -21,6 +19,6 @@ pub const NONE_DEVICE_INFO_PERMISSION_REQUEST: Option<&DeviceInfoPermissionReque
 
 impl fmt::Display for DeviceInfoPermissionRequest {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "DeviceInfoPermissionRequest")
+        f.write_str("DeviceInfoPermissionRequest")
     }
 }

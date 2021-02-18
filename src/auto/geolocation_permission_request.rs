@@ -2,16 +2,14 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::translate::*;
+use crate::PermissionRequest;
 use std::fmt;
-use webkit2_sys;
-use PermissionRequest;
 
-glib_wrapper! {
-    pub struct GeolocationPermissionRequest(Object<webkit2_sys::WebKitGeolocationPermissionRequest, webkit2_sys::WebKitGeolocationPermissionRequestClass, GeolocationPermissionRequestClass>) @implements PermissionRequest;
+glib::wrapper! {
+    pub struct GeolocationPermissionRequest(Object<ffi::WebKitGeolocationPermissionRequest, ffi::WebKitGeolocationPermissionRequestClass>) @implements PermissionRequest;
 
     match fn {
-        get_type => || webkit2_sys::webkit_geolocation_permission_request_get_type(),
+        get_type => || ffi::webkit_geolocation_permission_request_get_type(),
     }
 }
 
@@ -21,6 +19,6 @@ pub const NONE_GEOLOCATION_PERMISSION_REQUEST: Option<&GeolocationPermissionRequ
 
 impl fmt::Display for GeolocationPermissionRequest {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "GeolocationPermissionRequest")
+        f.write_str("GeolocationPermissionRequest")
     }
 }

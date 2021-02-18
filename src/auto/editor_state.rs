@@ -3,27 +3,31 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v2_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 use glib::object::Cast;
 use glib::object::IsA;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 use glib::signal::connect_raw;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 use glib::signal::SignalHandlerId;
+#[cfg(any(feature = "v2_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 use glib::translate::*;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
-use glib_sys;
-#[cfg(any(feature = "v2_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 use std::boxed::Box as Box_;
 use std::fmt;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 use std::mem::transmute;
-use webkit2_sys;
 
-glib_wrapper! {
-    pub struct EditorState(Object<webkit2_sys::WebKitEditorState, webkit2_sys::WebKitEditorStateClass, EditorStateClass>);
+glib::wrapper! {
+    pub struct EditorState(Object<ffi::WebKitEditorState, ffi::WebKitEditorStateClass>);
 
     match fn {
-        get_type => || webkit2_sys::webkit_editor_state_get_type(),
+        get_type => || ffi::webkit_editor_state_get_type(),
     }
 }
 
@@ -31,24 +35,37 @@ pub const NONE_EDITOR_STATE: Option<&EditorState> = None;
 
 pub trait EditorStateExt: 'static {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+    #[doc(alias = "webkit_editor_state_get_typing_attributes")]
     fn get_typing_attributes(&self) -> u32;
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
+    #[doc(alias = "webkit_editor_state_is_copy_available")]
     fn is_copy_available(&self) -> bool;
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
+    #[doc(alias = "webkit_editor_state_is_cut_available")]
     fn is_cut_available(&self) -> bool;
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
+    #[doc(alias = "webkit_editor_state_is_paste_available")]
     fn is_paste_available(&self) -> bool;
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
+    #[doc(alias = "webkit_editor_state_is_redo_available")]
     fn is_redo_available(&self) -> bool;
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
+    #[doc(alias = "webkit_editor_state_is_undo_available")]
     fn is_undo_available(&self) -> bool;
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
     fn connect_property_typing_attributes_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -57,66 +74,71 @@ pub trait EditorStateExt: 'static {
 
 impl<O: IsA<EditorState>> EditorStateExt for O {
     #[cfg(any(feature = "v2_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
     fn get_typing_attributes(&self) -> u32 {
-        unsafe {
-            webkit2_sys::webkit_editor_state_get_typing_attributes(self.as_ref().to_glib_none().0)
-        }
+        unsafe { ffi::webkit_editor_state_get_typing_attributes(self.as_ref().to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     fn is_copy_available(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_editor_state_is_copy_available(
+            from_glib(ffi::webkit_editor_state_is_copy_available(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     fn is_cut_available(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_editor_state_is_cut_available(
+            from_glib(ffi::webkit_editor_state_is_cut_available(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     fn is_paste_available(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_editor_state_is_paste_available(
+            from_glib(ffi::webkit_editor_state_is_paste_available(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     fn is_redo_available(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_editor_state_is_redo_available(
+            from_glib(ffi::webkit_editor_state_is_redo_available(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
     fn is_undo_available(&self) -> bool {
         unsafe {
-            from_glib(webkit2_sys::webkit_editor_state_is_undo_available(
+            from_glib(ffi::webkit_editor_state_is_undo_available(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
     fn connect_property_typing_attributes_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_typing_attributes_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut webkit2_sys::WebKitEditorState,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::WebKitEditorState,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<EditorState>,
         {
@@ -139,6 +161,6 @@ impl<O: IsA<EditorState>> EditorStateExt for O {
 
 impl fmt::Display for EditorState {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "EditorState")
+        f.write_str("EditorState")
     }
 }
