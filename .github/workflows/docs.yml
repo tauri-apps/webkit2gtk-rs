@@ -25,7 +25,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: doc
-          args: --package webkit2gtk --package webkit2gtk-sys --features=v2_28 --no-deps
+          args: --package webkit2gtk --package webkit2gtk-sys --features=v2_30 --no-deps
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v2
