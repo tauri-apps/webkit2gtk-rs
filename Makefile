@@ -7,7 +7,7 @@ gir : src/auto/mod.rs
 	cargo fmt
 
 gir-sys : webkit2gtk-sys/src/lib.rs
-	cargo fmt
+	cd webkit2gtk-sys && cargo fmt
 
 doc: $(GIR) $(GIR_FILES)
 	$(GIR) -m doc -c Gir.toml

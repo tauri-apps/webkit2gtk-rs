@@ -87,7 +87,11 @@ pub trait AutomationSessionExt: 'static {
 
     #[cfg(any(feature = "v2_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
-    fn connect_create_web_view<F: Fn(&Self) -> WebView + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_create_web_view<F: Fn(&Self) -> WebView + 'static>(
+        &self,
+        detail: Option<&str>,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<AutomationSession>> AutomationSessionExt for O {
@@ -124,7 +128,11 @@ impl<O: IsA<AutomationSession>> AutomationSessionExt for O {
 
     #[cfg(any(feature = "v2_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
-    fn connect_create_web_view<F: Fn(&Self) -> WebView + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_create_web_view<F: Fn(&Self) -> WebView + 'static>(
+        &self,
+        detail: Option<&str>,
+        f: F,
+    ) -> SignalHandlerId {
         unsafe extern "C" fn create_web_view_trampoline<P, F: Fn(&P) -> WebView + 'static>(
             this: *mut ffi::WebKitAutomationSession,
             f: glib::ffi::gpointer,
@@ -139,9 +147,13 @@ impl<O: IsA<AutomationSession>> AutomationSessionExt for O {
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
+            let detailed_signal_name = detail.map(|name| format!("create-web-view::{}\0", name));
+            let signal_name: &[u8] = detailed_signal_name
+                .as_ref()
+                .map_or(&b"create-web-view\0"[..], |n| n.as_bytes());
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"create-web-view\0".as_ptr() as *const _,
+                signal_name.as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     create_web_view_trampoline::<Self, F> as *const (),
                 )),
