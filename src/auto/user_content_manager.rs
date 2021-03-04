@@ -123,6 +123,7 @@ pub trait UserContentManagerExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn connect_script_message_received<F: Fn(&Self, &JavascriptResult) + 'static>(
         &self,
+        detail: Option<&str>,
         f: F,
     ) -> SignalHandlerId;
 }
@@ -251,6 +252,7 @@ impl<O: IsA<UserContentManager>> UserContentManagerExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn connect_script_message_received<F: Fn(&Self, &JavascriptResult) + 'static>(
         &self,
+        detail: Option<&str>,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn script_message_received_trampoline<
@@ -271,9 +273,14 @@ impl<O: IsA<UserContentManager>> UserContentManagerExt for O {
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
+            let detailed_signal_name =
+                detail.map(|name| format!("script-message-received::{}\0", name));
+            let signal_name: &[u8] = detailed_signal_name
+                .as_ref()
+                .map_or(&b"script-message-received\0"[..], |n| n.as_bytes());
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"script-message-received\0".as_ptr() as *const _,
+                signal_name.as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     script_message_received_trampoline::<Self, F> as *const (),
                 )),
