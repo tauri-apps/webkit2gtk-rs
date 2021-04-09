@@ -18,6 +18,14 @@ glib_wrapper! {
 }
 
 impl NetworkProxySettings {
+    pub fn new(default_proxy_uri: &str, ignore_hosts: &[&str]) -> NetworkProxySettings {
+        assert_initialized_main_thread!();
+        unsafe {
+            // *mut WebKitNetworkProxySettings
+            from_glib_none(webkit2_sys::webkit_network_proxy_settings_new(default_proxy_uri.to_glib_none().0, ignore_hosts.to_glib_none().0))
+        }
+    }
+
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     pub fn add_proxy_for_scheme(&mut self, scheme: &str, proxy_uri: &str) {
         unsafe {

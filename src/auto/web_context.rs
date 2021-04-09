@@ -5,6 +5,9 @@
 use gio;
 use gio_sys;
 use glib;
+use crate::auto::NetworkProxyMode;
+use crate::auto::network_proxy_settings::NetworkProxySettings;
+
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -256,6 +259,8 @@ pub trait WebContextExt: 'static {
     #[cfg_attr(feature = "v2_26", deprecated)]
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     fn set_web_process_count_limit(&self, limit: u32);
+
+    fn set_network_proxy_settings(&self, proxy_mode: NetworkProxyMode, proxy_settings: &mut NetworkProxySettings);
 
     #[cfg_attr(feature = "v2_10", deprecated)]
     #[cfg(any(feature = "v2_8", feature = "dox"))]
@@ -558,6 +563,17 @@ impl<O: IsA<WebContext>> WebContextExt for O {
     fn set_web_process_count_limit(&self, limit: u32) {
         unsafe {
             webkit2_sys::webkit_web_context_set_web_process_count_limit(self.as_ref().to_glib_none().0, limit);
+        }
+    }
+
+    // https://webkitgtk.org/reference/webkit2gtk/stable/WebKitWebContext.html#webkit-web-context-set-network-proxy-settings
+    fn set_network_proxy_settings(&self, proxy_mode: NetworkProxyMode, proxy_settings: &mut NetworkProxySettings) {
+        unsafe {
+            webkit2_sys::webkit_web_context_set_network_proxy_settings(
+                self.as_ref().to_glib_none().0,
+                proxy_mode.to_glib(),
+                proxy_settings.to_glib_none_mut().0,
+            );
         }
     }
 
