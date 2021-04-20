@@ -19,7 +19,12 @@ pub const NONE_URI_SCHEME_REQUEST: Option<&URISchemeRequest> = None;
 
 pub trait URISchemeRequestExt: 'static {
     #[doc(alias = "webkit_uri_scheme_request_finish")]
-    fn finish<P: IsA<gio::InputStream>>(&self, stream: &P, stream_length: i64, content_type: Option<&str>);
+    fn finish<P: IsA<gio::InputStream>>(
+        &self,
+        stream: &P,
+        stream_length: i64,
+        content_type: Option<&str>,
+    );
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
@@ -40,9 +45,19 @@ pub trait URISchemeRequestExt: 'static {
 }
 
 impl<O: IsA<URISchemeRequest>> URISchemeRequestExt for O {
-    fn finish<P: IsA<gio::InputStream>>(&self, stream: &P, stream_length: i64, content_type: Option<&str>) {
+    fn finish<P: IsA<gio::InputStream>>(
+        &self,
+        stream: &P,
+        stream_length: i64,
+        content_type: Option<&str>,
+    ) {
         unsafe {
-            ffi::webkit_uri_scheme_request_finish(self.as_ref().to_glib_none().0, stream.as_ref().to_glib_none().0, stream_length, content_type.to_glib_none().0);
+            ffi::webkit_uri_scheme_request_finish(
+                self.as_ref().to_glib_none().0,
+                stream.as_ref().to_glib_none().0,
+                stream_length,
+                content_type.to_glib_none().0,
+            );
         }
     }
 
@@ -50,31 +65,42 @@ impl<O: IsA<URISchemeRequest>> URISchemeRequestExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     fn finish_error(&self, error: &mut glib::Error) {
         unsafe {
-            ffi::webkit_uri_scheme_request_finish_error(self.as_ref().to_glib_none().0, error.to_glib_none_mut().0);
+            ffi::webkit_uri_scheme_request_finish_error(
+                self.as_ref().to_glib_none().0,
+                error.to_glib_none_mut().0,
+            );
         }
     }
 
     fn path(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_uri_scheme_request_get_path(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_uri_scheme_request_get_path(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn scheme(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_uri_scheme_request_get_scheme(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_uri_scheme_request_get_scheme(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn uri(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_uri_scheme_request_get_uri(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_uri_scheme_request_get_uri(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn web_view(&self) -> Option<WebView> {
         unsafe {
-            from_glib_none(ffi::webkit_uri_scheme_request_get_web_view(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_uri_scheme_request_get_web_view(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 }

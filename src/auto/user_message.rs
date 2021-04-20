@@ -22,15 +22,26 @@ impl UserMessage {
     pub fn new(name: &str, parameters: Option<&glib::Variant>) -> UserMessage {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::webkit_user_message_new(name.to_glib_none().0, parameters.to_glib_none().0))
+            from_glib_none(ffi::webkit_user_message_new(
+                name.to_glib_none().0,
+                parameters.to_glib_none().0,
+            ))
         }
     }
 
     #[doc(alias = "webkit_user_message_new_with_fd_list")]
-    pub fn with_fd_list<P: IsA<gio::UnixFDList>>(name: &str, parameters: Option<&glib::Variant>, fd_list: Option<&P>) -> UserMessage {
+    pub fn with_fd_list<P: IsA<gio::UnixFDList>>(
+        name: &str,
+        parameters: Option<&glib::Variant>,
+        fd_list: Option<&P>,
+    ) -> UserMessage {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::webkit_user_message_new_with_fd_list(name.to_glib_none().0, parameters.to_glib_none().0, fd_list.map(|p| p.as_ref()).to_glib_none().0))
+            from_glib_none(ffi::webkit_user_message_new_with_fd_list(
+                name.to_glib_none().0,
+                parameters.to_glib_none().0,
+                fd_list.map(|p| p.as_ref()).to_glib_none().0,
+            ))
         }
     }
 }
@@ -53,24 +64,22 @@ impl UserMessageBuilder {
         Self::default()
     }
 
-
     pub fn build(self) -> UserMessage {
         let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
         #[cfg(any(feature = "v2_28", feature = "dox"))]
-if let Some(ref fd_list) = self.fd_list {
-                properties.push(("fd-list", fd_list));
-            }
+        if let Some(ref fd_list) = self.fd_list {
+            properties.push(("fd-list", fd_list));
+        }
         #[cfg(any(feature = "v2_28", feature = "dox"))]
-if let Some(ref name) = self.name {
-                properties.push(("name", name));
-            }
+        if let Some(ref name) = self.name {
+            properties.push(("name", name));
+        }
         #[cfg(any(feature = "v2_28", feature = "dox"))]
-if let Some(ref parameters) = self.parameters {
-                properties.push(("parameters", parameters));
-            }
-        let ret = glib::Object::new::<UserMessage>(&properties)
-            .expect("object new");
-    ret
+        if let Some(ref parameters) = self.parameters {
+            properties.push(("parameters", parameters));
+        }
+        let ret = glib::Object::new::<UserMessage>(&properties).expect("object new");
+        ret
     }
 
     #[cfg(any(feature = "v2_28", feature = "dox"))]
@@ -114,25 +123,34 @@ pub trait UserMessageExt: 'static {
 impl<O: IsA<UserMessage>> UserMessageExt for O {
     fn fd_list(&self) -> Option<gio::UnixFDList> {
         unsafe {
-            from_glib_none(ffi::webkit_user_message_get_fd_list(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_user_message_get_fd_list(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn name(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_user_message_get_name(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_user_message_get_name(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn parameters(&self) -> Option<glib::Variant> {
         unsafe {
-            from_glib_none(ffi::webkit_user_message_get_parameters(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_user_message_get_parameters(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn send_reply<P: IsA<UserMessage>>(&self, reply: &P) {
         unsafe {
-            ffi::webkit_user_message_send_reply(self.as_ref().to_glib_none().0, reply.as_ref().to_glib_none().0);
+            ffi::webkit_user_message_send_reply(
+                self.as_ref().to_glib_none().0,
+                reply.as_ref().to_glib_none().0,
+            );
         }
     }
 }

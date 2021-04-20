@@ -25,35 +25,47 @@ impl Credential {
     pub fn new(username: &str, password: &str, persistence: CredentialPersistence) -> Credential {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::webkit_credential_new(username.to_glib_none().0, password.to_glib_none().0, persistence.to_glib()))
+            from_glib_full(ffi::webkit_credential_new(
+                username.to_glib_none().0,
+                password.to_glib_none().0,
+                persistence.to_glib(),
+            ))
         }
     }
 
     #[doc(alias = "webkit_credential_get_password")]
     pub fn password(&mut self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_credential_get_password(self.to_glib_none_mut().0))
+            from_glib_none(ffi::webkit_credential_get_password(
+                self.to_glib_none_mut().0,
+            ))
         }
     }
 
     #[doc(alias = "webkit_credential_get_persistence")]
     pub fn persistence(&mut self) -> CredentialPersistence {
         unsafe {
-            from_glib(ffi::webkit_credential_get_persistence(self.to_glib_none_mut().0))
+            from_glib(ffi::webkit_credential_get_persistence(
+                self.to_glib_none_mut().0,
+            ))
         }
     }
 
     #[doc(alias = "webkit_credential_get_username")]
     pub fn username(&mut self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_credential_get_username(self.to_glib_none_mut().0))
+            from_glib_none(ffi::webkit_credential_get_username(
+                self.to_glib_none_mut().0,
+            ))
         }
     }
 
     #[doc(alias = "webkit_credential_has_password")]
     pub fn has_password(&mut self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_credential_has_password(self.to_glib_none_mut().0))
+            from_glib(ffi::webkit_credential_has_password(
+                self.to_glib_none_mut().0,
+            ))
         }
     }
 }

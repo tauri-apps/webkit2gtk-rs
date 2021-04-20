@@ -21,7 +21,11 @@ impl NetworkProxySettings {
     #[doc(alias = "webkit_network_proxy_settings_add_proxy_for_scheme")]
     pub fn add_proxy_for_scheme(&mut self, scheme: &str, proxy_uri: &str) {
         unsafe {
-            ffi::webkit_network_proxy_settings_add_proxy_for_scheme(self.to_glib_none_mut().0, scheme.to_glib_none().0, proxy_uri.to_glib_none().0);
+            ffi::webkit_network_proxy_settings_add_proxy_for_scheme(
+                self.to_glib_none_mut().0,
+                scheme.to_glib_none().0,
+                proxy_uri.to_glib_none().0,
+            );
         }
     }
 }

@@ -81,7 +81,9 @@ pub trait AuthenticationRequestExt: 'static {
 impl<O: IsA<AuthenticationRequest>> AuthenticationRequestExt for O {
     fn can_save_credentials(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_authentication_request_can_save_credentials(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_authentication_request_can_save_credentials(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -93,31 +95,37 @@ impl<O: IsA<AuthenticationRequest>> AuthenticationRequestExt for O {
 
     fn host(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_authentication_request_get_host(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_authentication_request_get_host(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn port(&self) -> u32 {
-        unsafe {
-            ffi::webkit_authentication_request_get_port(self.as_ref().to_glib_none().0)
-        }
+        unsafe { ffi::webkit_authentication_request_get_port(self.as_ref().to_glib_none().0) }
     }
 
     fn proposed_credential(&self) -> Option<Credential> {
         unsafe {
-            from_glib_full(ffi::webkit_authentication_request_get_proposed_credential(self.as_ref().to_glib_none().0))
+            from_glib_full(ffi::webkit_authentication_request_get_proposed_credential(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn realm(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_authentication_request_get_realm(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_authentication_request_get_realm(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn scheme(&self) -> AuthenticationScheme {
         unsafe {
-            from_glib(ffi::webkit_authentication_request_get_scheme(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_authentication_request_get_scheme(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -125,19 +133,25 @@ impl<O: IsA<AuthenticationRequest>> AuthenticationRequestExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn security_origin(&self) -> Option<SecurityOrigin> {
         unsafe {
-            from_glib_full(ffi::webkit_authentication_request_get_security_origin(self.as_ref().to_glib_none().0))
+            from_glib_full(ffi::webkit_authentication_request_get_security_origin(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_for_proxy(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_authentication_request_is_for_proxy(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_authentication_request_is_for_proxy(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_retry(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_authentication_request_is_retry(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_authentication_request_is_retry(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -145,7 +159,10 @@ impl<O: IsA<AuthenticationRequest>> AuthenticationRequestExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn set_can_save_credentials(&self, enabled: bool) {
         unsafe {
-            ffi::webkit_authentication_request_set_can_save_credentials(self.as_ref().to_glib_none().0, enabled.to_glib());
+            ffi::webkit_authentication_request_set_can_save_credentials(
+                self.as_ref().to_glib_none().0,
+                enabled.to_glib(),
+            );
         }
     }
 
@@ -153,39 +170,64 @@ impl<O: IsA<AuthenticationRequest>> AuthenticationRequestExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn set_proposed_credential(&self, credential: &mut Credential) {
         unsafe {
-            ffi::webkit_authentication_request_set_proposed_credential(self.as_ref().to_glib_none().0, credential.to_glib_none_mut().0);
+            ffi::webkit_authentication_request_set_proposed_credential(
+                self.as_ref().to_glib_none().0,
+                credential.to_glib_none_mut().0,
+            );
         }
     }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn connect_authenticated<F: Fn(&Self, &Credential) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn authenticated_trampoline<P, F: Fn(&P, &Credential) + 'static>(this: *mut ffi::WebKitAuthenticationRequest, credential: *mut ffi::WebKitCredential, f: glib::ffi::gpointer)
-            where P: IsA<AuthenticationRequest>
+        unsafe extern "C" fn authenticated_trampoline<P, F: Fn(&P, &Credential) + 'static>(
+            this: *mut ffi::WebKitAuthenticationRequest,
+            credential: *mut ffi::WebKitCredential,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<AuthenticationRequest>,
         {
             let f: &F = &*(f as *const F);
-            f(&AuthenticationRequest::from_glib_borrow(this).unsafe_cast_ref(), &from_glib_borrow(credential))
+            f(
+                &AuthenticationRequest::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(credential),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"authenticated\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(authenticated_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"authenticated\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    authenticated_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
     fn connect_cancelled<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn cancelled_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitAuthenticationRequest, f: glib::ffi::gpointer)
-            where P: IsA<AuthenticationRequest>
+        unsafe extern "C" fn cancelled_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitAuthenticationRequest,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<AuthenticationRequest>,
         {
             let f: &F = &*(f as *const F);
             f(&AuthenticationRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"cancelled\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(cancelled_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"cancelled\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cancelled_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

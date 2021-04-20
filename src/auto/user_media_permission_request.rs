@@ -30,53 +30,99 @@ pub trait UserMediaPermissionRequestExt: 'static {
     #[doc(alias = "get_property_is_for_video_device")]
     fn is_for_video_device(&self) -> bool;
 
-    fn connect_property_is_for_audio_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_is_for_audio_device_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_is_for_video_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_is_for_video_device_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<UserMediaPermissionRequest>> UserMediaPermissionRequestExt for O {
     fn is_for_audio_device(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut glib::gobject_ffi::GObject, b"is-for-audio-device\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().expect("Return Value for property `is-for-audio-device` getter").unwrap()
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+                b"is-for-audio-device\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `is-for-audio-device` getter")
+                .unwrap()
         }
     }
 
     fn is_for_video_device(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut glib::gobject_ffi::GObject, b"is-for-video-device\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().expect("Return Value for property `is-for-video-device` getter").unwrap()
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+                b"is-for-video-device\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `is-for-video-device` getter")
+                .unwrap()
         }
     }
 
-    fn connect_property_is_for_audio_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_is_for_audio_device_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitUserMediaPermissionRequest, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer)
-            where P: IsA<UserMediaPermissionRequest>
+    fn connect_property_is_for_audio_device_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_is_for_audio_device_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitUserMediaPermissionRequest,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<UserMediaPermissionRequest>,
         {
             let f: &F = &*(f as *const F);
             f(&UserMediaPermissionRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::is-for-audio-device\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_is_for_audio_device_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::is-for-audio-device\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_is_for_audio_device_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_is_for_video_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_is_for_video_device_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitUserMediaPermissionRequest, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer)
-            where P: IsA<UserMediaPermissionRequest>
+    fn connect_property_is_for_video_device_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_is_for_video_device_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitUserMediaPermissionRequest,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<UserMediaPermissionRequest>,
         {
             let f: &F = &*(f as *const F);
             f(&UserMediaPermissionRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::is-for-video-device\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_is_for_video_device_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::is-for-video-device\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_is_for_video_device_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

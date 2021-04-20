@@ -20,7 +20,9 @@ impl JavascriptResult {
     #[doc(alias = "webkit_javascript_result_get_global_context")]
     pub fn global_context(&self) -> Option<java_script_core::GlobalContextRef> {
         unsafe {
-            from_glib_none(ffi::webkit_javascript_result_get_global_context(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_javascript_result_get_global_context(
+                self.to_glib_none().0,
+            ))
         }
     }
 
@@ -29,7 +31,9 @@ impl JavascriptResult {
     #[doc(alias = "webkit_javascript_result_get_js_value")]
     pub fn js_value(&self) -> Option<java_script_core::Value> {
         unsafe {
-            from_glib_none(ffi::webkit_javascript_result_get_js_value(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_javascript_result_get_js_value(
+                self.to_glib_none().0,
+            ))
         }
     }
 
@@ -37,7 +41,9 @@ impl JavascriptResult {
     #[doc(alias = "webkit_javascript_result_get_value")]
     pub fn value(&self) -> Option<java_script_core::ValueRef> {
         unsafe {
-            from_glib_none(ffi::webkit_javascript_result_get_value(self.to_glib_none().0))
+            from_glib_none(ffi::webkit_javascript_result_get_value(
+                self.to_glib_none().0,
+            ))
         }
     }
 }

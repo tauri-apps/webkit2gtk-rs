@@ -19,16 +19,16 @@ impl ContextMenu {
     #[doc(alias = "webkit_context_menu_new")]
     pub fn new() -> ContextMenu {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::webkit_context_menu_new())
-        }
+        unsafe { from_glib_full(ffi::webkit_context_menu_new()) }
     }
 
     #[doc(alias = "webkit_context_menu_new_with_items")]
     pub fn with_items(items: &[ContextMenuItem]) -> ContextMenu {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::webkit_context_menu_new_with_items(items.to_glib_none().0))
+            from_glib_full(ffi::webkit_context_menu_new_with_items(
+                items.to_glib_none().0,
+            ))
         }
     }
 }
@@ -89,69 +89,95 @@ pub trait ContextMenuExt: 'static {
 impl<O: IsA<ContextMenu>> ContextMenuExt for O {
     fn append<P: IsA<ContextMenuItem>>(&self, item: &P) {
         unsafe {
-            ffi::webkit_context_menu_append(self.as_ref().to_glib_none().0, item.as_ref().to_glib_none().0);
+            ffi::webkit_context_menu_append(
+                self.as_ref().to_glib_none().0,
+                item.as_ref().to_glib_none().0,
+            );
         }
     }
 
     fn first(&self) -> Option<ContextMenuItem> {
         unsafe {
-            from_glib_none(ffi::webkit_context_menu_first(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_context_menu_first(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn item_at_position(&self, position: u32) -> Option<ContextMenuItem> {
         unsafe {
-            from_glib_none(ffi::webkit_context_menu_get_item_at_position(self.as_ref().to_glib_none().0, position))
+            from_glib_none(ffi::webkit_context_menu_get_item_at_position(
+                self.as_ref().to_glib_none().0,
+                position,
+            ))
         }
     }
 
     fn items(&self) -> Vec<ContextMenuItem> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::webkit_context_menu_get_items(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ffi::webkit_context_menu_get_items(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn n_items(&self) -> u32 {
-        unsafe {
-            ffi::webkit_context_menu_get_n_items(self.as_ref().to_glib_none().0)
-        }
+        unsafe { ffi::webkit_context_menu_get_n_items(self.as_ref().to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn user_data(&self) -> Option<glib::Variant> {
         unsafe {
-            from_glib_none(ffi::webkit_context_menu_get_user_data(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_context_menu_get_user_data(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn insert<P: IsA<ContextMenuItem>>(&self, item: &P, position: i32) {
         unsafe {
-            ffi::webkit_context_menu_insert(self.as_ref().to_glib_none().0, item.as_ref().to_glib_none().0, position);
+            ffi::webkit_context_menu_insert(
+                self.as_ref().to_glib_none().0,
+                item.as_ref().to_glib_none().0,
+                position,
+            );
         }
     }
 
     fn last(&self) -> Option<ContextMenuItem> {
         unsafe {
-            from_glib_none(ffi::webkit_context_menu_last(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_context_menu_last(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn move_item<P: IsA<ContextMenuItem>>(&self, item: &P, position: i32) {
         unsafe {
-            ffi::webkit_context_menu_move_item(self.as_ref().to_glib_none().0, item.as_ref().to_glib_none().0, position);
+            ffi::webkit_context_menu_move_item(
+                self.as_ref().to_glib_none().0,
+                item.as_ref().to_glib_none().0,
+                position,
+            );
         }
     }
 
     fn prepend<P: IsA<ContextMenuItem>>(&self, item: &P) {
         unsafe {
-            ffi::webkit_context_menu_prepend(self.as_ref().to_glib_none().0, item.as_ref().to_glib_none().0);
+            ffi::webkit_context_menu_prepend(
+                self.as_ref().to_glib_none().0,
+                item.as_ref().to_glib_none().0,
+            );
         }
     }
 
     fn remove<P: IsA<ContextMenuItem>>(&self, item: &P) {
         unsafe {
-            ffi::webkit_context_menu_remove(self.as_ref().to_glib_none().0, item.as_ref().to_glib_none().0);
+            ffi::webkit_context_menu_remove(
+                self.as_ref().to_glib_none().0,
+                item.as_ref().to_glib_none().0,
+            );
         }
     }
 
@@ -165,7 +191,10 @@ impl<O: IsA<ContextMenu>> ContextMenuExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn set_user_data(&self, user_data: &glib::Variant) {
         unsafe {
-            ffi::webkit_context_menu_set_user_data(self.as_ref().to_glib_none().0, user_data.to_glib_none().0);
+            ffi::webkit_context_menu_set_user_data(
+                self.as_ref().to_glib_none().0,
+                user_data.to_glib_none().0,
+            );
         }
     }
 }

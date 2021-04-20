@@ -58,14 +58,21 @@ pub trait NavigationPolicyDecisionExt: 'static {
     fn connect_property_modifiers_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg_attr(feature = "v2_6", deprecated)]
-    fn connect_property_mouse_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_mouse_button_notify<F: Fn(&Self) + 'static>(&self, f: F)
+        -> SignalHandlerId;
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
-    fn connect_property_navigation_action_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_navigation_action_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[cfg_attr(feature = "v2_6", deprecated)]
-    fn connect_property_navigation_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_navigation_type_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[cfg_attr(feature = "v2_6", deprecated)]
     fn connect_property_request_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -74,7 +81,9 @@ pub trait NavigationPolicyDecisionExt: 'static {
 impl<O: IsA<NavigationPolicyDecision>> NavigationPolicyDecisionExt for O {
     fn frame_name(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_navigation_policy_decision_get_frame_name(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_navigation_policy_decision_get_frame_name(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -94,105 +103,182 @@ impl<O: IsA<NavigationPolicyDecision>> NavigationPolicyDecisionExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
     fn navigation_action(&self) -> Option<NavigationAction> {
         unsafe {
-            from_glib_none(ffi::webkit_navigation_policy_decision_get_navigation_action(self.as_ref().to_glib_none().0))
+            from_glib_none(
+                ffi::webkit_navigation_policy_decision_get_navigation_action(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
         }
     }
 
     fn navigation_type(&self) -> NavigationType {
         unsafe {
-            from_glib(ffi::webkit_navigation_policy_decision_get_navigation_type(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_navigation_policy_decision_get_navigation_type(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn request(&self) -> Option<URIRequest> {
         unsafe {
-            from_glib_none(ffi::webkit_navigation_policy_decision_get_request(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_navigation_policy_decision_get_request(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn connect_property_frame_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_frame_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitNavigationPolicyDecision, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer)
-            where P: IsA<NavigationPolicyDecision>
+        unsafe extern "C" fn notify_frame_name_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitNavigationPolicyDecision,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<NavigationPolicyDecision>,
         {
             let f: &F = &*(f as *const F);
             f(&NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::frame-name\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_frame_name_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::frame-name\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_frame_name_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_modifiers_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_modifiers_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitNavigationPolicyDecision, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer)
-            where P: IsA<NavigationPolicyDecision>
+        unsafe extern "C" fn notify_modifiers_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitNavigationPolicyDecision,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<NavigationPolicyDecision>,
         {
             let f: &F = &*(f as *const F);
             f(&NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::modifiers\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_modifiers_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::modifiers\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_modifiers_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_mouse_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_mouse_button_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitNavigationPolicyDecision, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer)
-            where P: IsA<NavigationPolicyDecision>
+    fn connect_property_mouse_button_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_mouse_button_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitNavigationPolicyDecision,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<NavigationPolicyDecision>,
         {
             let f: &F = &*(f as *const F);
             f(&NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::mouse-button\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_mouse_button_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::mouse-button\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_mouse_button_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     #[cfg(any(feature = "v2_6", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
-    fn connect_property_navigation_action_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_navigation_action_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitNavigationPolicyDecision, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer)
-            where P: IsA<NavigationPolicyDecision>
+    fn connect_property_navigation_action_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_navigation_action_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitNavigationPolicyDecision,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<NavigationPolicyDecision>,
         {
             let f: &F = &*(f as *const F);
             f(&NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::navigation-action\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_navigation_action_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::navigation-action\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_navigation_action_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_navigation_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_navigation_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitNavigationPolicyDecision, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer)
-            where P: IsA<NavigationPolicyDecision>
+    fn connect_property_navigation_type_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_navigation_type_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitNavigationPolicyDecision,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<NavigationPolicyDecision>,
         {
             let f: &F = &*(f as *const F);
             f(&NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::navigation-type\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_navigation_type_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::navigation-type\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_navigation_type_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_request_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_request_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitNavigationPolicyDecision, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer)
-            where P: IsA<NavigationPolicyDecision>
+        unsafe extern "C" fn notify_request_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitNavigationPolicyDecision,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<NavigationPolicyDecision>,
         {
             let f: &F = &*(f as *const F);
             f(&NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::request\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_request_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::request\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_request_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

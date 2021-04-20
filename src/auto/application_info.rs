@@ -24,16 +24,12 @@ impl ApplicationInfo {
     #[doc(alias = "webkit_application_info_new")]
     pub fn new() -> ApplicationInfo {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::webkit_application_info_new())
-        }
+        unsafe { from_glib_full(ffi::webkit_application_info_new()) }
     }
 
     #[doc(alias = "webkit_application_info_get_name")]
     pub fn name(&self) -> Option<glib::GString> {
-        unsafe {
-            from_glib_none(ffi::webkit_application_info_get_name(self.to_glib_none().0))
-        }
+        unsafe { from_glib_none(ffi::webkit_application_info_get_name(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "webkit_application_info_get_version")]
@@ -42,7 +38,12 @@ impl ApplicationInfo {
             let mut major = mem::MaybeUninit::uninit();
             let mut minor = mem::MaybeUninit::uninit();
             let mut micro = mem::MaybeUninit::uninit();
-            ffi::webkit_application_info_get_version(self.to_glib_none().0, major.as_mut_ptr(), minor.as_mut_ptr(), micro.as_mut_ptr());
+            ffi::webkit_application_info_get_version(
+                self.to_glib_none().0,
+                major.as_mut_ptr(),
+                minor.as_mut_ptr(),
+                micro.as_mut_ptr(),
+            );
             let major = major.assume_init();
             let minor = minor.assume_init();
             let micro = micro.assume_init();

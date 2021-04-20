@@ -20,7 +20,9 @@ impl GeolocationPosition {
     pub fn new(latitude: f64, longitude: f64, accuracy: f64) -> GeolocationPosition {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::webkit_geolocation_position_new(latitude, longitude, accuracy))
+            from_glib_full(ffi::webkit_geolocation_position_new(
+                latitude, longitude, accuracy,
+            ))
         }
     }
 
@@ -34,7 +36,10 @@ impl GeolocationPosition {
     #[doc(alias = "webkit_geolocation_position_set_altitude_accuracy")]
     pub fn set_altitude_accuracy(&mut self, altitude_accuracy: f64) {
         unsafe {
-            ffi::webkit_geolocation_position_set_altitude_accuracy(self.to_glib_none_mut().0, altitude_accuracy);
+            ffi::webkit_geolocation_position_set_altitude_accuracy(
+                self.to_glib_none_mut().0,
+                altitude_accuracy,
+            );
         }
     }
 

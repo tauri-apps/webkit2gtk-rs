@@ -26,10 +26,18 @@ impl ContextMenuItem {
     #[cfg(any(feature = "v2_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
     #[doc(alias = "webkit_context_menu_item_new_from_gaction")]
-    pub fn from_gaction<P: IsA<gio::Action>>(action: &P, label: &str, target: Option<&glib::Variant>) -> ContextMenuItem {
+    pub fn from_gaction<P: IsA<gio::Action>>(
+        action: &P,
+        label: &str,
+        target: Option<&glib::Variant>,
+    ) -> ContextMenuItem {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::webkit_context_menu_item_new_from_gaction(action.as_ref().to_glib_none().0, label.to_glib_none().0, target.to_glib_none().0))
+            from_glib_none(ffi::webkit_context_menu_item_new_from_gaction(
+                action.as_ref().to_glib_none().0,
+                label.to_glib_none().0,
+                target.to_glib_none().0,
+            ))
         }
     }
 
@@ -37,7 +45,9 @@ impl ContextMenuItem {
     pub fn from_stock_action(action: ContextMenuAction) -> ContextMenuItem {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::webkit_context_menu_item_new_from_stock_action(action.to_glib()))
+            from_glib_none(ffi::webkit_context_menu_item_new_from_stock_action(
+                action.to_glib(),
+            ))
         }
     }
 
@@ -45,23 +55,29 @@ impl ContextMenuItem {
     pub fn from_stock_action_with_label(action: ContextMenuAction, label: &str) -> ContextMenuItem {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::webkit_context_menu_item_new_from_stock_action_with_label(action.to_glib(), label.to_glib_none().0))
+            from_glib_none(
+                ffi::webkit_context_menu_item_new_from_stock_action_with_label(
+                    action.to_glib(),
+                    label.to_glib_none().0,
+                ),
+            )
         }
     }
 
     #[doc(alias = "webkit_context_menu_item_new_separator")]
     pub fn new_separator() -> ContextMenuItem {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(ffi::webkit_context_menu_item_new_separator())
-        }
+        unsafe { from_glib_none(ffi::webkit_context_menu_item_new_separator()) }
     }
 
     #[doc(alias = "webkit_context_menu_item_new_with_submenu")]
     pub fn with_submenu<P: IsA<ContextMenu>>(label: &str, submenu: &P) -> ContextMenuItem {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(ffi::webkit_context_menu_item_new_with_submenu(label.to_glib_none().0, submenu.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_context_menu_item_new_with_submenu(
+                label.to_glib_none().0,
+                submenu.as_ref().to_glib_none().0,
+            ))
         }
     }
 }
@@ -100,31 +116,42 @@ impl<O: IsA<ContextMenuItem>> ContextMenuItemExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
     fn gaction(&self) -> Option<gio::Action> {
         unsafe {
-            from_glib_none(ffi::webkit_context_menu_item_get_gaction(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_context_menu_item_get_gaction(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn stock_action(&self) -> ContextMenuAction {
         unsafe {
-            from_glib(ffi::webkit_context_menu_item_get_stock_action(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_context_menu_item_get_stock_action(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn submenu(&self) -> Option<ContextMenu> {
         unsafe {
-            from_glib_none(ffi::webkit_context_menu_item_get_submenu(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_context_menu_item_get_submenu(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_separator(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_context_menu_item_is_separator(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_context_menu_item_is_separator(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn set_submenu<P: IsA<ContextMenu>>(&self, submenu: Option<&P>) {
         unsafe {
-            ffi::webkit_context_menu_item_set_submenu(self.as_ref().to_glib_none().0, submenu.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::webkit_context_menu_item_set_submenu(
+                self.as_ref().to_glib_none().0,
+                submenu.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 }

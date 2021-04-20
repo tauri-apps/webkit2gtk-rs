@@ -48,9 +48,15 @@ pub trait FileChooserRequestExt: 'static {
 
     fn connect_property_mime_types_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_select_multiple_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_select_multiple_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_selected_files_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_selected_files_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<FileChooserRequest>> FileChooserRequestExt for O {
@@ -62,95 +68,158 @@ impl<O: IsA<FileChooserRequest>> FileChooserRequestExt for O {
 
     fn mime_types(&self) -> Vec<glib::GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::webkit_file_chooser_request_get_mime_types(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ffi::webkit_file_chooser_request_get_mime_types(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn mime_types_filter(&self) -> Option<gtk::FileFilter> {
         unsafe {
-            from_glib_none(ffi::webkit_file_chooser_request_get_mime_types_filter(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_file_chooser_request_get_mime_types_filter(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn selects_multiple(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_file_chooser_request_get_select_multiple(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_file_chooser_request_get_select_multiple(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn selected_files(&self) -> Vec<glib::GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::webkit_file_chooser_request_get_selected_files(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(
+                ffi::webkit_file_chooser_request_get_selected_files(self.as_ref().to_glib_none().0),
+            )
         }
     }
 
     fn select_files(&self, files: &[&str]) {
         unsafe {
-            ffi::webkit_file_chooser_request_select_files(self.as_ref().to_glib_none().0, files.to_glib_none().0);
+            ffi::webkit_file_chooser_request_select_files(
+                self.as_ref().to_glib_none().0,
+                files.to_glib_none().0,
+            );
         }
     }
 
     fn filter(&self) -> Option<gtk::FileFilter> {
         unsafe {
             let mut value = glib::Value::from_type(<gtk::FileFilter as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut glib::gobject_ffi::GObject, b"filter\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().expect("Return Value for property `filter` getter")
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+                b"filter\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `filter` getter")
         }
     }
 
     fn connect_property_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_filter_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitFileChooserRequest, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer)
-            where P: IsA<FileChooserRequest>
+        unsafe extern "C" fn notify_filter_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitFileChooserRequest,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<FileChooserRequest>,
         {
             let f: &F = &*(f as *const F);
             f(&FileChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::filter\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_filter_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::filter\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_filter_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_mime_types_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_mime_types_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitFileChooserRequest, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer)
-            where P: IsA<FileChooserRequest>
+        unsafe extern "C" fn notify_mime_types_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitFileChooserRequest,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<FileChooserRequest>,
         {
             let f: &F = &*(f as *const F);
             f(&FileChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::mime-types\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_mime_types_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::mime-types\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_mime_types_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_select_multiple_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_select_multiple_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitFileChooserRequest, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer)
-            where P: IsA<FileChooserRequest>
+    fn connect_property_select_multiple_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_select_multiple_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitFileChooserRequest,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<FileChooserRequest>,
         {
             let f: &F = &*(f as *const F);
             f(&FileChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::select-multiple\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_select_multiple_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::select-multiple\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_select_multiple_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_selected_files_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_selected_files_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitFileChooserRequest, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer)
-            where P: IsA<FileChooserRequest>
+    fn connect_property_selected_files_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_selected_files_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitFileChooserRequest,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<FileChooserRequest>,
         {
             let f: &F = &*(f as *const F);
             f(&FileChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::selected-files\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_selected_files_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::selected-files\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_selected_files_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

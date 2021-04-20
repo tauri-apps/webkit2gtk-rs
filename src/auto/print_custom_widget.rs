@@ -26,7 +26,10 @@ impl PrintCustomWidget {
     pub fn new<P: IsA<gtk::Widget>>(widget: &P, title: &str) -> PrintCustomWidget {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::webkit_print_custom_widget_new(widget.as_ref().to_glib_none().0, title.to_glib_none().0))
+            from_glib_full(ffi::webkit_print_custom_widget_new(
+                widget.as_ref().to_glib_none().0,
+                title.to_glib_none().0,
+            ))
         }
     }
 }
@@ -46,20 +49,18 @@ impl PrintCustomWidgetBuilder {
         Self::default()
     }
 
-
     pub fn build(self) -> PrintCustomWidget {
         let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
         #[cfg(any(feature = "v2_16", feature = "dox"))]
-if let Some(ref title) = self.title {
-                properties.push(("title", title));
-            }
+        if let Some(ref title) = self.title {
+            properties.push(("title", title));
+        }
         #[cfg(any(feature = "v2_16", feature = "dox"))]
-if let Some(ref widget) = self.widget {
-                properties.push(("widget", widget));
-            }
-        let ret = glib::Object::new::<PrintCustomWidget>(&properties)
-            .expect("object new");
-    ret
+        if let Some(ref widget) = self.widget {
+            properties.push(("widget", widget));
+        }
+        let ret = glib::Object::new::<PrintCustomWidget>(&properties).expect("object new");
+        ret
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
@@ -92,51 +93,88 @@ pub trait PrintCustomWidgetExt: 'static {
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
-    fn connect_update<F: Fn(&Self, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_update<F: Fn(&Self, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<PrintCustomWidget>> PrintCustomWidgetExt for O {
     fn title(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_print_custom_widget_get_title(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_print_custom_widget_get_title(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn widget(&self) -> Option<gtk::Widget> {
         unsafe {
-            from_glib_none(ffi::webkit_print_custom_widget_get_widget(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_print_custom_widget_get_widget(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
     fn connect_apply<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn apply_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitPrintCustomWidget, f: glib::ffi::gpointer)
-            where P: IsA<PrintCustomWidget>
+        unsafe extern "C" fn apply_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitPrintCustomWidget,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<PrintCustomWidget>,
         {
             let f: &F = &*(f as *const F);
             f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"apply\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(apply_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"apply\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    apply_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
-    fn connect_update<F: Fn(&Self, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn update_trampoline<P, F: Fn(&P, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(this: *mut ffi::WebKitPrintCustomWidget, page_setup: *mut gtk::ffi::GtkPageSetup, print_settings: *mut gtk::ffi::GtkPrintSettings, f: glib::ffi::gpointer)
-            where P: IsA<PrintCustomWidget>
+    fn connect_update<F: Fn(&Self, &gtk::PageSetup, &gtk::PrintSettings) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn update_trampoline<
+            P,
+            F: Fn(&P, &gtk::PageSetup, &gtk::PrintSettings) + 'static,
+        >(
+            this: *mut ffi::WebKitPrintCustomWidget,
+            page_setup: *mut gtk::ffi::GtkPageSetup,
+            print_settings: *mut gtk::ffi::GtkPrintSettings,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<PrintCustomWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintCustomWidget::from_glib_borrow(this).unsafe_cast_ref(), &from_glib_borrow(page_setup), &from_glib_borrow(print_settings))
+            f(
+                &PrintCustomWidget::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(page_setup),
+                &from_glib_borrow(print_settings),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"update\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(update_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"update\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    update_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

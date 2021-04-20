@@ -31,15 +31,13 @@ impl ColorChooserRequestBuilder {
         Self::default()
     }
 
-
     pub fn build(self) -> ColorChooserRequest {
         let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-if let Some(ref rgba) = self.rgba {
-                properties.push(("rgba", rgba));
-            }
-        let ret = glib::Object::new::<ColorChooserRequest>(&properties)
-            .expect("object new");
-    ret
+        if let Some(ref rgba) = self.rgba {
+            properties.push(("rgba", rgba));
+        }
+        let ret = glib::Object::new::<ColorChooserRequest>(&properties).expect("object new");
+        ret
     }
 
     pub fn rgba(mut self, rgba: &gdk::RGBA) -> Self {
@@ -93,7 +91,10 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
     fn element_rectangle(&self) -> gdk::Rectangle {
         unsafe {
             let mut rect = gdk::Rectangle::uninitialized();
-            ffi::webkit_color_chooser_request_get_element_rectangle(self.as_ref().to_glib_none().0, rect.to_glib_none_mut().0);
+            ffi::webkit_color_chooser_request_get_element_rectangle(
+                self.as_ref().to_glib_none().0,
+                rect.to_glib_none_mut().0,
+            );
             rect
         }
     }
@@ -101,58 +102,93 @@ impl<O: IsA<ColorChooserRequest>> ColorChooserRequestExt for O {
     fn rgba(&self) -> gdk::RGBA {
         unsafe {
             let mut rgba = gdk::RGBA::uninitialized();
-            ffi::webkit_color_chooser_request_get_rgba(self.as_ref().to_glib_none().0, rgba.to_glib_none_mut().0);
+            ffi::webkit_color_chooser_request_get_rgba(
+                self.as_ref().to_glib_none().0,
+                rgba.to_glib_none_mut().0,
+            );
             rgba
         }
     }
 
     fn set_rgba(&self, rgba: &gdk::RGBA) {
         unsafe {
-            ffi::webkit_color_chooser_request_set_rgba(self.as_ref().to_glib_none().0, rgba.to_glib_none().0);
+            ffi::webkit_color_chooser_request_set_rgba(
+                self.as_ref().to_glib_none().0,
+                rgba.to_glib_none().0,
+            );
         }
     }
 
     fn get_property_rgba(&self) -> Option<gdk::RGBA> {
         unsafe {
             let mut value = glib::Value::from_type(<gdk::RGBA as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut glib::gobject_ffi::GObject, b"rgba\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().expect("Return Value for property `rgba` getter")
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+                b"rgba\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `rgba` getter")
         }
     }
 
     fn set_property_rgba(&self, rgba: Option<&gdk::RGBA>) {
         unsafe {
-            glib::gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut glib::gobject_ffi::GObject, b"rgba\0".as_ptr() as *const _, glib::Value::from(rgba).to_glib_none().0);
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+                b"rgba\0".as_ptr() as *const _,
+                glib::Value::from(rgba).to_glib_none().0,
+            );
         }
     }
 
     #[cfg(any(feature = "v2_8", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
     fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitColorChooserRequest, f: glib::ffi::gpointer)
-            where P: IsA<ColorChooserRequest>
+        unsafe extern "C" fn finished_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitColorChooserRequest,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<ColorChooserRequest>,
         {
             let f: &F = &*(f as *const F);
             f(&ColorChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"finished\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(finished_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"finished\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    finished_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_rgba_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_rgba_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::WebKitColorChooserRequest, _param_spec: glib::ffi::gpointer, f: glib::ffi::gpointer)
-            where P: IsA<ColorChooserRequest>
+        unsafe extern "C" fn notify_rgba_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ffi::WebKitColorChooserRequest,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<ColorChooserRequest>,
         {
             let f: &F = &*(f as *const F);
             f(&ColorChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::rgba\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_rgba_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::rgba\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_rgba_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

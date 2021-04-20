@@ -26,9 +26,7 @@ glib::wrapper! {
 impl NavigationAction {
     #[doc(alias = "webkit_navigation_action_get_modifiers")]
     pub fn modifiers(&self) -> u32 {
-        unsafe {
-            ffi::webkit_navigation_action_get_modifiers(mut_override(self.to_glib_none().0))
-        }
+        unsafe { ffi::webkit_navigation_action_get_modifiers(mut_override(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "webkit_navigation_action_get_mouse_button")]
@@ -41,14 +39,18 @@ impl NavigationAction {
     #[doc(alias = "webkit_navigation_action_get_navigation_type")]
     pub fn navigation_type(&self) -> NavigationType {
         unsafe {
-            from_glib(ffi::webkit_navigation_action_get_navigation_type(mut_override(self.to_glib_none().0)))
+            from_glib(ffi::webkit_navigation_action_get_navigation_type(
+                mut_override(self.to_glib_none().0),
+            ))
         }
     }
 
     #[doc(alias = "webkit_navigation_action_get_request")]
     pub fn request(&self) -> Option<URIRequest> {
         unsafe {
-            from_glib_none(ffi::webkit_navigation_action_get_request(mut_override(self.to_glib_none().0)))
+            from_glib_none(ffi::webkit_navigation_action_get_request(mut_override(
+                self.to_glib_none().0,
+            )))
         }
     }
 
@@ -57,14 +59,18 @@ impl NavigationAction {
     #[doc(alias = "webkit_navigation_action_is_redirect")]
     pub fn is_redirect(&mut self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_navigation_action_is_redirect(self.to_glib_none_mut().0))
+            from_glib(ffi::webkit_navigation_action_is_redirect(
+                self.to_glib_none_mut().0,
+            ))
         }
     }
 
     #[doc(alias = "webkit_navigation_action_is_user_gesture")]
     pub fn is_user_gesture(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_navigation_action_is_user_gesture(mut_override(self.to_glib_none().0)))
+            from_glib(ffi::webkit_navigation_action_is_user_gesture(mut_override(
+                self.to_glib_none().0,
+            )))
         }
     }
 }

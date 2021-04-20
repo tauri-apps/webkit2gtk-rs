@@ -28,10 +28,20 @@ pub trait FaviconDatabaseExt: 'static {
     fn clear(&self);
 
     #[doc(alias = "webkit_favicon_database_get_favicon")]
-    fn get_favicon<P: IsA<gio::Cancellable>, Q: FnOnce(Result<cairo::Surface, glib::Error>) + Send + 'static>(&self, page_uri: &str, cancellable: Option<&P>, callback: Q);
+    fn get_favicon<
+        P: IsA<gio::Cancellable>,
+        Q: FnOnce(Result<cairo::Surface, glib::Error>) + Send + 'static,
+    >(
+        &self,
+        page_uri: &str,
+        cancellable: Option<&P>,
+        callback: Q,
+    );
 
-    
-    fn get_favicon_future(&self, page_uri: &str) -> Pin<Box_<dyn std::future::Future<Output = Result<cairo::Surface, glib::Error>> + 'static>>;
+    fn get_favicon_future(
+        &self,
+        page_uri: &str,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<cairo::Surface, glib::Error>> + 'static>>;
 
     #[doc(alias = "webkit_favicon_database_get_favicon_uri")]
     fn favicon_uri(&self, page_uri: &str) -> Option<glib::GString>;
@@ -46,34 +56,60 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
         }
     }
 
-    fn get_favicon<P: IsA<gio::Cancellable>, Q: FnOnce(Result<cairo::Surface, glib::Error>) + Send + 'static>(&self, page_uri: &str, cancellable: Option<&P>, callback: Q) {
+    fn get_favicon<
+        P: IsA<gio::Cancellable>,
+        Q: FnOnce(Result<cairo::Surface, glib::Error>) + Send + 'static,
+    >(
+        &self,
+        page_uri: &str,
+        cancellable: Option<&P>,
+        callback: Q,
+    ) {
         let user_data: Box_<Q> = Box_::new(callback);
-        unsafe extern "C" fn get_favicon_trampoline<Q: FnOnce(Result<cairo::Surface, glib::Error>) + Send + 'static>(_source_object: *mut glib::gobject_ffi::GObject, res: *mut gio::ffi::GAsyncResult, user_data: glib::ffi::gpointer) {
+        unsafe extern "C" fn get_favicon_trampoline<
+            Q: FnOnce(Result<cairo::Surface, glib::Error>) + Send + 'static,
+        >(
+            _source_object: *mut glib::gobject_ffi::GObject,
+            res: *mut gio::ffi::GAsyncResult,
+            user_data: glib::ffi::gpointer,
+        ) {
             let mut error = ptr::null_mut();
-            let ret = ffi::webkit_favicon_database_get_favicon_finish(_source_object as *mut _, res, &mut error);
-            let result = if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) };
+            let ret = ffi::webkit_favicon_database_get_favicon_finish(
+                _source_object as *mut _,
+                res,
+                &mut error,
+            );
+            let result = if error.is_null() {
+                Ok(from_glib_full(ret))
+            } else {
+                Err(from_glib_full(error))
+            };
             let callback: Box_<Q> = Box_::from_raw(user_data as *mut _);
             callback(result);
         }
         let callback = get_favicon_trampoline::<Q>;
         unsafe {
-            ffi::webkit_favicon_database_get_favicon(self.as_ref().to_glib_none().0, page_uri.to_glib_none().0, cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box_::into_raw(user_data) as *mut _);
+            ffi::webkit_favicon_database_get_favicon(
+                self.as_ref().to_glib_none().0,
+                page_uri.to_glib_none().0,
+                cancellable.map(|p| p.as_ref()).to_glib_none().0,
+                Some(callback),
+                Box_::into_raw(user_data) as *mut _,
+            );
         }
     }
 
-    
-    fn get_favicon_future(&self, page_uri: &str) -> Pin<Box_<dyn std::future::Future<Output = Result<cairo::Surface, glib::Error>> + 'static>> {
-
+    fn get_favicon_future(
+        &self,
+        page_uri: &str,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<cairo::Surface, glib::Error>> + 'static>>
+    {
         let page_uri = String::from(page_uri);
         Box_::pin(gio::GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            obj.get_favicon(
-                &page_uri,
-                Some(&cancellable),
-                move |res| {
-                    send.resolve(res);
-                },
-            );
+            obj.get_favicon(&page_uri, Some(&cancellable), move |res| {
+                send.resolve(res);
+            });
 
             cancellable
         }))
@@ -81,21 +117,39 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
 
     fn favicon_uri(&self, page_uri: &str) -> Option<glib::GString> {
         unsafe {
-            from_glib_full(ffi::webkit_favicon_database_get_favicon_uri(self.as_ref().to_glib_none().0, page_uri.to_glib_none().0))
+            from_glib_full(ffi::webkit_favicon_database_get_favicon_uri(
+                self.as_ref().to_glib_none().0,
+                page_uri.to_glib_none().0,
+            ))
         }
     }
 
     fn connect_favicon_changed<F: Fn(&Self, &str, &str) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn favicon_changed_trampoline<P, F: Fn(&P, &str, &str) + 'static>(this: *mut ffi::WebKitFaviconDatabase, page_uri: *mut libc::c_char, favicon_uri: *mut libc::c_char, f: glib::ffi::gpointer)
-            where P: IsA<FaviconDatabase>
+        unsafe extern "C" fn favicon_changed_trampoline<P, F: Fn(&P, &str, &str) + 'static>(
+            this: *mut ffi::WebKitFaviconDatabase,
+            page_uri: *mut libc::c_char,
+            favicon_uri: *mut libc::c_char,
+            f: glib::ffi::gpointer,
+        ) where
+            P: IsA<FaviconDatabase>,
         {
             let f: &F = &*(f as *const F);
-            f(&FaviconDatabase::from_glib_borrow(this).unsafe_cast_ref(), &glib::GString::from_glib_borrow(page_uri), &glib::GString::from_glib_borrow(favicon_uri))
+            f(
+                &FaviconDatabase::from_glib_borrow(this).unsafe_cast_ref(),
+                &glib::GString::from_glib_borrow(page_uri),
+                &glib::GString::from_glib_borrow(favicon_uri),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"favicon-changed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(favicon_changed_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"favicon-changed\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    favicon_changed_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

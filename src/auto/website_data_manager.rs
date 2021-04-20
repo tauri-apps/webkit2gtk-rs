@@ -49,9 +49,7 @@ impl WebsiteDataManager {
     #[doc(alias = "webkit_website_data_manager_new_ephemeral")]
     pub fn new_ephemeral() -> WebsiteDataManager {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::webkit_website_data_manager_new_ephemeral())
-        }
+        unsafe { from_glib_full(ffi::webkit_website_data_manager_new_ephemeral()) }
     }
 }
 
@@ -100,60 +98,68 @@ impl WebsiteDataManagerBuilder {
         Self::default()
     }
 
-
     pub fn build(self) -> WebsiteDataManager {
         let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
         #[cfg(any(feature = "v2_10", feature = "dox"))]
-if let Some(ref base_cache_directory) = self.base_cache_directory {
-                properties.push(("base-cache-directory", base_cache_directory));
-            }
+        if let Some(ref base_cache_directory) = self.base_cache_directory {
+            properties.push(("base-cache-directory", base_cache_directory));
+        }
         #[cfg(any(feature = "v2_10", feature = "dox"))]
-if let Some(ref base_data_directory) = self.base_data_directory {
-                properties.push(("base-data-directory", base_data_directory));
-            }
+        if let Some(ref base_data_directory) = self.base_data_directory {
+            properties.push(("base-data-directory", base_data_directory));
+        }
         #[cfg(any(feature = "v2_10", feature = "dox"))]
-if let Some(ref disk_cache_directory) = self.disk_cache_directory {
-                properties.push(("disk-cache-directory", disk_cache_directory));
-            }
+        if let Some(ref disk_cache_directory) = self.disk_cache_directory {
+            properties.push(("disk-cache-directory", disk_cache_directory));
+        }
         #[cfg(any(feature = "v2_30", feature = "dox"))]
-if let Some(ref dom_cache_directory) = self.dom_cache_directory {
-                properties.push(("dom-cache-directory", dom_cache_directory));
-            }
+        if let Some(ref dom_cache_directory) = self.dom_cache_directory {
+            properties.push(("dom-cache-directory", dom_cache_directory));
+        }
         #[cfg(any(feature = "v2_26", feature = "dox"))]
-if let Some(ref hsts_cache_directory) = self.hsts_cache_directory {
-                properties.push(("hsts-cache-directory", hsts_cache_directory));
-            }
+        if let Some(ref hsts_cache_directory) = self.hsts_cache_directory {
+            properties.push(("hsts-cache-directory", hsts_cache_directory));
+        }
         #[cfg(any(feature = "v2_10", feature = "dox"))]
-if let Some(ref indexeddb_directory) = self.indexeddb_directory {
-                properties.push(("indexeddb-directory", indexeddb_directory));
-            }
+        if let Some(ref indexeddb_directory) = self.indexeddb_directory {
+            properties.push(("indexeddb-directory", indexeddb_directory));
+        }
         #[cfg(any(feature = "v2_16", feature = "dox"))]
-if let Some(ref is_ephemeral) = self.is_ephemeral {
-                properties.push(("is-ephemeral", is_ephemeral));
-            }
+        if let Some(ref is_ephemeral) = self.is_ephemeral {
+            properties.push(("is-ephemeral", is_ephemeral));
+        }
         #[cfg(any(feature = "v2_30", feature = "dox"))]
-if let Some(ref itp_directory) = self.itp_directory {
-                properties.push(("itp-directory", itp_directory));
-            }
+        if let Some(ref itp_directory) = self.itp_directory {
+            properties.push(("itp-directory", itp_directory));
+        }
         #[cfg(any(feature = "v2_10", feature = "dox"))]
-if let Some(ref local_storage_directory) = self.local_storage_directory {
-                properties.push(("local-storage-directory", local_storage_directory));
-            }
+        if let Some(ref local_storage_directory) = self.local_storage_directory {
+            properties.push(("local-storage-directory", local_storage_directory));
+        }
         #[cfg(any(feature = "v2_10", feature = "dox"))]
-if let Some(ref offline_application_cache_directory) = self.offline_application_cache_directory {
-                properties.push(("offline-application-cache-directory", offline_application_cache_directory));
-            }
+        if let Some(ref offline_application_cache_directory) =
+            self.offline_application_cache_directory
+        {
+            properties.push((
+                "offline-application-cache-directory",
+                offline_application_cache_directory,
+            ));
+        }
         #[cfg(any(feature = "v2_30", feature = "dox"))]
-if let Some(ref service_worker_registrations_directory) = self.service_worker_registrations_directory {
-                properties.push(("service-worker-registrations-directory", service_worker_registrations_directory));
-            }
+        if let Some(ref service_worker_registrations_directory) =
+            self.service_worker_registrations_directory
+        {
+            properties.push((
+                "service-worker-registrations-directory",
+                service_worker_registrations_directory,
+            ));
+        }
         #[cfg(any(feature = "v2_10", feature = "dox"))]
-if let Some(ref websql_directory) = self.websql_directory {
-                properties.push(("websql-directory", websql_directory));
-            }
-        let ret = glib::Object::new::<WebsiteDataManager>(&properties)
-            .expect("object new");
-    ret
+        if let Some(ref websql_directory) = self.websql_directory {
+            properties.push(("websql-directory", websql_directory));
+        }
+        let ret = glib::Object::new::<WebsiteDataManager>(&properties).expect("object new");
+        ret
     }
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
@@ -221,15 +227,23 @@ if let Some(ref websql_directory) = self.websql_directory {
 
     #[cfg(any(feature = "v2_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
-    pub fn offline_application_cache_directory(mut self, offline_application_cache_directory: &str) -> Self {
-        self.offline_application_cache_directory = Some(offline_application_cache_directory.to_string());
+    pub fn offline_application_cache_directory(
+        mut self,
+        offline_application_cache_directory: &str,
+    ) -> Self {
+        self.offline_application_cache_directory =
+            Some(offline_application_cache_directory.to_string());
         self
     }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
-    pub fn service_worker_registrations_directory(mut self, service_worker_registrations_directory: &str) -> Self {
-        self.service_worker_registrations_directory = Some(service_worker_registrations_directory.to_string());
+    pub fn service_worker_registrations_directory(
+        mut self,
+        service_worker_registrations_directory: &str,
+    ) -> Self {
+        self.service_worker_registrations_directory =
+            Some(service_worker_registrations_directory.to_string());
         self
     }
 
@@ -247,22 +261,41 @@ pub trait WebsiteDataManagerExt: 'static {
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
     #[doc(alias = "webkit_website_data_manager_clear")]
-    fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, timespan: glib::TimeSpan, cancellable: Option<&P>, callback: Q);
+    fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(
+        &self,
+        types: WebsiteDataTypes,
+        timespan: glib::TimeSpan,
+        cancellable: Option<&P>,
+        callback: Q,
+    );
 
-    
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
-    fn clear_future(&self, types: WebsiteDataTypes, timespan: glib::TimeSpan) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
+    fn clear_future(
+        &self,
+        types: WebsiteDataTypes,
+        timespan: glib::TimeSpan,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>>;
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
     #[doc(alias = "webkit_website_data_manager_fetch")]
-    fn fetch<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<WebsiteData>, glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q);
+    fn fetch<
+        P: IsA<gio::Cancellable>,
+        Q: FnOnce(Result<Vec<WebsiteData>, glib::Error>) + Send + 'static,
+    >(
+        &self,
+        types: WebsiteDataTypes,
+        cancellable: Option<&P>,
+        callback: Q,
+    );
 
-    
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
-    fn fetch_future(&self, types: WebsiteDataTypes) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<WebsiteData>, glib::Error>> + 'static>>;
+    fn fetch_future(
+        &self,
+        types: WebsiteDataTypes,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<WebsiteData>, glib::Error>> + 'static>>;
 
     #[doc(alias = "webkit_website_data_manager_get_base_cache_directory")]
     fn base_cache_directory(&self) -> Option<glib::GString>;
@@ -304,12 +337,22 @@ pub trait WebsiteDataManagerExt: 'static {
     #[cfg(any(feature = "v2_30", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     #[doc(alias = "webkit_website_data_manager_get_itp_summary")]
-    fn itp_summary<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<ITPThirdParty>, glib::Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q);
+    fn itp_summary<
+        P: IsA<gio::Cancellable>,
+        Q: FnOnce(Result<Vec<ITPThirdParty>, glib::Error>) + Send + 'static,
+    >(
+        &self,
+        cancellable: Option<&P>,
+        callback: Q,
+    );
 
-    
     #[cfg(any(feature = "v2_30", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
-    fn get_itp_summary_future(&self) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<ITPThirdParty>, glib::Error>> + 'static>>;
+    fn get_itp_summary_future(
+        &self,
+    ) -> Pin<
+        Box_<dyn std::future::Future<Output = Result<Vec<ITPThirdParty>, glib::Error>> + 'static>,
+    >;
 
     #[doc(alias = "webkit_website_data_manager_get_local_storage_directory")]
     fn local_storage_directory(&self) -> Option<glib::GString>;
@@ -350,36 +393,60 @@ pub trait WebsiteDataManagerExt: 'static {
 impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
-    fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, timespan: glib::TimeSpan, cancellable: Option<&P>, callback: Q) {
+    fn clear<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(
+        &self,
+        types: WebsiteDataTypes,
+        timespan: glib::TimeSpan,
+        cancellable: Option<&P>,
+        callback: Q,
+    ) {
         let user_data: Box_<Q> = Box_::new(callback);
-        unsafe extern "C" fn clear_trampoline<Q: FnOnce(Result<(), glib::Error>) + Send + 'static>(_source_object: *mut glib::gobject_ffi::GObject, res: *mut gio::ffi::GAsyncResult, user_data: glib::ffi::gpointer) {
+        unsafe extern "C" fn clear_trampoline<
+            Q: FnOnce(Result<(), glib::Error>) + Send + 'static,
+        >(
+            _source_object: *mut glib::gobject_ffi::GObject,
+            res: *mut gio::ffi::GAsyncResult,
+            user_data: glib::ffi::gpointer,
+        ) {
             let mut error = ptr::null_mut();
-            let _ = ffi::webkit_website_data_manager_clear_finish(_source_object as *mut _, res, &mut error);
-            let result = if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) };
+            let _ = ffi::webkit_website_data_manager_clear_finish(
+                _source_object as *mut _,
+                res,
+                &mut error,
+            );
+            let result = if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            };
             let callback: Box_<Q> = Box_::from_raw(user_data as *mut _);
             callback(result);
         }
         let callback = clear_trampoline::<Q>;
         unsafe {
-            ffi::webkit_website_data_manager_clear(self.as_ref().to_glib_none().0, types.to_glib(), timespan, cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box_::into_raw(user_data) as *mut _);
+            ffi::webkit_website_data_manager_clear(
+                self.as_ref().to_glib_none().0,
+                types.to_glib(),
+                timespan,
+                cancellable.map(|p| p.as_ref()).to_glib_none().0,
+                Some(callback),
+                Box_::into_raw(user_data) as *mut _,
+            );
         }
     }
 
-    
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
-    fn clear_future(&self, types: WebsiteDataTypes, timespan: glib::TimeSpan) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
-
+    fn clear_future(
+        &self,
+        types: WebsiteDataTypes,
+        timespan: glib::TimeSpan,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
         Box_::pin(gio::GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            obj.clear(
-                types,
-                timespan,
-                Some(&cancellable),
-                move |res| {
-                    send.resolve(res);
-                },
-            );
+            obj.clear(types, timespan, Some(&cancellable), move |res| {
+                send.resolve(res);
+            });
 
             cancellable
         }))
@@ -387,35 +454,61 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
 
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
-    fn fetch<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<WebsiteData>, glib::Error>) + Send + 'static>(&self, types: WebsiteDataTypes, cancellable: Option<&P>, callback: Q) {
+    fn fetch<
+        P: IsA<gio::Cancellable>,
+        Q: FnOnce(Result<Vec<WebsiteData>, glib::Error>) + Send + 'static,
+    >(
+        &self,
+        types: WebsiteDataTypes,
+        cancellable: Option<&P>,
+        callback: Q,
+    ) {
         let user_data: Box_<Q> = Box_::new(callback);
-        unsafe extern "C" fn fetch_trampoline<Q: FnOnce(Result<Vec<WebsiteData>, glib::Error>) + Send + 'static>(_source_object: *mut glib::gobject_ffi::GObject, res: *mut gio::ffi::GAsyncResult, user_data: glib::ffi::gpointer) {
+        unsafe extern "C" fn fetch_trampoline<
+            Q: FnOnce(Result<Vec<WebsiteData>, glib::Error>) + Send + 'static,
+        >(
+            _source_object: *mut glib::gobject_ffi::GObject,
+            res: *mut gio::ffi::GAsyncResult,
+            user_data: glib::ffi::gpointer,
+        ) {
             let mut error = ptr::null_mut();
-            let ret = ffi::webkit_website_data_manager_fetch_finish(_source_object as *mut _, res, &mut error);
-            let result = if error.is_null() { Ok(FromGlibPtrContainer::from_glib_full(ret)) } else { Err(from_glib_full(error)) };
+            let ret = ffi::webkit_website_data_manager_fetch_finish(
+                _source_object as *mut _,
+                res,
+                &mut error,
+            );
+            let result = if error.is_null() {
+                Ok(FromGlibPtrContainer::from_glib_full(ret))
+            } else {
+                Err(from_glib_full(error))
+            };
             let callback: Box_<Q> = Box_::from_raw(user_data as *mut _);
             callback(result);
         }
         let callback = fetch_trampoline::<Q>;
         unsafe {
-            ffi::webkit_website_data_manager_fetch(self.as_ref().to_glib_none().0, types.to_glib(), cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box_::into_raw(user_data) as *mut _);
+            ffi::webkit_website_data_manager_fetch(
+                self.as_ref().to_glib_none().0,
+                types.to_glib(),
+                cancellable.map(|p| p.as_ref()).to_glib_none().0,
+                Some(callback),
+                Box_::into_raw(user_data) as *mut _,
+            );
         }
     }
 
-    
     #[cfg(any(feature = "v2_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
-    fn fetch_future(&self, types: WebsiteDataTypes) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<WebsiteData>, glib::Error>> + 'static>> {
-
+    fn fetch_future(
+        &self,
+        types: WebsiteDataTypes,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<WebsiteData>, glib::Error>> + 'static>>
+    {
         Box_::pin(gio::GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            obj.fetch(
-                types,
-                Some(&cancellable),
-                move |res| {
-                    send.resolve(res);
-                },
-            );
+            obj.fetch(types, Some(&cancellable), move |res| {
+                send.resolve(res);
+            });
 
             cancellable
         }))
@@ -423,13 +516,17 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
 
     fn base_cache_directory(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_base_cache_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_website_data_manager_get_base_cache_directory(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn base_data_directory(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_base_data_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_website_data_manager_get_base_data_directory(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -437,13 +534,17 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
     fn cookie_manager(&self) -> Option<CookieManager> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_cookie_manager(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_website_data_manager_get_cookie_manager(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn disk_cache_directory(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_disk_cache_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_website_data_manager_get_disk_cache_directory(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -451,7 +552,9 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn dom_cache_directory(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_dom_cache_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_website_data_manager_get_dom_cache_directory(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -459,13 +562,17 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
     fn hsts_cache_directory(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_hsts_cache_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_website_data_manager_get_hsts_cache_directory(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn indexeddb_directory(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_indexeddb_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_website_data_manager_get_indexeddb_directory(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -473,7 +580,9 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn itp_directory(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_itp_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_website_data_manager_get_itp_directory(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -481,40 +590,67 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn is_itp_enabled(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_website_data_manager_get_itp_enabled(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_website_data_manager_get_itp_enabled(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
-    fn itp_summary<P: IsA<gio::Cancellable>, Q: FnOnce(Result<Vec<ITPThirdParty>, glib::Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q) {
+    fn itp_summary<
+        P: IsA<gio::Cancellable>,
+        Q: FnOnce(Result<Vec<ITPThirdParty>, glib::Error>) + Send + 'static,
+    >(
+        &self,
+        cancellable: Option<&P>,
+        callback: Q,
+    ) {
         let user_data: Box_<Q> = Box_::new(callback);
-        unsafe extern "C" fn get_itp_summary_trampoline<Q: FnOnce(Result<Vec<ITPThirdParty>, glib::Error>) + Send + 'static>(_source_object: *mut glib::gobject_ffi::GObject, res: *mut gio::ffi::GAsyncResult, user_data: glib::ffi::gpointer) {
+        unsafe extern "C" fn get_itp_summary_trampoline<
+            Q: FnOnce(Result<Vec<ITPThirdParty>, glib::Error>) + Send + 'static,
+        >(
+            _source_object: *mut glib::gobject_ffi::GObject,
+            res: *mut gio::ffi::GAsyncResult,
+            user_data: glib::ffi::gpointer,
+        ) {
             let mut error = ptr::null_mut();
-            let ret = ffi::webkit_website_data_manager_get_itp_summary_finish(_source_object as *mut _, res, &mut error);
-            let result = if error.is_null() { Ok(FromGlibPtrContainer::from_glib_full(ret)) } else { Err(from_glib_full(error)) };
+            let ret = ffi::webkit_website_data_manager_get_itp_summary_finish(
+                _source_object as *mut _,
+                res,
+                &mut error,
+            );
+            let result = if error.is_null() {
+                Ok(FromGlibPtrContainer::from_glib_full(ret))
+            } else {
+                Err(from_glib_full(error))
+            };
             let callback: Box_<Q> = Box_::from_raw(user_data as *mut _);
             callback(result);
         }
         let callback = get_itp_summary_trampoline::<Q>;
         unsafe {
-            ffi::webkit_website_data_manager_get_itp_summary(self.as_ref().to_glib_none().0, cancellable.map(|p| p.as_ref()).to_glib_none().0, Some(callback), Box_::into_raw(user_data) as *mut _);
+            ffi::webkit_website_data_manager_get_itp_summary(
+                self.as_ref().to_glib_none().0,
+                cancellable.map(|p| p.as_ref()).to_glib_none().0,
+                Some(callback),
+                Box_::into_raw(user_data) as *mut _,
+            );
         }
     }
 
-    
     #[cfg(any(feature = "v2_30", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
-    fn get_itp_summary_future(&self) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<ITPThirdParty>, glib::Error>> + 'static>> {
-
+    fn get_itp_summary_future(
+        &self,
+    ) -> Pin<
+        Box_<dyn std::future::Future<Output = Result<Vec<ITPThirdParty>, glib::Error>> + 'static>,
+    > {
         Box_::pin(gio::GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            obj.get_itp_summary(
-                Some(&cancellable),
-                move |res| {
-                    send.resolve(res);
-                },
-            );
+            obj.get_itp_summary(Some(&cancellable), move |res| {
+                send.resolve(res);
+            });
 
             cancellable
         }))
@@ -522,13 +658,21 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
 
     fn local_storage_directory(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_local_storage_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(
+                ffi::webkit_website_data_manager_get_local_storage_directory(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
         }
     }
 
     fn offline_application_cache_directory(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_offline_application_cache_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(
+                ffi::webkit_website_data_manager_get_offline_application_cache_directory(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
         }
     }
 
@@ -536,7 +680,11 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn is_persistent_credential_storage_enabled(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_website_data_manager_get_persistent_credential_storage_enabled(self.as_ref().to_glib_none().0))
+            from_glib(
+                ffi::webkit_website_data_manager_get_persistent_credential_storage_enabled(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
         }
     }
 
@@ -544,13 +692,19 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn service_worker_registrations_directory(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_service_worker_registrations_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(
+                ffi::webkit_website_data_manager_get_service_worker_registrations_directory(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
         }
     }
 
     fn websql_directory(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ffi::webkit_website_data_manager_get_websql_directory(self.as_ref().to_glib_none().0))
+            from_glib_none(ffi::webkit_website_data_manager_get_websql_directory(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -558,7 +712,9 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
     fn is_ephemeral(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_website_data_manager_is_ephemeral(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_website_data_manager_is_ephemeral(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -566,7 +722,10 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn set_itp_enabled(&self, enabled: bool) {
         unsafe {
-            ffi::webkit_website_data_manager_set_itp_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
+            ffi::webkit_website_data_manager_set_itp_enabled(
+                self.as_ref().to_glib_none().0,
+                enabled.to_glib(),
+            );
         }
     }
 
@@ -574,7 +733,10 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn set_persistent_credential_storage_enabled(&self, enabled: bool) {
         unsafe {
-            ffi::webkit_website_data_manager_set_persistent_credential_storage_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
+            ffi::webkit_website_data_manager_set_persistent_credential_storage_enabled(
+                self.as_ref().to_glib_none().0,
+                enabled.to_glib(),
+            );
         }
     }
 }

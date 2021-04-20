@@ -58,7 +58,10 @@ impl<O: IsA<PolicyDecision>> PolicyDecisionExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     fn use_with_policies<P: IsA<WebsitePolicies>>(&self, policies: &P) {
         unsafe {
-            ffi::webkit_policy_decision_use_with_policies(self.as_ref().to_glib_none().0, policies.as_ref().to_glib_none().0);
+            ffi::webkit_policy_decision_use_with_policies(
+                self.as_ref().to_glib_none().0,
+                policies.as_ref().to_glib_none().0,
+            );
         }
     }
 }

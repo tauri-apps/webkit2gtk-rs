@@ -23,22 +23,16 @@ glib::wrapper! {
 impl WebsiteData {
     #[doc(alias = "webkit_website_data_get_name")]
     pub fn name(&self) -> Option<glib::GString> {
-        unsafe {
-            from_glib_none(ffi::webkit_website_data_get_name(self.to_glib_none().0))
-        }
+        unsafe { from_glib_none(ffi::webkit_website_data_get_name(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "webkit_website_data_get_size")]
     pub fn size(&self, types: WebsiteDataTypes) -> u64 {
-        unsafe {
-            ffi::webkit_website_data_get_size(self.to_glib_none().0, types.to_glib())
-        }
+        unsafe { ffi::webkit_website_data_get_size(self.to_glib_none().0, types.to_glib()) }
     }
 
     #[doc(alias = "webkit_website_data_get_types")]
     pub fn types(&self) -> WebsiteDataTypes {
-        unsafe {
-            from_glib(ffi::webkit_website_data_get_types(self.to_glib_none().0))
-        }
+        unsafe { from_glib(ffi::webkit_website_data_get_types(self.to_glib_none().0)) }
     }
 }

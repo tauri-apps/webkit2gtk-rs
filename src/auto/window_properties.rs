@@ -34,36 +34,34 @@ impl WindowPropertiesBuilder {
         Self::default()
     }
 
-
     pub fn build(self) -> WindowProperties {
         let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-if let Some(ref fullscreen) = self.fullscreen {
-                properties.push(("fullscreen", fullscreen));
-            }
-if let Some(ref geometry) = self.geometry {
-                properties.push(("geometry", geometry));
-            }
-if let Some(ref locationbar_visible) = self.locationbar_visible {
-                properties.push(("locationbar-visible", locationbar_visible));
-            }
-if let Some(ref menubar_visible) = self.menubar_visible {
-                properties.push(("menubar-visible", menubar_visible));
-            }
-if let Some(ref resizable) = self.resizable {
-                properties.push(("resizable", resizable));
-            }
-if let Some(ref scrollbars_visible) = self.scrollbars_visible {
-                properties.push(("scrollbars-visible", scrollbars_visible));
-            }
-if let Some(ref statusbar_visible) = self.statusbar_visible {
-                properties.push(("statusbar-visible", statusbar_visible));
-            }
-if let Some(ref toolbar_visible) = self.toolbar_visible {
-                properties.push(("toolbar-visible", toolbar_visible));
-            }
-        let ret = glib::Object::new::<WindowProperties>(&properties)
-            .expect("object new");
-    ret
+        if let Some(ref fullscreen) = self.fullscreen {
+            properties.push(("fullscreen", fullscreen));
+        }
+        if let Some(ref geometry) = self.geometry {
+            properties.push(("geometry", geometry));
+        }
+        if let Some(ref locationbar_visible) = self.locationbar_visible {
+            properties.push(("locationbar-visible", locationbar_visible));
+        }
+        if let Some(ref menubar_visible) = self.menubar_visible {
+            properties.push(("menubar-visible", menubar_visible));
+        }
+        if let Some(ref resizable) = self.resizable {
+            properties.push(("resizable", resizable));
+        }
+        if let Some(ref scrollbars_visible) = self.scrollbars_visible {
+            properties.push(("scrollbars-visible", scrollbars_visible));
+        }
+        if let Some(ref statusbar_visible) = self.statusbar_visible {
+            properties.push(("statusbar-visible", statusbar_visible));
+        }
+        if let Some(ref toolbar_visible) = self.toolbar_visible {
+            properties.push(("toolbar-visible", toolbar_visible));
+        }
+        let ret = glib::Object::new::<WindowProperties>(&properties).expect("object new");
+        ret
     }
 
     pub fn fullscreen(mut self, fullscreen: bool) -> Self {
@@ -138,51 +136,68 @@ pub trait WindowPropertiesExt: 'static {
 impl<O: IsA<WindowProperties>> WindowPropertiesExt for O {
     fn is_fullscreen(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_window_properties_get_fullscreen(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_window_properties_get_fullscreen(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn geometry(&self) -> gdk::Rectangle {
         unsafe {
             let mut geometry = gdk::Rectangle::uninitialized();
-            ffi::webkit_window_properties_get_geometry(self.as_ref().to_glib_none().0, geometry.to_glib_none_mut().0);
+            ffi::webkit_window_properties_get_geometry(
+                self.as_ref().to_glib_none().0,
+                geometry.to_glib_none_mut().0,
+            );
             geometry
         }
     }
 
     fn is_locationbar_visible(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_window_properties_get_locationbar_visible(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_window_properties_get_locationbar_visible(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_menubar_visible(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_window_properties_get_menubar_visible(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_window_properties_get_menubar_visible(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_resizable(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_window_properties_get_resizable(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_window_properties_get_resizable(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_scrollbars_visible(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_window_properties_get_scrollbars_visible(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_window_properties_get_scrollbars_visible(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_statusbar_visible(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_window_properties_get_statusbar_visible(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_window_properties_get_statusbar_visible(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_toolbar_visible(&self) -> bool {
         unsafe {
-            from_glib(ffi::webkit_window_properties_get_toolbar_visible(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_window_properties_get_toolbar_visible(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 }

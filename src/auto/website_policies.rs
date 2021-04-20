@@ -22,9 +22,7 @@ impl WebsitePolicies {
     #[doc(alias = "webkit_website_policies_new")]
     pub fn new() -> WebsitePolicies {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::webkit_website_policies_new())
-        }
+        unsafe { from_glib_full(ffi::webkit_website_policies_new()) }
     }
 
     //#[doc(alias = "webkit_website_policies_new_with_policies")]
@@ -53,16 +51,14 @@ impl WebsitePoliciesBuilder {
         Self::default()
     }
 
-
     pub fn build(self) -> WebsitePolicies {
         let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
         #[cfg(any(feature = "v2_30", feature = "dox"))]
-if let Some(ref autoplay) = self.autoplay {
-                properties.push(("autoplay", autoplay));
-            }
-        let ret = glib::Object::new::<WebsitePolicies>(&properties)
-            .expect("object new");
-    ret
+        if let Some(ref autoplay) = self.autoplay {
+            properties.push(("autoplay", autoplay));
+        }
+        let ret = glib::Object::new::<WebsitePolicies>(&properties).expect("object new");
+        ret
     }
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
@@ -88,7 +84,9 @@ pub trait WebsitePoliciesExt: 'static {
 impl<O: IsA<WebsitePolicies>> WebsitePoliciesExt for O {
     fn autoplay_policy(&self) -> AutoplayPolicy {
         unsafe {
-            from_glib(ffi::webkit_website_policies_get_autoplay_policy(self.as_ref().to_glib_none().0))
+            from_glib(ffi::webkit_website_policies_get_autoplay_policy(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -97,8 +95,15 @@ impl<O: IsA<WebsitePolicies>> WebsitePoliciesExt for O {
     fn autoplay(&self) -> AutoplayPolicy {
         unsafe {
             let mut value = glib::Value::from_type(<AutoplayPolicy as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut glib::gobject_ffi::GObject, b"autoplay\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().expect("Return Value for property `autoplay` getter").unwrap()
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+                b"autoplay\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `autoplay` getter")
+                .unwrap()
         }
     }
 }
