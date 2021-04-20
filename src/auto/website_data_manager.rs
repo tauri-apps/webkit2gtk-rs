@@ -337,7 +337,7 @@ pub trait WebsiteDataManagerExt: 'static {
     #[cfg(any(feature = "v2_30", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
     #[doc(alias = "webkit_website_data_manager_get_itp_summary")]
-    fn itp_summary<
+    fn get_itp_summary<
         P: IsA<gio::Cancellable>,
         Q: FnOnce(Result<Vec<ITPThirdParty>, glib::Error>) + Send + 'static,
     >(
@@ -598,7 +598,7 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExt for O {
 
     #[cfg(any(feature = "v2_30", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
-    fn itp_summary<
+    fn get_itp_summary<
         P: IsA<gio::Cancellable>,
         Q: FnOnce(Result<Vec<ITPThirdParty>, glib::Error>) + Send + 'static,
     >(

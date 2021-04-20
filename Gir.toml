@@ -285,6 +285,9 @@ generate_builder = true
     [[object.function]]
     name = "remove"
     ignore = true # to be generated manually
+    [[object.function]]
+    name = "get_itp_summary"
+    bypass_auto_rename = true
 
 [[object]]
 name = "WebKit2.WebsitePolicies"
