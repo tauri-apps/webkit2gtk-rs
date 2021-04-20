@@ -2,7 +2,7 @@
 "web_kit2" = "webkit2"
 
 [options]
-girs_dir = "gir-files"
+girs_directories = ["gir-files"]
 library = "WebKit2"
 version = "4.0"
 work_mode = "normal"
@@ -28,7 +28,6 @@ generate = [
     "WebKit2.ContextMenuAction",
     "WebKit2.ContextMenuItem",
     "WebKit2.CookieAcceptPolicy",
-    "WebKit2.CookieManager",
     "WebKit2.CookiePersistentStorage",
     "WebKit2.Credential",
     "WebKit2.CredentialPersistence",
@@ -36,7 +35,6 @@ generate = [
     "WebKit2.DownloadError",
     "WebKit2.EditorState",
     "WebKit2.EditorTypingAttributes",
-    "WebKit2.FaviconDatabase",
     "WebKit2.FaviconDatabaseError",
     "WebKit2.FileChooserRequest",
     "WebKit2.FindOptions",
@@ -97,7 +95,6 @@ generate = [
     "WebKit2.UserStyleSheet",
     "WebKit2.WebInspector",
     "WebKit2.WebProcessTerminationReason",
-    "WebKit2.WebResource",
     "WebKit2.WebViewBase",
     "WebKit2.WebViewSessionState",
     "WebKit2.WebsiteData",
@@ -142,9 +139,9 @@ manual = [
 [[object]]
 name = "WebKit2.AuthenticationRequest"
 status = "generate"
-    [[object.function]]
-    name = "authenticate"
-    ignore = true
+[[object.function]]
+name = "authenticate"
+ignore = true
 
 [[object]]
 name = "WebKit2.AutomationSession"
@@ -157,9 +154,28 @@ status = "generate"
 generate_builder = true
 
 [[object]]
+name = "WebKit2.CookieManager"
+status = "generate"
+generate_builder = false
+[[object.function]]
+name = "get_accept_policy"
+bypass_auto_rename = true
+[[object.function]]
+name = "get_domains_with_cookies"
+bypass_auto_rename = true
+
+[[object]]
 name = "WebKit2.Download"
 status = "generate"
 generate_builder = true
+
+[[object]]
+name = "WebKit2.FaviconDatabase"
+status = "generate"
+generate_builder = false
+[[object.function]]
+name = "get_favicon"
+bypass_auto_rename = true
 
 [[object]]
 name = "WebKit2.FindController"
@@ -169,10 +185,10 @@ generate_builder = true
 [[object]]
 name = "WebKit2.FormSubmissionRequest"
 status = "generate"
-    [[object.function]]
-    name = "list_text_fields"
-    # Fails to get generated as some how glib::GString doesn't get added
-    ignore = true
+[[object.function]]
+name = "list_text_fields"
+# Fails to get generated as some how glib::GString doesn't get added
+ignore = true
 
 [[object]]
 name = "WebKit2.HitTestResult"
@@ -182,38 +198,38 @@ generate_builder = true
 [[object]]
 name = "WebKit2.NavigationAction"
 status = "generate"
-    [[object.function]]
-    name = "get_modifiers"
-        [[object.function.parameter]]
-        name = "navigation"
-        const = true
-    [[object.function]]
-    name = "get_mouse_button"
-        [[object.function.parameter]]
-        name = "navigation"
-        const = true
-    [[object.function]]
-    name = "get_navigation_type"
-        [[object.function.parameter]]
-        name = "navigation"
-        const = true
-    [[object.function]]
-    name = "get_request"
-        [[object.function.parameter]]
-        name = "navigation"
-        const = true
-    [[object.function]]
-    name = "is_user_gesture"
-        [[object.function.parameter]]
-        name = "navigation"
-        const = true
+[[object.function]]
+name = "get_modifiers"
+[[object.function.parameter]]
+name = "navigation"
+const = true
+[[object.function]]
+name = "get_mouse_button"
+[[object.function.parameter]]
+name = "navigation"
+const = true
+[[object.function]]
+name = "get_navigation_type"
+[[object.function.parameter]]
+name = "navigation"
+const = true
+[[object.function]]
+name = "get_request"
+[[object.function.parameter]]
+name = "navigation"
+const = true
+[[object.function]]
+name = "is_user_gesture"
+[[object.function.parameter]]
+name = "navigation"
+const = true
 
 [[object]]
 name = "WebKit2.NetworkProxySettings"
 status = "generate"
-    [[object.function]]
-    name = "new"
-    ignore = true
+[[object.function]]
+name = "new"
+ignore = true
 
 [[object]]
 name = "WebKit2.PrintCustomWidget"
@@ -255,17 +271,20 @@ module_name = "uri_response"
 name = "WebKit2.WebContext"
 status = "generate"
 generate_builder = true
-    [[object.function]]
-    name = "set_network_proxy_settings"
-    ignore = true
+[[object.function]]
+name = "get_plugins"
+bypass_auto_rename = true
+[[object.function]]
+name = "set_network_proxy_settings"
+ignore = true
 
 [[object]]
 name = "WebKit2.WebsiteDataManager"
 status = "generate"
 generate_builder = true
-    [[object.function]]
-    name = "remove"
-    ignore = true # to be generated manually
+[[object.function]]
+name = "remove"
+ignore = true # to be generated manually
 
 [[object]]
 name = "WebKit2.WebsitePolicies"
@@ -273,14 +292,25 @@ status = "generate"
 generate_builder = true
 
 [[object]]
+name = "WebKit2.WebResource"
+status = "generate"
+generate_builder = false
+[[object.function]]
+name = "get_data"
+bypass_auto_rename = true
+
+[[object]]
 name = "WebKit2.WebView"
 status = "generate"
 generate_builder = true
-    [[object.signal]]
-    name = "create"
-    version = "2.6"
-        [object.signal.return]
-        nullable = true
+[[object.function]]
+name = "get_snapshot"
+bypass_auto_rename = true
+[[object.signal]]
+name = "create"
+version = "2.6"
+[object.signal.return]
+nullable = true
 
 [[object]]
 name = "WebKit2.WindowProperties"
