@@ -19,7 +19,6 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-use glib;
 use gtk;
 use webkit2gtk;
 
@@ -34,7 +33,7 @@ fn main() {
     gtk::init().unwrap();
 
     let window = Window::new(WindowType::Toplevel);
-    let context = WebContext::get_default().unwrap();
+    let context = WebContext::default().unwrap();
     #[cfg(feature = "v2_4")]
     context.set_web_extensions_initialization_user_data(&"webkit".to_variant());
     context.set_web_extensions_directory("../webkit2gtk-webextension-rs/example/target/debug/");
@@ -46,7 +45,7 @@ fn main() {
     webview.load_uri("https://crates.io/");
     window.add(&webview);
 
-    let settings = WebViewExt::get_settings(&webview).unwrap();
+    let settings = WebViewExt::settings(&webview).unwrap();
     settings.set_enable_developer_extras(true);
 
     /*let inspector = webview.get_inspector().unwrap();
@@ -59,8 +58,8 @@ fn main() {
     let cancellable = gio::Cancellable::new();
     webview.run_javascript("42", Some(&cancellable), |result| match result {
         Ok(result) => {
-            let context = result.get_global_context().unwrap();
-            let value = result.get_value().unwrap();
+            let context = result.global_context().unwrap();
+            let value = result.value().unwrap();
             println!("is_boolean: {}", value.is_boolean(&context));
             println!("is_number: {}", value.is_number(&context));
             println!("{:?}", value.to_number(&context));
