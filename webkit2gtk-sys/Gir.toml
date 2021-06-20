@@ -1,5 +1,5 @@
 [options]
-girs_dir = "../gir-files"
+girs_directories = ["../gir-files"]
 work_mode = "sys"
 min_cfg_version="2.4"
 library = "WebKit2"

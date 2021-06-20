@@ -14,7 +14,7 @@ jobs:
           - stable
           - beta
           - nightly
-          - "1.48.0"
+          - "1.51.0"
     steps:
       - run: sudo apt-get install libwebkit2gtk-4.0-dev -y
       - uses: actions/checkout@v2
