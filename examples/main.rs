@@ -25,7 +25,8 @@ use webkit2gtk;
 
 #[cfg(feature = "v2_4")]
 use glib::ToVariant;
-use gtk::{ContainerExt, Inhibit, WidgetExt, Window, WindowType};
+use gtk::{Inhibit, Window, WindowType};
+use gtk::prelude::{ContainerExt, WidgetExt};
 #[cfg(feature = "v2_6")]
 use webkit2gtk::UserContentManager;
 use webkit2gtk::{SettingsExt, WebContext, WebContextExt, WebView, WebViewExt};
