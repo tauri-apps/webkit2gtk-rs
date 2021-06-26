@@ -26,7 +26,7 @@ extern crate webkit2gtk;
 
 #[cfg(feature = "v2_4")]
 use glib::ToVariant;
-use gtk::{Inhibit, Window, WindowType, prelude::{ContainerExt, WidgetExt}};
+use gtk::{Inhibit, Window, WindowType, prelude::*};
 use webkit2gtk::{traits::{SettingsExt, WebContextExt, WebViewExt}, WebContext, WebView, WebViewExtManual};
 #[cfg(feature = "v2_6")]
 use webkit2gtk::UserContentManager;
