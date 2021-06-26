@@ -3,14 +3,12 @@
  * TODO: add all unstable methods.
  */
 
-#[macro_use]
 extern crate bitflags;
 extern crate cairo;
 extern crate gdk;
 extern crate gdk_sys;
 extern crate gio;
 extern crate gio_sys;
-#[macro_use]
 extern crate glib;
 extern crate glib_sys;
 extern crate gobject_sys;
@@ -19,7 +17,7 @@ extern crate gtk_sys;
 extern crate javascriptcore as java_script_core;
 extern crate libc;
 
-extern crate webkit2gtk_sys as webkit2_sys;
+extern crate webkit2gtk_sys as ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => (

@@ -1,7 +1,8 @@
 [package]
 name = "webkit2gtk"
-version = "0.11.0"
+version = "0.12.0"
 authors = ["The Gtk-rs Project Developers"]
+edition = "2018"
 
 categories = ["api-bindings", "gui"]
 description = "Rust bindings for webkit-gtk library"
@@ -37,6 +38,7 @@ v2_28 = ["v2_26", "webkit2gtk-sys/v2_28"]
 
 [dependencies]
 bitflags = "^1.0"
+once_cell = "1.8"
 libc = "^0.2"
 cairo-rs = "^0.14.0"
 gdk = "^0.14.0"
@@ -48,7 +50,7 @@ glib-sys = "^0.14.0"
 gobject-sys = "^0.14.0"
 gtk = "^0.14.0"
 gtk-sys = "^0.14.0"
-javascriptcore-rs = "0.10"
+javascriptcore-rs = { git = "https://github.com/jangernert/javascriptcore-rs.git", branch = "crate" }
 
 [dependencies.webkit2gtk-sys]
 path = "./webkit2gtk-sys"

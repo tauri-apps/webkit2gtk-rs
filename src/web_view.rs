@@ -30,7 +30,7 @@ use glib::object::Cast;
 #[cfg(feature = "v2_6")]
 use glib::StaticType;
 #[cfg(feature = "v2_6")]
-use glib::translate::{FromGlibPtrNone, ToGlib, ToGlibPtr};
+use glib::translate::{FromGlibPtrNone, IntoGlib, ToGlibPtr};
 #[cfg(feature = "v2_6")]
 use gobject_sys;
 use gtk;
@@ -60,7 +60,7 @@ impl<O> WebViewExtManual for O
         let glib_context = glib_context as *mut gobject_sys::GObject;
         let null: *mut gobject_sys::GObject = ptr::null_mut();
         unsafe {
-            gtk::Widget::from_glib_none(gobject_sys::g_object_new(WebView::static_type().to_glib(), user_content_manager_property.as_ptr(), glib_user_content_manager, web_context_property.as_ptr(), glib_context, null) as *mut _).downcast().expect("downcast")
+            gtk::Widget::from_glib_none(gobject_sys::g_object_new(WebView::static_type().into_glib(), user_content_manager_property.as_ptr(), glib_user_content_manager, web_context_property.as_ptr(), glib_context, null) as *mut _).downcast().expect("downcast")
         }
     }
 }
