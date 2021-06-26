@@ -54,9 +54,9 @@ impl<O> WebViewExtManual for O
         assert_initialized_main_thread!();
         let user_content_manager_property = CString::new("user-content-manager").unwrap();
         let web_context_property = CString::new("web-context").unwrap();
-        let glib_user_content_manager: *mut webkit2_sys::WebKitUserContentManager = user_content_manager.to_glib_none().0;
+        let glib_user_content_manager: *mut ffi::WebKitUserContentManager = user_content_manager.to_glib_none().0;
         let glib_user_content_manager = glib_user_content_manager as *mut gobject_sys::GObject;
-        let glib_context: *mut webkit2_sys::WebKitWebContext = context.to_glib_none().0;
+        let glib_context: *mut ffi::WebKitWebContext = context.to_glib_none().0;
         let glib_context = glib_context as *mut gobject_sys::GObject;
         let null: *mut gobject_sys::GObject = ptr::null_mut();
         unsafe {
