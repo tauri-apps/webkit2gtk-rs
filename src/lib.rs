@@ -48,3 +48,4 @@ pub use glib::Error;
 pub use auto::*;
 pub use script_dialog::*;
 pub use web_view::*;
+pub use web_context::*;
