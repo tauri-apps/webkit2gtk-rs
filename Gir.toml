@@ -2,7 +2,7 @@
 "web_kit2" = "webkit2"
 
 [options]
-girs_dir = "gir-files"
+girs_directories = ["gir-files"]
 library = "WebKit2"
 version = "4.0"
 work_mode = "normal"
@@ -208,12 +208,10 @@ status = "generate"
         name = "navigation"
         const = true
 
+
 [[object]]
 name = "WebKit2.NetworkProxySettings"
 status = "generate"
-    [[object.function]]
-    name = "new"
-    ignore = true
 
 [[object]]
 name = "WebKit2.PrintCustomWidget"
