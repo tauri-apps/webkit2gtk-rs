@@ -8,13 +8,13 @@ single_version_file = "."
 target_path = "."
 
 external_libraries = [
-   "Gtk",
-   "GLib",
-   "GObject",
-   "Gio",
-   "Gdk",
-   "Cairo",
-   "Soup",
+    "Gtk",
+    "GLib",
+    "GObject",
+    "Gio",
+    "Gdk",
+    "Cairo",
+    "Soup",
 ]
 
 [external_libraries]
