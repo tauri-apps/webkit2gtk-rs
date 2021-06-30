@@ -212,9 +212,6 @@ status = "generate"
 [[object]]
 name = "WebKit2.NetworkProxySettings"
 status = "generate"
-    [[object.function]]
-    name = "new"
-    ignore = true
 
 [[object]]
 name = "WebKit2.PrintCustomWidget"
