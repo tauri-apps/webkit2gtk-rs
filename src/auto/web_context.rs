@@ -12,6 +12,12 @@ use crate::FaviconDatabase;
 #[cfg(any(feature = "v2_26", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
 use crate::GeolocationManager;
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+use crate::NetworkProxyMode;
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+use crate::NetworkProxySettings;
 use crate::Plugin;
 #[cfg(any(feature = "v2_4", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
@@ -332,6 +338,11 @@ pub trait WebContextExt: 'static {
     #[doc(alias = "webkit_web_context_set_favicon_database_directory")]
     fn set_favicon_database_directory(&self, path: Option<&str>);
 
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    #[doc(alias = "webkit_web_context_set_network_proxy_settings")]
+    fn set_network_proxy_settings(&self, proxy_mode: NetworkProxyMode, proxy_settings: Option<&mut NetworkProxySettings>);
+
     #[doc(alias = "webkit_web_context_set_preferred_languages")]
     fn set_preferred_languages(&self, languages: &[&str]);
 
@@ -651,6 +662,14 @@ impl<O: IsA<WebContext>> WebContextExt for O {
     fn set_favicon_database_directory(&self, path: Option<&str>) {
         unsafe {
             ffi::webkit_web_context_set_favicon_database_directory(self.as_ref().to_glib_none().0, path.to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v2_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+    fn set_network_proxy_settings(&self, proxy_mode: NetworkProxyMode, proxy_settings: Option<&mut NetworkProxySettings>) {
+        unsafe {
+            ffi::webkit_web_context_set_network_proxy_settings(self.as_ref().to_glib_none().0, proxy_mode.into_glib(), proxy_settings.to_glib_none_mut().0);
         }
     }
 

@@ -256,9 +256,6 @@ module_name = "uri_response"
 name = "WebKit2.WebContext"
 status = "generate"
 generate_builder = true
-    [[object.function]]
-    name = "set_network_proxy_settings"
-    ignore = true
 
 [[object]]
 name = "WebKit2.WebsiteDataManager"
