@@ -52,7 +52,4 @@ gobject-sys = "^0.14.0"
 gtk = "^0.14.0"
 gtk-sys = "^0.14.0"
 javascriptcore-rs = "^0.14.0"
-
-[dependencies.webkit2gtk-sys]
-path = "./webkit2gtk-sys"
-version = "^0.14"
+ffi = { package = "webkit2gtk-sys", path = "webkit2gtk-sys" }
