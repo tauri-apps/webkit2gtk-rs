@@ -41,6 +41,7 @@ macro_rules! skip_assert_initialized {
 mod auto;
 mod script_dialog;
 mod web_view;
+mod web_context;
 
 pub use glib::Error;
 
