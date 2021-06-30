@@ -17,7 +17,7 @@ extern crate gtk_sys;
 extern crate javascriptcore as java_script_core;
 extern crate libc;
 
-extern crate webkit2gtk_sys as ffi;
+extern crate ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => (
