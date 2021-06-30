@@ -1,6 +1,6 @@
 [package]
 name = "webkit2gtk"
-version = "0.12.0"
+version = "0.14.0"
 authors = ["The Gtk-rs Project Developers"]
 edition = "2018"
 
@@ -23,18 +23,19 @@ name = "webkit2gtk"
 #default = ["v2_22"]
 v2_2 = []
 v2_4 = ["v2_2"]
-v2_6 = ["v2_4", "webkit2gtk-sys/v2_6"]
-v2_8 = ["v2_6", "webkit2gtk-sys/v2_8"]
-v2_10 = ["v2_8", "webkit2gtk-sys/v2_10"]
-v2_12 = ["v2_10", "webkit2gtk-sys/v2_12"]
-v2_14 = ["v2_12", "webkit2gtk-sys/v2_14"]
-v2_16 = ["v2_14", "webkit2gtk-sys/v2_16"]
-v2_18 = ["v2_16", "webkit2gtk-sys/v2_18"]
-v2_20 = ["v2_18", "webkit2gtk-sys/v2_20"]
-v2_22 = ["v2_20", "webkit2gtk-sys/v2_22"]
-v2_24 = ["v2_22", "webkit2gtk-sys/v2_24"]
-v2_26 = ["v2_24", "webkit2gtk-sys/v2_26"]
-v2_28 = ["v2_26", "webkit2gtk-sys/v2_28"]
+v2_6 = ["v2_4", "ffi/v2_6"]
+v2_8 = ["v2_6", "ffi/v2_8"]
+v2_10 = ["v2_8", "ffi/v2_10"]
+v2_12 = ["v2_10", "ffi/v2_12"]
+v2_14 = ["v2_12", "ffi/v2_14"]
+v2_16 = ["v2_14", "ffi/v2_16"]
+v2_18 = ["v2_16", "ffi/v2_18"]
+v2_20 = ["v2_18", "ffi/v2_20"]
+v2_22 = ["v2_20", "ffi/v2_22"]
+v2_24 = ["v2_22", "ffi/v2_24"]
+v2_26 = ["v2_24", "ffi/v2_26"]
+v2_28 = ["v2_26", "ffi/v2_28"]
+v2_30 = ["v2_28", "ffi/v2_30"]
 
 [dependencies]
 bitflags = "^1.0"
