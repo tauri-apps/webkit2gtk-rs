@@ -7,7 +7,7 @@
 mod authentication_request;
 #[cfg(any(feature = "v2_2", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
-pub use self::authentication_request::{AuthenticationRequest, NONE_AUTHENTICATION_REQUEST};
+pub use self::authentication_request::{AuthenticationRequest, AuthenticationRequestExt, NONE_AUTHENTICATION_REQUEST};
 
 #[cfg(any(feature = "v2_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
@@ -17,13 +17,13 @@ mod automation_session;
 pub use self::automation_session::AutomationSessionBuilder;
 #[cfg(any(feature = "v2_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
-pub use self::automation_session::{AutomationSession, NONE_AUTOMATION_SESSION};
+pub use self::automation_session::{AutomationSession, AutomationSessionExt, NONE_AUTOMATION_SESSION};
 
 mod back_forward_list;
-pub use self::back_forward_list::{BackForwardList, NONE_BACK_FORWARD_LIST};
+pub use self::back_forward_list::{BackForwardList, BackForwardListExt, NONE_BACK_FORWARD_LIST};
 
 mod back_forward_list_item;
-pub use self::back_forward_list_item::{BackForwardListItem, NONE_BACK_FORWARD_LIST_ITEM};
+pub use self::back_forward_list_item::{BackForwardListItem, BackForwardListItemExt, NONE_BACK_FORWARD_LIST_ITEM};
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
@@ -33,16 +33,16 @@ mod color_chooser_request;
 pub use self::color_chooser_request::ColorChooserRequestBuilder;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
-pub use self::color_chooser_request::{ColorChooserRequest, NONE_COLOR_CHOOSER_REQUEST};
+pub use self::color_chooser_request::{ColorChooserRequest, ColorChooserRequestExt, NONE_COLOR_CHOOSER_REQUEST};
 
 mod context_menu;
-pub use self::context_menu::{ContextMenu, NONE_CONTEXT_MENU};
+pub use self::context_menu::{ContextMenu, ContextMenuExt, NONE_CONTEXT_MENU};
 
 mod context_menu_item;
-pub use self::context_menu_item::{ContextMenuItem, NONE_CONTEXT_MENU_ITEM};
+pub use self::context_menu_item::{ContextMenuItem, ContextMenuItemExt, NONE_CONTEXT_MENU_ITEM};
 
 mod cookie_manager;
-pub use self::cookie_manager::{CookieManager, NONE_COOKIE_MANAGER};
+pub use self::cookie_manager::{CookieManager, CookieManagerExt, NONE_COOKIE_MANAGER};
 
 mod device_info_permission_request;
 pub use self::device_info_permission_request::{
@@ -51,34 +51,34 @@ pub use self::device_info_permission_request::{
 
 mod download;
 pub use self::download::DownloadBuilder;
-pub use self::download::{Download, NONE_DOWNLOAD};
+pub use self::download::{Download, DownloadExt, NONE_DOWNLOAD};
 
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 mod editor_state;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
-pub use self::editor_state::{EditorState, NONE_EDITOR_STATE};
+pub use self::editor_state::{EditorState, EditorStateExt, NONE_EDITOR_STATE};
 
 mod favicon_database;
-pub use self::favicon_database::{FaviconDatabase, NONE_FAVICON_DATABASE};
+pub use self::favicon_database::{FaviconDatabase, FaviconDatabaseExt, NONE_FAVICON_DATABASE};
 
 mod file_chooser_request;
-pub use self::file_chooser_request::{FileChooserRequest, NONE_FILE_CHOOSER_REQUEST};
+pub use self::file_chooser_request::{FileChooserRequest, FileChooserRequestExt, NONE_FILE_CHOOSER_REQUEST};
 
 mod find_controller;
 pub use self::find_controller::FindControllerBuilder;
-pub use self::find_controller::{FindController, NONE_FIND_CONTROLLER};
+pub use self::find_controller::{FindController, FindControllerExt, NONE_FIND_CONTROLLER};
 
 mod form_submission_request;
-pub use self::form_submission_request::{FormSubmissionRequest, NONE_FORM_SUBMISSION_REQUEST};
+pub use self::form_submission_request::{FormSubmissionRequest, FormSubmissionRequestExt, NONE_FORM_SUBMISSION_REQUEST};
 
 #[cfg(any(feature = "v2_26", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
 mod geolocation_manager;
 #[cfg(any(feature = "v2_26", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
-pub use self::geolocation_manager::{GeolocationManager, NONE_GEOLOCATION_MANAGER};
+pub use self::geolocation_manager::{GeolocationManager, GeolocationManagerExt, NONE_GEOLOCATION_MANAGER};
 
 mod geolocation_permission_request;
 pub use self::geolocation_permission_request::{
@@ -87,14 +87,14 @@ pub use self::geolocation_permission_request::{
 
 mod hit_test_result;
 pub use self::hit_test_result::HitTestResultBuilder;
-pub use self::hit_test_result::{HitTestResult, NONE_HIT_TEST_RESULT};
+pub use self::hit_test_result::{HitTestResult, HitTestResultExt, NONE_HIT_TEST_RESULT};
 
 #[cfg(any(feature = "v2_28", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
 mod input_method_context;
 #[cfg(any(feature = "v2_28", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
-pub use self::input_method_context::{InputMethodContext, NONE_INPUT_METHOD_CONTEXT};
+pub use self::input_method_context::{InputMethodContext, InputMethodContextExt, NONE_INPUT_METHOD_CONTEXT};
 
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
@@ -102,13 +102,13 @@ mod install_missing_media_plugins_permission_request;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 pub use self::install_missing_media_plugins_permission_request::{
-    InstallMissingMediaPluginsPermissionRequest,
+    InstallMissingMediaPluginsPermissionRequest, InstallMissingMediaPluginsPermissionRequestExt,
     NONE_INSTALL_MISSING_MEDIA_PLUGINS_PERMISSION_REQUEST,
 };
 
 mod navigation_policy_decision;
 pub use self::navigation_policy_decision::{
-    NavigationPolicyDecision, NONE_NAVIGATION_POLICY_DECISION,
+    NavigationPolicyDecision, NavigationPolicyDecisionExt, NONE_NAVIGATION_POLICY_DECISION,
 };
 
 #[cfg(any(feature = "v2_8", feature = "dox"))]
@@ -116,7 +116,7 @@ pub use self::navigation_policy_decision::{
 mod notification;
 #[cfg(any(feature = "v2_8", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
-pub use self::notification::{Notification, NONE_NOTIFICATION};
+pub use self::notification::{Notification, NotificationExt, NONE_NOTIFICATION};
 
 mod notification_permission_request;
 pub use self::notification_permission_request::{
@@ -128,13 +128,13 @@ pub use self::notification_permission_request::{
 mod option_menu;
 #[cfg(any(feature = "v2_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
-pub use self::option_menu::{OptionMenu, NONE_OPTION_MENU};
+pub use self::option_menu::{OptionMenu, OptionMenuExt, NONE_OPTION_MENU};
 
 mod permission_request;
-pub use self::permission_request::{PermissionRequest, NONE_PERMISSION_REQUEST};
+pub use self::permission_request::{PermissionRequest, PermissionRequestExt, NONE_PERMISSION_REQUEST};
 
 mod plugin;
-pub use self::plugin::{Plugin, NONE_PLUGIN};
+pub use self::plugin::{Plugin, PluginExt, NONE_PLUGIN};
 
 mod pointer_lock_permission_request;
 pub use self::pointer_lock_permission_request::{
@@ -142,7 +142,7 @@ pub use self::pointer_lock_permission_request::{
 };
 
 mod policy_decision;
-pub use self::policy_decision::{PolicyDecision, NONE_POLICY_DECISION};
+pub use self::policy_decision::{PolicyDecision, PolicyDecisionExt, NONE_POLICY_DECISION};
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
@@ -152,42 +152,42 @@ mod print_custom_widget;
 pub use self::print_custom_widget::PrintCustomWidgetBuilder;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
-pub use self::print_custom_widget::{PrintCustomWidget, NONE_PRINT_CUSTOM_WIDGET};
+pub use self::print_custom_widget::{PrintCustomWidget, PrintCustomWidgetExt, NONE_PRINT_CUSTOM_WIDGET};
 
 mod print_operation;
 pub use self::print_operation::PrintOperationBuilder;
-pub use self::print_operation::{PrintOperation, NONE_PRINT_OPERATION};
+pub use self::print_operation::{PrintOperation, PrintOperationExt, NONE_PRINT_OPERATION};
 
 mod response_policy_decision;
-pub use self::response_policy_decision::{ResponsePolicyDecision, NONE_RESPONSE_POLICY_DECISION};
+pub use self::response_policy_decision::{ResponsePolicyDecision, ResponsePolicyDecisionExt, NONE_RESPONSE_POLICY_DECISION};
 
 mod security_manager;
-pub use self::security_manager::{SecurityManager, NONE_SECURITY_MANAGER};
+pub use self::security_manager::{SecurityManager, SecurityManagerExt, NONE_SECURITY_MANAGER};
 
 mod settings;
 pub use self::settings::SettingsBuilder;
-pub use self::settings::{Settings, NONE_SETTINGS};
+pub use self::settings::{Settings, SettingsExt, NONE_SETTINGS};
 
 mod uri_request;
 pub use self::uri_request::URIRequestBuilder;
-pub use self::uri_request::{URIRequest, NONE_URI_REQUEST};
+pub use self::uri_request::{URIRequest, URIRequestExt, NONE_URI_REQUEST};
 
 mod uri_response;
-pub use self::uri_response::{URIResponse, NONE_URI_RESPONSE};
+pub use self::uri_response::{URIResponse, URIResponseExt, NONE_URI_RESPONSE};
 
 mod uri_scheme_request;
-pub use self::uri_scheme_request::{URISchemeRequest, NONE_URI_SCHEME_REQUEST};
+pub use self::uri_scheme_request::{URISchemeRequest, URISchemeRequestExt, NONE_URI_SCHEME_REQUEST};
 
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
 mod user_content_manager;
 #[cfg(any(feature = "v2_6", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
-pub use self::user_content_manager::{UserContentManager, NONE_USER_CONTENT_MANAGER};
+pub use self::user_content_manager::{UserContentManager, UserContentManagerExt, NONE_USER_CONTENT_MANAGER};
 
 mod user_media_permission_request;
 pub use self::user_media_permission_request::{
-    UserMediaPermissionRequest, NONE_USER_MEDIA_PERMISSION_REQUEST,
+    UserMediaPermissionRequest, UserMediaPermissionRequestExt, NONE_USER_MEDIA_PERMISSION_REQUEST,
 };
 
 #[cfg(any(feature = "v2_28", feature = "dox"))]
@@ -198,21 +198,21 @@ mod user_message;
 pub use self::user_message::UserMessageBuilder;
 #[cfg(any(feature = "v2_28", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
-pub use self::user_message::{UserMessage, NONE_USER_MESSAGE};
+pub use self::user_message::{UserMessage, UserMessageExt, NONE_USER_MESSAGE};
 
 mod web_context;
 pub use self::web_context::WebContextBuilder;
-pub use self::web_context::{WebContext, NONE_WEB_CONTEXT};
+pub use self::web_context::{WebContext, WebContextExt, NONE_WEB_CONTEXT};
 
 mod web_inspector;
-pub use self::web_inspector::{WebInspector, NONE_WEB_INSPECTOR};
+pub use self::web_inspector::{WebInspector, WebInspectorExt, NONE_WEB_INSPECTOR};
 
 mod web_resource;
-pub use self::web_resource::{WebResource, NONE_WEB_RESOURCE};
+pub use self::web_resource::{WebResource, WebResourceExt, NONE_WEB_RESOURCE};
 
 mod web_view;
 pub use self::web_view::WebViewBuilder;
-pub use self::web_view::{WebView, NONE_WEB_VIEW};
+pub use self::web_view::{WebView, WebViewExt, NONE_WEB_VIEW};
 
 mod web_view_base;
 pub use self::web_view_base::{WebViewBase, NONE_WEB_VIEW_BASE};
@@ -223,7 +223,7 @@ mod website_data_access_permission_request;
 #[cfg(any(feature = "v2_30", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
 pub use self::website_data_access_permission_request::{
-    WebsiteDataAccessPermissionRequest, NONE_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST,
+    WebsiteDataAccessPermissionRequest, WebsiteDataAccessPermissionRequestExt, NONE_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST,
 };
 
 #[cfg(any(feature = "v2_10", feature = "dox"))]
@@ -234,7 +234,7 @@ mod website_data_manager;
 pub use self::website_data_manager::WebsiteDataManagerBuilder;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
-pub use self::website_data_manager::{WebsiteDataManager, NONE_WEBSITE_DATA_MANAGER};
+pub use self::website_data_manager::{WebsiteDataManager, WebsiteDataManagerExt, NONE_WEBSITE_DATA_MANAGER};
 
 #[cfg(any(feature = "v2_30", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
@@ -244,11 +244,11 @@ mod website_policies;
 pub use self::website_policies::WebsitePoliciesBuilder;
 #[cfg(any(feature = "v2_30", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
-pub use self::website_policies::{WebsitePolicies, NONE_WEBSITE_POLICIES};
+pub use self::website_policies::{WebsitePolicies, WebsitePoliciesExt, NONE_WEBSITE_POLICIES};
 
 mod window_properties;
 pub use self::window_properties::WindowPropertiesBuilder;
-pub use self::window_properties::{WindowProperties, NONE_WINDOW_PROPERTIES};
+pub use self::window_properties::{WindowProperties, WindowPropertiesExt, NONE_WINDOW_PROPERTIES};
 
 #[cfg(any(feature = "v2_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]

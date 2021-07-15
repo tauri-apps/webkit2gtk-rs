@@ -37,7 +37,7 @@ impl WebView {
         let null: *mut gobject_sys::GObject = ptr::null_mut();
         unsafe {
             gtk::Widget::from_glib_none(gobject_sys::g_object_new(
-                WebView::static_type().to_glib(),
+                WebView::static_type().into_glib(),
                 user_content_manager_property.as_ptr(),
                 glib_user_content_manager,
                 web_context_property.as_ptr(),
