@@ -5,7 +5,7 @@ use std::mem;
 use std::ptr;
 
 use ffi;
-use glib::translate::{from_glib, mut_override, Stash, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, mut_override, Stash, IntoGlib, ToGlibPtr};
 use glib_sys;
 
 use super::ScriptDialogType;
@@ -24,7 +24,7 @@ impl ScriptDialog {
         unsafe {
             ffi::webkit_script_dialog_confirm_set_confirmed(
                 mut_override(self.to_glib_none().0),
-                confirmed.to_glib(),
+                confirmed.into_glib(),
             );
         }
     }
