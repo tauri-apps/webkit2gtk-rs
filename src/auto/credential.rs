@@ -21,52 +21,64 @@ glib::wrapper! {
 }
 
 impl Credential {
-    #[cfg(any(feature = "v2_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
-    #[doc(alias = "webkit_credential_new")]
-    pub fn new(username: &str, password: &str, persistence: CredentialPersistence) -> Credential {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::webkit_credential_new(username.to_glib_none().0, password.to_glib_none().0, persistence.into_glib()))
-        }
+  #[cfg(any(feature = "v2_2", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
+  #[doc(alias = "webkit_credential_new")]
+  pub fn new(username: &str, password: &str, persistence: CredentialPersistence) -> Credential {
+    assert_initialized_main_thread!();
+    unsafe {
+      from_glib_full(ffi::webkit_credential_new(
+        username.to_glib_none().0,
+        password.to_glib_none().0,
+        persistence.into_glib(),
+      ))
     }
+  }
 
-    #[cfg(any(feature = "v2_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
-    #[doc(alias = "webkit_credential_get_password")]
-    #[doc(alias = "get_password")]
-    pub fn password(&mut self) -> Option<glib::GString> {
-        unsafe {
-            from_glib_none(ffi::webkit_credential_get_password(self.to_glib_none_mut().0))
-        }
+  #[cfg(any(feature = "v2_2", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
+  #[doc(alias = "webkit_credential_get_password")]
+  #[doc(alias = "get_password")]
+  pub fn password(&mut self) -> Option<glib::GString> {
+    unsafe {
+      from_glib_none(ffi::webkit_credential_get_password(
+        self.to_glib_none_mut().0,
+      ))
     }
+  }
 
-    #[cfg(any(feature = "v2_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
-    #[doc(alias = "webkit_credential_get_persistence")]
-    #[doc(alias = "get_persistence")]
-    pub fn persistence(&mut self) -> CredentialPersistence {
-        unsafe {
-            from_glib(ffi::webkit_credential_get_persistence(self.to_glib_none_mut().0))
-        }
+  #[cfg(any(feature = "v2_2", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
+  #[doc(alias = "webkit_credential_get_persistence")]
+  #[doc(alias = "get_persistence")]
+  pub fn persistence(&mut self) -> CredentialPersistence {
+    unsafe {
+      from_glib(ffi::webkit_credential_get_persistence(
+        self.to_glib_none_mut().0,
+      ))
     }
+  }
 
-    #[cfg(any(feature = "v2_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
-    #[doc(alias = "webkit_credential_get_username")]
-    #[doc(alias = "get_username")]
-    pub fn username(&mut self) -> Option<glib::GString> {
-        unsafe {
-            from_glib_none(ffi::webkit_credential_get_username(self.to_glib_none_mut().0))
-        }
+  #[cfg(any(feature = "v2_2", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
+  #[doc(alias = "webkit_credential_get_username")]
+  #[doc(alias = "get_username")]
+  pub fn username(&mut self) -> Option<glib::GString> {
+    unsafe {
+      from_glib_none(ffi::webkit_credential_get_username(
+        self.to_glib_none_mut().0,
+      ))
     }
+  }
 
-    #[cfg(any(feature = "v2_2", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
-    #[doc(alias = "webkit_credential_has_password")]
-    pub fn has_password(&mut self) -> bool {
-        unsafe {
-            from_glib(ffi::webkit_credential_has_password(self.to_glib_none_mut().0))
-        }
+  #[cfg(any(feature = "v2_2", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
+  #[doc(alias = "webkit_credential_has_password")]
+  pub fn has_password(&mut self) -> bool {
+    unsafe {
+      from_glib(ffi::webkit_credential_has_password(
+        self.to_glib_none_mut().0,
+      ))
     }
+  }
 }

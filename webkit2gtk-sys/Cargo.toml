@@ -1,6 +1,3 @@
-[badges.travis-ci]
-repository = "gtk-rs/webkit2gtk-rs"
-
 [build-dependencies]
 pkg-config = "0.3.7"
 system-deps = "5"
@@ -45,15 +42,13 @@ v2_32 = ["v2_30"]
 name = "webkit2gtk_sys"
 
 [package]
-authors = ["The Gtk-rs Project Developers"]
+name = "webkit2gtk-sys"
 build = "build.rs"
 categories = ["api-bindings", "gui"]
 description = "Rust binding for webkit-gtk library"
-homepage = "http://gtk-rs.org"
 keywords = ["webkit", "gtk-rs", "gnome", "GUI"]
 license = "MIT"
 links = "web_kit2"
-name = "webkit2gtk-sys"
 repository = "https://github.com/gtk-rs/webkit2gtk-rs"
 version = "0.14.0"
 edition = "2018"

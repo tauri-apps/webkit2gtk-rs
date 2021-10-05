@@ -19,7 +19,7 @@ impl NotificationPermissionRequest {}
 pub const NONE_NOTIFICATION_PERMISSION_REQUEST: Option<&NotificationPermissionRequest> = None;
 
 impl fmt::Display for NotificationPermissionRequest {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("NotificationPermissionRequest")
-    }
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    f.write_str("NotificationPermissionRequest")
+  }
 }

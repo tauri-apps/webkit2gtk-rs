@@ -18,28 +18,36 @@ glib::wrapper! {
     }
 }
 
-pub const NONE_INSTALL_MISSING_MEDIA_PLUGINS_PERMISSION_REQUEST: Option<&InstallMissingMediaPluginsPermissionRequest> = None;
+pub const NONE_INSTALL_MISSING_MEDIA_PLUGINS_PERMISSION_REQUEST: Option<
+  &InstallMissingMediaPluginsPermissionRequest,
+> = None;
 
 pub trait InstallMissingMediaPluginsPermissionRequestExt: 'static {
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
-    #[doc(alias = "webkit_install_missing_media_plugins_permission_request_get_description")]
-    #[doc(alias = "get_description")]
-    fn description(&self) -> Option<glib::GString>;
+  #[cfg(any(feature = "v2_10", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  #[doc(alias = "webkit_install_missing_media_plugins_permission_request_get_description")]
+  #[doc(alias = "get_description")]
+  fn description(&self) -> Option<glib::GString>;
 }
 
-impl<O: IsA<InstallMissingMediaPluginsPermissionRequest>> InstallMissingMediaPluginsPermissionRequestExt for O {
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
-    fn description(&self) -> Option<glib::GString> {
-        unsafe {
-            from_glib_none(ffi::webkit_install_missing_media_plugins_permission_request_get_description(self.as_ref().to_glib_none().0))
-        }
+impl<O: IsA<InstallMissingMediaPluginsPermissionRequest>>
+  InstallMissingMediaPluginsPermissionRequestExt for O
+{
+  #[cfg(any(feature = "v2_10", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  fn description(&self) -> Option<glib::GString> {
+    unsafe {
+      from_glib_none(
+        ffi::webkit_install_missing_media_plugins_permission_request_get_description(
+          self.as_ref().to_glib_none().0,
+        ),
+      )
     }
+  }
 }
 
 impl fmt::Display for InstallMissingMediaPluginsPermissionRequest {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("InstallMissingMediaPluginsPermissionRequest")
-    }
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    f.write_str("InstallMissingMediaPluginsPermissionRequest")
+  }
 }

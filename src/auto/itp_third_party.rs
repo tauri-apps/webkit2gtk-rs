@@ -21,23 +21,27 @@ glib::wrapper! {
 }
 
 impl ITPThirdParty {
-    #[cfg(any(feature = "v2_30", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
-    #[doc(alias = "webkit_itp_third_party_get_domain")]
-    #[doc(alias = "get_domain")]
-    pub fn domain(&self) -> Option<glib::GString> {
-        unsafe {
-            from_glib_none(ffi::webkit_itp_third_party_get_domain(self.to_glib_none().0))
-        }
+  #[cfg(any(feature = "v2_30", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+  #[doc(alias = "webkit_itp_third_party_get_domain")]
+  #[doc(alias = "get_domain")]
+  pub fn domain(&self) -> Option<glib::GString> {
+    unsafe {
+      from_glib_none(ffi::webkit_itp_third_party_get_domain(
+        self.to_glib_none().0,
+      ))
     }
+  }
 
-    #[cfg(any(feature = "v2_30", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
-    #[doc(alias = "webkit_itp_third_party_get_first_parties")]
-    #[doc(alias = "get_first_parties")]
-    pub fn first_parties(&self) -> Vec<ITPFirstParty> {
-        unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::webkit_itp_third_party_get_first_parties(self.to_glib_none().0))
-        }
+  #[cfg(any(feature = "v2_30", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+  #[doc(alias = "webkit_itp_third_party_get_first_parties")]
+  #[doc(alias = "get_first_parties")]
+  pub fn first_parties(&self) -> Vec<ITPFirstParty> {
+    unsafe {
+      FromGlibPtrContainer::from_glib_none(ffi::webkit_itp_third_party_get_first_parties(
+        self.to_glib_none().0,
+      ))
     }
+  }
 }
