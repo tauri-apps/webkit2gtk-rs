@@ -51,7 +51,7 @@ glib-sys = "^0.14.0"
 gobject-sys = "^0.14.0"
 gtk = "^0.14.0"
 gtk-sys = "^0.14.0"
-javascriptcore-rs = "^0.14.0"
+javascriptcore-rs = "^0.15.0"
 
 [dependencies.ffi]
 package = "webkit2gtk-sys"
