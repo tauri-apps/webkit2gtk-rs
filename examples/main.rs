@@ -59,10 +59,10 @@ fn main() {
   window.show_all();
 
   webview.run_javascript("alert('Hello');", None::<&gio::Cancellable>, |_result| {});
+  #[cfg(feature = "v2_22")]
   webview.run_javascript("42", None::<&gio::Cancellable>, |result| match result {
     Ok(result) => {
-      let context = result.global_context().unwrap();
-      let value = result.value().unwrap();
+      let value = result.js_value();
       println!("is_boolean: {}", value.is_boolean(&context));
       println!("is_number: {}", value.is_number(&context));
       println!("{:?}", value.to_number(&context));
