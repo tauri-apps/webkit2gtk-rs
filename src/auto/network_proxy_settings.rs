@@ -18,22 +18,29 @@ glib::wrapper! {
 }
 
 impl NetworkProxySettings {
-    #[cfg(any(feature = "v2_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
-    #[doc(alias = "webkit_network_proxy_settings_new")]
-    pub fn new(default_proxy_uri: Option<&str>, ignore_hosts: &[&str]) -> NetworkProxySettings {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::webkit_network_proxy_settings_new(default_proxy_uri.to_glib_none().0, ignore_hosts.to_glib_none().0))
-        }
+  #[cfg(any(feature = "v2_16", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+  #[doc(alias = "webkit_network_proxy_settings_new")]
+  pub fn new(default_proxy_uri: Option<&str>, ignore_hosts: &[&str]) -> NetworkProxySettings {
+    assert_initialized_main_thread!();
+    unsafe {
+      from_glib_full(ffi::webkit_network_proxy_settings_new(
+        default_proxy_uri.to_glib_none().0,
+        ignore_hosts.to_glib_none().0,
+      ))
     }
+  }
 
-    #[cfg(any(feature = "v2_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
-    #[doc(alias = "webkit_network_proxy_settings_add_proxy_for_scheme")]
-    pub fn add_proxy_for_scheme(&mut self, scheme: &str, proxy_uri: &str) {
-        unsafe {
-            ffi::webkit_network_proxy_settings_add_proxy_for_scheme(self.to_glib_none_mut().0, scheme.to_glib_none().0, proxy_uri.to_glib_none().0);
-        }
+  #[cfg(any(feature = "v2_16", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+  #[doc(alias = "webkit_network_proxy_settings_add_proxy_for_scheme")]
+  pub fn add_proxy_for_scheme(&mut self, scheme: &str, proxy_uri: &str) {
+    unsafe {
+      ffi::webkit_network_proxy_settings_add_proxy_for_scheme(
+        self.to_glib_none_mut().0,
+        scheme.to_glib_none().0,
+        proxy_uri.to_glib_none().0,
+      );
     }
+  }
 }

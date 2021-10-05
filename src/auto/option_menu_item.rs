@@ -18,59 +18,71 @@ glib::wrapper! {
 }
 
 impl OptionMenuItem {
-    #[cfg(any(feature = "v2_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
-    #[doc(alias = "webkit_option_menu_item_get_label")]
-    #[doc(alias = "get_label")]
-    pub fn label(&mut self) -> Option<glib::GString> {
-        unsafe {
-            from_glib_none(ffi::webkit_option_menu_item_get_label(self.to_glib_none_mut().0))
-        }
+  #[cfg(any(feature = "v2_18", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
+  #[doc(alias = "webkit_option_menu_item_get_label")]
+  #[doc(alias = "get_label")]
+  pub fn label(&mut self) -> Option<glib::GString> {
+    unsafe {
+      from_glib_none(ffi::webkit_option_menu_item_get_label(
+        self.to_glib_none_mut().0,
+      ))
     }
+  }
 
-    #[cfg(any(feature = "v2_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
-    #[doc(alias = "webkit_option_menu_item_get_tooltip")]
-    #[doc(alias = "get_tooltip")]
-    pub fn tooltip(&mut self) -> Option<glib::GString> {
-        unsafe {
-            from_glib_none(ffi::webkit_option_menu_item_get_tooltip(self.to_glib_none_mut().0))
-        }
+  #[cfg(any(feature = "v2_18", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
+  #[doc(alias = "webkit_option_menu_item_get_tooltip")]
+  #[doc(alias = "get_tooltip")]
+  pub fn tooltip(&mut self) -> Option<glib::GString> {
+    unsafe {
+      from_glib_none(ffi::webkit_option_menu_item_get_tooltip(
+        self.to_glib_none_mut().0,
+      ))
     }
+  }
 
-    #[cfg(any(feature = "v2_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
-    #[doc(alias = "webkit_option_menu_item_is_enabled")]
-    pub fn is_enabled(&mut self) -> bool {
-        unsafe {
-            from_glib(ffi::webkit_option_menu_item_is_enabled(self.to_glib_none_mut().0))
-        }
+  #[cfg(any(feature = "v2_18", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
+  #[doc(alias = "webkit_option_menu_item_is_enabled")]
+  pub fn is_enabled(&mut self) -> bool {
+    unsafe {
+      from_glib(ffi::webkit_option_menu_item_is_enabled(
+        self.to_glib_none_mut().0,
+      ))
     }
+  }
 
-    #[cfg(any(feature = "v2_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
-    #[doc(alias = "webkit_option_menu_item_is_group_child")]
-    pub fn is_group_child(&mut self) -> bool {
-        unsafe {
-            from_glib(ffi::webkit_option_menu_item_is_group_child(self.to_glib_none_mut().0))
-        }
+  #[cfg(any(feature = "v2_18", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
+  #[doc(alias = "webkit_option_menu_item_is_group_child")]
+  pub fn is_group_child(&mut self) -> bool {
+    unsafe {
+      from_glib(ffi::webkit_option_menu_item_is_group_child(
+        self.to_glib_none_mut().0,
+      ))
     }
+  }
 
-    #[cfg(any(feature = "v2_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
-    #[doc(alias = "webkit_option_menu_item_is_group_label")]
-    pub fn is_group_label(&mut self) -> bool {
-        unsafe {
-            from_glib(ffi::webkit_option_menu_item_is_group_label(self.to_glib_none_mut().0))
-        }
+  #[cfg(any(feature = "v2_18", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
+  #[doc(alias = "webkit_option_menu_item_is_group_label")]
+  pub fn is_group_label(&mut self) -> bool {
+    unsafe {
+      from_glib(ffi::webkit_option_menu_item_is_group_label(
+        self.to_glib_none_mut().0,
+      ))
     }
+  }
 
-    #[cfg(any(feature = "v2_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
-    #[doc(alias = "webkit_option_menu_item_is_selected")]
-    pub fn is_selected(&mut self) -> bool {
-        unsafe {
-            from_glib(ffi::webkit_option_menu_item_is_selected(self.to_glib_none_mut().0))
-        }
+  #[cfg(any(feature = "v2_18", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
+  #[doc(alias = "webkit_option_menu_item_is_selected")]
+  pub fn is_selected(&mut self) -> bool {
+    unsafe {
+      from_glib(ffi::webkit_option_menu_item_is_selected(
+        self.to_glib_none_mut().0,
+      ))
     }
+  }
 }

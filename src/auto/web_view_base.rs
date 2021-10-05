@@ -18,7 +18,7 @@ impl WebViewBase {}
 pub const NONE_WEB_VIEW_BASE: Option<&WebViewBase> = None;
 
 impl fmt::Display for WebViewBase {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("WebViewBase")
-    }
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    f.write_str("WebViewBase")
+  }
 }

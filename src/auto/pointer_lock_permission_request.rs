@@ -19,7 +19,7 @@ impl PointerLockPermissionRequest {}
 pub const NONE_POINTER_LOCK_PERMISSION_REQUEST: Option<&PointerLockPermissionRequest> = None;
 
 impl fmt::Display for PointerLockPermissionRequest {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("PointerLockPermissionRequest")
-    }
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    f.write_str("PointerLockPermissionRequest")
+  }
 }

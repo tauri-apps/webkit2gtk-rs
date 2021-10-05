@@ -24,30 +24,29 @@ extern crate libc;
 extern crate ffi;
 
 macro_rules! assert_initialized_main_thread {
-    () => (
-        if !::gtk::is_initialized_main_thread() {
-            if ::gtk::is_initialized() {
-                panic!("GTK may only be used from the main thread.");
-            }
-            else {
-                panic!("GTK has not been initialized. Call `gtk::init` first.");
-            }
-        }
-    )
+  () => {
+    if !::gtk::is_initialized_main_thread() {
+      if ::gtk::is_initialized() {
+        panic!("GTK may only be used from the main thread.");
+      } else {
+        panic!("GTK has not been initialized. Call `gtk::init` first.");
+      }
+    }
+  };
 }
 
 macro_rules! skip_assert_initialized {
-    () => ()
+  () => {};
 }
 
 mod auto;
 mod script_dialog;
-mod web_view;
 mod web_context;
+mod web_view;
 
 pub use glib::Error;
 
 pub use auto::*;
 pub use script_dialog::*;
-pub use web_view::*;
 pub use web_context::*;
+pub use web_view::*;

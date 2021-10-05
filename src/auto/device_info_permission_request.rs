@@ -19,7 +19,7 @@ impl DeviceInfoPermissionRequest {}
 pub const NONE_DEVICE_INFO_PERMISSION_REQUEST: Option<&DeviceInfoPermissionRequest> = None;
 
 impl fmt::Display for DeviceInfoPermissionRequest {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("DeviceInfoPermissionRequest")
-    }
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    f.write_str("DeviceInfoPermissionRequest")
+  }
 }

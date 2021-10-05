@@ -2,8 +2,7 @@
 // from gir-files (https://github.com/wusyong/gir-files)
 // DO NOT EDIT
 
-use glib::object::IsA;
-use glib::translate::*;
+use glib::{object::IsA, translate::*};
 use std::fmt;
 
 glib::wrapper! {
@@ -18,29 +17,29 @@ glib::wrapper! {
 pub const NONE_FORM_SUBMISSION_REQUEST: Option<&FormSubmissionRequest> = None;
 
 pub trait FormSubmissionRequestExt: 'static {
-    //#[cfg_attr(feature = "v2_20", deprecated = "Since 2.20")]
-    //#[doc(alias = "webkit_form_submission_request_get_text_fields")]
-    //#[doc(alias = "get_text_fields")]
-    //fn text_fields(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 25 }/TypeId { ns_id: 0, id: 25 };
+  //#[cfg_attr(feature = "v2_20", deprecated = "Since 2.20")]
+  //#[doc(alias = "webkit_form_submission_request_get_text_fields")]
+  //#[doc(alias = "get_text_fields")]
+  //fn text_fields(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 25 }/TypeId { ns_id: 0, id: 25 };
 
-    #[doc(alias = "webkit_form_submission_request_submit")]
-    fn submit(&self);
+  #[doc(alias = "webkit_form_submission_request_submit")]
+  fn submit(&self);
 }
 
 impl<O: IsA<FormSubmissionRequest>> FormSubmissionRequestExt for O {
-    //fn text_fields(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 25 }/TypeId { ns_id: 0, id: 25 } {
-    //    unsafe { TODO: call ffi:webkit_form_submission_request_get_text_fields() }
-    //}
+  //fn text_fields(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 25 }/TypeId { ns_id: 0, id: 25 } {
+  //    unsafe { TODO: call ffi:webkit_form_submission_request_get_text_fields() }
+  //}
 
-    fn submit(&self) {
-        unsafe {
-            ffi::webkit_form_submission_request_submit(self.as_ref().to_glib_none().0);
-        }
+  fn submit(&self) {
+    unsafe {
+      ffi::webkit_form_submission_request_submit(self.as_ref().to_glib_none().0);
     }
+  }
 }
 
 impl fmt::Display for FormSubmissionRequest {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("FormSubmissionRequest")
-    }
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    f.write_str("FormSubmissionRequest")
+  }
 }
