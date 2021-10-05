@@ -4,6 +4,8 @@
  * TODO: add Cargo categories.
  * TODO: add all unstable methods.
  */
+#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![allow(unused_imports, deprecated)]
 
 extern crate bitflags;
 extern crate cairo;

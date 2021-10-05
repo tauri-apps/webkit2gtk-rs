@@ -2,10 +2,8 @@
 // from gir-files (https://github.com/wusyong/gir-files)
 // DO NOT EDIT
 
-use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
-use glib::StaticType;
 use glib::ToValue;
 use std::fmt;
 
