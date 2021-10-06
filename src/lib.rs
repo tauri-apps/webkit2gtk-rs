@@ -46,6 +46,7 @@ mod web_view;
 
 pub use glib::Error;
 
+pub use auto::traits::*;
 pub use auto::*;
 pub use script_dialog::*;
 pub use web_context::*;
