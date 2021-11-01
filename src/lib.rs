@@ -1,53 +1,51 @@
-// Take a look at the license at the top of the repository in the LICENSE file.
-
-/*
- * TODO: add Cargo categories.
- * TODO: add all unstable methods.
- */
+#![allow(deprecated)]
+#![doc = include_str!("../README.md")]
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
-#![allow(unused_imports, deprecated)]
 
-extern crate bitflags;
-extern crate cairo;
-extern crate gdk;
-extern crate gdk_sys;
-extern crate gio;
-extern crate gio_sys;
-extern crate glib;
-extern crate glib_sys;
-extern crate gobject_sys;
-extern crate gtk;
-extern crate gtk_sys;
-extern crate javascriptcore as java_script_core;
-extern crate libc;
+pub use ffi;
 
-extern crate ffi;
-
-macro_rules! assert_initialized_main_thread {
-  () => {
-    if !::gtk::is_initialized_main_thread() {
-      if ::gtk::is_initialized() {
-        panic!("GTK may only be used from the main thread.");
-      } else {
-        panic!("GTK has not been initialized. Call `gtk::init` first.");
-      }
-    }
-  };
-}
-
-macro_rules! skip_assert_initialized {
-  () => {};
-}
-
-mod auto;
-mod script_dialog;
-mod web_context;
-mod web_view;
+// Re-export gtk dependencies
+pub use gio;
+#[macro_use]
+pub use glib;
 
 pub use glib::Error;
 
-pub use auto::traits::*;
-pub use auto::*;
-pub use script_dialog::*;
+#[macro_use]
+use bitflags;
+use cairo;
+use gdk;
+use gdk_sys;
+use gio_sys;
+use glib_sys;
+use gobject_sys;
+use gtk;
+use gtk_sys;
+use libc;
+
+#[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
+#[cfg_attr(feature = "cargo-clippy", allow(useless_transmute))]
+#[macro_use]
+mod rt;
+
+#[allow(unused_imports)]
+mod auto;
+mod credential;
+mod javascript_result;
+mod web_context;
+mod web_view;
+
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+mod website_data_manager;
+
+pub use credential::*;
+pub use javascript_result::*;
 pub use web_context::*;
 pub use web_view::*;
+
+#[cfg(any(feature = "v2_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+pub use website_data_manager::*;
+
+pub use crate::auto::*;

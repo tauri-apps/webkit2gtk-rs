@@ -79,7 +79,7 @@
   },
   "packages": {
     "webkit2gtk-sys": {
-      "path": "./webkit2gtk-sys",
+      "path": "./sys",
       "manager": "rust"
     },
     "webkit2gtk-rs": {

@@ -71,6 +71,19 @@ fn main() {
     Err(error) => println!("{}", error),
   });
 
+  let cancellable = gio::Cancellable::new();
+  webview.run_javascript("42", Some(&cancellable), |result| match result {
+    Ok(result) => {
+      let context = result.global_context().unwrap();
+      let value = result.value().unwrap();
+      println!("is_boolean: {}", value.is_boolean(&context));
+      println!("is_number: {}", value.is_number(&context));
+      println!("{:?}", value.to_number(&context));
+      println!("{:?}", value.to_boolean(&context));
+    }
+    Err(error) => println!("{}", error),
+  });
+
   window.connect_delete_event(|_, _| {
     gtk::main_quit();
     Inhibit(false)

@@ -1,26 +1,23 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 #[cfg(feature = "v2_6")]
-use std::ffi::CString;
+use crate::UserContentManager;
 #[cfg(feature = "v2_6")]
-use std::ptr;
-
-#[cfg(feature = "v2_6")]
-use glib::object::Cast;
-#[cfg(feature = "v2_6")]
-use glib::translate::{FromGlibPtrNone, IntoGlib, ToGlibPtr};
+use crate::WebContext;
+use crate::WebView;
 use glib::IsA;
-#[cfg(feature = "v2_6")]
-use glib::StaticType;
-#[cfg(feature = "v2_6")]
+
+use std::{error::Error, ffi::CString, ptr};
+
+use ffi;
+use glib::{
+  object::Cast,
+  translate::{FromGlibPtrNone, IntoGlib, ToGlibPtr, ToGlibPtrMut},
+  StaticType,
+};
 use gobject_sys;
 use gtk;
-
-#[cfg(feature = "v2_6")]
-use super::UserContentManager;
-#[cfg(feature = "v2_6")]
-use super::WebContext;
-use super::WebView;
+use libc::c_void;
 
 pub trait WebViewExtManual {
   #[cfg(feature = "v2_6")]
