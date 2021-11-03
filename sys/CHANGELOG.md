@@ -1,5 +1,10 @@
 # Changelog
 
+## \[0.15.2]
+
+- Update with lates gir files
+  - [cf24027](https://github.com/tauri-apps/javascriptcore-rs/commit/cf240271a1154ff82ae9dcf444fa63d082a8a9f9) Add change file on 2021-11-04
+
 ## \[0.15.0]
 
 - Update sys crate to latest gir.
