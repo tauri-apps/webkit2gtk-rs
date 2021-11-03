@@ -71,7 +71,7 @@ impl<O: IsA<WebsiteDataManager>> WebsiteDataManagerExtManual for O {
       ffi::webkit_website_data_manager_clear(
         self.as_ref().to_glib_none().0,
         types.into_glib(),
-        timespan.into_glib(),
+        timespan,
         cancellable.map(|p| p.as_ref()).to_glib_none().0,
         Some(callback),
         Box_::into_raw(user_data) as *mut _,
