@@ -17,7 +17,6 @@ external_libraries = [
 ]
 
 generate = [
-    "WebKit2.ApplicationInfo",
     "WebKit2.AuthenticationScheme",
     "WebKit2.AutomationBrowsingContextPresentation",
     "WebKit2.AutoplayPolicy",
@@ -30,7 +29,6 @@ generate = [
     "WebKit2.CookieAcceptPolicy",
     "WebKit2.CookieManager",
     "WebKit2.CookiePersistentStorage",
-    "WebKit2.Credential",
     "WebKit2.CredentialPersistence",
     "WebKit2.DeviceInfoPermissionRequest",
     "WebKit2.DownloadError",
@@ -45,16 +43,11 @@ generate = [
     "WebKit2.GeolocationPosition",
     "WebKit2.HardwareAccelerationPolicy",
     "WebKit2.HitTestResultContext",
-    "WebKit2.ITPFirstParty",
-    "WebKit2.ITPThirdParty",
     "WebKit2.InputHints",
-    "WebKit2.InputMethodContext",
-    "WebKit2.InputMethodUnderline",
     "WebKit2.InputPurpose",
     "WebKit2.InsecureContentEvent",
     "WebKit2.InstallMissingMediaPluginsPermissionRequest",
     "WebKit2.JavascriptError",
-    "WebKit2.JavascriptResult",
     "WebKit2.LoadEvent",
     "WebKit2.MimeInfo",
     "WebKit2.NavigationPolicyDecision",
@@ -64,7 +57,6 @@ generate = [
     "WebKit2.Notification",
     "WebKit2.NotificationPermissionRequest",
     "WebKit2.OptionMenu",
-    "WebKit2.OptionMenuItem",
     "WebKit2.PermissionRequest",
     "WebKit2.Plugin",
     "WebKit2.PluginError",
@@ -79,7 +71,6 @@ generate = [
     "WebKit2.SaveMode",
     "WebKit2.ScriptDialogType",
     "WebKit2.SecurityManager",
-    "WebKit2.SecurityOrigin",
     "WebKit2.SnapshotError",
     "WebKit2.SnapshotOptions",
     "WebKit2.SnapshotRegion",
@@ -91,18 +82,15 @@ generate = [
     "WebKit2.UserContentManager",
     "WebKit2.UserMediaPermissionRequest",
     "WebKit2.UserMessageError",
-    "WebKit2.UserScript",
     "WebKit2.UserScriptInjectionTime",
     "WebKit2.UserStyleLevel",
-    "WebKit2.UserStyleSheet",
     "WebKit2.WebInspector",
     "WebKit2.WebProcessTerminationReason",
     "WebKit2.WebResource",
     "WebKit2.WebViewBase",
-    "WebKit2.WebViewSessionState",
-    "WebKit2.WebsiteData",
     "WebKit2.WebsiteDataAccessPermissionRequest",
     "WebKit2.WebsiteDataTypes",
+
 ]
 
 manual = [
@@ -133,11 +121,15 @@ manual = [
     "Gtk.PrintSettings",
     "Gtk.Widget",
     "Gtk.Window",
-    "JavaScriptCore.GlobalContextRef",
-    "JavaScriptCore.Value",
-    "JavaScriptCore.ValueRef",
-    "WebKit2.ScriptDialog",
+    "WebKit2.Credential",
+    "WebKit2.JavascriptResult",
 ]
+
+
+[[object]]
+name = "WebKit2.ApplicationInfo"
+status = "generate"
+version = "2.18"
 
 [[object]]
 name = "WebKit2.AuthenticationRequest"
@@ -180,8 +172,29 @@ status = "generate"
 generate_builder = true
 
 [[object]]
+name = "WebKit2.InputMethodContext"
+status = "generate"
+version = "2.28"
+
+[[object]]
+name = "WebKit2.InputMethodUnderline"
+status = "generate"
+version = "2.28"
+
+[[object]]
+name = "WebKit2.ITPFirstParty"
+status = "generate"
+version = "2.30"
+
+[[object]]
+name = "WebKit2.ITPThirdParty"
+status = "generate"
+version = "2.30"
+
+[[object]]
 name = "WebKit2.NavigationAction"
 status = "generate"
+version = "2.6"
     [[object.function]]
     name = "get_modifiers"
         [[object.function.parameter]]
@@ -212,6 +225,12 @@ status = "generate"
 [[object]]
 name = "WebKit2.NetworkProxySettings"
 status = "generate"
+version = "2.16"
+
+[[object]]
+name = "WebKit2.OptionMenuItem"
+status = "generate"
+version = "2.18"
 
 [[object]]
 name = "WebKit2.PrintCustomWidget"
@@ -234,6 +253,16 @@ status = "generate"
 generate_builder = true
 
 [[object]]
+name = "WebKit2.UserScript"
+status = "generate"
+version = "2.6"
+
+[[object]]
+name = "WebKit2.UserStyleSheet"
+status = "generate"
+version = "2.6"
+
+[[object]]
 name = "WebKit2.URISchemeRequest"
 status = "generate"
 module_name = "uri_scheme_request"
@@ -250,6 +279,16 @@ status = "generate"
 module_name = "uri_response"
 
 [[object]]
+name = "WebKit2.SecurityOrigin"
+status = "generate"
+version = "2.16"
+
+[[object]]
+name = "WebKit2.ScriptDialog"
+status = "generate"
+version = "2.24"
+
+[[object]]
 name = "WebKit2.WebContext"
 status = "generate"
 generate_builder = true
@@ -258,12 +297,21 @@ generate_builder = true
     ignore = true
 
 [[object]]
+name = "WebKit2.WebsiteData"
+status = "generate"
+version = "2.16"
+
+[[object]]
 name = "WebKit2.WebsiteDataManager"
 status = "generate"
 generate_builder = true
     [[object.function]]
+    name = "clear"
+    manual = true
+
+    [[object.function]]
     name = "remove"
-    ignore = true # to be generated manually
+    manual = true
 
 [[object]]
 name = "WebKit2.WebsitePolicies"
@@ -279,6 +327,14 @@ generate_builder = true
     version = "2.6"
         [object.signal.return]
         nullable = true
+    [[object.signal]]
+    name = "script-dialog"
+    version = "2.24"
+
+[[object]]
+name = "WebKit2.WebViewSessionState"
+status = "generate"
+version = "2.12"
 
 [[object]]
 name = "WebKit2.WindowProperties"

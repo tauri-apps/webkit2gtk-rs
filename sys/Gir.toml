@@ -18,4 +18,4 @@ external_libraries = [
 ]
 
 [external_libraries]
-javascriptcore = "JavaScriptCore"
+javascriptcore_rs = "JavaScriptCore"

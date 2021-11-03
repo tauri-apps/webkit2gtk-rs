@@ -1,10 +1,5 @@
 # Changelog
 
-## \[0.15.1]
-
-- Update url in Cargo.toml.
-  - [f458817](https://github.com/tauri-apps/javascriptcore-rs/commit/f4588172e70e58ff76c63c49cd8a7e576452e33b) Update url in Cargo.toml on 2021-10-25
-
 ## \[0.15.0]
 
 - Update sys crate to latest gir.
