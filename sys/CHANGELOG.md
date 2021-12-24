@@ -1,5 +1,10 @@
 # Changelog
 
+## \[0.16.0]
+
+- Update to soup2-sys in sys crate.
+  - [eb53cd6](https://github.com/tauri-apps/javascriptcore-rs/commit/eb53cd68667ea35917a75aac4ed9167ddf4bfa0e) Add change file on 2021-12-23
+
 ## \[0.15.2]
 
 - Update with lates gir files
