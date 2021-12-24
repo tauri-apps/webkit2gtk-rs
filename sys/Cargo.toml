@@ -51,7 +51,7 @@ keywords = [ "webkit", "gtk-rs", "gnome", "GUI" ]
 license = "MIT"
 links = "web_kit2"
 repository = "https://github.com/tauri-apps/webkit2gtk-rs"
-version = "0.15.2"
+version = "0.16.0"
 edition = "2018"
 
 [package.metadata.docs.rs]
