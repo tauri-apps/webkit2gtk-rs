@@ -1,5 +1,10 @@
 # Changelog
 
+## \[0.17.0]
+
+- Update to gtk 0.15
+  - [205e481](https://github.com/tauri-apps/javascriptcore-rs/commit/205e481831a8f008d0c89a31463751c3e7800dfd) Update to gtk 0.15 on 2022-01-18
+
 ## \[0.16.0]
 
 - Update to soup2-sys in sys crate.
