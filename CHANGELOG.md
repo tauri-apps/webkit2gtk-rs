@@ -1,5 +1,10 @@
 # Changelog
 
+## \[0.17.1]
+
+- Fix TimeSpan type mismatch.
+  - [dbbbf7a](https://github.com/tauri-apps/javascriptcore-rs/commit/dbbbf7ae1f9c9c8d91429a694245e7f1e923a49c) Fix TimeSpan type mismatch on 2022-01-19
+
 ## \[0.17.0]
 
 - Update to gtk 0.15
