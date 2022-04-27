@@ -48,4 +48,6 @@ pub use web_view::*;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
 pub use website_data_manager::*;
 
+pub use crate::auto::builders::*;
+pub use crate::auto::traits::*;
 pub use crate::auto::*;

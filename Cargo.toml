@@ -27,6 +27,9 @@ v2_24 = [ "v2_22", "ffi/v2_24" ]
 v2_26 = [ "v2_24", "ffi/v2_26" ]
 v2_28 = [ "v2_26", "ffi/v2_28" ]
 v2_30 = [ "v2_28", "ffi/v2_30" ]
+v2_32 = [ "v2_30", "ffi/v2_32" ]
+v2_34 = [ "v2_32", "ffi/v2_34" ]
+v2_36 = [ "v2_34", "ffi/v2_36" ]
 
 [dependencies]
 bitflags = "^1.0"
@@ -43,6 +46,7 @@ gobject-sys = "^0.15.0"
 gtk = "^0.15.0"
 gtk-sys = "^0.15.0"
 javascriptcore-rs = "^0.16.0"
+soup2 = "^0.2.0"
 
   [dependencies.ffi]
   package = "webkit2gtk-sys"
