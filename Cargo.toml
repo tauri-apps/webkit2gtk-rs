@@ -1,6 +1,6 @@
 [package]
 name = "webkit2gtk"
-version = "0.17.1"
+version = "0.18.0"
 edition = "2018"
 categories = [ "api-bindings", "gui" ]
 description = "Rust bindings for webkit-gtk library"
@@ -51,4 +51,4 @@ soup2 = "^0.2.0"
   [dependencies.ffi]
   package = "webkit2gtk-sys"
   path = "sys"
-  version = "^0.17"
+  version = "^0.18"
