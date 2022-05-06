@@ -14,6 +14,7 @@ external_libraries = [
     "Gio",
     "Gtk",
     "JavaScriptCore",
+    "Soup",
 ]
 
 generate = [
@@ -49,6 +50,9 @@ generate = [
     "WebKit2.InstallMissingMediaPluginsPermissionRequest",
     "WebKit2.JavascriptError",
     "WebKit2.LoadEvent",
+    "WebKit2.MediaCaptureState",
+    "WebKit2.MediaKeySystemPermissionRequest",
+    "WebKit2.MemoryPressureSettings",
     "WebKit2.MimeInfo",
     "WebKit2.NavigationPolicyDecision",
     "WebKit2.NavigationType",
@@ -75,6 +79,7 @@ generate = [
     "WebKit2.SnapshotOptions",
     "WebKit2.SnapshotRegion",
     "WebKit2.TLSErrorsPolicy",
+    "WebKit2.URISchemeRequestCallback",
     # "WebKit2.UserContentFilter",
     "WebKit2.UserContentFilterError",
     # "WebKit2.UserContentFilterStore",
@@ -100,27 +105,34 @@ manual = [
     "Gdk.Rectangle",
     "Gdk.RGBA",
     "Gio.Action",
+    "Gio.AsyncReadyCallback",
+    "Gio.AsyncResult",
     "Gio.Cancellable",
     "Gio.File",
     "Gio.InputStream",
     "Gio.TlsCertificate",
     "Gio.TlsCertificateFlags",
+    "Gio.TlsPasswordFlags",
     "Gio.UnixFDList",
     "GLib.Bytes",
     "GLib.DateTime",
+    "GLib.DestroyNotify",
     "GLib.Error",
     "GLib.List",
     "GLib.Quark",
     "GLib.TimeSpan",
     "GLib.Variant",
     "GObject.Object",
-    #"Gtk.Action",
+    "Gtk.Action",
+    "Gtk.Buildable",
     "Gtk.Container",
     "Gtk.FileFilter",
     "Gtk.PageSetup",
     "Gtk.PrintSettings",
     "Gtk.Widget",
     "Gtk.Window",
+    "Soup.Cookie",
+    "Soup.MessageHeaders",
     "WebKit2.Credential",
     "WebKit2.JavascriptResult",
 ]
@@ -266,6 +278,12 @@ version = "2.6"
 name = "WebKit2.URISchemeRequest"
 status = "generate"
 module_name = "uri_scheme_request"
+
+[[object]]
+name = "WebKit2.URISchemeResponse"
+status = "generate"
+generate_builder = true
+module_name = "uri_scheme_response"
 
 [[object]]
 name = "WebKit2.URIRequest"
