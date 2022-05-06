@@ -1,5 +1,10 @@
 # Changelog
 
+## \[0.18.0]
+
+- Update webkit2gtk to 2.36
+  - [e43696b](https://github.com/tauri-apps/javascriptcore-rs/commit/e43696b55d2ea3cad03c8493dc381dbbf5c741a4) Add change file on 2022-05-06
+
 ## \[0.17.1]
 
 - Fix TimeSpan type mismatch.
