@@ -11,7 +11,7 @@ See the [requirements page](http://gtk-rs.org/docs/requirements.html).
 
 ```toml
 [dependencies]
-webkit2gtk-rs = "0.15"
+webkit2gtk = "0.18.0"
 ```
 
 ## License
