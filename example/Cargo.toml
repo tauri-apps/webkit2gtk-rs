@@ -1,0 +1,12 @@
+[package]
+name = "example"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+webkit2gtk = "0.18.0"
+gtk = "0.15.5"
+glib = "0.15.11"
+gio = "0.15.11"
