@@ -1,7 +1,7 @@
 [package]
 name = "webkit2gtk"
 version = "0.18.0"
-edition = "2018"
+edition = "2021"
 categories = [ "api-bindings", "gui" ]
 description = "Rust bindings for webkit-gtk library"
 repository = "https://github.com/tauri-apps/webkit2gtk-rs"
