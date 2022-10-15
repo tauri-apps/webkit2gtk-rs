@@ -1,5 +1,10 @@
 # Changelog
 
+## \[0.18.1]
+
+- Fix transfer rule of `URISchemeRequest::http_headers` to none.
+  - [eb1dd5d](https://github.com/tauri-apps/javascriptcore-rs/commit/eb1dd5db0ac1b5a4fb153ca8ac7835e609aa2783) Fix transfer rule of `URISchemeRequest::http_headers` to none on 2022-10-15
+
 ## \[0.18.0]
 
 - Update webkit2gtk to 2.36
