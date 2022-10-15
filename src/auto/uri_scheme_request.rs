@@ -110,7 +110,10 @@ impl<O: IsA<URISchemeRequest>> URISchemeRequestExt for O {
 
   fn http_headers(&self) -> Option<soup::MessageHeaders> {
     unsafe {
-      from_glib_full(ffi::webkit_uri_scheme_request_get_http_headers(
+      // XXX: Gir file is incorrect with `transfer: full`. We do this fix internally
+      // so it can just be patch bump. When we update gir and generate new bindings next
+      // time. Please make sure it's fixed. Or we should add a manual external trait.
+      from_glib_none(ffi::webkit_uri_scheme_request_get_http_headers(
         self.as_ref().to_glib_none().0,
       ))
     }
