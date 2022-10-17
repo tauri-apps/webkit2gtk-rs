@@ -1,5 +1,10 @@
 # Changelog
 
+## \[0.18.2]
+
+- Fix transfer rule of `URISchemeResponse::set_http_headers` to full.
+  - [609aece](https://github.com/tauri-apps/javascriptcore-rs/commit/609aecedee096fec37618b8e3c1d7c7a43eabc32) Fix transfer rule of `URISchemeResponse::set_http_headers` on 2022-10-17
+
 ## \[0.18.1]
 
 - Fix transfer rule of `URISchemeRequest::http_headers` to none.
