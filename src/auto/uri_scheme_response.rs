@@ -144,7 +144,10 @@ impl<O: IsA<URISchemeResponse>> URISchemeResponseExt for O {
     unsafe {
       ffi::webkit_uri_scheme_response_set_http_headers(
         self.as_ref().to_glib_none().0,
-        headers.to_glib_none_mut().0,
+        // XXX: Gir file is incorrect with `transfer: none`. We do this fix internally
+        // so it can just be patch bump. When we update gir and generate new bindings next
+        // time. Please make sure it's fixed. Or we should add a manual external trait.
+        headers.to_glib_full() as *mut _,
       );
     }
   }
