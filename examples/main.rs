@@ -35,6 +35,25 @@ use webkit2gtk::{
 };
 
 fn main() {
+    std::thread::spawn(m);
+    // gtk::init();
+
+    glib::idle_add(|| {
+        use rfd::FileDialog;
+        let files = FileDialog::new()
+            .add_filter("text", &["txt", "rs"])
+            .add_filter("rust", &["rs", "toml"])
+            .set_directory("/")
+            .pick_file();
+
+        glib::Continue(false)
+    });
+    loop {
+        println!("Be gone! Gtk is not on main thread");
+    }
+}
+
+fn m() {
   gtk::init().unwrap();
 
   let window = Window::new(WindowType::Toplevel);
@@ -58,31 +77,31 @@ fn main() {
 
   window.show_all();
 
-  webview.run_javascript("alert('Hello');", None::<&gio::Cancellable>, |_result| {});
-  #[cfg(feature = "v2_22")]
-  webview.run_javascript("42", None::<&gio::Cancellable>, |result| match result {
-    Ok(result) => {
-      let value = result.js_value();
-      println!("is_boolean: {}", value.is_boolean(&context));
-      println!("is_number: {}", value.is_number(&context));
-      println!("{:?}", value.to_number(&context));
-      println!("{:?}", value.to_boolean(&context));
-    }
-    Err(error) => println!("{}", error),
-  });
-
-  let cancellable = gio::Cancellable::new();
-  webview.run_javascript("42", Some(&cancellable), |result| match result {
-    Ok(result) => {
-      let context = result.global_context().unwrap();
-      let value = result.value().unwrap();
-      println!("is_boolean: {}", value.is_boolean(&context));
-      println!("is_number: {}", value.is_number(&context));
-      println!("{:?}", value.to_number(&context));
-      println!("{:?}", value.to_boolean(&context));
-    }
-    Err(error) => println!("{}", error),
-  });
+  // webview.run_javascript("alert('Hello');", None::<&gio::Cancellable>, |_result| {});
+  // #[cfg(feature = "v2_22")]
+  // webview.run_javascript("42", None::<&gio::Cancellable>, |result| match result {
+  //   Ok(result) => {
+  //     let value = result.js_value();
+  //     println!("is_boolean: {}", value.is_boolean(&context));
+  //     println!("is_number: {}", value.is_number(&context));
+  //     println!("{:?}", value.to_number(&context));
+  //     println!("{:?}", value.to_boolean(&context));
+  //   }
+  //   Err(error) => println!("{}", error),
+  // });
+  //
+  // let cancellable = gio::Cancellable::new();
+  // webview.run_javascript("42", Some(&cancellable), |result| match result {
+  //   Ok(result) => {
+  //     let context = result.global_context().unwrap();
+  //     let value = result.value().unwrap();
+  //     println!("is_boolean: {}", value.is_boolean(&context));
+  //     println!("is_number: {}", value.is_number(&context));
+  //     println!("{:?}", value.to_number(&context));
+  //     println!("{:?}", value.to_boolean(&context));
+  //   }
+  //   Err(error) => println!("{}", error),
+  // });
 
   window.connect_delete_event(|_, _| {
     gtk::main_quit();

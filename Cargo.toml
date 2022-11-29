@@ -47,6 +47,7 @@ gtk = "^0.15.0"
 gtk-sys = "^0.15.0"
 javascriptcore-rs = "^0.16.0"
 soup2 = "^0.2.0"
+rfd = "0.10"
 
   [dependencies.ffi]
   package = "webkit2gtk-sys"
