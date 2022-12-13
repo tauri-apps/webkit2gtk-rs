@@ -52,7 +52,6 @@ impl PrintOperation {
 impl Default for PrintOperation {
   fn default() -> Self {
     glib::object::Object::new::<Self>(&[])
-      .expect("Can't construct PrintOperation object with default parameters")
   }
 }
 
@@ -90,7 +89,6 @@ impl PrintOperationBuilder {
       properties.push(("web-view", web_view));
     }
     glib::Object::new::<PrintOperation>(&properties)
-      .expect("Failed to create an instance of PrintOperation")
   }
 
   pub fn page_setup(mut self, page_setup: &gtk::PageSetup) -> Self {

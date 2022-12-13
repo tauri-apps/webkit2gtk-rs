@@ -32,7 +32,7 @@ pub trait CookieManagerExt: 'static {
   #[cfg(any(feature = "v2_20", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
   #[doc(alias = "webkit_cookie_manager_add_cookie")]
-  fn add_cookie<P: FnOnce(Result<(), glib::Error>) + Send + 'static>(
+  fn add_cookie<P: FnOnce(Result<(), glib::Error>) + 'static>(
     &self,
     cookie: &mut soup::Cookie,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
@@ -53,7 +53,7 @@ pub trait CookieManagerExt: 'static {
   #[cfg(any(feature = "v2_20", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
   #[doc(alias = "webkit_cookie_manager_delete_cookie")]
-  fn delete_cookie<P: FnOnce(Result<(), glib::Error>) + Send + 'static>(
+  fn delete_cookie<P: FnOnce(Result<(), glib::Error>) + 'static>(
     &self,
     cookie: &mut soup::Cookie,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
@@ -73,7 +73,7 @@ pub trait CookieManagerExt: 'static {
 
   #[doc(alias = "webkit_cookie_manager_get_accept_policy")]
   #[doc(alias = "get_accept_policy")]
-  fn accept_policy<P: FnOnce(Result<CookieAcceptPolicy, glib::Error>) + Send + 'static>(
+  fn accept_policy<P: FnOnce(Result<CookieAcceptPolicy, glib::Error>) + 'static>(
     &self,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
@@ -87,7 +87,7 @@ pub trait CookieManagerExt: 'static {
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
   #[doc(alias = "webkit_cookie_manager_get_cookies")]
   #[doc(alias = "get_cookies")]
-  fn cookies<P: FnOnce(Result<Vec<soup::Cookie>, glib::Error>) + Send + 'static>(
+  fn cookies<P: FnOnce(Result<Vec<soup::Cookie>, glib::Error>) + 'static>(
     &self,
     uri: &str,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
@@ -104,7 +104,7 @@ pub trait CookieManagerExt: 'static {
   #[cfg_attr(feature = "v2_16", deprecated = "Since 2.16")]
   #[doc(alias = "webkit_cookie_manager_get_domains_with_cookies")]
   #[doc(alias = "get_domains_with_cookies")]
-  fn domains_with_cookies<P: FnOnce(Result<Vec<glib::GString>, glib::Error>) + Send + 'static>(
+  fn domains_with_cookies<P: FnOnce(Result<Vec<glib::GString>, glib::Error>) + 'static>(
     &self,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
@@ -129,16 +129,25 @@ pub trait CookieManagerExt: 'static {
 impl<O: IsA<CookieManager>> CookieManagerExt for O {
   #[cfg(any(feature = "v2_20", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
-  fn add_cookie<P: FnOnce(Result<(), glib::Error>) + Send + 'static>(
+  fn add_cookie<P: FnOnce(Result<(), glib::Error>) + 'static>(
     &self,
     cookie: &mut soup::Cookie,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
-    unsafe extern "C" fn add_cookie_trampoline<
-      P: FnOnce(Result<(), glib::Error>) + Send + 'static,
-    >(
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
+    unsafe extern "C" fn add_cookie_trampoline<P: FnOnce(Result<(), glib::Error>) + 'static>(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
@@ -151,7 +160,8 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = add_cookie_trampoline::<P>;
@@ -188,16 +198,25 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
 
   #[cfg(any(feature = "v2_20", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
-  fn delete_cookie<P: FnOnce(Result<(), glib::Error>) + Send + 'static>(
+  fn delete_cookie<P: FnOnce(Result<(), glib::Error>) + 'static>(
     &self,
     cookie: &mut soup::Cookie,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
-    unsafe extern "C" fn delete_cookie_trampoline<
-      P: FnOnce(Result<(), glib::Error>) + Send + 'static,
-    >(
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
+    unsafe extern "C" fn delete_cookie_trampoline<P: FnOnce(Result<(), glib::Error>) + 'static>(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
@@ -210,7 +229,8 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = delete_cookie_trampoline::<P>;
@@ -248,14 +268,25 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
     }
   }
 
-  fn accept_policy<P: FnOnce(Result<CookieAcceptPolicy, glib::Error>) + Send + 'static>(
+  fn accept_policy<P: FnOnce(Result<CookieAcceptPolicy, glib::Error>) + 'static>(
     &self,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
     unsafe extern "C" fn accept_policy_trampoline<
-      P: FnOnce(Result<CookieAcceptPolicy, glib::Error>) + Send + 'static,
+      P: FnOnce(Result<CookieAcceptPolicy, glib::Error>) + 'static,
     >(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
@@ -272,7 +303,8 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = accept_policy_trampoline::<P>;
@@ -299,15 +331,26 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
 
   #[cfg(any(feature = "v2_20", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
-  fn cookies<P: FnOnce(Result<Vec<soup::Cookie>, glib::Error>) + Send + 'static>(
+  fn cookies<P: FnOnce(Result<Vec<soup::Cookie>, glib::Error>) + 'static>(
     &self,
     uri: &str,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
     unsafe extern "C" fn cookies_trampoline<
-      P: FnOnce(Result<Vec<soup::Cookie>, glib::Error>) + Send + 'static,
+      P: FnOnce(Result<Vec<soup::Cookie>, glib::Error>) + 'static,
     >(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
@@ -321,7 +364,8 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = cookies_trampoline::<P>;
@@ -351,14 +395,25 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
     }))
   }
 
-  fn domains_with_cookies<P: FnOnce(Result<Vec<glib::GString>, glib::Error>) + Send + 'static>(
+  fn domains_with_cookies<P: FnOnce(Result<Vec<glib::GString>, glib::Error>) + 'static>(
     &self,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
     unsafe extern "C" fn domains_with_cookies_trampoline<
-      P: FnOnce(Result<Vec<glib::GString>, glib::Error>) + Send + 'static,
+      P: FnOnce(Result<Vec<glib::GString>, glib::Error>) + 'static,
     >(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
@@ -375,7 +430,8 @@ impl<O: IsA<CookieManager>> CookieManagerExt for O {
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = domains_with_cookies_trampoline::<P>;

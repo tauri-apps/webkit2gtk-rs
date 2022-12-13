@@ -76,7 +76,6 @@ impl HitTestResultBuilder {
       properties.push(("media-uri", media_uri));
     }
     glib::Object::new::<HitTestResult>(&properties)
-      .expect("Failed to create an instance of HitTestResult")
   }
 
   pub fn context(mut self, context: u32) -> Self {

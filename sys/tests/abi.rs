@@ -12,7 +12,7 @@ use std::str;
 use tempfile::Builder;
 use webkit2gtk_sys::*;
 
-static PACKAGES: &[&str] = &["webkit2gtk-4.0"];
+static PACKAGES: &[&str] = &["webkit2gtk-4.1"];
 
 #[derive(Clone, Debug)]
 struct Compiler {
@@ -40,7 +40,7 @@ impl Compiler {
     cmd.arg(out);
     let status = cmd.spawn()?.wait()?;
     if !status.success() {
-      return Err(format!("compilation command {:?} failed, {}", &cmd, status).into());
+      return Err(format!("compilation command {cmd:?} failed, {status}").into());
     }
     Ok(())
   }
@@ -56,7 +56,7 @@ fn get_var(name: &str, default: &str) -> Result<Vec<String>, Box<dyn Error>> {
   match env::var(name) {
     Ok(value) => Ok(shell_words::split(&value)?),
     Err(env::VarError::NotPresent) => Ok(shell_words::split(default)?),
-    Err(err) => Err(format!("{} {}", name, err).into()),
+    Err(err) => Err(format!("{name} {err}").into()),
   }
 }
 
@@ -70,7 +70,7 @@ fn pkg_config_cflags(packages: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
   cmd.args(packages);
   let out = cmd.output()?;
   if !out.status.success() {
-    return Err(format!("command {:?} returned {}", &cmd, out.status).into());
+    return Err(format!("command {cmd:?} returned {}", out.status).into());
   }
   let stdout = str::from_utf8(&out.stdout)?;
   Ok(shell_words::split(stdout.trim())?)
@@ -110,17 +110,13 @@ impl Results {
 }
 
 #[test]
+#[cfg(target_os = "linux")]
 fn cross_validate_constants_with_c() {
   let mut c_constants: Vec<(String, String)> = Vec::new();
 
   for l in get_c_output("constant").unwrap().lines() {
-    let mut words = l.trim().split(';');
-    let name = words.next().expect("Failed to parse name").to_owned();
-    let value = words
-      .next()
-      .and_then(|s| s.parse().ok())
-      .expect("Failed to parse value");
-    c_constants.push((name, value));
+    let (name, value) = l.split_once(';').expect("Missing ';' separator");
+    c_constants.push((name.to_owned(), value.to_owned()));
   }
 
   let mut results = Results::default();
@@ -129,16 +125,13 @@ fn cross_validate_constants_with_c() {
   {
     if rust_name != c_name {
       results.record_failed();
-      eprintln!("Name mismatch:\nRust: {:?}\nC:    {:?}", rust_name, c_name,);
+      eprintln!("Name mismatch:\nRust: {rust_name:?}\nC:    {c_name:?}");
       continue;
     }
 
     if rust_value != c_value {
       results.record_failed();
-      eprintln!(
-        "Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
-        rust_name, rust_value, &c_value
-      );
+      eprintln!("Constant value mismatch for {rust_name}\nRust: {rust_value:?}\nC:    {c_value:?}",);
       continue;
     }
 
@@ -149,21 +142,16 @@ fn cross_validate_constants_with_c() {
 }
 
 #[test]
+#[cfg(target_os = "linux")]
 fn cross_validate_layout_with_c() {
   let mut c_layouts = Vec::new();
 
   for l in get_c_output("layout").unwrap().lines() {
-    let mut words = l.trim().split(';');
-    let name = words.next().expect("Failed to parse name").to_owned();
-    let size = words
-      .next()
-      .and_then(|s| s.parse().ok())
-      .expect("Failed to parse size");
-    let alignment = words
-      .next()
-      .and_then(|s| s.parse().ok())
-      .expect("Failed to parse alignment");
-    c_layouts.push((name, Layout { size, alignment }));
+    let (name, value) = l.split_once(';').expect("Missing first ';' separator");
+    let (size, alignment) = value.split_once(';').expect("Missing second ';' separator");
+    let size = size.parse().expect("Failed to parse size");
+    let alignment = alignment.parse().expect("Failed to parse alignment");
+    c_layouts.push((name.to_owned(), Layout { size, alignment }));
   }
 
   let mut results = Results::default();
@@ -171,16 +159,13 @@ fn cross_validate_layout_with_c() {
   for ((rust_name, rust_layout), (c_name, c_layout)) in RUST_LAYOUTS.iter().zip(c_layouts.iter()) {
     if rust_name != c_name {
       results.record_failed();
-      eprintln!("Name mismatch:\nRust: {:?}\nC:    {:?}", rust_name, c_name,);
+      eprintln!("Name mismatch:\nRust: {rust_name:?}\nC:    {c_name:?}");
       continue;
     }
 
     if rust_layout != c_layout {
       results.record_failed();
-      eprintln!(
-        "Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
-        rust_name, rust_layout, &c_layout
-      );
+      eprintln!("Layout mismatch for {rust_name}\nRust: {rust_layout:?}\nC:    {c_layout:?}",);
       continue;
     }
 
@@ -201,7 +186,7 @@ fn get_c_output(name: &str) -> Result<String, Box<dyn Error>> {
   let mut abi_cmd = Command::new(exe);
   let output = abi_cmd.output()?;
   if !output.status.success() {
-    return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
+    return Err(format!("command {abi_cmd:?} failed, {output:?}").into());
   }
 
   Ok(String::from_utf8(output.stdout)?)
@@ -1084,6 +1069,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
     },
   ),
   (
+    "WebKitWebExtensionMode",
+    Layout {
+      size: size_of::<WebKitWebExtensionMode>(),
+      alignment: align_of::<WebKitWebExtensionMode>(),
+    },
+  ),
+  (
     "WebKitWebInspector",
     Layout {
       size: size_of::<WebKitWebInspector>(),
@@ -1422,7 +1414,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
   ("(gint) WEBKIT_MEDIA_CAPTURE_STATE_MUTED", "2"),
   ("(gint) WEBKIT_MEDIA_CAPTURE_STATE_NONE", "0"),
   ("WEBKIT_MICRO_VERSION", "1"),
-  ("WEBKIT_MINOR_VERSION", "36"),
+  ("WEBKIT_MINOR_VERSION", "38"),
   ("(gint) WEBKIT_NAVIGATION_TYPE_BACK_FORWARD", "2"),
   ("(gint) WEBKIT_NAVIGATION_TYPE_FORM_RESUBMITTED", "4"),
   ("(gint) WEBKIT_NAVIGATION_TYPE_FORM_SUBMITTED", "1"),
@@ -1516,6 +1508,9 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
   ),
   ("(guint) WEBKIT_WEBSITE_DATA_SESSION_STORAGE", "8"),
   ("(guint) WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES", "32"),
+  ("(gint) WEBKIT_WEB_EXTENSION_MODE_MANIFESTV2", "1"),
+  ("(gint) WEBKIT_WEB_EXTENSION_MODE_MANIFESTV3", "2"),
+  ("(gint) WEBKIT_WEB_EXTENSION_MODE_NONE", "0"),
   ("(gint) WEBKIT_WEB_PROCESS_CRASHED", "0"),
   ("(gint) WEBKIT_WEB_PROCESS_EXCEEDED_MEMORY_LIMIT", "1"),
   ("(gint) WEBKIT_WEB_PROCESS_TERMINATED_BY_API", "2"),

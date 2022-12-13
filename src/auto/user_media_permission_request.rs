@@ -27,28 +27,42 @@ impl UserMediaPermissionRequest {
 }
 
 pub trait UserMediaPermissionRequestExt: 'static {
+  #[cfg(any(feature = "v2_8", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
   #[doc(alias = "is-for-audio-device")]
   fn is_for_audio_device(&self) -> bool;
 
+  #[cfg(any(feature = "v2_8", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
   #[doc(alias = "is-for-video-device")]
   fn is_for_video_device(&self) -> bool;
 
+  #[cfg(any(feature = "v2_8", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
   #[doc(alias = "is-for-audio-device")]
   fn connect_is_for_audio_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+  #[cfg(any(feature = "v2_8", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
   #[doc(alias = "is-for-video-device")]
   fn connect_is_for_video_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<UserMediaPermissionRequest>> UserMediaPermissionRequestExt for O {
+  #[cfg(any(feature = "v2_8", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
   fn is_for_audio_device(&self) -> bool {
     glib::ObjectExt::property(self.as_ref(), "is-for-audio-device")
   }
 
+  #[cfg(any(feature = "v2_8", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
   fn is_for_video_device(&self) -> bool {
     glib::ObjectExt::property(self.as_ref(), "is-for-video-device")
   }
 
+  #[cfg(any(feature = "v2_8", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
   fn connect_is_for_audio_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_is_for_audio_device_trampoline<
       P: IsA<UserMediaPermissionRequest>,
@@ -74,6 +88,8 @@ impl<O: IsA<UserMediaPermissionRequest>> UserMediaPermissionRequestExt for O {
     }
   }
 
+  #[cfg(any(feature = "v2_8", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
   fn connect_is_for_video_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_is_for_video_device_trampoline<
       P: IsA<UserMediaPermissionRequest>,

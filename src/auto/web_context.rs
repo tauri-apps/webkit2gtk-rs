@@ -95,6 +95,7 @@ impl WebContext {
 
   #[doc(alias = "webkit_web_context_get_default")]
   #[doc(alias = "get_default")]
+  #[allow(clippy::should_implement_trait)]
   pub fn default() -> Option<WebContext> {
     assert_initialized_main_thread!();
     unsafe { from_glib_none(ffi::webkit_web_context_get_default()) }
@@ -126,6 +127,9 @@ pub struct WebContextBuilder {
   #[cfg(any(feature = "v2_28", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
   process_swap_on_cross_site_navigation_enabled: Option<bool>,
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  time_zone_override: Option<String>,
   #[cfg(any(feature = "v2_30", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
   use_system_appearance_for_scrollbars: Option<bool>,
@@ -163,6 +167,10 @@ impl WebContextBuilder {
         process_swap_on_cross_site_navigation_enabled,
       ));
     }
+    #[cfg(any(feature = "v2_38", feature = "dox"))]
+    if let Some(ref time_zone_override) = self.time_zone_override {
+      properties.push(("time-zone-override", time_zone_override));
+    }
     #[cfg(any(feature = "v2_30", feature = "dox"))]
     if let Some(ref use_system_appearance_for_scrollbars) =
       self.use_system_appearance_for_scrollbars
@@ -177,7 +185,6 @@ impl WebContextBuilder {
       properties.push(("website-data-manager", website_data_manager));
     }
     glib::Object::new::<WebContext>(&properties)
-      .expect("Failed to create an instance of WebContext")
   }
 
   #[cfg(any(feature = "v2_8", feature = "dox"))]
@@ -206,6 +213,13 @@ impl WebContextBuilder {
   ) -> Self {
     self.process_swap_on_cross_site_navigation_enabled =
       Some(process_swap_on_cross_site_navigation_enabled);
+    self
+  }
+
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  pub fn time_zone_override(mut self, time_zone_override: &str) -> Self {
+    self.time_zone_override = Some(time_zone_override.to_string());
     self
   }
 
@@ -272,7 +286,7 @@ pub trait WebContextExt: 'static {
   #[cfg_attr(feature = "v2_32", deprecated = "Since 2.32")]
   #[doc(alias = "webkit_web_context_get_plugins")]
   #[doc(alias = "get_plugins")]
-  fn plugins<P: FnOnce(Result<Vec<Plugin>, glib::Error>) + Send + 'static>(
+  fn plugins<P: FnOnce(Result<Vec<Plugin>, glib::Error>) + 'static>(
     &self,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
@@ -307,6 +321,12 @@ pub trait WebContextExt: 'static {
   #[doc(alias = "webkit_web_context_get_spell_checking_languages")]
   #[doc(alias = "get_spell_checking_languages")]
   fn spell_checking_languages(&self) -> Vec<glib::GString>;
+
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  #[doc(alias = "webkit_web_context_get_time_zone_override")]
+  #[doc(alias = "get_time_zone_override")]
+  fn time_zone_override(&self) -> Option<glib::GString>;
 
   #[cfg_attr(feature = "v2_32", deprecated = "Since 2.32")]
   #[doc(alias = "webkit_web_context_get_tls_errors_policy")]
@@ -561,14 +581,25 @@ impl<O: IsA<WebContext>> WebContextExt for O {
     }
   }
 
-  fn plugins<P: FnOnce(Result<Vec<Plugin>, glib::Error>) + Send + 'static>(
+  fn plugins<P: FnOnce(Result<Vec<Plugin>, glib::Error>) + 'static>(
     &self,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
     unsafe extern "C" fn plugins_trampoline<
-      P: FnOnce(Result<Vec<Plugin>, glib::Error>) + Send + 'static,
+      P: FnOnce(Result<Vec<Plugin>, glib::Error>) + 'static,
     >(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
@@ -582,7 +613,8 @@ impl<O: IsA<WebContext>> WebContextExt for O {
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = plugins_trampoline::<P>;
@@ -645,6 +677,16 @@ impl<O: IsA<WebContext>> WebContextExt for O {
   fn spell_checking_languages(&self) -> Vec<glib::GString> {
     unsafe {
       FromGlibPtrContainer::from_glib_none(ffi::webkit_web_context_get_spell_checking_languages(
+        self.as_ref().to_glib_none().0,
+      ))
+    }
+  }
+
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  fn time_zone_override(&self) -> Option<glib::GString> {
+    unsafe {
+      from_glib_none(ffi::webkit_web_context_get_time_zone_override(
         self.as_ref().to_glib_none().0,
       ))
     }

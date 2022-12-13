@@ -32,7 +32,7 @@ impl WebResource {
 pub trait WebResourceExt: 'static {
   #[doc(alias = "webkit_web_resource_get_data")]
   #[doc(alias = "get_data")]
-  fn data<P: FnOnce(Result<Vec<u8>, glib::Error>) + Send + 'static>(
+  fn data<P: FnOnce(Result<Vec<u8>, glib::Error>) + 'static>(
     &self,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
@@ -83,15 +83,24 @@ pub trait WebResourceExt: 'static {
 }
 
 impl<O: IsA<WebResource>> WebResourceExt for O {
-  fn data<P: FnOnce(Result<Vec<u8>, glib::Error>) + Send + 'static>(
+  fn data<P: FnOnce(Result<Vec<u8>, glib::Error>) + 'static>(
     &self,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
-    unsafe extern "C" fn data_trampoline<
-      P: FnOnce(Result<Vec<u8>, glib::Error>) + Send + 'static,
-    >(
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
+    unsafe extern "C" fn data_trampoline<P: FnOnce(Result<Vec<u8>, glib::Error>) + 'static>(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
@@ -107,12 +116,13 @@ impl<O: IsA<WebResource>> WebResourceExt for O {
       let result = if error.is_null() {
         Ok(FromGlibContainer::from_glib_full_num(
           ret,
-          length.assume_init() as usize,
+          length.assume_init() as _,
         ))
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = data_trampoline::<P>;

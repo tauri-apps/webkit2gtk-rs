@@ -65,7 +65,7 @@ impl DownloadBuilder {
     if let Some(ref allow_overwrite) = self.allow_overwrite {
       properties.push(("allow-overwrite", allow_overwrite));
     }
-    glib::Object::new::<Download>(&properties).expect("Failed to create an instance of Download")
+    glib::Object::new::<Download>(&properties)
   }
 
   #[cfg(any(feature = "v2_6", feature = "dox"))]

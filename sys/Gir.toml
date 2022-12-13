@@ -3,7 +3,7 @@ girs_directories = ["../gir-files"]
 work_mode = "sys"
 min_cfg_version="2.4"
 library = "WebKit2"
-version = "4.0"
+version = "4.1"
 single_version_file = "."
 target_path = "."
 

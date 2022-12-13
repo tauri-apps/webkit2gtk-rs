@@ -42,6 +42,8 @@ pub trait URISchemeRequestExt: 'static {
   #[doc(alias = "webkit_uri_scheme_request_finish_with_response")]
   fn finish_with_response(&self, response: &impl IsA<URISchemeResponse>);
 
+  #[cfg(any(feature = "v2_36", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
   #[doc(alias = "webkit_uri_scheme_request_get_http_headers")]
   #[doc(alias = "get_http_headers")]
   fn http_headers(&self) -> Option<soup::MessageHeaders>;
@@ -108,11 +110,10 @@ impl<O: IsA<URISchemeRequest>> URISchemeRequestExt for O {
     }
   }
 
+  #[cfg(any(feature = "v2_36", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
   fn http_headers(&self) -> Option<soup::MessageHeaders> {
     unsafe {
-      // XXX: Gir file is incorrect with `transfer: full`. We do this fix internally
-      // so it can just be patch bump. When we update gir and generate new bindings next
-      // time. Please make sure it's fixed. Or we should add a manual external trait.
       from_glib_none(ffi::webkit_uri_scheme_request_get_http_headers(
         self.as_ref().to_glib_none().0,
       ))
