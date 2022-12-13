@@ -133,6 +133,7 @@ manual = [
     "Gtk.Window",
     "Soup.Cookie",
     "Soup.MessageHeaders",
+    "JavaScriptCore.Value",
 ]
 
 

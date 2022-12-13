@@ -20,14 +20,11 @@ glib::wrapper! {
 impl ContextMenuItem {
   pub const NONE: Option<&'static ContextMenuItem> = None;
 
-  // #[cfg_attr(feature = "v2_18", deprecated = "Since 2.18")]
-  // #[doc(alias = "webkit_context_menu_item_new")]
-  // pub fn new(action: &impl IsA<gtk::Action>) -> ContextMenuItem {
-  //     assert_initialized_main_thread!();
-  //     unsafe {
-  //         from_glib_none(ffi::webkit_context_menu_item_new(action.as_ref().to_glib_none().0))
-  //     }
-  // }
+  //#[cfg_attr(feature = "v2_18", deprecated = "Since 2.18")]
+  //#[doc(alias = "webkit_context_menu_item_new")]
+  //pub fn new(action: /*Ignored*/&gtk::Action) -> ContextMenuItem {
+  //    unsafe { TODO: call ffi:webkit_context_menu_item_new() }
+  //}
 
   #[cfg(any(feature = "v2_18", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
@@ -93,10 +90,10 @@ impl ContextMenuItem {
 }
 
 pub trait ContextMenuItemExt: 'static {
-  // #[cfg_attr(feature = "v2_18", deprecated = "Since 2.18")]
-  // #[doc(alias = "webkit_context_menu_item_get_action")]
-  // #[doc(alias = "get_action")]
-  // fn action(&self) -> Option<gtk::Action>;
+  //#[cfg_attr(feature = "v2_18", deprecated = "Since 2.18")]
+  //#[doc(alias = "webkit_context_menu_item_get_action")]
+  //#[doc(alias = "get_action")]
+  //fn action(&self) -> /*Ignored*/Option<gtk::Action>;
 
   #[cfg(any(feature = "v2_18", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
@@ -120,11 +117,9 @@ pub trait ContextMenuItemExt: 'static {
 }
 
 impl<O: IsA<ContextMenuItem>> ContextMenuItemExt for O {
-  // fn action(&self) -> Option<gtk::Action> {
-  //     unsafe {
-  //         from_glib_none(ffi::webkit_context_menu_item_get_action(self.as_ref().to_glib_none().0))
-  //     }
-  // }
+  //fn action(&self) -> /*Ignored*/Option<gtk::Action> {
+  //    unsafe { TODO: call ffi:webkit_context_menu_item_get_action() }
+  //}
 
   #[cfg(any(feature = "v2_18", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
