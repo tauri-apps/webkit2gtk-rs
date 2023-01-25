@@ -61,7 +61,6 @@ impl FindControllerBuilder {
       properties.push(("web-view", web_view));
     }
     glib::Object::new::<FindController>(&properties)
-      .expect("Failed to create an instance of FindController")
   }
 
   pub fn web_view(mut self, web_view: &impl IsA<WebView>) -> Self {

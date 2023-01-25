@@ -4,8 +4,6 @@
 
 use crate::PermissionRequest;
 use glib::object::IsA;
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 use glib::translate::*;
 use std::fmt;
 
@@ -23,8 +21,6 @@ impl InstallMissingMediaPluginsPermissionRequest {
 }
 
 pub trait InstallMissingMediaPluginsPermissionRequestExt: 'static {
-  #[cfg(any(feature = "v2_10", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
   #[doc(alias = "webkit_install_missing_media_plugins_permission_request_get_description")]
   #[doc(alias = "get_description")]
   fn description(&self) -> Option<glib::GString>;
@@ -33,8 +29,6 @@ pub trait InstallMissingMediaPluginsPermissionRequestExt: 'static {
 impl<O: IsA<InstallMissingMediaPluginsPermissionRequest>>
   InstallMissingMediaPluginsPermissionRequestExt for O
 {
-  #[cfg(any(feature = "v2_10", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
   fn description(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(

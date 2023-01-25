@@ -7,18 +7,6 @@ use crate::WebContext;
 use crate::WebView;
 use glib::IsA;
 
-use std::{error::Error, ffi::CString, ptr};
-
-use ffi;
-use glib::{
-  object::Cast,
-  translate::{FromGlibPtrNone, IntoGlib, ToGlibPtr, ToGlibPtrMut},
-  StaticType,
-};
-use gobject_sys;
-use gtk;
-use libc::c_void;
-
 pub trait WebViewExtManual {
   #[cfg(feature = "v2_6")]
   fn new_with_context_and_user_content_manager(
@@ -36,6 +24,12 @@ where
     context: &WebContext,
     user_content_manager: &UserContentManager,
   ) -> Self {
+    use glib::{
+      object::Cast,
+      translate::{FromGlibPtrNone, IntoGlib, ToGlibPtr},
+      StaticType,
+    };
+    use std::{ffi::CString, ptr};
     assert_initialized_main_thread!();
     let user_content_manager_property = CString::new("user-content-manager").unwrap();
     let web_context_property = CString::new("web-context").unwrap();

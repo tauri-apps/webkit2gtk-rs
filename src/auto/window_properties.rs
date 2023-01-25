@@ -84,7 +84,6 @@ impl WindowPropertiesBuilder {
       properties.push(("toolbar-visible", toolbar_visible));
     }
     glib::Object::new::<WindowProperties>(&properties)
-      .expect("Failed to create an instance of WindowProperties")
   }
 
   pub fn fullscreen(mut self, fullscreen: bool) -> Self {

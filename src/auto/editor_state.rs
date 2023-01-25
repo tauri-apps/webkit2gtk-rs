@@ -2,25 +2,13 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 use glib::object::Cast;
 use glib::object::IsA;
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 use glib::signal::connect_raw;
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 use glib::signal::SignalHandlerId;
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 use glib::translate::*;
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 use std::boxed::Box as Box_;
 use std::fmt;
-#[cfg(any(feature = "v2_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
 use std::mem::transmute;
 
 glib::wrapper! {
@@ -37,8 +25,6 @@ impl EditorState {
 }
 
 pub trait EditorStateExt: 'static {
-  #[cfg(any(feature = "v2_10", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
   #[doc(alias = "webkit_editor_state_get_typing_attributes")]
   #[doc(alias = "get_typing_attributes")]
   fn typing_attributes(&self) -> u32;
@@ -75,8 +61,6 @@ pub trait EditorStateExt: 'static {
 }
 
 impl<O: IsA<EditorState>> EditorStateExt for O {
-  #[cfg(any(feature = "v2_10", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
   fn typing_attributes(&self) -> u32 {
     unsafe { ffi::webkit_editor_state_get_typing_attributes(self.as_ref().to_glib_none().0) }
   }

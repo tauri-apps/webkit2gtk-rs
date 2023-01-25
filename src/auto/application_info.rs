@@ -42,10 +42,11 @@ impl ApplicationInfo {
         minor.as_mut_ptr(),
         micro.as_mut_ptr(),
       );
-      let major = major.assume_init();
-      let minor = minor.assume_init();
-      let micro = micro.assume_init();
-      (major, minor, micro)
+      (
+        major.assume_init(),
+        minor.assume_init(),
+        micro.assume_init(),
+      )
     }
   }
 

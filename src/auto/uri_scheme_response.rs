@@ -4,13 +4,13 @@
 
 use glib::object::Cast;
 use glib::object::IsA;
+#[cfg(any(feature = "v2_36", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
 use glib::translate::*;
 use glib::StaticType;
 use glib::ToValue;
 use std::fmt;
 
-#[cfg(any(feature = "v2_36", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
 glib::wrapper! {
     #[doc(alias = "WebKitURISchemeResponse")]
     pub struct URISchemeResponse(Object<ffi::WebKitURISchemeResponse, ffi::WebKitURISchemeResponseClass>);
@@ -20,8 +20,6 @@ glib::wrapper! {
     }
 }
 
-#[cfg(any(feature = "v2_36", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
 impl URISchemeResponse {
   pub const NONE: Option<&'static URISchemeResponse> = None;
 
@@ -52,12 +50,9 @@ impl URISchemeResponse {
 impl Default for URISchemeResponse {
   fn default() -> Self {
     glib::object::Object::new::<Self>(&[])
-      .expect("Can't construct URISchemeResponse object with default parameters")
   }
 }
 
-#[cfg(any(feature = "v2_36", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
 #[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
 /// A [builder-pattern] type to construct [`URISchemeResponse`] objects.
@@ -68,11 +63,11 @@ pub struct URISchemeResponseBuilder {
   #[cfg(any(feature = "v2_36", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
   stream: Option<gio::InputStream>,
+  #[cfg(any(feature = "v2_36", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
   stream_length: Option<i64>,
 }
 
-#[cfg(any(feature = "v2_36", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
 impl URISchemeResponseBuilder {
   // rustdoc-stripper-ignore-next
   /// Create a new [`URISchemeResponseBuilder`].
@@ -89,11 +84,11 @@ impl URISchemeResponseBuilder {
     if let Some(ref stream) = self.stream {
       properties.push(("stream", stream));
     }
+    #[cfg(any(feature = "v2_36", feature = "dox"))]
     if let Some(ref stream_length) = self.stream_length {
       properties.push(("stream-length", stream_length));
     }
     glib::Object::new::<URISchemeResponse>(&properties)
-      .expect("Failed to create an instance of URISchemeResponse")
   }
 
   #[cfg(any(feature = "v2_36", feature = "dox"))]
@@ -103,22 +98,24 @@ impl URISchemeResponseBuilder {
     self
   }
 
+  #[cfg(any(feature = "v2_36", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
   pub fn stream_length(mut self, stream_length: i64) -> Self {
     self.stream_length = Some(stream_length);
     self
   }
 }
 
-#[cfg(any(feature = "v2_36", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
 pub trait URISchemeResponseExt: 'static {
   #[cfg(any(feature = "v2_36", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
   #[doc(alias = "webkit_uri_scheme_response_set_content_type")]
   fn set_content_type(&self, content_type: &str);
 
+  #[cfg(any(feature = "v2_36", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
   #[doc(alias = "webkit_uri_scheme_response_set_http_headers")]
-  fn set_http_headers(&self, headers: &mut soup::MessageHeaders);
+  fn set_http_headers(&self, headers: &soup::MessageHeaders);
 
   #[cfg(any(feature = "v2_36", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
@@ -126,8 +123,6 @@ pub trait URISchemeResponseExt: 'static {
   fn set_status(&self, status_code: u32, reason_phrase: Option<&str>);
 }
 
-#[cfg(any(feature = "v2_36", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
 impl<O: IsA<URISchemeResponse>> URISchemeResponseExt for O {
   #[cfg(any(feature = "v2_36", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
@@ -140,14 +135,13 @@ impl<O: IsA<URISchemeResponse>> URISchemeResponseExt for O {
     }
   }
 
-  fn set_http_headers(&self, headers: &mut soup::MessageHeaders) {
+  #[cfg(any(feature = "v2_36", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
+  fn set_http_headers(&self, headers: &soup::MessageHeaders) {
     unsafe {
       ffi::webkit_uri_scheme_response_set_http_headers(
         self.as_ref().to_glib_none().0,
-        // XXX: Gir file is incorrect with `transfer: none`. We do this fix internally
-        // so it can just be patch bump. When we update gir and generate new bindings next
-        // time. Please make sure it's fixed. Or we should add a manual external trait.
-        headers.to_glib_full() as *mut _,
+        headers.to_glib_full(),
       );
     }
   }
@@ -165,8 +159,6 @@ impl<O: IsA<URISchemeResponse>> URISchemeResponseExt for O {
   }
 }
 
-#[cfg(any(feature = "v2_36", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
 impl fmt::Display for URISchemeResponse {
   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
     f.write_str("URISchemeResponse")

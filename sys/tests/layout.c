@@ -132,6 +132,7 @@ int main() {
     printf("%s;%zu;%zu\n", "WebKitUserStyleLevel", sizeof(WebKitUserStyleLevel), alignof(WebKitUserStyleLevel));
     printf("%s;%zu;%zu\n", "WebKitWebContext", sizeof(WebKitWebContext), alignof(WebKitWebContext));
     printf("%s;%zu;%zu\n", "WebKitWebContextClass", sizeof(WebKitWebContextClass), alignof(WebKitWebContextClass));
+    printf("%s;%zu;%zu\n", "WebKitWebExtensionMode", sizeof(WebKitWebExtensionMode), alignof(WebKitWebExtensionMode));
     printf("%s;%zu;%zu\n", "WebKitWebInspector", sizeof(WebKitWebInspector), alignof(WebKitWebInspector));
     printf("%s;%zu;%zu\n", "WebKitWebInspectorClass", sizeof(WebKitWebInspectorClass), alignof(WebKitWebInspectorClass));
     printf("%s;%zu;%zu\n", "WebKitWebProcessTerminationReason", sizeof(WebKitWebProcessTerminationReason), alignof(WebKitWebProcessTerminationReason));

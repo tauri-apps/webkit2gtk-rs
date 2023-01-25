@@ -189,6 +189,9 @@ pub struct WebViewBuilder {
   #[cfg(any(feature = "v2_34", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_34")))]
   camera_capture_state: Option<MediaCaptureState>,
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  default_content_security_policy: Option<String>,
   #[cfg(any(feature = "v2_34", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_34")))]
   display_capture_state: Option<MediaCaptureState>,
@@ -217,6 +220,7 @@ pub struct WebViewBuilder {
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
   user_content_manager: Option<UserContentManager>,
   web_context: Option<WebContext>,
+  //web-extension-mode: /*Unknown type*/,
   #[cfg(any(feature = "v2_30", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
   website_policies: Option<WebsitePolicies>,
@@ -320,6 +324,13 @@ impl WebViewBuilder {
     #[cfg(any(feature = "v2_34", feature = "dox"))]
     if let Some(ref camera_capture_state) = self.camera_capture_state {
       properties.push(("camera-capture-state", camera_capture_state));
+    }
+    #[cfg(any(feature = "v2_38", feature = "dox"))]
+    if let Some(ref default_content_security_policy) = self.default_content_security_policy {
+      properties.push((
+        "default-content-security-policy",
+        default_content_security_policy,
+      ));
     }
     #[cfg(any(feature = "v2_34", feature = "dox"))]
     if let Some(ref display_capture_state) = self.display_capture_state {
@@ -487,7 +498,7 @@ impl WebViewBuilder {
     if let Some(ref width_request) = self.width_request {
       properties.push(("width-request", width_request));
     }
-    glib::Object::new::<WebView>(&properties).expect("Failed to create an instance of WebView")
+    glib::Object::new::<WebView>(&properties)
   }
 
   #[cfg(any(feature = "v2_28", feature = "dox"))]
@@ -504,6 +515,13 @@ impl WebViewBuilder {
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_34")))]
   pub fn camera_capture_state(mut self, camera_capture_state: MediaCaptureState) -> Self {
     self.camera_capture_state = Some(camera_capture_state);
+    self
+  }
+
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  pub fn default_content_security_policy(mut self, default_content_security_policy: &str) -> Self {
+    self.default_content_security_policy = Some(default_content_security_policy.to_string());
     self
   }
 
@@ -802,7 +820,7 @@ impl WebViewBuilder {
 
 pub trait WebViewExt: 'static {
   #[doc(alias = "webkit_web_view_can_execute_editing_command")]
-  fn can_execute_editing_command<P: FnOnce(Result<(), glib::Error>) + Send + 'static>(
+  fn can_execute_editing_command<P: FnOnce(Result<(), glib::Error>) + 'static>(
     &self,
     command: &str,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
@@ -864,6 +882,12 @@ pub trait WebViewExt: 'static {
   #[doc(alias = "get_custom_charset")]
   fn custom_charset(&self) -> Option<glib::GString>;
 
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  #[doc(alias = "webkit_web_view_get_default_content_security_policy")]
+  #[doc(alias = "get_default_content_security_policy")]
+  fn default_content_security_policy(&self) -> Option<glib::GString>;
+
   #[cfg(any(feature = "v2_34", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_34")))]
   #[doc(alias = "webkit_web_view_get_display_capture_state")]
@@ -904,14 +928,11 @@ pub trait WebViewExt: 'static {
   #[doc(alias = "get_is_muted")]
   fn is_muted(&self) -> bool;
 
+  #[cfg(any(feature = "v2_34", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_34")))]
   #[doc(alias = "webkit_web_view_get_is_web_process_responsive")]
   #[doc(alias = "get_is_web_process_responsive")]
   fn is_web_process_responsive(&self) -> bool;
-
-  //#[cfg_attr(feature = "v2_22", deprecated = "Since 2.22")]
-  //#[doc(alias = "webkit_web_view_get_javascript_global_context")]
-  //#[doc(alias = "get_javascript_global_context")]
-  //fn javascript_global_context(&self) -> /*Ignored*/Option<java_script_core::GlobalContextRef>;
 
   #[doc(alias = "webkit_web_view_get_main_resource")]
   #[doc(alias = "get_main_resource")]
@@ -939,7 +960,7 @@ pub trait WebViewExt: 'static {
 
   #[doc(alias = "webkit_web_view_get_snapshot")]
   #[doc(alias = "get_snapshot")]
-  fn snapshot<P: FnOnce(Result<cairo::Surface, glib::Error>) + Send + 'static>(
+  fn snapshot<P: FnOnce(Result<cairo::Surface, glib::Error>) + 'static>(
     &self,
     region: SnapshotRegion,
     options: SnapshotOptions,
@@ -970,6 +991,12 @@ pub trait WebViewExt: 'static {
   #[doc(alias = "webkit_web_view_get_user_content_manager")]
   #[doc(alias = "get_user_content_manager")]
   fn user_content_manager(&self) -> Option<UserContentManager>;
+
+  //#[cfg(any(feature = "v2_38", feature = "dox"))]
+  //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  //#[doc(alias = "webkit_web_view_get_web_extension_mode")]
+  //#[doc(alias = "get_web_extension_mode")]
+  //fn web_extension_mode(&self) -> /*Ignored*/WebExtensionMode;
 
   #[cfg(any(feature = "v2_16", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
@@ -1005,6 +1032,8 @@ pub trait WebViewExt: 'static {
   #[doc(alias = "webkit_web_view_is_controlled_by_automation")]
   fn is_controlled_by_automation(&self) -> bool;
 
+  #[cfg(any(feature = "v2_8", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
   #[doc(alias = "webkit_web_view_is_editable")]
   fn is_editable(&self) -> bool;
 
@@ -1058,8 +1087,11 @@ pub trait WebViewExt: 'static {
   #[doc(alias = "webkit_web_view_restore_session_state")]
   fn restore_session_state(&self, state: &WebViewSessionState);
 
+  //#[doc(alias = "webkit_web_view_run_async_javascript_function_in_world")]
+  //fn run_async_javascript_function_in_world<P: FnOnce(Result<(), glib::Error>) + 'static>(&self, body: &str, arguments: &glib::Variant, world_name: &str, cancellable: Option<&impl IsA<gio::Cancellable>>, callback: P);
+
   #[doc(alias = "webkit_web_view_run_javascript")]
-  fn run_javascript<P: FnOnce(Result<JavascriptResult, glib::Error>) + Send + 'static>(
+  fn run_javascript<P: FnOnce(Result<JavascriptResult, glib::Error>) + 'static>(
     &self,
     script: &str,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
@@ -1072,9 +1104,7 @@ pub trait WebViewExt: 'static {
   ) -> Pin<Box_<dyn std::future::Future<Output = Result<JavascriptResult, glib::Error>> + 'static>>;
 
   #[doc(alias = "webkit_web_view_run_javascript_from_gresource")]
-  fn run_javascript_from_gresource<
-    P: FnOnce(Result<JavascriptResult, glib::Error>) + Send + 'static,
-  >(
+  fn run_javascript_from_gresource<P: FnOnce(Result<JavascriptResult, glib::Error>) + 'static>(
     &self,
     resource: &str,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
@@ -1089,7 +1119,7 @@ pub trait WebViewExt: 'static {
   #[cfg(any(feature = "v2_22", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_22")))]
   #[doc(alias = "webkit_web_view_run_javascript_in_world")]
-  fn run_javascript_in_world<P: FnOnce(Result<JavascriptResult, glib::Error>) + Send + 'static>(
+  fn run_javascript_in_world<P: FnOnce(Result<JavascriptResult, glib::Error>) + 'static>(
     &self,
     script: &str,
     world_name: &str,
@@ -1106,7 +1136,7 @@ pub trait WebViewExt: 'static {
   ) -> Pin<Box_<dyn std::future::Future<Output = Result<JavascriptResult, glib::Error>> + 'static>>;
 
   #[doc(alias = "webkit_web_view_save")]
-  fn save<P: FnOnce(Result<gio::InputStream, glib::Error>) + Send + 'static>(
+  fn save<P: FnOnce(Result<gio::InputStream, glib::Error>) + 'static>(
     &self,
     save_mode: SaveMode,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
@@ -1119,7 +1149,7 @@ pub trait WebViewExt: 'static {
   ) -> Pin<Box_<dyn std::future::Future<Output = Result<gio::InputStream, glib::Error>> + 'static>>;
 
   #[doc(alias = "webkit_web_view_save_to_file")]
-  fn save_to_file<P: FnOnce(Result<(), glib::Error>) + Send + 'static>(
+  fn save_to_file<P: FnOnce(Result<(), glib::Error>) + 'static>(
     &self,
     file: &impl IsA<gio::File>,
     save_mode: SaveMode,
@@ -1136,7 +1166,7 @@ pub trait WebViewExt: 'static {
   #[cfg(any(feature = "v2_28", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
   #[doc(alias = "webkit_web_view_send_message_to_page")]
-  fn send_message_to_page<P: FnOnce(Result<UserMessage, glib::Error>) + Send + 'static>(
+  fn send_message_to_page<P: FnOnce(Result<UserMessage, glib::Error>) + 'static>(
     &self,
     message: &impl IsA<UserMessage>,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
@@ -1448,15 +1478,26 @@ pub trait WebViewExt: 'static {
 }
 
 impl<O: IsA<WebView>> WebViewExt for O {
-  fn can_execute_editing_command<P: FnOnce(Result<(), glib::Error>) + Send + 'static>(
+  fn can_execute_editing_command<P: FnOnce(Result<(), glib::Error>) + 'static>(
     &self,
     command: &str,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
     unsafe extern "C" fn can_execute_editing_command_trampoline<
-      P: FnOnce(Result<(), glib::Error>) + Send + 'static,
+      P: FnOnce(Result<(), glib::Error>) + 'static,
     >(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
@@ -1473,7 +1514,8 @@ impl<O: IsA<WebView>> WebViewExt for O {
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = can_execute_editing_command_trampoline::<P>;
@@ -1612,6 +1654,16 @@ impl<O: IsA<WebView>> WebViewExt for O {
     }
   }
 
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  fn default_content_security_policy(&self) -> Option<glib::GString> {
+    unsafe {
+      from_glib_none(ffi::webkit_web_view_get_default_content_security_policy(
+        self.as_ref().to_glib_none().0,
+      ))
+    }
+  }
+
   #[cfg(any(feature = "v2_34", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_34")))]
   fn display_capture_state(&self) -> MediaCaptureState {
@@ -1680,6 +1732,8 @@ impl<O: IsA<WebView>> WebViewExt for O {
     }
   }
 
+  #[cfg(any(feature = "v2_34", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_34")))]
   fn is_web_process_responsive(&self) -> bool {
     unsafe {
       from_glib(ffi::webkit_web_view_get_is_web_process_responsive(
@@ -1687,10 +1741,6 @@ impl<O: IsA<WebView>> WebViewExt for O {
       ))
     }
   }
-
-  //fn javascript_global_context(&self) -> /*Ignored*/Option<java_script_core::GlobalContextRef> {
-  //    unsafe { TODO: call ffi:webkit_web_view_get_javascript_global_context() }
-  //}
 
   fn main_resource(&self) -> Option<WebResource> {
     unsafe {
@@ -1732,16 +1782,27 @@ impl<O: IsA<WebView>> WebViewExt for O {
     }
   }
 
-  fn snapshot<P: FnOnce(Result<cairo::Surface, glib::Error>) + Send + 'static>(
+  fn snapshot<P: FnOnce(Result<cairo::Surface, glib::Error>) + 'static>(
     &self,
     region: SnapshotRegion,
     options: SnapshotOptions,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
     unsafe extern "C" fn snapshot_trampoline<
-      P: FnOnce(Result<cairo::Surface, glib::Error>) + Send + 'static,
+      P: FnOnce(Result<cairo::Surface, glib::Error>) + 'static,
     >(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
@@ -1754,7 +1815,8 @@ impl<O: IsA<WebView>> WebViewExt for O {
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = snapshot_trampoline::<P>;
@@ -1800,9 +1862,8 @@ impl<O: IsA<WebView>> WebViewExt for O {
         &mut certificate,
         errors.as_mut_ptr(),
       ));
-      let errors = errors.assume_init();
       if ret {
-        Some((from_glib_none(certificate), from_glib(errors)))
+        Some((from_glib_none(certificate), from_glib(errors.assume_init())))
       } else {
         None
       }
@@ -1822,6 +1883,12 @@ impl<O: IsA<WebView>> WebViewExt for O {
       ))
     }
   }
+
+  //#[cfg(any(feature = "v2_38", feature = "dox"))]
+  //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  //fn web_extension_mode(&self) -> /*Ignored*/WebExtensionMode {
+  //    unsafe { TODO: call ffi:webkit_web_view_get_web_extension_mode() }
+  //}
 
   #[cfg(any(feature = "v2_16", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
@@ -1886,6 +1953,8 @@ impl<O: IsA<WebView>> WebViewExt for O {
     }
   }
 
+  #[cfg(any(feature = "v2_8", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
   fn is_editable(&self) -> bool {
     unsafe {
       from_glib(ffi::webkit_web_view_is_editable(
@@ -2010,15 +2079,30 @@ impl<O: IsA<WebView>> WebViewExt for O {
     }
   }
 
-  fn run_javascript<P: FnOnce(Result<JavascriptResult, glib::Error>) + Send + 'static>(
+  //fn run_async_javascript_function_in_world<P: FnOnce(Result<(), glib::Error>) + 'static>(&self, body: &str, arguments: &glib::Variant, world_name: &str, cancellable: Option<&impl IsA<gio::Cancellable>>, callback: P) {
+  //    unsafe { TODO: call ffi:webkit_web_view_run_async_javascript_function_in_world() }
+  //}
+
+  fn run_javascript<P: FnOnce(Result<JavascriptResult, glib::Error>) + 'static>(
     &self,
     script: &str,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
     unsafe extern "C" fn run_javascript_trampoline<
-      P: FnOnce(Result<JavascriptResult, glib::Error>) + Send + 'static,
+      P: FnOnce(Result<JavascriptResult, glib::Error>) + 'static,
     >(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
@@ -2032,7 +2116,8 @@ impl<O: IsA<WebView>> WebViewExt for O {
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = run_javascript_trampoline::<P>;
@@ -2060,17 +2145,26 @@ impl<O: IsA<WebView>> WebViewExt for O {
     }))
   }
 
-  fn run_javascript_from_gresource<
-    P: FnOnce(Result<JavascriptResult, glib::Error>) + Send + 'static,
-  >(
+  fn run_javascript_from_gresource<P: FnOnce(Result<JavascriptResult, glib::Error>) + 'static>(
     &self,
     resource: &str,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
     unsafe extern "C" fn run_javascript_from_gresource_trampoline<
-      P: FnOnce(Result<JavascriptResult, glib::Error>) + Send + 'static,
+      P: FnOnce(Result<JavascriptResult, glib::Error>) + 'static,
     >(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
@@ -2087,7 +2181,8 @@ impl<O: IsA<WebView>> WebViewExt for O {
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = run_javascript_from_gresource_trampoline::<P>;
@@ -2117,16 +2212,27 @@ impl<O: IsA<WebView>> WebViewExt for O {
 
   #[cfg(any(feature = "v2_22", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_22")))]
-  fn run_javascript_in_world<P: FnOnce(Result<JavascriptResult, glib::Error>) + Send + 'static>(
+  fn run_javascript_in_world<P: FnOnce(Result<JavascriptResult, glib::Error>) + 'static>(
     &self,
     script: &str,
     world_name: &str,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
     unsafe extern "C" fn run_javascript_in_world_trampoline<
-      P: FnOnce(Result<JavascriptResult, glib::Error>) + Send + 'static,
+      P: FnOnce(Result<JavascriptResult, glib::Error>) + 'static,
     >(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
@@ -2143,7 +2249,8 @@ impl<O: IsA<WebView>> WebViewExt for O {
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = run_javascript_in_world_trampoline::<P>;
@@ -2176,15 +2283,26 @@ impl<O: IsA<WebView>> WebViewExt for O {
     }))
   }
 
-  fn save<P: FnOnce(Result<gio::InputStream, glib::Error>) + Send + 'static>(
+  fn save<P: FnOnce(Result<gio::InputStream, glib::Error>) + 'static>(
     &self,
     save_mode: SaveMode,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
     unsafe extern "C" fn save_trampoline<
-      P: FnOnce(Result<gio::InputStream, glib::Error>) + Send + 'static,
+      P: FnOnce(Result<gio::InputStream, glib::Error>) + 'static,
     >(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
@@ -2197,7 +2315,8 @@ impl<O: IsA<WebView>> WebViewExt for O {
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = save_trampoline::<P>;
@@ -2224,17 +2343,26 @@ impl<O: IsA<WebView>> WebViewExt for O {
     }))
   }
 
-  fn save_to_file<P: FnOnce(Result<(), glib::Error>) + Send + 'static>(
+  fn save_to_file<P: FnOnce(Result<(), glib::Error>) + 'static>(
     &self,
     file: &impl IsA<gio::File>,
     save_mode: SaveMode,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
-    unsafe extern "C" fn save_to_file_trampoline<
-      P: FnOnce(Result<(), glib::Error>) + Send + 'static,
-    >(
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
+    unsafe extern "C" fn save_to_file_trampoline<P: FnOnce(Result<(), glib::Error>) + 'static>(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
@@ -2246,7 +2374,8 @@ impl<O: IsA<WebView>> WebViewExt for O {
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = save_to_file_trampoline::<P>;
@@ -2277,15 +2406,26 @@ impl<O: IsA<WebView>> WebViewExt for O {
 
   #[cfg(any(feature = "v2_28", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
-  fn send_message_to_page<P: FnOnce(Result<UserMessage, glib::Error>) + Send + 'static>(
+  fn send_message_to_page<P: FnOnce(Result<UserMessage, glib::Error>) + 'static>(
     &self,
     message: &impl IsA<UserMessage>,
     cancellable: Option<&impl IsA<gio::Cancellable>>,
     callback: P,
   ) {
-    let user_data: Box_<P> = Box_::new(callback);
+    let main_context = glib::MainContext::ref_thread_default();
+    let is_main_context_owner = main_context.is_owner();
+    let has_acquired_main_context = (!is_main_context_owner)
+      .then(|| main_context.acquire().ok())
+      .flatten();
+    assert!(
+      is_main_context_owner || has_acquired_main_context.is_some(),
+      "Async operations only allowed if the thread is owning the MainContext"
+    );
+
+    let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+      Box_::new(glib::thread_guard::ThreadGuard::new(callback));
     unsafe extern "C" fn send_message_to_page_trampoline<
-      P: FnOnce(Result<UserMessage, glib::Error>) + Send + 'static,
+      P: FnOnce(Result<UserMessage, glib::Error>) + 'static,
     >(
       _source_object: *mut glib::gobject_ffi::GObject,
       res: *mut gio::ffi::GAsyncResult,
@@ -2299,7 +2439,8 @@ impl<O: IsA<WebView>> WebViewExt for O {
       } else {
         Err(from_glib_full(error))
       };
-      let callback: Box_<P> = Box_::from_raw(user_data as *mut _);
+      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
+      let callback: P = callback.into_inner();
       callback(result);
     }
     let callback = send_message_to_page_trampoline::<P>;

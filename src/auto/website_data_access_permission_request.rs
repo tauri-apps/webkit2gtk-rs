@@ -4,8 +4,6 @@
 
 use crate::PermissionRequest;
 use glib::object::IsA;
-#[cfg(any(feature = "v2_30", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
 use glib::translate::*;
 use std::fmt;
 
@@ -23,22 +21,16 @@ impl WebsiteDataAccessPermissionRequest {
 }
 
 pub trait WebsiteDataAccessPermissionRequestExt: 'static {
-  #[cfg(any(feature = "v2_30", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
   #[doc(alias = "webkit_website_data_access_permission_request_get_current_domain")]
   #[doc(alias = "get_current_domain")]
   fn current_domain(&self) -> Option<glib::GString>;
 
-  #[cfg(any(feature = "v2_30", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
   #[doc(alias = "webkit_website_data_access_permission_request_get_requesting_domain")]
   #[doc(alias = "get_requesting_domain")]
   fn requesting_domain(&self) -> Option<glib::GString>;
 }
 
 impl<O: IsA<WebsiteDataAccessPermissionRequest>> WebsiteDataAccessPermissionRequestExt for O {
-  #[cfg(any(feature = "v2_30", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
   fn current_domain(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(
@@ -49,8 +41,6 @@ impl<O: IsA<WebsiteDataAccessPermissionRequest>> WebsiteDataAccessPermissionRequ
     }
   }
 
-  #[cfg(any(feature = "v2_30", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
   fn requesting_domain(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(

@@ -36,7 +36,7 @@ impl Settings {
 
   //#[doc(alias = "webkit_settings_new_with_settings")]
   //#[doc(alias = "new_with_settings")]
-  //pub fn with_settings(first_setting_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Settings {
+  //pub fn with_settings(first_setting_name: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) -> Settings {
   //    unsafe { TODO: call ffi:webkit_settings_new_with_settings() }
   //}
 
@@ -108,11 +108,13 @@ pub struct SettingsBuilder {
   #[cfg(any(feature = "v2_20", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_20")))]
   enable_encrypted_media: Option<bool>,
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   enable_frame_flattening: Option<bool>,
   enable_fullscreen: Option<bool>,
   enable_html5_database: Option<bool>,
   enable_html5_local_storage: Option<bool>,
   enable_hyperlink_auditing: Option<bool>,
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   enable_java: Option<bool>,
   enable_javascript: Option<bool>,
   #[cfg(any(feature = "v2_24", feature = "dox"))]
@@ -148,9 +150,13 @@ pub struct SettingsBuilder {
   enable_tabs_to_links: Option<bool>,
   enable_webaudio: Option<bool>,
   enable_webgl: Option<bool>,
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  enable_webrtc: Option<bool>,
   #[cfg(any(feature = "v2_2", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
   enable_write_console_messages_to_stdout: Option<bool>,
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   enable_xss_auditor: Option<bool>,
   fantasy_font_family: Option<String>,
   #[cfg(any(feature = "v2_16", feature = "dox"))]
@@ -343,6 +349,10 @@ impl SettingsBuilder {
     if let Some(ref enable_webgl) = self.enable_webgl {
       properties.push(("enable-webgl", enable_webgl));
     }
+    #[cfg(any(feature = "v2_38", feature = "dox"))]
+    if let Some(ref enable_webrtc) = self.enable_webrtc {
+      properties.push(("enable-webrtc", enable_webrtc));
+    }
     #[cfg(any(feature = "v2_2", feature = "dox"))]
     if let Some(ref enable_write_console_messages_to_stdout) =
       self.enable_write_console_messages_to_stdout
@@ -428,7 +438,7 @@ impl SettingsBuilder {
     if let Some(ref zoom_text_only) = self.zoom_text_only {
       properties.push(("zoom-text-only", zoom_text_only));
     }
-    glib::Object::new::<Settings>(&properties).expect("Failed to create an instance of Settings")
+    glib::Object::new::<Settings>(&properties)
   }
 
   #[cfg(any(feature = "v2_10", feature = "dox"))]
@@ -541,6 +551,7 @@ impl SettingsBuilder {
     self
   }
 
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   pub fn enable_frame_flattening(mut self, enable_frame_flattening: bool) -> Self {
     self.enable_frame_flattening = Some(enable_frame_flattening);
     self
@@ -566,6 +577,7 @@ impl SettingsBuilder {
     self
   }
 
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   pub fn enable_java(mut self, enable_java: bool) -> Self {
     self.enable_java = Some(enable_java);
     self
@@ -680,6 +692,13 @@ impl SettingsBuilder {
     self
   }
 
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  pub fn enable_webrtc(mut self, enable_webrtc: bool) -> Self {
+    self.enable_webrtc = Some(enable_webrtc);
+    self
+  }
+
   #[cfg(any(feature = "v2_2", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
   pub fn enable_write_console_messages_to_stdout(
@@ -690,6 +709,7 @@ impl SettingsBuilder {
     self
   }
 
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   pub fn enable_xss_auditor(mut self, enable_xss_auditor: bool) -> Self {
     self.enable_xss_auditor = Some(enable_xss_auditor);
     self
@@ -879,6 +899,7 @@ pub trait SettingsExt: 'static {
   #[doc(alias = "get_enable_encrypted_media")]
   fn enables_encrypted_media(&self) -> bool;
 
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   #[doc(alias = "webkit_settings_get_enable_frame_flattening")]
   #[doc(alias = "get_enable_frame_flattening")]
   fn enables_frame_flattening(&self) -> bool;
@@ -899,6 +920,7 @@ pub trait SettingsExt: 'static {
   #[doc(alias = "get_enable_hyperlink_auditing")]
   fn enables_hyperlink_auditing(&self) -> bool;
 
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   #[doc(alias = "webkit_settings_get_enable_java")]
   #[doc(alias = "get_enable_java")]
   fn enables_java(&self) -> bool;
@@ -991,12 +1013,19 @@ pub trait SettingsExt: 'static {
   #[doc(alias = "get_enable_webgl")]
   fn enables_webgl(&self) -> bool;
 
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  #[doc(alias = "webkit_settings_get_enable_webrtc")]
+  #[doc(alias = "get_enable_webrtc")]
+  fn enables_webrtc(&self) -> bool;
+
   #[cfg(any(feature = "v2_2", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
   #[doc(alias = "webkit_settings_get_enable_write_console_messages_to_stdout")]
   #[doc(alias = "get_enable_write_console_messages_to_stdout")]
   fn enables_write_console_messages_to_stdout(&self) -> bool;
 
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   #[doc(alias = "webkit_settings_get_enable_xss_auditor")]
   #[doc(alias = "get_enable_xss_auditor")]
   fn enables_xss_auditor(&self) -> bool;
@@ -1133,6 +1162,7 @@ pub trait SettingsExt: 'static {
   #[doc(alias = "webkit_settings_set_enable_encrypted_media")]
   fn set_enable_encrypted_media(&self, enabled: bool);
 
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   #[doc(alias = "webkit_settings_set_enable_frame_flattening")]
   fn set_enable_frame_flattening(&self, enabled: bool);
 
@@ -1148,6 +1178,7 @@ pub trait SettingsExt: 'static {
   #[doc(alias = "webkit_settings_set_enable_hyperlink_auditing")]
   fn set_enable_hyperlink_auditing(&self, enabled: bool);
 
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   #[doc(alias = "webkit_settings_set_enable_java")]
   fn set_enable_java(&self, enabled: bool);
 
@@ -1221,11 +1252,17 @@ pub trait SettingsExt: 'static {
   #[doc(alias = "webkit_settings_set_enable_webgl")]
   fn set_enable_webgl(&self, enabled: bool);
 
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  #[doc(alias = "webkit_settings_set_enable_webrtc")]
+  fn set_enable_webrtc(&self, enabled: bool);
+
   #[cfg(any(feature = "v2_2", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
   #[doc(alias = "webkit_settings_set_enable_write_console_messages_to_stdout")]
   fn set_enable_write_console_messages_to_stdout(&self, enabled: bool);
 
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   #[doc(alias = "webkit_settings_set_enable_xss_auditor")]
   fn set_enable_xss_auditor(&self, enabled: bool);
 
@@ -1374,6 +1411,7 @@ pub trait SettingsExt: 'static {
   #[doc(alias = "enable-encrypted-media")]
   fn connect_enable_encrypted_media_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   #[doc(alias = "enable-frame-flattening")]
   fn connect_enable_frame_flattening_notify<F: Fn(&Self) + 'static>(&self, f: F)
     -> SignalHandlerId;
@@ -1396,6 +1434,7 @@ pub trait SettingsExt: 'static {
     f: F,
   ) -> SignalHandlerId;
 
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   #[doc(alias = "enable-java")]
   fn connect_enable_java_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -1492,6 +1531,11 @@ pub trait SettingsExt: 'static {
   #[doc(alias = "enable-webgl")]
   fn connect_enable_webgl_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  #[doc(alias = "enable-webrtc")]
+  fn connect_enable_webrtc_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
   #[cfg(any(feature = "v2_2", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
   #[doc(alias = "enable-write-console-messages-to-stdout")]
@@ -1500,6 +1544,7 @@ pub trait SettingsExt: 'static {
     f: F,
   ) -> SignalHandlerId;
 
+  #[cfg_attr(feature = "v2_38", deprecated = "Since 2.38")]
   #[doc(alias = "enable-xss-auditor")]
   fn connect_enable_xss_auditor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -1925,6 +1970,16 @@ impl<O: IsA<Settings>> SettingsExt for O {
   fn enables_webgl(&self) -> bool {
     unsafe {
       from_glib(ffi::webkit_settings_get_enable_webgl(
+        self.as_ref().to_glib_none().0,
+      ))
+    }
+  }
+
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  fn enables_webrtc(&self) -> bool {
+    unsafe {
+      from_glib(ffi::webkit_settings_get_enable_webrtc(
         self.as_ref().to_glib_none().0,
       ))
     }
@@ -2460,6 +2515,14 @@ impl<O: IsA<Settings>> SettingsExt for O {
   fn set_enable_webgl(&self, enabled: bool) {
     unsafe {
       ffi::webkit_settings_set_enable_webgl(self.as_ref().to_glib_none().0, enabled.into_glib());
+    }
+  }
+
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  fn set_enable_webrtc(&self, enabled: bool) {
+    unsafe {
+      ffi::webkit_settings_set_enable_webrtc(self.as_ref().to_glib_none().0, enabled.into_glib());
     }
   }
 
@@ -3735,6 +3798,30 @@ impl<O: IsA<Settings>> SettingsExt for O {
         b"notify::enable-webgl\0".as_ptr() as *const _,
         Some(transmute::<_, unsafe extern "C" fn()>(
           notify_enable_webgl_trampoline::<Self, F> as *const (),
+        )),
+        Box_::into_raw(f),
+      )
+    }
+  }
+
+  #[cfg(any(feature = "v2_38", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_38")))]
+  fn connect_enable_webrtc_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    unsafe extern "C" fn notify_enable_webrtc_trampoline<P: IsA<Settings>, F: Fn(&P) + 'static>(
+      this: *mut ffi::WebKitSettings,
+      _param_spec: glib::ffi::gpointer,
+      f: glib::ffi::gpointer,
+    ) {
+      let f: &F = &*(f as *const F);
+      f(Settings::from_glib_borrow(this).unsafe_cast_ref())
+    }
+    unsafe {
+      let f: Box_<F> = Box_::new(f);
+      connect_raw(
+        self.as_ptr() as *mut _,
+        b"notify::enable-webrtc\0".as_ptr() as *const _,
+        Some(transmute::<_, unsafe extern "C" fn()>(
+          notify_enable_webrtc_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
       )

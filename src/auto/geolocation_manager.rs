@@ -2,28 +2,14 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v2_26", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
 use crate::GeolocationPosition;
-#[cfg(any(feature = "v2_26", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
 use glib::object::Cast;
 use glib::object::IsA;
-#[cfg(any(feature = "v2_26", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
 use glib::signal::connect_raw;
-#[cfg(any(feature = "v2_26", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
 use glib::signal::SignalHandlerId;
-#[cfg(any(feature = "v2_26", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
 use glib::translate::*;
-#[cfg(any(feature = "v2_26", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
 use std::boxed::Box as Box_;
 use std::fmt;
-#[cfg(any(feature = "v2_26", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
 use std::mem::transmute;
 
 glib::wrapper! {
@@ -40,19 +26,13 @@ impl GeolocationManager {
 }
 
 pub trait GeolocationManagerExt: 'static {
-  #[cfg(any(feature = "v2_26", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
   #[doc(alias = "webkit_geolocation_manager_failed")]
   fn failed(&self, error_message: &str);
 
-  #[cfg(any(feature = "v2_26", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
   #[doc(alias = "webkit_geolocation_manager_get_enable_high_accuracy")]
   #[doc(alias = "get_enable_high_accuracy")]
   fn enables_high_accuracy(&self) -> bool;
 
-  #[cfg(any(feature = "v2_26", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
   #[doc(alias = "webkit_geolocation_manager_update_position")]
   fn update_position(&self, position: &mut GeolocationPosition);
 
@@ -73,8 +53,6 @@ pub trait GeolocationManagerExt: 'static {
 }
 
 impl<O: IsA<GeolocationManager>> GeolocationManagerExt for O {
-  #[cfg(any(feature = "v2_26", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
   fn failed(&self, error_message: &str) {
     unsafe {
       ffi::webkit_geolocation_manager_failed(
@@ -84,8 +62,6 @@ impl<O: IsA<GeolocationManager>> GeolocationManagerExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_26", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
   fn enables_high_accuracy(&self) -> bool {
     unsafe {
       from_glib(ffi::webkit_geolocation_manager_get_enable_high_accuracy(
@@ -94,8 +70,6 @@ impl<O: IsA<GeolocationManager>> GeolocationManagerExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_26", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
   fn update_position(&self, position: &mut GeolocationPosition) {
     unsafe {
       ffi::webkit_geolocation_manager_update_position(
