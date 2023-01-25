@@ -1,5 +1,10 @@
 # Changelog
 
+## \[0.19.0]
+
+- Bump gtk version: 0.15 -> 0.16, webkit2gtk version: 4.0 -> 4.1
+  - [c475ff3](https://github.com/tauri-apps/javascriptcore-rs/commit/c475ff39b8412e38cda91c5705a6ad518dd4e5e0) chore: add changelog on 2023-01-25
+
 ## \[0.18.0]
 
 - Update webkit2gtk to 2.36
