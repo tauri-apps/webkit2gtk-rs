@@ -106,8 +106,6 @@ libc = "0.2"
   [dependencies.java_script_core]
   package = "javascriptcore-rs-sys"
   version = "0.5"
-  git = "https://github.com/tauri-apps/javascriptcore-rs"
-  branch = "0.16"
 
   [dependencies.soup]
   package = "soup3-sys"
