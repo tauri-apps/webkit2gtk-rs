@@ -1,5 +1,10 @@
 # Changelog
 
+## \[0.19.1]
+
+- Update javascriptcore to crates.io dependency.
+  - [38b4d26](https://github.com/tauri-apps/javascriptcore-rs/commit/38b4d2647db6fad4791ec21897d23722c79a1015) Update jsc to crate.io's dependency. on 2023-01-26
+
 ## \[0.19.0]
 
 - Bump gtk version: 0.15 -> 0.16, webkit2gtk version: 4.0 -> 4.1
