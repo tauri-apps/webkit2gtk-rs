@@ -11,7 +11,19 @@ keywords = [ "webkit", "gtk-rs", "gnome", "GUI" ]
 [lib]
 name = "webkit2gtk"
 
+[package.metadata.docs.rs]
+features = [ "dox" ]
+
 [features]
+dox = [
+  "ffi/dox",
+  "gtk/dox",
+  "glib/dox",
+  "gio/dox",
+  "gdk/dox",
+  "soup/dox",
+  "java_script_core/dox"
+]
 v2_2 = [ ]
 v2_4 = [ "v2_2" ]
 v2_6 = [ "v2_4", "ffi/v2_6" ]
