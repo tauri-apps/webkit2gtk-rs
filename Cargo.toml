@@ -1,6 +1,6 @@
 [package]
 name = "webkit2gtk"
-version = "0.19.1"
+version = "0.19.2"
 edition = "2021"
 categories = [ "api-bindings", "gui" ]
 description = "Rust bindings for webkit-gtk library"
@@ -8,11 +8,11 @@ repository = "https://github.com/tauri-apps/webkit2gtk-rs"
 license = "MIT"
 keywords = [ "webkit", "gtk-rs", "gnome", "GUI" ]
 
-[lib]
-name = "webkit2gtk"
-
 [package.metadata.docs.rs]
 features = [ "dox" ]
+
+[lib]
+name = "webkit2gtk"
 
 [features]
 dox = [
