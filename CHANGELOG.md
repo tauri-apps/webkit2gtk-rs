@@ -1,5 +1,10 @@
 # Changelog
 
+## \[0.19.2]
+
+- Enable dox feature when building docs.
+  - [a59c76d](https://github.com/tauri-apps/javascriptcore-rs/commit/a59c76dfe31b05e20ca809dc3ce4113a2e54a7d7) Enable dox feature when building docs on 2023-01-31
+
 ## \[0.19.1]
 
 - Update javascriptcore to crates.io dependency.
