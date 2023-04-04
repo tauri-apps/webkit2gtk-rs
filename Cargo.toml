@@ -61,7 +61,7 @@ gtk-sys = "^0.16.0"
 
   [dependencies.java_script_core]
   package = "javascriptcore-rs"
-  version = "0.17"
+  version = "1.0"
 
   [dependencies.soup]
   package = "soup3"

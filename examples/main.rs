@@ -27,12 +27,12 @@ extern crate webkit2gtk;
 #[cfg(feature = "v2_4")]
 use glib::ToVariant;
 use gtk::{prelude::*, Inhibit, Window, WindowType};
-#[cfg(feature = "v2_6")]
-use webkit2gtk::UserContentManager;
 use webkit2gtk::{
   traits::{SettingsExt, WebContextExt, WebViewExt},
   WebContext, WebView,
 };
+#[cfg(feature = "v2_6")]
+use webkit2gtk::{UserContentManager, WebViewExtManual};
 
 fn main() {
   gtk::init().unwrap();
@@ -62,11 +62,12 @@ fn main() {
   #[cfg(feature = "v2_22")]
   webview.run_javascript("42", None::<&gio::Cancellable>, |result| match result {
     Ok(result) => {
-      let value = result.js_value();
-      println!("is_boolean: {}", value.is_boolean(&context));
-      println!("is_number: {}", value.is_number(&context));
-      println!("{:?}", value.to_number(&context));
-      println!("{:?}", value.to_boolean(&context));
+      use java_script_core::ValueExt;
+      let value = result.js_value().unwrap();
+      println!("is_boolean: {}", value.is_boolean());
+      println!("is_number: {}", value.is_number());
+      println!("{:?}", value.to_int32());
+      println!("{:?}", value.to_boolean());
     }
     Err(error) => println!("{}", error),
   });
