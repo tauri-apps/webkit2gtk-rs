@@ -1,5 +1,10 @@
 # Changelog
 
+## \[1.0.0]
+
+- Bump version to 1.0.
+  - [31b3ddf](https://github.com/tauri-apps/javascriptcore-rs/commit/31b3ddf725a394499d2a3a03a776d34e73464a66) Bump version to v1.0 on 2023-04-04
+
 ## \[0.19.1]
 
 - Update javascriptcore to crates.io dependency.
