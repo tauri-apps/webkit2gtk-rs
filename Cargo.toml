@@ -70,4 +70,4 @@ gtk-sys = "^0.16.0"
   [dependencies.ffi]
   package = "webkit2gtk-sys"
   path = "sys"
-  version = "^0.19"
+  version = "1.0"
