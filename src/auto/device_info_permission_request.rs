@@ -15,11 +15,12 @@ glib::wrapper! {
 }
 
 impl DeviceInfoPermissionRequest {
-  pub const NONE: Option<&'static DeviceInfoPermissionRequest> = None;
+        pub const NONE: Option<&'static DeviceInfoPermissionRequest> = None;
+    
 }
 
 impl fmt::Display for DeviceInfoPermissionRequest {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("DeviceInfoPermissionRequest")
-  }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str("DeviceInfoPermissionRequest")
+    }
 }

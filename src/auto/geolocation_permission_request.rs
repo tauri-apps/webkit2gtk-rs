@@ -15,11 +15,12 @@ glib::wrapper! {
 }
 
 impl GeolocationPermissionRequest {
-  pub const NONE: Option<&'static GeolocationPermissionRequest> = None;
+        pub const NONE: Option<&'static GeolocationPermissionRequest> = None;
+    
 }
 
 impl fmt::Display for GeolocationPermissionRequest {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("GeolocationPermissionRequest")
-  }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str("GeolocationPermissionRequest")
+    }
 }

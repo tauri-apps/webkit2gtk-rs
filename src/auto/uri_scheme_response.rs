@@ -21,146 +21,137 @@ glib::wrapper! {
 }
 
 impl URISchemeResponse {
-  pub const NONE: Option<&'static URISchemeResponse> = None;
+        pub const NONE: Option<&'static URISchemeResponse> = None;
+    
 
-  #[cfg(any(feature = "v2_36", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
-  #[doc(alias = "webkit_uri_scheme_response_new")]
-  pub fn new(input_stream: &impl IsA<gio::InputStream>, stream_length: i64) -> URISchemeResponse {
-    assert_initialized_main_thread!();
-    unsafe {
-      from_glib_full(ffi::webkit_uri_scheme_response_new(
-        input_stream.as_ref().to_glib_none().0,
-        stream_length,
-      ))
+    #[cfg(any(feature = "v2_36", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
+    #[doc(alias = "webkit_uri_scheme_response_new")]
+    pub fn new(input_stream: &impl IsA<gio::InputStream>, stream_length: i64) -> URISchemeResponse {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_full(ffi::webkit_uri_scheme_response_new(input_stream.as_ref().to_glib_none().0, stream_length))
+        }
     }
-  }
 
-  // rustdoc-stripper-ignore-next
-  /// Creates a new builder-pattern struct instance to construct [`URISchemeResponse`] objects.
-  ///
-  /// This method returns an instance of [`URISchemeResponseBuilder`](crate::builders::URISchemeResponseBuilder) which can be used to create [`URISchemeResponse`] objects.
-  pub fn builder() -> URISchemeResponseBuilder {
-    URISchemeResponseBuilder::default()
-  }
+            // rustdoc-stripper-ignore-next
+            /// Creates a new builder-pattern struct instance to construct [`URISchemeResponse`] objects.
+            ///
+            /// This method returns an instance of [`URISchemeResponseBuilder`](crate::builders::URISchemeResponseBuilder) which can be used to create [`URISchemeResponse`] objects.
+            pub fn builder() -> URISchemeResponseBuilder {
+                URISchemeResponseBuilder::default()
+            }
+        
 }
 
 #[cfg(any(feature = "v2_36", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
 impl Default for URISchemeResponse {
-  fn default() -> Self {
-    glib::object::Object::new::<Self>(&[])
-  }
-}
+                     fn default() -> Self {
+                         glib::object::Object::new::<Self>(&[])
+                     }
+                 }
 
 #[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
-/// A [builder-pattern] type to construct [`URISchemeResponse`] objects.
-///
-/// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
+        /// A [builder-pattern] type to construct [`URISchemeResponse`] objects.
+        ///
+        /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
 pub struct URISchemeResponseBuilder {
-  #[cfg(any(feature = "v2_36", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
-  stream: Option<gio::InputStream>,
-  #[cfg(any(feature = "v2_36", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
-  stream_length: Option<i64>,
+    #[cfg(any(feature = "v2_36", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
+    stream: Option<gio::InputStream>,
+    #[cfg(any(feature = "v2_36", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
+    stream_length: Option<i64>,
 }
 
 impl URISchemeResponseBuilder {
-  // rustdoc-stripper-ignore-next
-  /// Create a new [`URISchemeResponseBuilder`].
-  pub fn new() -> Self {
-    Self::default()
-  }
-
-  // rustdoc-stripper-ignore-next
-  /// Build the [`URISchemeResponse`].
-  #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
-  pub fn build(self) -> URISchemeResponse {
-    let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-    #[cfg(any(feature = "v2_36", feature = "dox"))]
-    if let Some(ref stream) = self.stream {
-      properties.push(("stream", stream));
+    // rustdoc-stripper-ignore-next
+    /// Create a new [`URISchemeResponseBuilder`].
+    pub fn new() -> Self {
+        Self::default()
     }
-    #[cfg(any(feature = "v2_36", feature = "dox"))]
-    if let Some(ref stream_length) = self.stream_length {
-      properties.push(("stream-length", stream_length));
+
+
+    // rustdoc-stripper-ignore-next
+    /// Build the [`URISchemeResponse`].
+    #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
+    pub fn build(self) -> URISchemeResponse {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        #[cfg(any(feature = "v2_36", feature = "dox"))]
+if let Some(ref stream) = self.stream {
+                properties.push(("stream", stream));
+            }
+        #[cfg(any(feature = "v2_36", feature = "dox"))]
+if let Some(ref stream_length) = self.stream_length {
+                properties.push(("stream-length", stream_length));
+            }
+        glib::Object::new::<URISchemeResponse>(&properties)
+
     }
-    glib::Object::new::<URISchemeResponse>(&properties)
-  }
 
-  #[cfg(any(feature = "v2_36", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
-  pub fn stream(mut self, stream: &impl IsA<gio::InputStream>) -> Self {
-    self.stream = Some(stream.clone().upcast());
-    self
-  }
+    #[cfg(any(feature = "v2_36", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
+    pub fn stream(mut self, stream: &impl IsA<gio::InputStream>) -> Self {
+        self.stream = Some(stream.clone().upcast());
+        self
+    }
 
-  #[cfg(any(feature = "v2_36", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
-  pub fn stream_length(mut self, stream_length: i64) -> Self {
-    self.stream_length = Some(stream_length);
-    self
-  }
+    #[cfg(any(feature = "v2_36", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
+    pub fn stream_length(mut self, stream_length: i64) -> Self {
+        self.stream_length = Some(stream_length);
+        self
+    }
 }
 
 pub trait URISchemeResponseExt: 'static {
-  #[cfg(any(feature = "v2_36", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
-  #[doc(alias = "webkit_uri_scheme_response_set_content_type")]
-  fn set_content_type(&self, content_type: &str);
+    #[cfg(any(feature = "v2_36", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
+    #[doc(alias = "webkit_uri_scheme_response_set_content_type")]
+    fn set_content_type(&self, content_type: &str);
 
-  #[cfg(any(feature = "v2_36", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
-  #[doc(alias = "webkit_uri_scheme_response_set_http_headers")]
-  fn set_http_headers(&self, headers: &soup::MessageHeaders);
+    #[cfg(any(feature = "v2_36", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
+    #[doc(alias = "webkit_uri_scheme_response_set_http_headers")]
+    fn set_http_headers(&self, headers: &soup::MessageHeaders);
 
-  #[cfg(any(feature = "v2_36", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
-  #[doc(alias = "webkit_uri_scheme_response_set_status")]
-  fn set_status(&self, status_code: u32, reason_phrase: Option<&str>);
+    #[cfg(any(feature = "v2_36", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
+    #[doc(alias = "webkit_uri_scheme_response_set_status")]
+    fn set_status(&self, status_code: u32, reason_phrase: Option<&str>);
 }
 
 impl<O: IsA<URISchemeResponse>> URISchemeResponseExt for O {
-  #[cfg(any(feature = "v2_36", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
-  fn set_content_type(&self, content_type: &str) {
-    unsafe {
-      ffi::webkit_uri_scheme_response_set_content_type(
-        self.as_ref().to_glib_none().0,
-        content_type.to_glib_none().0,
-      );
+    #[cfg(any(feature = "v2_36", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
+    fn set_content_type(&self, content_type: &str) {
+        unsafe {
+            ffi::webkit_uri_scheme_response_set_content_type(self.as_ref().to_glib_none().0, content_type.to_glib_none().0);
+        }
     }
-  }
 
-  #[cfg(any(feature = "v2_36", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
-  fn set_http_headers(&self, headers: &soup::MessageHeaders) {
-    unsafe {
-      ffi::webkit_uri_scheme_response_set_http_headers(
-        self.as_ref().to_glib_none().0,
-        headers.to_glib_full(),
-      );
+    #[cfg(any(feature = "v2_36", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
+    fn set_http_headers(&self, headers: &soup::MessageHeaders) {
+        unsafe {
+            ffi::webkit_uri_scheme_response_set_http_headers(self.as_ref().to_glib_none().0, headers.to_glib_full());
+        }
     }
-  }
 
-  #[cfg(any(feature = "v2_36", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
-  fn set_status(&self, status_code: u32, reason_phrase: Option<&str>) {
-    unsafe {
-      ffi::webkit_uri_scheme_response_set_status(
-        self.as_ref().to_glib_none().0,
-        status_code,
-        reason_phrase.to_glib_none().0,
-      );
+    #[cfg(any(feature = "v2_36", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_36")))]
+    fn set_status(&self, status_code: u32, reason_phrase: Option<&str>) {
+        unsafe {
+            ffi::webkit_uri_scheme_response_set_status(self.as_ref().to_glib_none().0, status_code, reason_phrase.to_glib_none().0);
+        }
     }
-  }
 }
 
 impl fmt::Display for URISchemeResponse {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("URISchemeResponse")
-  }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str("URISchemeResponse")
+    }
 }

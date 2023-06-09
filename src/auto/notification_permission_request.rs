@@ -15,11 +15,12 @@ glib::wrapper! {
 }
 
 impl NotificationPermissionRequest {
-  pub const NONE: Option<&'static NotificationPermissionRequest> = None;
+        pub const NONE: Option<&'static NotificationPermissionRequest> = None;
+    
 }
 
 impl fmt::Display for NotificationPermissionRequest {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("NotificationPermissionRequest")
-  }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str("NotificationPermissionRequest")
+    }
 }
