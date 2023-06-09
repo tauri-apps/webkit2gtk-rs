@@ -428,109 +428,109 @@ pub use self::flags::WebsiteDataTypes;
 
 #[doc(hidden)]
 pub mod traits {
-    pub use super::authentication_request::AuthenticationRequestExt;
-    #[cfg(any(feature = "v2_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
-    pub use super::automation_session::AutomationSessionExt;
-    pub use super::back_forward_list::BackForwardListExt;
-    pub use super::back_forward_list_item::BackForwardListItemExt;
-    pub use super::color_chooser_request::ColorChooserRequestExt;
-    pub use super::context_menu::ContextMenuExt;
-    pub use super::context_menu_item::ContextMenuItemExt;
-    pub use super::cookie_manager::CookieManagerExt;
-    pub use super::download::DownloadExt;
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
-    pub use super::editor_state::EditorStateExt;
-    pub use super::favicon_database::FaviconDatabaseExt;
-    pub use super::file_chooser_request::FileChooserRequestExt;
-    pub use super::find_controller::FindControllerExt;
-    pub use super::form_submission_request::FormSubmissionRequestExt;
-    #[cfg(any(feature = "v2_26", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
-    pub use super::geolocation_manager::GeolocationManagerExt;
-    pub use super::hit_test_result::HitTestResultExt;
-    #[cfg(any(feature = "v2_28", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
-    pub use super::input_method_context::InputMethodContextExt;
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
-    #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
-    pub use super::install_missing_media_plugins_permission_request::InstallMissingMediaPluginsPermissionRequestExt;
-    pub use super::navigation_policy_decision::NavigationPolicyDecisionExt;
-    #[cfg(any(feature = "v2_8", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
-    pub use super::notification::NotificationExt;
-    #[cfg(any(feature = "v2_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
-    pub use super::option_menu::OptionMenuExt;
-    pub use super::permission_request::PermissionRequestExt;
-    #[cfg_attr(feature = "v2_32", deprecated = "Since 2.32")]
-    pub use super::plugin::PluginExt;
-    pub use super::policy_decision::PolicyDecisionExt;
-    #[cfg(any(feature = "v2_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
-    #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
-    pub use super::print_custom_widget::PrintCustomWidgetExt;
-    pub use super::print_operation::PrintOperationExt;
-    pub use super::response_policy_decision::ResponsePolicyDecisionExt;
-    pub use super::security_manager::SecurityManagerExt;
-    pub use super::settings::SettingsExt;
-    pub use super::uri_request::URIRequestExt;
-    pub use super::uri_response::URIResponseExt;
-    pub use super::uri_scheme_request::URISchemeRequestExt;
-    pub use super::uri_scheme_response::URISchemeResponseExt;
-    #[cfg(any(feature = "v2_6", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
-    pub use super::user_content_manager::UserContentManagerExt;
-    #[cfg(any(feature = "v2_8", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
-    pub use super::user_media_permission_request::UserMediaPermissionRequestExt;
-    #[cfg(any(feature = "v2_28", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
-    pub use super::user_message::UserMessageExt;
-    pub use super::web_context::WebContextExt;
-    pub use super::web_inspector::WebInspectorExt;
-    pub use super::web_resource::WebResourceExt;
-    pub use super::web_view::WebViewExt;
-    #[cfg(any(feature = "v2_30", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
-    pub use super::website_data_access_permission_request::WebsiteDataAccessPermissionRequestExt;
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
-    pub use super::website_data_manager::WebsiteDataManagerExt;
-    #[cfg(any(feature = "v2_30", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
-    pub use super::website_policies::WebsitePoliciesExt;
-    pub use super::window_properties::WindowPropertiesExt;
+  pub use super::authentication_request::AuthenticationRequestExt;
+  #[cfg(any(feature = "v2_18", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
+  pub use super::automation_session::AutomationSessionExt;
+  pub use super::back_forward_list::BackForwardListExt;
+  pub use super::back_forward_list_item::BackForwardListItemExt;
+  pub use super::color_chooser_request::ColorChooserRequestExt;
+  pub use super::context_menu::ContextMenuExt;
+  pub use super::context_menu_item::ContextMenuItemExt;
+  pub use super::cookie_manager::CookieManagerExt;
+  pub use super::download::DownloadExt;
+  #[cfg(any(feature = "v2_10", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  pub use super::editor_state::EditorStateExt;
+  pub use super::favicon_database::FaviconDatabaseExt;
+  pub use super::file_chooser_request::FileChooserRequestExt;
+  pub use super::find_controller::FindControllerExt;
+  pub use super::form_submission_request::FormSubmissionRequestExt;
+  #[cfg(any(feature = "v2_26", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
+  pub use super::geolocation_manager::GeolocationManagerExt;
+  pub use super::hit_test_result::HitTestResultExt;
+  #[cfg(any(feature = "v2_28", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+  pub use super::input_method_context::InputMethodContextExt;
+  #[cfg(any(feature = "v2_10", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
+  pub use super::install_missing_media_plugins_permission_request::InstallMissingMediaPluginsPermissionRequestExt;
+  pub use super::navigation_policy_decision::NavigationPolicyDecisionExt;
+  #[cfg(any(feature = "v2_8", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+  pub use super::notification::NotificationExt;
+  #[cfg(any(feature = "v2_18", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
+  pub use super::option_menu::OptionMenuExt;
+  pub use super::permission_request::PermissionRequestExt;
+  #[cfg_attr(feature = "v2_32", deprecated = "Since 2.32")]
+  pub use super::plugin::PluginExt;
+  pub use super::policy_decision::PolicyDecisionExt;
+  #[cfg(any(feature = "v2_16", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
+  pub use super::print_custom_widget::PrintCustomWidgetExt;
+  pub use super::print_operation::PrintOperationExt;
+  pub use super::response_policy_decision::ResponsePolicyDecisionExt;
+  pub use super::security_manager::SecurityManagerExt;
+  pub use super::settings::SettingsExt;
+  pub use super::uri_request::URIRequestExt;
+  pub use super::uri_response::URIResponseExt;
+  pub use super::uri_scheme_request::URISchemeRequestExt;
+  pub use super::uri_scheme_response::URISchemeResponseExt;
+  #[cfg(any(feature = "v2_6", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+  pub use super::user_content_manager::UserContentManagerExt;
+  #[cfg(any(feature = "v2_8", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+  pub use super::user_media_permission_request::UserMediaPermissionRequestExt;
+  #[cfg(any(feature = "v2_28", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+  pub use super::user_message::UserMessageExt;
+  pub use super::web_context::WebContextExt;
+  pub use super::web_inspector::WebInspectorExt;
+  pub use super::web_resource::WebResourceExt;
+  pub use super::web_view::WebViewExt;
+  #[cfg(any(feature = "v2_30", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+  pub use super::website_data_access_permission_request::WebsiteDataAccessPermissionRequestExt;
+  #[cfg(any(feature = "v2_10", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  pub use super::website_data_manager::WebsiteDataManagerExt;
+  #[cfg(any(feature = "v2_30", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+  pub use super::website_policies::WebsitePoliciesExt;
+  pub use super::window_properties::WindowPropertiesExt;
 }
 #[doc(hidden)]
 pub mod builders {
-    #[cfg(any(feature = "v2_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
-    pub use super::automation_session::AutomationSessionBuilder;
-    pub use super::color_chooser_request::ColorChooserRequestBuilder;
-    pub use super::download::DownloadBuilder;
-    pub use super::find_controller::FindControllerBuilder;
-    pub use super::hit_test_result::HitTestResultBuilder;
-    #[cfg(any(feature = "v2_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
-    #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
-    pub use super::print_custom_widget::PrintCustomWidgetBuilder;
-    pub use super::print_operation::PrintOperationBuilder;
-    pub use super::settings::SettingsBuilder;
-    pub use super::uri_request::URIRequestBuilder;
-    pub use super::uri_scheme_response::URISchemeResponseBuilder;
-    #[cfg(any(feature = "v2_28", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
-    pub use super::user_message::UserMessageBuilder;
-    pub use super::web_context::WebContextBuilder;
-    pub use super::web_view::WebViewBuilder;
-    #[cfg(any(feature = "v2_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
-    pub use super::website_data_manager::WebsiteDataManagerBuilder;
-    #[cfg(any(feature = "v2_30", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
-    pub use super::website_policies::WebsitePoliciesBuilder;
-    pub use super::window_properties::WindowPropertiesBuilder;
+  #[cfg(any(feature = "v2_18", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_18")))]
+  pub use super::automation_session::AutomationSessionBuilder;
+  pub use super::color_chooser_request::ColorChooserRequestBuilder;
+  pub use super::download::DownloadBuilder;
+  pub use super::find_controller::FindControllerBuilder;
+  pub use super::hit_test_result::HitTestResultBuilder;
+  #[cfg(any(feature = "v2_16", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
+  pub use super::print_custom_widget::PrintCustomWidgetBuilder;
+  pub use super::print_operation::PrintOperationBuilder;
+  pub use super::settings::SettingsBuilder;
+  pub use super::uri_request::URIRequestBuilder;
+  pub use super::uri_scheme_response::URISchemeResponseBuilder;
+  #[cfg(any(feature = "v2_28", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+  pub use super::user_message::UserMessageBuilder;
+  pub use super::web_context::WebContextBuilder;
+  pub use super::web_view::WebViewBuilder;
+  #[cfg(any(feature = "v2_10", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  pub use super::website_data_manager::WebsiteDataManagerBuilder;
+  #[cfg(any(feature = "v2_30", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+  pub use super::website_policies::WebsitePoliciesBuilder;
+  pub use super::window_properties::WindowPropertiesBuilder;
 }

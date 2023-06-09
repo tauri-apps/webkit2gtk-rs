@@ -15,12 +15,11 @@ glib::wrapper! {
 }
 
 impl MediaKeySystemPermissionRequest {
-        pub const NONE: Option<&'static MediaKeySystemPermissionRequest> = None;
-    
+  pub const NONE: Option<&'static MediaKeySystemPermissionRequest> = None;
 }
 
 impl fmt::Display for MediaKeySystemPermissionRequest {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("MediaKeySystemPermissionRequest")
-    }
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    f.write_str("MediaKeySystemPermissionRequest")
+  }
 }

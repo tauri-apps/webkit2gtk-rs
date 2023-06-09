@@ -15,12 +15,11 @@ glib::wrapper! {
 }
 
 impl PointerLockPermissionRequest {
-        pub const NONE: Option<&'static PointerLockPermissionRequest> = None;
-    
+  pub const NONE: Option<&'static PointerLockPermissionRequest> = None;
 }
 
 impl fmt::Display for PointerLockPermissionRequest {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("PointerLockPermissionRequest")
-    }
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    f.write_str("PointerLockPermissionRequest")
+  }
 }
