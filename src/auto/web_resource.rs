@@ -66,6 +66,7 @@ pub trait WebResourceExt: 'static {
   #[doc(alias = "finished")]
   fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[doc(alias = "received-data")]
   fn connect_received_data<F: Fn(&Self, u64) + 'static>(&self, f: F) -> SignalHandlerId;
 

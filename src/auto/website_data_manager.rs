@@ -109,30 +109,38 @@ pub struct WebsiteDataManagerBuilder {
   base_data_directory: Option<String>,
   #[cfg(any(feature = "v2_10", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   disk_cache_directory: Option<String>,
   #[cfg(any(feature = "v2_30", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   dom_cache_directory: Option<String>,
   #[cfg(any(feature = "v2_26", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   hsts_cache_directory: Option<String>,
   #[cfg(any(feature = "v2_10", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   indexeddb_directory: Option<String>,
   #[cfg(any(feature = "v2_16", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
   is_ephemeral: Option<bool>,
   #[cfg(any(feature = "v2_30", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   itp_directory: Option<String>,
   #[cfg(any(feature = "v2_10", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   local_storage_directory: Option<String>,
   #[cfg(any(feature = "v2_10", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   offline_application_cache_directory: Option<String>,
   #[cfg(any(feature = "v2_30", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   service_worker_registrations_directory: Option<String>,
   #[cfg(any(feature = "v2_10", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
@@ -228,6 +236,7 @@ impl WebsiteDataManagerBuilder {
 
   #[cfg(any(feature = "v2_10", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   pub fn disk_cache_directory(mut self, disk_cache_directory: &str) -> Self {
     self.disk_cache_directory = Some(disk_cache_directory.to_string());
     self
@@ -235,6 +244,7 @@ impl WebsiteDataManagerBuilder {
 
   #[cfg(any(feature = "v2_30", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   pub fn dom_cache_directory(mut self, dom_cache_directory: &str) -> Self {
     self.dom_cache_directory = Some(dom_cache_directory.to_string());
     self
@@ -242,6 +252,7 @@ impl WebsiteDataManagerBuilder {
 
   #[cfg(any(feature = "v2_26", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   pub fn hsts_cache_directory(mut self, hsts_cache_directory: &str) -> Self {
     self.hsts_cache_directory = Some(hsts_cache_directory.to_string());
     self
@@ -249,6 +260,7 @@ impl WebsiteDataManagerBuilder {
 
   #[cfg(any(feature = "v2_10", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   pub fn indexeddb_directory(mut self, indexeddb_directory: &str) -> Self {
     self.indexeddb_directory = Some(indexeddb_directory.to_string());
     self
@@ -263,6 +275,7 @@ impl WebsiteDataManagerBuilder {
 
   #[cfg(any(feature = "v2_30", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   pub fn itp_directory(mut self, itp_directory: &str) -> Self {
     self.itp_directory = Some(itp_directory.to_string());
     self
@@ -270,6 +283,7 @@ impl WebsiteDataManagerBuilder {
 
   #[cfg(any(feature = "v2_10", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   pub fn local_storage_directory(mut self, local_storage_directory: &str) -> Self {
     self.local_storage_directory = Some(local_storage_directory.to_string());
     self
@@ -277,6 +291,7 @@ impl WebsiteDataManagerBuilder {
 
   #[cfg(any(feature = "v2_10", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   pub fn offline_application_cache_directory(
     mut self,
     offline_application_cache_directory: &str,
@@ -288,6 +303,7 @@ impl WebsiteDataManagerBuilder {
 
   #[cfg(any(feature = "v2_30", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   pub fn service_worker_registrations_directory(
     mut self,
     service_worker_registrations_directory: &str,
@@ -338,26 +354,31 @@ pub trait WebsiteDataManagerExt: 'static {
   #[doc(alias = "get_cookie_manager")]
   fn cookie_manager(&self) -> Option<CookieManager>;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[doc(alias = "webkit_website_data_manager_get_disk_cache_directory")]
   #[doc(alias = "get_disk_cache_directory")]
   fn disk_cache_directory(&self) -> Option<glib::GString>;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[cfg(any(feature = "v2_30", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
   #[doc(alias = "webkit_website_data_manager_get_dom_cache_directory")]
   #[doc(alias = "get_dom_cache_directory")]
   fn dom_cache_directory(&self) -> Option<glib::GString>;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[cfg(any(feature = "v2_26", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_26")))]
   #[doc(alias = "webkit_website_data_manager_get_hsts_cache_directory")]
   #[doc(alias = "get_hsts_cache_directory")]
   fn hsts_cache_directory(&self) -> Option<glib::GString>;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[doc(alias = "webkit_website_data_manager_get_indexeddb_directory")]
   #[doc(alias = "get_indexeddb_directory")]
   fn indexeddb_directory(&self) -> Option<glib::GString>;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[cfg(any(feature = "v2_30", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
   #[doc(alias = "webkit_website_data_manager_get_itp_directory")]
@@ -386,10 +407,12 @@ pub trait WebsiteDataManagerExt: 'static {
     &self,
   ) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<ITPThirdParty>, glib::Error>> + 'static>>;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[doc(alias = "webkit_website_data_manager_get_local_storage_directory")]
   #[doc(alias = "get_local_storage_directory")]
   fn local_storage_directory(&self) -> Option<glib::GString>;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[doc(alias = "webkit_website_data_manager_get_offline_application_cache_directory")]
   #[doc(alias = "get_offline_application_cache_directory")]
   fn offline_application_cache_directory(&self) -> Option<glib::GString>;
@@ -400,6 +423,7 @@ pub trait WebsiteDataManagerExt: 'static {
   #[doc(alias = "get_persistent_credential_storage_enabled")]
   fn is_persistent_credential_storage_enabled(&self) -> bool;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[cfg(any(feature = "v2_30", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_30")))]
   #[doc(alias = "webkit_website_data_manager_get_service_worker_registrations_directory")]

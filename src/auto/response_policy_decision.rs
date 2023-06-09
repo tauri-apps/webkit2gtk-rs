@@ -36,6 +36,11 @@ pub trait ResponsePolicyDecisionExt: 'static {
   #[doc(alias = "get_response")]
   fn response(&self) -> Option<URIResponse>;
 
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  #[doc(alias = "webkit_response_policy_decision_is_main_frame_main_resource")]
+  fn is_main_frame_main_resource(&self) -> bool;
+
   #[cfg(any(feature = "v2_4", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
   #[doc(alias = "webkit_response_policy_decision_is_mime_type_supported")]
@@ -62,6 +67,18 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
       from_glib_none(ffi::webkit_response_policy_decision_get_response(
         self.as_ref().to_glib_none().0,
       ))
+    }
+  }
+
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  fn is_main_frame_main_resource(&self) -> bool {
+    unsafe {
+      from_glib(
+        ffi::webkit_response_policy_decision_is_main_frame_main_resource(
+          self.as_ref().to_glib_none().0,
+        ),
+      )
     }
   }
 

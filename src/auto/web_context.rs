@@ -298,6 +298,7 @@ pub trait WebContextExt: 'static {
     &self,
   ) -> Pin<Box_<dyn std::future::Future<Output = Result<Vec<Plugin>, glib::Error>> + 'static>>;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[cfg(any(feature = "v2_4", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
   #[doc(alias = "webkit_web_context_get_process_model")]
@@ -404,6 +405,7 @@ pub trait WebContextExt: 'static {
   #[doc(alias = "webkit_web_context_set_preferred_languages")]
   fn set_preferred_languages(&self, languages: &[&str]);
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[cfg(any(feature = "v2_4", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
   #[doc(alias = "webkit_web_context_set_process_model")]

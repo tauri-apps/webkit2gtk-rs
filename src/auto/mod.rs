@@ -81,9 +81,11 @@ pub use self::input_method_context::InputMethodContext;
 
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+#[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
 mod install_missing_media_plugins_permission_request;
 #[cfg(any(feature = "v2_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+#[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
 pub use self::install_missing_media_plugins_permission_request::InstallMissingMediaPluginsPermissionRequest;
 
 mod media_key_system_permission_request;
@@ -133,9 +135,11 @@ pub use self::policy_decision::PolicyDecision;
 
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+#[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
 mod print_custom_widget;
 #[cfg(any(feature = "v2_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+#[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
 pub use self::print_custom_widget::PrintCustomWidget;
 
 mod print_operation;
@@ -451,6 +455,7 @@ pub mod traits {
   pub use super::input_method_context::InputMethodContextExt;
   #[cfg(any(feature = "v2_10", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_10")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   pub use super::install_missing_media_plugins_permission_request::InstallMissingMediaPluginsPermissionRequestExt;
   pub use super::navigation_policy_decision::NavigationPolicyDecisionExt;
   #[cfg(any(feature = "v2_8", feature = "dox"))]
@@ -465,6 +470,7 @@ pub mod traits {
   pub use super::policy_decision::PolicyDecisionExt;
   #[cfg(any(feature = "v2_16", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   pub use super::print_custom_widget::PrintCustomWidgetExt;
   pub use super::print_operation::PrintOperationExt;
   pub use super::response_policy_decision::ResponsePolicyDecisionExt;
@@ -509,6 +515,7 @@ pub mod builders {
   pub use super::hit_test_result::HitTestResultBuilder;
   #[cfg(any(feature = "v2_16", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   pub use super::print_custom_widget::PrintCustomWidgetBuilder;
   pub use super::print_operation::PrintOperationBuilder;
   pub use super::settings::SettingsBuilder;

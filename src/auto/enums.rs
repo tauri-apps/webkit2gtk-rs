@@ -1619,7 +1619,11 @@ impl ToValue for InsecureContentEvent {
 #[doc(alias = "WebKitJavascriptError")]
 pub enum JavascriptError {
   #[doc(alias = "WEBKIT_JAVASCRIPT_ERROR_SCRIPT_FAILED")]
-  Failed,
+  ScriptFailed,
+  #[doc(alias = "WEBKIT_JAVASCRIPT_ERROR_INVALID_PARAMETER")]
+  InvalidParameter,
+  #[doc(alias = "WEBKIT_JAVASCRIPT_ERROR_INVALID_RESULT")]
+  InvalidResult,
   #[doc(hidden)]
   __Unknown(i32),
 }
@@ -1638,7 +1642,9 @@ impl fmt::Display for JavascriptError {
       f,
       "JavascriptError::{}",
       match *self {
-        Self::Failed => "Failed",
+        Self::ScriptFailed => "ScriptFailed",
+        Self::InvalidParameter => "InvalidParameter",
+        Self::InvalidResult => "InvalidResult",
         _ => "Unknown",
       }
     )
@@ -1651,7 +1657,9 @@ impl IntoGlib for JavascriptError {
 
   fn into_glib(self) -> ffi::WebKitJavascriptError {
     match self {
-      Self::Failed => ffi::WEBKIT_JAVASCRIPT_ERROR_SCRIPT_FAILED,
+      Self::ScriptFailed => ffi::WEBKIT_JAVASCRIPT_ERROR_SCRIPT_FAILED,
+      Self::InvalidParameter => ffi::WEBKIT_JAVASCRIPT_ERROR_INVALID_PARAMETER,
+      Self::InvalidResult => ffi::WEBKIT_JAVASCRIPT_ERROR_INVALID_RESULT,
       Self::__Unknown(value) => value,
     }
   }
@@ -1662,7 +1670,9 @@ impl FromGlib<ffi::WebKitJavascriptError> for JavascriptError {
   unsafe fn from_glib(value: ffi::WebKitJavascriptError) -> Self {
     skip_assert_initialized!();
     match value {
-      ffi::WEBKIT_JAVASCRIPT_ERROR_SCRIPT_FAILED => Self::Failed,
+      ffi::WEBKIT_JAVASCRIPT_ERROR_SCRIPT_FAILED => Self::ScriptFailed,
+      ffi::WEBKIT_JAVASCRIPT_ERROR_INVALID_PARAMETER => Self::InvalidParameter,
+      ffi::WEBKIT_JAVASCRIPT_ERROR_INVALID_RESULT => Self::InvalidResult,
       value => Self::__Unknown(value),
     }
   }
@@ -1686,8 +1696,10 @@ impl ErrorDomain for JavascriptError {
   fn from(code: i32) -> Option<Self> {
     skip_assert_initialized!();
     match code {
-      ffi::WEBKIT_JAVASCRIPT_ERROR_SCRIPT_FAILED => Some(Self::Failed),
-      _ => Some(Self::Failed),
+      ffi::WEBKIT_JAVASCRIPT_ERROR_SCRIPT_FAILED => Some(Self::ScriptFailed),
+      ffi::WEBKIT_JAVASCRIPT_ERROR_INVALID_PARAMETER => Some(Self::InvalidParameter),
+      ffi::WEBKIT_JAVASCRIPT_ERROR_INVALID_RESULT => Some(Self::InvalidResult),
+      value => Some(Self::__Unknown(value)),
     }
   }
 }
@@ -2846,6 +2858,7 @@ impl ToValue for PrintOperationResponse {
   }
 }
 
+#[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
 #[cfg(any(feature = "v2_4", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]

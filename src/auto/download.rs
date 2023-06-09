@@ -120,7 +120,7 @@ pub trait DownloadExt: 'static {
   fn set_allow_overwrite(&self, allowed: bool);
 
   #[doc(alias = "webkit_download_set_destination")]
-  fn set_destination(&self, uri: &str);
+  fn set_destination(&self, destination: &str);
 
   #[doc(alias = "created-destination")]
   fn connect_created_destination<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -224,9 +224,12 @@ impl<O: IsA<Download>> DownloadExt for O {
     }
   }
 
-  fn set_destination(&self, uri: &str) {
+  fn set_destination(&self, destination: &str) {
     unsafe {
-      ffi::webkit_download_set_destination(self.as_ref().to_glib_none().0, uri.to_glib_none().0);
+      ffi::webkit_download_set_destination(
+        self.as_ref().to_glib_none().0,
+        destination.to_glib_none().0,
+      );
     }
   }
 

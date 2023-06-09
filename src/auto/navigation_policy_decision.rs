@@ -31,6 +31,7 @@ impl NavigationPolicyDecision {
 }
 
 pub trait NavigationPolicyDecisionExt: 'static {
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[doc(alias = "webkit_navigation_policy_decision_get_frame_name")]
   #[doc(alias = "get_frame_name")]
   fn frame_name(&self) -> Option<glib::GString>;
@@ -61,6 +62,7 @@ pub trait NavigationPolicyDecisionExt: 'static {
   #[doc(alias = "get_request")]
   fn request(&self) -> Option<URIRequest>;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[doc(alias = "frame-name")]
   fn connect_frame_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 

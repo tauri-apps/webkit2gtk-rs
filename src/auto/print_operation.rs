@@ -131,6 +131,7 @@ pub trait PrintOperationExt: 'static {
   #[doc(alias = "web-view")]
   fn web_view(&self) -> Option<WebView>;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[cfg(any(feature = "v2_16", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
   #[doc(alias = "create-custom-widget")]

@@ -50,6 +50,12 @@ pub trait ContextMenuExt: 'static {
   #[doc(alias = "webkit_context_menu_first")]
   fn first(&self) -> Option<ContextMenuItem>;
 
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  #[doc(alias = "webkit_context_menu_get_event")]
+  #[doc(alias = "get_event")]
+  fn event(&self) -> Option<gdk::Event>;
+
   #[doc(alias = "webkit_context_menu_get_item_at_position")]
   #[doc(alias = "get_item_at_position")]
   fn item_at_position(&self, position: u32) -> Option<ContextMenuItem>;
@@ -105,6 +111,16 @@ impl<O: IsA<ContextMenu>> ContextMenuExt for O {
   fn first(&self) -> Option<ContextMenuItem> {
     unsafe {
       from_glib_none(ffi::webkit_context_menu_first(
+        self.as_ref().to_glib_none().0,
+      ))
+    }
+  }
+
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  fn event(&self) -> Option<gdk::Event> {
+    unsafe {
+      from_glib_none(ffi::webkit_context_menu_get_event(
         self.as_ref().to_glib_none().0,
       ))
     }

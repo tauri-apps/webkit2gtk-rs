@@ -9,7 +9,11 @@ license = "MIT"
 keywords = [ "webkit", "gtk-rs", "gnome", "GUI" ]
 
 [package.metadata.docs.rs]
-features = [ "dox" ]
+all-features = true
+# For build.rs scripts
+rustc-args = ["--cfg", "docsrs"]
+# For rustdoc
+rustdoc-args = ["--cfg", "docsrs"]
 
 [lib]
 name = "webkit2gtk"
@@ -43,6 +47,7 @@ v2_32 = [ "v2_30", "ffi/v2_32" ]
 v2_34 = [ "v2_32", "ffi/v2_34" ]
 v2_36 = [ "v2_34", "ffi/v2_36" ]
 v2_38 = [ "v2_36", "ffi/v2_38" ]
+v2_40 = [ "v2_38", "ffi/v2_40" ]
 
 [dependencies]
 bitflags = "^1.0"

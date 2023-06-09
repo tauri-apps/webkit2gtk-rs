@@ -32,6 +32,12 @@ pub trait OptionMenuExt: 'static {
   #[doc(alias = "webkit_option_menu_close")]
   fn close(&self);
 
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  #[doc(alias = "webkit_option_menu_get_event")]
+  #[doc(alias = "get_event")]
+  fn event(&self) -> Option<gdk::Event>;
+
   #[doc(alias = "webkit_option_menu_get_item")]
   #[doc(alias = "get_item")]
   fn item(&self, index: u32) -> Option<OptionMenuItem>;
@@ -59,6 +65,16 @@ impl<O: IsA<OptionMenu>> OptionMenuExt for O {
   fn close(&self) {
     unsafe {
       ffi::webkit_option_menu_close(self.as_ref().to_glib_none().0);
+    }
+  }
+
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  fn event(&self) -> Option<gdk::Event> {
+    unsafe {
+      from_glib_none(ffi::webkit_option_menu_get_event(
+        self.as_ref().to_glib_none().0,
+      ))
     }
   }
 

@@ -75,6 +75,11 @@ pub trait UserContentManagerExt: 'static {
   #[doc(alias = "webkit_user_content_manager_register_script_message_handler_in_world")]
   fn register_script_message_handler_in_world(&self, name: &str, world_name: &str) -> bool;
 
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  #[doc(alias = "webkit_user_content_manager_register_script_message_handler_with_reply")]
+  fn register_script_message_handler_with_reply(&self, name: &str, world_name: &str) -> bool;
+
   #[cfg(any(feature = "v2_24", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_24")))]
   #[doc(alias = "webkit_user_content_manager_remove_all_filters")]
@@ -124,6 +129,11 @@ pub trait UserContentManagerExt: 'static {
     detail: Option<&str>,
     f: F,
   ) -> SignalHandlerId;
+
+  //#[cfg(any(feature = "v2_40", feature = "dox"))]
+  //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  //#[doc(alias = "script-message-with-reply-received")]
+  //fn connect_script_message_with_reply_received<Unsupported or ignored types>(&self, detail: Option<&str>, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<UserContentManager>> UserContentManagerExt for O {
@@ -170,6 +180,20 @@ impl<O: IsA<UserContentManager>> UserContentManagerExt for O {
     unsafe {
       from_glib(
         ffi::webkit_user_content_manager_register_script_message_handler_in_world(
+          self.as_ref().to_glib_none().0,
+          name.to_glib_none().0,
+          world_name.to_glib_none().0,
+        ),
+      )
+    }
+  }
+
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  fn register_script_message_handler_with_reply(&self, name: &str, world_name: &str) -> bool {
+    unsafe {
+      from_glib(
+        ffi::webkit_user_content_manager_register_script_message_handler_with_reply(
           self.as_ref().to_glib_none().0,
           name.to_glib_none().0,
           world_name.to_glib_none().0,
@@ -272,13 +296,13 @@ impl<O: IsA<UserContentManager>> UserContentManagerExt for O {
       F: Fn(&P, &JavascriptResult) + 'static,
     >(
       this: *mut ffi::WebKitUserContentManager,
-      js_result: *mut ffi::WebKitJavascriptResult,
+      value: *mut ffi::WebKitJavascriptResult,
       f: glib::ffi::gpointer,
     ) {
       let f: &F = &*(f as *const F);
       f(
         UserContentManager::from_glib_borrow(this).unsafe_cast_ref(),
-        &from_glib_borrow(js_result),
+        &from_glib_borrow(value),
       )
     }
     unsafe {
@@ -297,6 +321,12 @@ impl<O: IsA<UserContentManager>> UserContentManagerExt for O {
       )
     }
   }
+
+  //#[cfg(any(feature = "v2_40", feature = "dox"))]
+  //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  //fn connect_script_message_with_reply_received<Unsupported or ignored types>(&self, detail: Option<&str>, f: F) -> SignalHandlerId {
+  //    Ignored reply: WebKit2.ScriptMessageReply
+  //}
 }
 
 impl fmt::Display for UserContentManager {

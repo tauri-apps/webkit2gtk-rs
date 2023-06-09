@@ -94,6 +94,9 @@ pub struct SettingsBuilder {
   default_font_family: Option<String>,
   default_font_size: Option<u32>,
   default_monospace_font_size: Option<u32>,
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  disable_web_security: Option<bool>,
   draw_compositing_indicators: Option<bool>,
   #[cfg(any(feature = "v2_2", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_2")))]
@@ -235,6 +238,10 @@ impl SettingsBuilder {
     }
     if let Some(ref default_monospace_font_size) = self.default_monospace_font_size {
       properties.push(("default-monospace-font-size", default_monospace_font_size));
+    }
+    #[cfg(any(feature = "v2_40", feature = "dox"))]
+    if let Some(ref disable_web_security) = self.disable_web_security {
+      properties.push(("disable-web-security", disable_web_security));
     }
     if let Some(ref draw_compositing_indicators) = self.draw_compositing_indicators {
       properties.push(("draw-compositing-indicators", draw_compositing_indicators));
@@ -503,6 +510,13 @@ impl SettingsBuilder {
 
   pub fn default_monospace_font_size(mut self, default_monospace_font_size: u32) -> Self {
     self.default_monospace_font_size = Some(default_monospace_font_size);
+    self
+  }
+
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  pub fn disable_web_security(mut self, disable_web_security: bool) -> Self {
+    self.disable_web_security = Some(disable_web_security);
     self
   }
 
@@ -864,6 +878,12 @@ pub trait SettingsExt: 'static {
   #[doc(alias = "get_default_monospace_font_size")]
   fn default_monospace_font_size(&self) -> u32;
 
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  #[doc(alias = "webkit_settings_get_disable_web_security")]
+  #[doc(alias = "get_disable_web_security")]
+  fn is_disable_web_security(&self) -> bool;
+
   #[doc(alias = "webkit_settings_get_draw_compositing_indicators")]
   #[doc(alias = "get_draw_compositing_indicators")]
   fn draws_compositing_indicators(&self) -> bool;
@@ -1134,6 +1154,11 @@ pub trait SettingsExt: 'static {
   #[doc(alias = "webkit_settings_set_default_monospace_font_size")]
   fn set_default_monospace_font_size(&self, font_size: u32);
 
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  #[doc(alias = "webkit_settings_set_disable_web_security")]
+  fn set_disable_web_security(&self, disabled: bool);
+
   #[doc(alias = "webkit_settings_set_draw_compositing_indicators")]
   fn set_draw_compositing_indicators(&self, enabled: bool);
 
@@ -1372,6 +1397,11 @@ pub trait SettingsExt: 'static {
     &self,
     f: F,
   ) -> SignalHandlerId;
+
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  #[doc(alias = "disable-web-security")]
+  fn connect_disable_web_security_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
   #[doc(alias = "draw-compositing-indicators")]
   fn connect_draw_compositing_indicators_notify<F: Fn(&Self) + 'static>(
@@ -1701,6 +1731,16 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
   fn default_monospace_font_size(&self) -> u32 {
     unsafe { ffi::webkit_settings_get_default_monospace_font_size(self.as_ref().to_glib_none().0) }
+  }
+
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  fn is_disable_web_security(&self) -> bool {
+    unsafe {
+      from_glib(ffi::webkit_settings_get_disable_web_security(
+        self.as_ref().to_glib_none().0,
+      ))
+    }
   }
 
   fn draws_compositing_indicators(&self) -> bool {
@@ -2230,6 +2270,17 @@ impl<O: IsA<Settings>> SettingsExt for O {
       ffi::webkit_settings_set_default_monospace_font_size(
         self.as_ref().to_glib_none().0,
         font_size,
+      );
+    }
+  }
+
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  fn set_disable_web_security(&self, disabled: bool) {
+    unsafe {
+      ffi::webkit_settings_set_disable_web_security(
+        self.as_ref().to_glib_none().0,
+        disabled.into_glib(),
       );
     }
   }
@@ -2967,6 +3018,33 @@ impl<O: IsA<Settings>> SettingsExt for O {
         b"notify::default-monospace-font-size\0".as_ptr() as *const _,
         Some(transmute::<_, unsafe extern "C" fn()>(
           notify_default_monospace_font_size_trampoline::<Self, F> as *const (),
+        )),
+        Box_::into_raw(f),
+      )
+    }
+  }
+
+  #[cfg(any(feature = "v2_40", feature = "dox"))]
+  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  fn connect_disable_web_security_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    unsafe extern "C" fn notify_disable_web_security_trampoline<
+      P: IsA<Settings>,
+      F: Fn(&P) + 'static,
+    >(
+      this: *mut ffi::WebKitSettings,
+      _param_spec: glib::ffi::gpointer,
+      f: glib::ffi::gpointer,
+    ) {
+      let f: &F = &*(f as *const F);
+      f(Settings::from_glib_borrow(this).unsafe_cast_ref())
+    }
+    unsafe {
+      let f: Box_<F> = Box_::new(f);
+      connect_raw(
+        self.as_ptr() as *mut _,
+        b"notify::disable-web-security\0".as_ptr() as *const _,
+        Some(transmute::<_, unsafe extern "C" fn()>(
+          notify_disable_web_security_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
       )

@@ -21,6 +21,7 @@ impl InstallMissingMediaPluginsPermissionRequest {
 }
 
 pub trait InstallMissingMediaPluginsPermissionRequestExt: 'static {
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[doc(alias = "webkit_install_missing_media_plugins_permission_request_get_description")]
   #[doc(alias = "get_description")]
   fn description(&self) -> Option<glib::GString>;

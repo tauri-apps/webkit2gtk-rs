@@ -81,6 +81,7 @@ int main() {
     printf("%s;%zu;%zu\n", "WebKitOptionMenu", sizeof(WebKitOptionMenu), alignof(WebKitOptionMenu));
     printf("%s;%zu;%zu\n", "WebKitOptionMenuClass", sizeof(WebKitOptionMenuClass), alignof(WebKitOptionMenuClass));
     printf("%s;%zu;%zu\n", "WebKitPermissionRequestIface", sizeof(WebKitPermissionRequestIface), alignof(WebKitPermissionRequestIface));
+    printf("%s;%zu;%zu\n", "WebKitPermissionState", sizeof(WebKitPermissionState), alignof(WebKitPermissionState));
     printf("%s;%zu;%zu\n", "WebKitPlugin", sizeof(WebKitPlugin), alignof(WebKitPlugin));
     printf("%s;%zu;%zu\n", "WebKitPluginClass", sizeof(WebKitPluginClass), alignof(WebKitPluginClass));
     printf("%s;%zu;%zu\n", "WebKitPluginError", sizeof(WebKitPluginError), alignof(WebKitPluginError));

@@ -25,6 +25,7 @@ glib::wrapper! {
 impl PrintCustomWidget {
   pub const NONE: Option<&'static PrintCustomWidget> = None;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[doc(alias = "webkit_print_custom_widget_new")]
   pub fn new(widget: &impl IsA<gtk::Widget>, title: &str) -> PrintCustomWidget {
     assert_initialized_main_thread!();
@@ -62,9 +63,11 @@ impl Default for PrintCustomWidget {
 pub struct PrintCustomWidgetBuilder {
   #[cfg(any(feature = "v2_16", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   title: Option<String>,
   #[cfg(any(feature = "v2_16", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   widget: Option<gtk::Widget>,
 }
 
@@ -93,6 +96,7 @@ impl PrintCustomWidgetBuilder {
 
   #[cfg(any(feature = "v2_16", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   pub fn title(mut self, title: &str) -> Self {
     self.title = Some(title.to_string());
     self
@@ -100,6 +104,7 @@ impl PrintCustomWidgetBuilder {
 
   #[cfg(any(feature = "v2_16", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   pub fn widget(mut self, widget: &impl IsA<gtk::Widget>) -> Self {
     self.widget = Some(widget.clone().upcast());
     self
@@ -107,19 +112,23 @@ impl PrintCustomWidgetBuilder {
 }
 
 pub trait PrintCustomWidgetExt: 'static {
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[doc(alias = "webkit_print_custom_widget_get_title")]
   #[doc(alias = "get_title")]
   fn title(&self) -> Option<glib::GString>;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[doc(alias = "webkit_print_custom_widget_get_widget")]
   #[doc(alias = "get_widget")]
   fn widget(&self) -> Option<gtk::Widget>;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[cfg(any(feature = "v2_16", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
   #[doc(alias = "apply")]
   fn connect_apply<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[cfg(any(feature = "v2_16", feature = "dox"))]
   #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
   #[doc(alias = "update")]
