@@ -1,6 +1,6 @@
 [package]
 name = "webkit2gtk"
-version = "1.1.0"
+version = "1.2.0"
 edition = "2021"
 categories = [ "api-bindings", "gui" ]
 description = "Rust bindings for webkit-gtk library"
@@ -19,11 +19,6 @@ name = "webkit2gtk"
 [features]
 dox = [
   "ffi/dox",
-  "gtk/dox",
-  "glib/dox",
-  "gio/dox",
-  "gdk/dox",
-  "soup/dox",
   "java_script_core/dox"
 ]
 v2_2 = [ ]
@@ -51,26 +46,26 @@ v2_40 = [ "v2_38", "ffi/v2_40" ]
 bitflags = "^1.0"
 once_cell = "1.8"
 libc = "^0.2"
-cairo-rs = "^0.16.0"
-gdk = "^0.16.0"
-gdk-sys = "^0.16.0"
-gio = "^0.16.0"
-gio-sys = "^0.16.0"
-glib = "^0.16.0"
-glib-sys = "^0.16.0"
-gobject-sys = "^0.16.0"
-gtk = "^0.16.0"
-gtk-sys = "^0.16.0"
+cairo-rs = "^0.18.0"
+gdk = "^0.18.0"
+gdk-sys = "^0.18.0"
+gio = "^0.18.0"
+gio-sys = "^0.18.0"
+glib = "^0.18.0"
+glib-sys = "^0.18.0"
+gobject-sys = "^0.18.0"
+gtk = "^0.18.0"
+gtk-sys = "^0.18.0"
 
-  [dependencies.java_script_core]
-  package = "javascriptcore-rs"
-  version = "1.0"
+[dependencies.java_script_core]
+package = "javascriptcore-rs"
+version = "1.0"
 
-  [dependencies.soup]
-  package = "soup3"
-  version = "0.3"
+[dependencies.soup]
+package = "soup3"
+version = "0.5"
 
-  [dependencies.ffi]
-  package = "webkit2gtk-sys"
-  path = "sys"
-  version = "1.0"
+[dependencies.ffi]
+package = "webkit2gtk-sys"
+path = "sys"
+version = "1.0"

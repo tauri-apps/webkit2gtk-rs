@@ -84,27 +84,27 @@ libc = "0.2"
 
   [dependencies.gtk]
   package = "gtk-sys"
-  version = "0.16"
+  version = "0.18"
 
   [dependencies.gdk]
   package = "gdk-sys"
-  version = "0.16"
+  version = "0.18"
 
   [dependencies.gio]
   package = "gio-sys"
-  version = "0.16"
+  version = "0.18"
 
   [dependencies.glib]
   package = "glib-sys"
-  version = "0.16"
+  version = "0.18"
 
   [dependencies.gobject]
   package = "gobject-sys"
-  version = "0.16"
+  version = "0.18"
 
   [dependencies.cairo]
   package = "cairo-sys-rs"
-  version = "0.16"
+  version = "0.18"
 
   [dependencies.java_script_core]
   package = "javascriptcore-rs-sys"
@@ -112,7 +112,7 @@ libc = "0.2"
 
   [dependencies.soup]
   package = "soup3-sys"
-  version = "0.3"
+  version = "0.5"
 
 [dev-dependencies]
 shell-words = "1.0.0"
@@ -120,13 +120,6 @@ tempfile = "3"
 
 [features]
 dox = [
-  "gtk/dox",
-  "glib/dox",
-  "gobject/dox",
-  "gio/dox",
-  "gdk/dox",
-  "cairo/dox",
-  "soup/dox",
   "java_script_core/dox"
 ]
 v2_6 = [ ]
