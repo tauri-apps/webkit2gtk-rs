@@ -2,8 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::PermissionRequest;
-use std::fmt;
+use crate::{PermissionRequest};
 
 glib::wrapper! {
     #[doc(alias = "WebKitMediaKeySystemPermissionRequest")]
@@ -15,11 +14,6 @@ glib::wrapper! {
 }
 
 impl MediaKeySystemPermissionRequest {
-  pub const NONE: Option<&'static MediaKeySystemPermissionRequest> = None;
-}
-
-impl fmt::Display for MediaKeySystemPermissionRequest {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("MediaKeySystemPermissionRequest")
-  }
+        pub const NONE: Option<&'static MediaKeySystemPermissionRequest> = None;
+    
 }

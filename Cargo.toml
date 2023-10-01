@@ -19,11 +19,6 @@ name = "webkit2gtk"
 [features]
 dox = [
   "ffi/dox",
-  "gtk/dox",
-  "glib/dox",
-  "gio/dox",
-  "gdk/dox",
-  "soup/dox",
   "java_script_core/dox"
 ]
 v2_2 = [ ]
