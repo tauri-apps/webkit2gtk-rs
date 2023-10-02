@@ -2,16 +2,12 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
+use glib::{
+  prelude::*,
+  signal::{connect_raw, SignalHandlerId},
+  translate::*,
+};
 use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
 
 glib::wrapper! {
     #[doc(alias = "WebKitURIRequest")]
@@ -36,73 +32,54 @@ impl URIRequest {
   ///
   /// This method returns an instance of [`URIRequestBuilder`](crate::builders::URIRequestBuilder) which can be used to create [`URIRequest`] objects.
   pub fn builder() -> URIRequestBuilder {
-    URIRequestBuilder::default()
+    URIRequestBuilder::new()
   }
 }
 
 impl Default for URIRequest {
   fn default() -> Self {
-    glib::object::Object::new::<Self>(&[])
+    glib::object::Object::new::<Self>()
   }
 }
 
-#[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
 /// A [builder-pattern] type to construct [`URIRequest`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
 pub struct URIRequestBuilder {
-  uri: Option<String>,
+  builder: glib::object::ObjectBuilder<'static, URIRequest>,
 }
 
 impl URIRequestBuilder {
-  // rustdoc-stripper-ignore-next
-  /// Create a new [`URIRequestBuilder`].
-  pub fn new() -> Self {
-    Self::default()
+  fn new() -> Self {
+    Self {
+      builder: glib::object::Object::builder(),
+    }
+  }
+
+  pub fn uri(self, uri: impl Into<glib::GString>) -> Self {
+    Self {
+      builder: self.builder.property("uri", uri.into()),
+    }
   }
 
   // rustdoc-stripper-ignore-next
   /// Build the [`URIRequest`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> URIRequest {
-    let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-    if let Some(ref uri) = self.uri {
-      properties.push(("uri", uri));
-    }
-    glib::Object::new::<URIRequest>(&properties)
-  }
-
-  pub fn uri(mut self, uri: &str) -> Self {
-    self.uri = Some(uri.to_string());
-    self
+    self.builder.build()
   }
 }
 
-pub trait URIRequestExt: 'static {
+mod sealed {
+  pub trait Sealed {}
+  impl<T: super::IsA<super::URIRequest>> Sealed for T {}
+}
+
+pub trait URIRequestExt: IsA<URIRequest> + sealed::Sealed + 'static {
   #[doc(alias = "webkit_uri_request_get_http_headers")]
   #[doc(alias = "get_http_headers")]
-  fn http_headers(&self) -> Option<soup::MessageHeaders>;
-
-  #[cfg(any(feature = "v2_12", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_12")))]
-  #[doc(alias = "webkit_uri_request_get_http_method")]
-  #[doc(alias = "get_http_method")]
-  fn http_method(&self) -> Option<glib::GString>;
-
-  #[doc(alias = "webkit_uri_request_get_uri")]
-  #[doc(alias = "get_uri")]
-  fn uri(&self) -> Option<glib::GString>;
-
-  #[doc(alias = "webkit_uri_request_set_uri")]
-  fn set_uri(&self, uri: &str);
-
-  #[doc(alias = "uri")]
-  fn connect_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<URIRequest>> URIRequestExt for O {
   fn http_headers(&self) -> Option<soup::MessageHeaders> {
     unsafe {
       from_glib_none(ffi::webkit_uri_request_get_http_headers(
@@ -111,8 +88,10 @@ impl<O: IsA<URIRequest>> URIRequestExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_12", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_12")))]
+  #[cfg(feature = "v2_12")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_12")))]
+  #[doc(alias = "webkit_uri_request_get_http_method")]
+  #[doc(alias = "get_http_method")]
   fn http_method(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_uri_request_get_http_method(
@@ -121,6 +100,8 @@ impl<O: IsA<URIRequest>> URIRequestExt for O {
     }
   }
 
+  #[doc(alias = "webkit_uri_request_get_uri")]
+  #[doc(alias = "get_uri")]
   fn uri(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_uri_request_get_uri(
@@ -129,12 +110,14 @@ impl<O: IsA<URIRequest>> URIRequestExt for O {
     }
   }
 
+  #[doc(alias = "webkit_uri_request_set_uri")]
   fn set_uri(&self, uri: &str) {
     unsafe {
       ffi::webkit_uri_request_set_uri(self.as_ref().to_glib_none().0, uri.to_glib_none().0);
     }
   }
 
+  #[doc(alias = "uri")]
   fn connect_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_uri_trampoline<P: IsA<URIRequest>, F: Fn(&P) + 'static>(
       this: *mut ffi::WebKitURIRequest,
@@ -149,7 +132,7 @@ impl<O: IsA<URIRequest>> URIRequestExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::uri\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_uri_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -158,8 +141,4 @@ impl<O: IsA<URIRequest>> URIRequestExt for O {
   }
 }
 
-impl fmt::Display for URIRequest {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("URIRequest")
-  }
-}
+impl<O: IsA<URIRequest>> URIRequestExt for O {}

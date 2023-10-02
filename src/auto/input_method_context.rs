@@ -2,16 +2,13 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::InputHints;
-use crate::InputPurpose;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
+use crate::{InputHints, InputPurpose};
+use glib::{
+  prelude::*,
+  signal::{connect_raw, SignalHandlerId},
+  translate::*,
+};
 use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
 
 glib::wrapper! {
     #[doc(alias = "WebKitInputMethodContext")]
@@ -26,83 +23,13 @@ impl InputMethodContext {
   pub const NONE: Option<&'static InputMethodContext> = None;
 }
 
-pub trait InputMethodContextExt: 'static {
-  #[doc(alias = "webkit_input_method_context_filter_key_event")]
-  fn filter_key_event(&self, key_event: &mut gdk::EventKey) -> bool;
-
-  #[doc(alias = "webkit_input_method_context_get_input_hints")]
-  #[doc(alias = "get_input_hints")]
-  fn input_hints(&self) -> InputHints;
-
-  #[doc(alias = "webkit_input_method_context_get_input_purpose")]
-  #[doc(alias = "get_input_purpose")]
-  fn input_purpose(&self) -> InputPurpose;
-
-  //#[doc(alias = "webkit_input_method_context_get_preedit")]
-  //#[doc(alias = "get_preedit")]
-  //fn preedit(&self, underlines: /*Unimplemented*/Vec<InputMethodUnderline>) -> (Option<glib::GString>, u32);
-
-  #[doc(alias = "webkit_input_method_context_notify_cursor_area")]
-  fn notify_cursor_area(&self, x: i32, y: i32, width: i32, height: i32);
-
-  #[doc(alias = "webkit_input_method_context_notify_focus_in")]
-  fn notify_focus_in(&self);
-
-  #[doc(alias = "webkit_input_method_context_notify_focus_out")]
-  fn notify_focus_out(&self);
-
-  #[doc(alias = "webkit_input_method_context_notify_surrounding")]
-  fn notify_surrounding(&self, text: &str, cursor_index: u32, selection_index: u32);
-
-  #[doc(alias = "webkit_input_method_context_reset")]
-  fn reset(&self);
-
-  #[doc(alias = "webkit_input_method_context_set_enable_preedit")]
-  fn set_enable_preedit(&self, enabled: bool);
-
-  #[doc(alias = "webkit_input_method_context_set_input_hints")]
-  fn set_input_hints(&self, hints: InputHints);
-
-  #[doc(alias = "webkit_input_method_context_set_input_purpose")]
-  fn set_input_purpose(&self, purpose: InputPurpose);
-
-  #[cfg(any(feature = "v2_28", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
-  #[doc(alias = "committed")]
-  fn connect_committed<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[cfg(any(feature = "v2_28", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
-  #[doc(alias = "delete-surrounding")]
-  fn connect_delete_surrounding<F: Fn(&Self, i32, u32) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[cfg(any(feature = "v2_28", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
-  #[doc(alias = "preedit-changed")]
-  fn connect_preedit_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[cfg(any(feature = "v2_28", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
-  #[doc(alias = "preedit-finished")]
-  fn connect_preedit_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[cfg(any(feature = "v2_28", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
-  #[doc(alias = "preedit-started")]
-  fn connect_preedit_started<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[cfg(any(feature = "v2_28", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
-  #[doc(alias = "input-hints")]
-  fn connect_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[cfg(any(feature = "v2_28", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
-  #[doc(alias = "input-purpose")]
-  fn connect_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+  pub trait Sealed {}
+  impl<T: super::IsA<super::InputMethodContext>> Sealed for T {}
 }
 
-impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
+pub trait InputMethodContextExt: IsA<InputMethodContext> + sealed::Sealed + 'static {
+  #[doc(alias = "webkit_input_method_context_filter_key_event")]
   fn filter_key_event(&self, key_event: &mut gdk::EventKey) -> bool {
     unsafe {
       from_glib(ffi::webkit_input_method_context_filter_key_event(
@@ -112,6 +39,8 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
   }
 
+  #[doc(alias = "webkit_input_method_context_get_input_hints")]
+  #[doc(alias = "get_input_hints")]
   fn input_hints(&self) -> InputHints {
     unsafe {
       from_glib(ffi::webkit_input_method_context_get_input_hints(
@@ -120,6 +49,8 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
   }
 
+  #[doc(alias = "webkit_input_method_context_get_input_purpose")]
+  #[doc(alias = "get_input_purpose")]
   fn input_purpose(&self) -> InputPurpose {
     unsafe {
       from_glib(ffi::webkit_input_method_context_get_input_purpose(
@@ -128,10 +59,13 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
   }
 
+  //#[doc(alias = "webkit_input_method_context_get_preedit")]
+  //#[doc(alias = "get_preedit")]
   //fn preedit(&self, underlines: /*Unimplemented*/Vec<InputMethodUnderline>) -> (Option<glib::GString>, u32) {
   //    unsafe { TODO: call ffi:webkit_input_method_context_get_preedit() }
   //}
 
+  #[doc(alias = "webkit_input_method_context_notify_cursor_area")]
   fn notify_cursor_area(&self, x: i32, y: i32, width: i32, height: i32) {
     unsafe {
       ffi::webkit_input_method_context_notify_cursor_area(
@@ -144,18 +78,21 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
   }
 
+  #[doc(alias = "webkit_input_method_context_notify_focus_in")]
   fn notify_focus_in(&self) {
     unsafe {
       ffi::webkit_input_method_context_notify_focus_in(self.as_ref().to_glib_none().0);
     }
   }
 
+  #[doc(alias = "webkit_input_method_context_notify_focus_out")]
   fn notify_focus_out(&self) {
     unsafe {
       ffi::webkit_input_method_context_notify_focus_out(self.as_ref().to_glib_none().0);
     }
   }
 
+  #[doc(alias = "webkit_input_method_context_notify_surrounding")]
   fn notify_surrounding(&self, text: &str, cursor_index: u32, selection_index: u32) {
     let length = text.len() as _;
     unsafe {
@@ -169,12 +106,14 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
   }
 
+  #[doc(alias = "webkit_input_method_context_reset")]
   fn reset(&self) {
     unsafe {
       ffi::webkit_input_method_context_reset(self.as_ref().to_glib_none().0);
     }
   }
 
+  #[doc(alias = "webkit_input_method_context_set_enable_preedit")]
   fn set_enable_preedit(&self, enabled: bool) {
     unsafe {
       ffi::webkit_input_method_context_set_enable_preedit(
@@ -184,6 +123,7 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
   }
 
+  #[doc(alias = "webkit_input_method_context_set_input_hints")]
   fn set_input_hints(&self, hints: InputHints) {
     unsafe {
       ffi::webkit_input_method_context_set_input_hints(
@@ -193,6 +133,7 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
   }
 
+  #[doc(alias = "webkit_input_method_context_set_input_purpose")]
   fn set_input_purpose(&self, purpose: InputPurpose) {
     unsafe {
       ffi::webkit_input_method_context_set_input_purpose(
@@ -202,8 +143,9 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_28", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+  #[cfg(feature = "v2_28")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_28")))]
+  #[doc(alias = "committed")]
   fn connect_committed<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn committed_trampoline<
       P: IsA<InputMethodContext>,
@@ -224,7 +166,7 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"committed\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           committed_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -232,8 +174,9 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_28", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+  #[cfg(feature = "v2_28")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_28")))]
+  #[doc(alias = "delete-surrounding")]
   fn connect_delete_surrounding<F: Fn(&Self, i32, u32) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn delete_surrounding_trampoline<
       P: IsA<InputMethodContext>,
@@ -256,7 +199,7 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"delete-surrounding\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           delete_surrounding_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -264,8 +207,9 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_28", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+  #[cfg(feature = "v2_28")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_28")))]
+  #[doc(alias = "preedit-changed")]
   fn connect_preedit_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn preedit_changed_trampoline<
       P: IsA<InputMethodContext>,
@@ -282,7 +226,7 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"preedit-changed\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           preedit_changed_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -290,8 +234,9 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_28", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+  #[cfg(feature = "v2_28")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_28")))]
+  #[doc(alias = "preedit-finished")]
   fn connect_preedit_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn preedit_finished_trampoline<
       P: IsA<InputMethodContext>,
@@ -308,7 +253,7 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"preedit-finished\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           preedit_finished_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -316,8 +261,9 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_28", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+  #[cfg(feature = "v2_28")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_28")))]
+  #[doc(alias = "preedit-started")]
   fn connect_preedit_started<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn preedit_started_trampoline<
       P: IsA<InputMethodContext>,
@@ -334,7 +280,7 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"preedit-started\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           preedit_started_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -342,8 +288,9 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_28", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+  #[cfg(feature = "v2_28")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_28")))]
+  #[doc(alias = "input-hints")]
   fn connect_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_input_hints_trampoline<
       P: IsA<InputMethodContext>,
@@ -361,7 +308,7 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::input-hints\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_input_hints_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -369,8 +316,9 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_28", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_28")))]
+  #[cfg(feature = "v2_28")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_28")))]
+  #[doc(alias = "input-purpose")]
   fn connect_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_input_purpose_trampoline<
       P: IsA<InputMethodContext>,
@@ -388,7 +336,7 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::input-purpose\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_input_purpose_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -397,8 +345,4 @@ impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {
   }
 }
 
-impl fmt::Display for InputMethodContext {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("InputMethodContext")
-  }
-}
+impl<O: IsA<InputMethodContext>> InputMethodContextExt for O {}

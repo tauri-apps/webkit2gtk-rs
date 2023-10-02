@@ -26,11 +26,8 @@ extern crate webkit2gtk;
 
 #[cfg(feature = "v2_4")]
 use glib::ToVariant;
-use gtk::{prelude::*, Inhibit, Window, WindowType};
-use webkit2gtk::{
-  traits::{SettingsExt, WebContextExt, WebViewExt},
-  WebContext, WebView,
-};
+use gtk::{prelude::*, Window, WindowType};
+use webkit2gtk::{SettingsExt, WebContext, WebContextExt, WebView, WebViewExt};
 #[cfg(feature = "v2_6")]
 use webkit2gtk::{UserContentManager, WebViewExtManual};
 
@@ -74,7 +71,7 @@ fn main() {
 
   window.connect_delete_event(|_, _| {
     gtk::main_quit();
-    Inhibit(false)
+    glib::Propagation::Proceed
   });
 
   gtk::main();

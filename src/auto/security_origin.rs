@@ -3,7 +3,6 @@
 // DO NOT EDIT
 
 use glib::translate::*;
-use std::fmt;
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -63,6 +62,7 @@ impl SecurityOrigin {
   }
 
   #[cfg_attr(feature = "v2_32", deprecated = "Since 2.32")]
+  #[allow(deprecated)]
   #[doc(alias = "webkit_security_origin_is_opaque")]
   pub fn is_opaque(&self) -> bool {
     unsafe { from_glib(ffi::webkit_security_origin_is_opaque(self.to_glib_none().0)) }
@@ -75,9 +75,9 @@ impl SecurityOrigin {
   }
 }
 
-impl fmt::Display for SecurityOrigin {
+impl std::fmt::Display for SecurityOrigin {
   #[inline]
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
     f.write_str(&self.to_str())
   }
 }

@@ -2,9 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use glib::object::IsA;
-use glib::translate::*;
-use std::fmt;
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "WebKitBackForwardListItem")]
@@ -19,21 +17,14 @@ impl BackForwardListItem {
   pub const NONE: Option<&'static BackForwardListItem> = None;
 }
 
-pub trait BackForwardListItemExt: 'static {
-  #[doc(alias = "webkit_back_forward_list_item_get_original_uri")]
-  #[doc(alias = "get_original_uri")]
-  fn original_uri(&self) -> Option<glib::GString>;
-
-  #[doc(alias = "webkit_back_forward_list_item_get_title")]
-  #[doc(alias = "get_title")]
-  fn title(&self) -> Option<glib::GString>;
-
-  #[doc(alias = "webkit_back_forward_list_item_get_uri")]
-  #[doc(alias = "get_uri")]
-  fn uri(&self) -> Option<glib::GString>;
+mod sealed {
+  pub trait Sealed {}
+  impl<T: super::IsA<super::BackForwardListItem>> Sealed for T {}
 }
 
-impl<O: IsA<BackForwardListItem>> BackForwardListItemExt for O {
+pub trait BackForwardListItemExt: IsA<BackForwardListItem> + sealed::Sealed + 'static {
+  #[doc(alias = "webkit_back_forward_list_item_get_original_uri")]
+  #[doc(alias = "get_original_uri")]
   fn original_uri(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_back_forward_list_item_get_original_uri(
@@ -42,6 +33,8 @@ impl<O: IsA<BackForwardListItem>> BackForwardListItemExt for O {
     }
   }
 
+  #[doc(alias = "webkit_back_forward_list_item_get_title")]
+  #[doc(alias = "get_title")]
   fn title(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_back_forward_list_item_get_title(
@@ -50,6 +43,8 @@ impl<O: IsA<BackForwardListItem>> BackForwardListItemExt for O {
     }
   }
 
+  #[doc(alias = "webkit_back_forward_list_item_get_uri")]
+  #[doc(alias = "get_uri")]
   fn uri(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_back_forward_list_item_get_uri(
@@ -59,8 +54,4 @@ impl<O: IsA<BackForwardListItem>> BackForwardListItemExt for O {
   }
 }
 
-impl fmt::Display for BackForwardListItem {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("BackForwardListItem")
-  }
-}
+impl<O: IsA<BackForwardListItem>> BackForwardListItemExt for O {}

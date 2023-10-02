@@ -3,15 +3,12 @@
 // DO NOT EDIT
 
 use crate::PermissionRequest;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
+use glib::{
+  prelude::*,
+  signal::{connect_raw, SignalHandlerId},
+  translate::*,
+};
 use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
 
 glib::wrapper! {
     #[doc(alias = "WebKitUserMediaPermissionRequest")]
@@ -26,43 +23,31 @@ impl UserMediaPermissionRequest {
   pub const NONE: Option<&'static UserMediaPermissionRequest> = None;
 }
 
-pub trait UserMediaPermissionRequestExt: 'static {
-  #[cfg(any(feature = "v2_8", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
-  #[doc(alias = "is-for-audio-device")]
-  fn is_for_audio_device(&self) -> bool;
-
-  #[cfg(any(feature = "v2_8", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
-  #[doc(alias = "is-for-video-device")]
-  fn is_for_video_device(&self) -> bool;
-
-  #[cfg(any(feature = "v2_8", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
-  #[doc(alias = "is-for-audio-device")]
-  fn connect_is_for_audio_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[cfg(any(feature = "v2_8", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
-  #[doc(alias = "is-for-video-device")]
-  fn connect_is_for_video_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+  pub trait Sealed {}
+  impl<T: super::IsA<super::UserMediaPermissionRequest>> Sealed for T {}
 }
 
-impl<O: IsA<UserMediaPermissionRequest>> UserMediaPermissionRequestExt for O {
-  #[cfg(any(feature = "v2_8", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+pub trait UserMediaPermissionRequestExt:
+  IsA<UserMediaPermissionRequest> + sealed::Sealed + 'static
+{
+  #[cfg(feature = "v2_8")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_8")))]
+  #[doc(alias = "is-for-audio-device")]
   fn is_for_audio_device(&self) -> bool {
-    glib::ObjectExt::property(self.as_ref(), "is-for-audio-device")
+    ObjectExt::property(self.as_ref(), "is-for-audio-device")
   }
 
-  #[cfg(any(feature = "v2_8", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+  #[cfg(feature = "v2_8")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_8")))]
+  #[doc(alias = "is-for-video-device")]
   fn is_for_video_device(&self) -> bool {
-    glib::ObjectExt::property(self.as_ref(), "is-for-video-device")
+    ObjectExt::property(self.as_ref(), "is-for-video-device")
   }
 
-  #[cfg(any(feature = "v2_8", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+  #[cfg(feature = "v2_8")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_8")))]
+  #[doc(alias = "is-for-audio-device")]
   fn connect_is_for_audio_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_is_for_audio_device_trampoline<
       P: IsA<UserMediaPermissionRequest>,
@@ -80,7 +65,7 @@ impl<O: IsA<UserMediaPermissionRequest>> UserMediaPermissionRequestExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::is-for-audio-device\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_is_for_audio_device_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -88,8 +73,9 @@ impl<O: IsA<UserMediaPermissionRequest>> UserMediaPermissionRequestExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_8", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+  #[cfg(feature = "v2_8")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_8")))]
+  #[doc(alias = "is-for-video-device")]
   fn connect_is_for_video_device_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_is_for_video_device_trampoline<
       P: IsA<UserMediaPermissionRequest>,
@@ -107,7 +93,7 @@ impl<O: IsA<UserMediaPermissionRequest>> UserMediaPermissionRequestExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::is-for-video-device\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_is_for_video_device_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -116,8 +102,4 @@ impl<O: IsA<UserMediaPermissionRequest>> UserMediaPermissionRequestExt for O {
   }
 }
 
-impl fmt::Display for UserMediaPermissionRequest {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("UserMediaPermissionRequest")
-  }
-}
+impl<O: IsA<UserMediaPermissionRequest>> UserMediaPermissionRequestExt for O {}

@@ -2,21 +2,16 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+#[cfg(feature = "v2_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v2_16")))]
 use crate::PrintCustomWidget;
-use crate::PrintOperationResponse;
-use crate::WebView;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
+use crate::{PrintOperationResponse, WebView};
+use glib::{
+  prelude::*,
+  signal::{connect_raw, SignalHandlerId},
+  translate::*,
+};
 use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
 
 glib::wrapper! {
     #[doc(alias = "WebKitPrintOperation")]
@@ -45,115 +40,68 @@ impl PrintOperation {
   ///
   /// This method returns an instance of [`PrintOperationBuilder`](crate::builders::PrintOperationBuilder) which can be used to create [`PrintOperation`] objects.
   pub fn builder() -> PrintOperationBuilder {
-    PrintOperationBuilder::default()
+    PrintOperationBuilder::new()
   }
 }
 
 impl Default for PrintOperation {
   fn default() -> Self {
-    glib::object::Object::new::<Self>(&[])
+    glib::object::Object::new::<Self>()
   }
 }
 
-#[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
 /// A [builder-pattern] type to construct [`PrintOperation`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
 pub struct PrintOperationBuilder {
-  page_setup: Option<gtk::PageSetup>,
-  print_settings: Option<gtk::PrintSettings>,
-  web_view: Option<WebView>,
+  builder: glib::object::ObjectBuilder<'static, PrintOperation>,
 }
 
 impl PrintOperationBuilder {
-  // rustdoc-stripper-ignore-next
-  /// Create a new [`PrintOperationBuilder`].
-  pub fn new() -> Self {
-    Self::default()
+  fn new() -> Self {
+    Self {
+      builder: glib::object::Object::builder(),
+    }
+  }
+
+  pub fn page_setup(self, page_setup: &gtk::PageSetup) -> Self {
+    Self {
+      builder: self.builder.property("page-setup", page_setup.clone()),
+    }
+  }
+
+  pub fn print_settings(self, print_settings: &gtk::PrintSettings) -> Self {
+    Self {
+      builder: self
+        .builder
+        .property("print-settings", print_settings.clone()),
+    }
+  }
+
+  pub fn web_view(self, web_view: &impl IsA<WebView>) -> Self {
+    Self {
+      builder: self.builder.property("web-view", web_view.clone().upcast()),
+    }
   }
 
   // rustdoc-stripper-ignore-next
   /// Build the [`PrintOperation`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> PrintOperation {
-    let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-    if let Some(ref page_setup) = self.page_setup {
-      properties.push(("page-setup", page_setup));
-    }
-    if let Some(ref print_settings) = self.print_settings {
-      properties.push(("print-settings", print_settings));
-    }
-    if let Some(ref web_view) = self.web_view {
-      properties.push(("web-view", web_view));
-    }
-    glib::Object::new::<PrintOperation>(&properties)
-  }
-
-  pub fn page_setup(mut self, page_setup: &gtk::PageSetup) -> Self {
-    self.page_setup = Some(page_setup.clone());
-    self
-  }
-
-  pub fn print_settings(mut self, print_settings: &gtk::PrintSettings) -> Self {
-    self.print_settings = Some(print_settings.clone());
-    self
-  }
-
-  pub fn web_view(mut self, web_view: &impl IsA<WebView>) -> Self {
-    self.web_view = Some(web_view.clone().upcast());
-    self
+    self.builder.build()
   }
 }
 
-pub trait PrintOperationExt: 'static {
+mod sealed {
+  pub trait Sealed {}
+  impl<T: super::IsA<super::PrintOperation>> Sealed for T {}
+}
+
+pub trait PrintOperationExt: IsA<PrintOperation> + sealed::Sealed + 'static {
   #[doc(alias = "webkit_print_operation_get_page_setup")]
   #[doc(alias = "get_page_setup")]
-  fn page_setup(&self) -> Option<gtk::PageSetup>;
-
-  #[doc(alias = "webkit_print_operation_get_print_settings")]
-  #[doc(alias = "get_print_settings")]
-  fn print_settings(&self) -> Option<gtk::PrintSettings>;
-
-  #[doc(alias = "webkit_print_operation_print")]
-  fn print(&self);
-
-  #[doc(alias = "webkit_print_operation_run_dialog")]
-  fn run_dialog(&self, parent: Option<&impl IsA<gtk::Window>>) -> PrintOperationResponse;
-
-  #[doc(alias = "webkit_print_operation_set_page_setup")]
-  fn set_page_setup(&self, page_setup: &gtk::PageSetup);
-
-  #[doc(alias = "webkit_print_operation_set_print_settings")]
-  fn set_print_settings(&self, print_settings: &gtk::PrintSettings);
-
-  #[doc(alias = "web-view")]
-  fn web_view(&self) -> Option<WebView>;
-
-  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
-  #[cfg(any(feature = "v2_16", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
-  #[doc(alias = "create-custom-widget")]
-  fn connect_create_custom_widget<F: Fn(&Self) -> PrintCustomWidget + 'static>(
-    &self,
-    f: F,
-  ) -> SignalHandlerId;
-
-  #[doc(alias = "failed")]
-  fn connect_failed<F: Fn(&Self, &glib::Error) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[doc(alias = "finished")]
-  fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[doc(alias = "page-setup")]
-  fn connect_page_setup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[doc(alias = "print-settings")]
-  fn connect_print_settings_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<PrintOperation>> PrintOperationExt for O {
   fn page_setup(&self) -> Option<gtk::PageSetup> {
     unsafe {
       from_glib_none(ffi::webkit_print_operation_get_page_setup(
@@ -162,6 +110,8 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     }
   }
 
+  #[doc(alias = "webkit_print_operation_get_print_settings")]
+  #[doc(alias = "get_print_settings")]
   fn print_settings(&self) -> Option<gtk::PrintSettings> {
     unsafe {
       from_glib_none(ffi::webkit_print_operation_get_print_settings(
@@ -170,12 +120,14 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     }
   }
 
+  #[doc(alias = "webkit_print_operation_print")]
   fn print(&self) {
     unsafe {
       ffi::webkit_print_operation_print(self.as_ref().to_glib_none().0);
     }
   }
 
+  #[doc(alias = "webkit_print_operation_run_dialog")]
   fn run_dialog(&self, parent: Option<&impl IsA<gtk::Window>>) -> PrintOperationResponse {
     unsafe {
       from_glib(ffi::webkit_print_operation_run_dialog(
@@ -185,6 +137,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     }
   }
 
+  #[doc(alias = "webkit_print_operation_set_page_setup")]
   fn set_page_setup(&self, page_setup: &gtk::PageSetup) {
     unsafe {
       ffi::webkit_print_operation_set_page_setup(
@@ -194,6 +147,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     }
   }
 
+  #[doc(alias = "webkit_print_operation_set_print_settings")]
   fn set_print_settings(&self, print_settings: &gtk::PrintSettings) {
     unsafe {
       ffi::webkit_print_operation_set_print_settings(
@@ -203,12 +157,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     }
   }
 
+  #[doc(alias = "web-view")]
   fn web_view(&self) -> Option<WebView> {
-    glib::ObjectExt::property(self.as_ref(), "web-view")
+    ObjectExt::property(self.as_ref(), "web-view")
   }
 
-  #[cfg(any(feature = "v2_16", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+  #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
+  #[cfg(feature = "v2_16")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_16")))]
+  #[doc(alias = "create-custom-widget")]
   fn connect_create_custom_widget<F: Fn(&Self) -> PrintCustomWidget + 'static>(
     &self,
     f: F,
@@ -228,7 +185,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"create-custom-widget\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           create_custom_widget_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -236,6 +193,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     }
   }
 
+  #[doc(alias = "failed")]
   fn connect_failed<F: Fn(&Self, &glib::Error) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn failed_trampoline<
       P: IsA<PrintOperation>,
@@ -256,7 +214,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"failed\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           failed_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -264,6 +222,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     }
   }
 
+  #[doc(alias = "finished")]
   fn connect_finished<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn finished_trampoline<P: IsA<PrintOperation>, F: Fn(&P) + 'static>(
       this: *mut ffi::WebKitPrintOperation,
@@ -277,7 +236,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"finished\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           finished_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -285,6 +244,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     }
   }
 
+  #[doc(alias = "page-setup")]
   fn connect_page_setup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_page_setup_trampoline<
       P: IsA<PrintOperation>,
@@ -302,7 +262,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::page-setup\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_page_setup_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -310,6 +270,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     }
   }
 
+  #[doc(alias = "print-settings")]
   fn connect_print_settings_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_print_settings_trampoline<
       P: IsA<PrintOperation>,
@@ -327,7 +288,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::print-settings\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_print_settings_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -336,8 +297,4 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
   }
 }
 
-impl fmt::Display for PrintOperation {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("PrintOperation")
-  }
-}
+impl<O: IsA<PrintOperation>> PrintOperationExt for O {}

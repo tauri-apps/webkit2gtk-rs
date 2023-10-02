@@ -2,12 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
-use std::fmt;
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "WebKitHitTestResult")]
@@ -26,136 +21,77 @@ impl HitTestResult {
   ///
   /// This method returns an instance of [`HitTestResultBuilder`](crate::builders::HitTestResultBuilder) which can be used to create [`HitTestResult`] objects.
   pub fn builder() -> HitTestResultBuilder {
-    HitTestResultBuilder::default()
+    HitTestResultBuilder::new()
   }
 }
 
-#[derive(Clone, Default)]
 // rustdoc-stripper-ignore-next
 /// A [builder-pattern] type to construct [`HitTestResult`] objects.
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
 pub struct HitTestResultBuilder {
-  context: Option<u32>,
-  image_uri: Option<String>,
-  link_label: Option<String>,
-  link_title: Option<String>,
-  link_uri: Option<String>,
-  media_uri: Option<String>,
+  builder: glib::object::ObjectBuilder<'static, HitTestResult>,
 }
 
 impl HitTestResultBuilder {
-  // rustdoc-stripper-ignore-next
-  /// Create a new [`HitTestResultBuilder`].
-  pub fn new() -> Self {
-    Self::default()
+  fn new() -> Self {
+    Self {
+      builder: glib::object::Object::builder(),
+    }
+  }
+
+  pub fn context(self, context: u32) -> Self {
+    Self {
+      builder: self.builder.property("context", context),
+    }
+  }
+
+  pub fn image_uri(self, image_uri: impl Into<glib::GString>) -> Self {
+    Self {
+      builder: self.builder.property("image-uri", image_uri.into()),
+    }
+  }
+
+  pub fn link_label(self, link_label: impl Into<glib::GString>) -> Self {
+    Self {
+      builder: self.builder.property("link-label", link_label.into()),
+    }
+  }
+
+  pub fn link_title(self, link_title: impl Into<glib::GString>) -> Self {
+    Self {
+      builder: self.builder.property("link-title", link_title.into()),
+    }
+  }
+
+  pub fn link_uri(self, link_uri: impl Into<glib::GString>) -> Self {
+    Self {
+      builder: self.builder.property("link-uri", link_uri.into()),
+    }
+  }
+
+  pub fn media_uri(self, media_uri: impl Into<glib::GString>) -> Self {
+    Self {
+      builder: self.builder.property("media-uri", media_uri.into()),
+    }
   }
 
   // rustdoc-stripper-ignore-next
   /// Build the [`HitTestResult`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> HitTestResult {
-    let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-    if let Some(ref context) = self.context {
-      properties.push(("context", context));
-    }
-    if let Some(ref image_uri) = self.image_uri {
-      properties.push(("image-uri", image_uri));
-    }
-    if let Some(ref link_label) = self.link_label {
-      properties.push(("link-label", link_label));
-    }
-    if let Some(ref link_title) = self.link_title {
-      properties.push(("link-title", link_title));
-    }
-    if let Some(ref link_uri) = self.link_uri {
-      properties.push(("link-uri", link_uri));
-    }
-    if let Some(ref media_uri) = self.media_uri {
-      properties.push(("media-uri", media_uri));
-    }
-    glib::Object::new::<HitTestResult>(&properties)
-  }
-
-  pub fn context(mut self, context: u32) -> Self {
-    self.context = Some(context);
-    self
-  }
-
-  pub fn image_uri(mut self, image_uri: &str) -> Self {
-    self.image_uri = Some(image_uri.to_string());
-    self
-  }
-
-  pub fn link_label(mut self, link_label: &str) -> Self {
-    self.link_label = Some(link_label.to_string());
-    self
-  }
-
-  pub fn link_title(mut self, link_title: &str) -> Self {
-    self.link_title = Some(link_title.to_string());
-    self
-  }
-
-  pub fn link_uri(mut self, link_uri: &str) -> Self {
-    self.link_uri = Some(link_uri.to_string());
-    self
-  }
-
-  pub fn media_uri(mut self, media_uri: &str) -> Self {
-    self.media_uri = Some(media_uri.to_string());
-    self
+    self.builder.build()
   }
 }
 
-pub trait HitTestResultExt: 'static {
+mod sealed {
+  pub trait Sealed {}
+  impl<T: super::IsA<super::HitTestResult>> Sealed for T {}
+}
+
+pub trait HitTestResultExt: IsA<HitTestResult> + sealed::Sealed + 'static {
   #[doc(alias = "webkit_hit_test_result_context_is_editable")]
-  fn context_is_editable(&self) -> bool;
-
-  #[doc(alias = "webkit_hit_test_result_context_is_image")]
-  fn context_is_image(&self) -> bool;
-
-  #[doc(alias = "webkit_hit_test_result_context_is_link")]
-  fn context_is_link(&self) -> bool;
-
-  #[doc(alias = "webkit_hit_test_result_context_is_media")]
-  fn context_is_media(&self) -> bool;
-
-  #[doc(alias = "webkit_hit_test_result_context_is_scrollbar")]
-  fn context_is_scrollbar(&self) -> bool;
-
-  #[cfg(any(feature = "v2_8", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
-  #[doc(alias = "webkit_hit_test_result_context_is_selection")]
-  fn context_is_selection(&self) -> bool;
-
-  #[doc(alias = "webkit_hit_test_result_get_context")]
-  #[doc(alias = "get_context")]
-  fn context(&self) -> u32;
-
-  #[doc(alias = "webkit_hit_test_result_get_image_uri")]
-  #[doc(alias = "get_image_uri")]
-  fn image_uri(&self) -> Option<glib::GString>;
-
-  #[doc(alias = "webkit_hit_test_result_get_link_label")]
-  #[doc(alias = "get_link_label")]
-  fn link_label(&self) -> Option<glib::GString>;
-
-  #[doc(alias = "webkit_hit_test_result_get_link_title")]
-  #[doc(alias = "get_link_title")]
-  fn link_title(&self) -> Option<glib::GString>;
-
-  #[doc(alias = "webkit_hit_test_result_get_link_uri")]
-  #[doc(alias = "get_link_uri")]
-  fn link_uri(&self) -> Option<glib::GString>;
-
-  #[doc(alias = "webkit_hit_test_result_get_media_uri")]
-  #[doc(alias = "get_media_uri")]
-  fn media_uri(&self) -> Option<glib::GString>;
-}
-
-impl<O: IsA<HitTestResult>> HitTestResultExt for O {
   fn context_is_editable(&self) -> bool {
     unsafe {
       from_glib(ffi::webkit_hit_test_result_context_is_editable(
@@ -164,6 +100,7 @@ impl<O: IsA<HitTestResult>> HitTestResultExt for O {
     }
   }
 
+  #[doc(alias = "webkit_hit_test_result_context_is_image")]
   fn context_is_image(&self) -> bool {
     unsafe {
       from_glib(ffi::webkit_hit_test_result_context_is_image(
@@ -172,6 +109,7 @@ impl<O: IsA<HitTestResult>> HitTestResultExt for O {
     }
   }
 
+  #[doc(alias = "webkit_hit_test_result_context_is_link")]
   fn context_is_link(&self) -> bool {
     unsafe {
       from_glib(ffi::webkit_hit_test_result_context_is_link(
@@ -180,6 +118,7 @@ impl<O: IsA<HitTestResult>> HitTestResultExt for O {
     }
   }
 
+  #[doc(alias = "webkit_hit_test_result_context_is_media")]
   fn context_is_media(&self) -> bool {
     unsafe {
       from_glib(ffi::webkit_hit_test_result_context_is_media(
@@ -188,6 +127,7 @@ impl<O: IsA<HitTestResult>> HitTestResultExt for O {
     }
   }
 
+  #[doc(alias = "webkit_hit_test_result_context_is_scrollbar")]
   fn context_is_scrollbar(&self) -> bool {
     unsafe {
       from_glib(ffi::webkit_hit_test_result_context_is_scrollbar(
@@ -196,8 +136,9 @@ impl<O: IsA<HitTestResult>> HitTestResultExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_8", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_8")))]
+  #[cfg(feature = "v2_8")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_8")))]
+  #[doc(alias = "webkit_hit_test_result_context_is_selection")]
   fn context_is_selection(&self) -> bool {
     unsafe {
       from_glib(ffi::webkit_hit_test_result_context_is_selection(
@@ -206,10 +147,14 @@ impl<O: IsA<HitTestResult>> HitTestResultExt for O {
     }
   }
 
+  #[doc(alias = "webkit_hit_test_result_get_context")]
+  #[doc(alias = "get_context")]
   fn context(&self) -> u32 {
     unsafe { ffi::webkit_hit_test_result_get_context(self.as_ref().to_glib_none().0) }
   }
 
+  #[doc(alias = "webkit_hit_test_result_get_image_uri")]
+  #[doc(alias = "get_image_uri")]
   fn image_uri(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_hit_test_result_get_image_uri(
@@ -218,6 +163,8 @@ impl<O: IsA<HitTestResult>> HitTestResultExt for O {
     }
   }
 
+  #[doc(alias = "webkit_hit_test_result_get_link_label")]
+  #[doc(alias = "get_link_label")]
   fn link_label(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_hit_test_result_get_link_label(
@@ -226,6 +173,8 @@ impl<O: IsA<HitTestResult>> HitTestResultExt for O {
     }
   }
 
+  #[doc(alias = "webkit_hit_test_result_get_link_title")]
+  #[doc(alias = "get_link_title")]
   fn link_title(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_hit_test_result_get_link_title(
@@ -234,6 +183,8 @@ impl<O: IsA<HitTestResult>> HitTestResultExt for O {
     }
   }
 
+  #[doc(alias = "webkit_hit_test_result_get_link_uri")]
+  #[doc(alias = "get_link_uri")]
   fn link_uri(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_hit_test_result_get_link_uri(
@@ -242,6 +193,8 @@ impl<O: IsA<HitTestResult>> HitTestResultExt for O {
     }
   }
 
+  #[doc(alias = "webkit_hit_test_result_get_media_uri")]
+  #[doc(alias = "get_media_uri")]
   fn media_uri(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_hit_test_result_get_media_uri(
@@ -251,8 +204,4 @@ impl<O: IsA<HitTestResult>> HitTestResultExt for O {
   }
 }
 
-impl fmt::Display for HitTestResult {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("HitTestResult")
-  }
-}
+impl<O: IsA<HitTestResult>> HitTestResultExt for O {}

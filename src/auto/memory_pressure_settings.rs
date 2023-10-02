@@ -96,8 +96,8 @@ impl MemoryPressureSettings {
   }
 }
 
-#[cfg(any(feature = "v2_34", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_34")))]
+#[cfg(feature = "v2_34")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v2_34")))]
 impl Default for MemoryPressureSettings {
   fn default() -> Self {
     Self::new()

@@ -2,16 +2,12 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
-use std::pin::Pin;
-use std::ptr;
+use glib::{
+  prelude::*,
+  signal::{connect_raw, SignalHandlerId},
+  translate::*,
+};
+use std::{boxed::Box as Box_, pin::Pin};
 
 glib::wrapper! {
     #[doc(alias = "WebKitFaviconDatabase")]
@@ -26,39 +22,21 @@ impl FaviconDatabase {
   pub const NONE: Option<&'static FaviconDatabase> = None;
 }
 
-pub trait FaviconDatabaseExt: 'static {
-  #[doc(alias = "webkit_favicon_database_clear")]
-  fn clear(&self);
-
-  #[doc(alias = "webkit_favicon_database_get_favicon")]
-  #[doc(alias = "get_favicon")]
-  fn favicon<P: FnOnce(Result<cairo::Surface, glib::Error>) + 'static>(
-    &self,
-    page_uri: &str,
-    cancellable: Option<&impl IsA<gio::Cancellable>>,
-    callback: P,
-  );
-
-  fn favicon_future(
-    &self,
-    page_uri: &str,
-  ) -> Pin<Box_<dyn std::future::Future<Output = Result<cairo::Surface, glib::Error>> + 'static>>;
-
-  #[doc(alias = "webkit_favicon_database_get_favicon_uri")]
-  #[doc(alias = "get_favicon_uri")]
-  fn favicon_uri(&self, page_uri: &str) -> Option<glib::GString>;
-
-  #[doc(alias = "favicon-changed")]
-  fn connect_favicon_changed<F: Fn(&Self, &str, &str) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+  pub trait Sealed {}
+  impl<T: super::IsA<super::FaviconDatabase>> Sealed for T {}
 }
 
-impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
+pub trait FaviconDatabaseExt: IsA<FaviconDatabase> + sealed::Sealed + 'static {
+  #[doc(alias = "webkit_favicon_database_clear")]
   fn clear(&self) {
     unsafe {
       ffi::webkit_favicon_database_clear(self.as_ref().to_glib_none().0);
     }
   }
 
+  #[doc(alias = "webkit_favicon_database_get_favicon")]
+  #[doc(alias = "get_favicon")]
   fn favicon<P: FnOnce(Result<cairo::Surface, glib::Error>) + 'static>(
     &self,
     page_uri: &str,
@@ -84,7 +62,7 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
     ) {
-      let mut error = ptr::null_mut();
+      let mut error = std::ptr::null_mut();
       let ret =
         ffi::webkit_favicon_database_get_favicon_finish(_source_object as *mut _, res, &mut error);
       let result = if error.is_null() {
@@ -121,6 +99,8 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
     }))
   }
 
+  #[doc(alias = "webkit_favicon_database_get_favicon_uri")]
+  #[doc(alias = "get_favicon_uri")]
   fn favicon_uri(&self, page_uri: &str) -> Option<glib::GString> {
     unsafe {
       from_glib_full(ffi::webkit_favicon_database_get_favicon_uri(
@@ -130,6 +110,7 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
     }
   }
 
+  #[doc(alias = "favicon-changed")]
   fn connect_favicon_changed<F: Fn(&Self, &str, &str) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn favicon_changed_trampoline<
       P: IsA<FaviconDatabase>,
@@ -152,7 +133,7 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"favicon-changed\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           favicon_changed_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -161,8 +142,4 @@ impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {
   }
 }
 
-impl fmt::Display for FaviconDatabase {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("FaviconDatabase")
-  }
-}
+impl<O: IsA<FaviconDatabase>> FaviconDatabaseExt for O {}

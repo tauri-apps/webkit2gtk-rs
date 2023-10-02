@@ -2,14 +2,12 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
+use glib::{
+  prelude::*,
+  signal::{connect_raw, SignalHandlerId},
+  translate::*,
+};
 use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
 
 glib::wrapper! {
     #[doc(alias = "WebKitURIResponse")]
@@ -24,61 +22,22 @@ impl URIResponse {
   pub const NONE: Option<&'static URIResponse> = None;
 }
 
-pub trait URIResponseExt: 'static {
-  #[doc(alias = "webkit_uri_response_get_content_length")]
-  #[doc(alias = "get_content_length")]
-  fn content_length(&self) -> u64;
-
-  #[cfg(any(feature = "v2_6", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
-  #[doc(alias = "webkit_uri_response_get_http_headers")]
-  #[doc(alias = "get_http_headers")]
-  fn http_headers(&self) -> Option<soup::MessageHeaders>;
-
-  #[doc(alias = "webkit_uri_response_get_mime_type")]
-  #[doc(alias = "get_mime_type")]
-  fn mime_type(&self) -> Option<glib::GString>;
-
-  #[doc(alias = "webkit_uri_response_get_status_code")]
-  #[doc(alias = "get_status_code")]
-  fn status_code(&self) -> u32;
-
-  #[doc(alias = "webkit_uri_response_get_suggested_filename")]
-  #[doc(alias = "get_suggested_filename")]
-  fn suggested_filename(&self) -> Option<glib::GString>;
-
-  #[doc(alias = "webkit_uri_response_get_uri")]
-  #[doc(alias = "get_uri")]
-  fn uri(&self) -> Option<glib::GString>;
-
-  #[doc(alias = "content-length")]
-  fn connect_content_length_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[cfg(any(feature = "v2_6", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
-  #[doc(alias = "http-headers")]
-  fn connect_http_headers_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[doc(alias = "mime-type")]
-  fn connect_mime_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[doc(alias = "status-code")]
-  fn connect_status_code_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[doc(alias = "suggested-filename")]
-  fn connect_suggested_filename_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[doc(alias = "uri")]
-  fn connect_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+  pub trait Sealed {}
+  impl<T: super::IsA<super::URIResponse>> Sealed for T {}
 }
 
-impl<O: IsA<URIResponse>> URIResponseExt for O {
+pub trait URIResponseExt: IsA<URIResponse> + sealed::Sealed + 'static {
+  #[doc(alias = "webkit_uri_response_get_content_length")]
+  #[doc(alias = "get_content_length")]
   fn content_length(&self) -> u64 {
     unsafe { ffi::webkit_uri_response_get_content_length(self.as_ref().to_glib_none().0) }
   }
 
-  #[cfg(any(feature = "v2_6", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+  #[cfg(feature = "v2_6")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_6")))]
+  #[doc(alias = "webkit_uri_response_get_http_headers")]
+  #[doc(alias = "get_http_headers")]
   fn http_headers(&self) -> Option<soup::MessageHeaders> {
     unsafe {
       from_glib_none(ffi::webkit_uri_response_get_http_headers(
@@ -87,6 +46,8 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
     }
   }
 
+  #[doc(alias = "webkit_uri_response_get_mime_type")]
+  #[doc(alias = "get_mime_type")]
   fn mime_type(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_uri_response_get_mime_type(
@@ -95,10 +56,14 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
     }
   }
 
+  #[doc(alias = "webkit_uri_response_get_status_code")]
+  #[doc(alias = "get_status_code")]
   fn status_code(&self) -> u32 {
     unsafe { ffi::webkit_uri_response_get_status_code(self.as_ref().to_glib_none().0) }
   }
 
+  #[doc(alias = "webkit_uri_response_get_suggested_filename")]
+  #[doc(alias = "get_suggested_filename")]
   fn suggested_filename(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_uri_response_get_suggested_filename(
@@ -107,6 +72,8 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
     }
   }
 
+  #[doc(alias = "webkit_uri_response_get_uri")]
+  #[doc(alias = "get_uri")]
   fn uri(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_uri_response_get_uri(
@@ -115,6 +82,7 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
     }
   }
 
+  #[doc(alias = "content-length")]
   fn connect_content_length_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_content_length_trampoline<
       P: IsA<URIResponse>,
@@ -132,7 +100,7 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::content-length\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_content_length_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -140,8 +108,9 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_6", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+  #[cfg(feature = "v2_6")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_6")))]
+  #[doc(alias = "http-headers")]
   fn connect_http_headers_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_http_headers_trampoline<
       P: IsA<URIResponse>,
@@ -159,7 +128,7 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::http-headers\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_http_headers_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -167,6 +136,7 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
     }
   }
 
+  #[doc(alias = "mime-type")]
   fn connect_mime_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_mime_type_trampoline<P: IsA<URIResponse>, F: Fn(&P) + 'static>(
       this: *mut ffi::WebKitURIResponse,
@@ -181,7 +151,7 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::mime-type\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_mime_type_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -189,6 +159,7 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
     }
   }
 
+  #[doc(alias = "status-code")]
   fn connect_status_code_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_status_code_trampoline<P: IsA<URIResponse>, F: Fn(&P) + 'static>(
       this: *mut ffi::WebKitURIResponse,
@@ -203,7 +174,7 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::status-code\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_status_code_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -211,6 +182,7 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
     }
   }
 
+  #[doc(alias = "suggested-filename")]
   fn connect_suggested_filename_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_suggested_filename_trampoline<
       P: IsA<URIResponse>,
@@ -228,7 +200,7 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::suggested-filename\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_suggested_filename_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -236,6 +208,7 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
     }
   }
 
+  #[doc(alias = "uri")]
   fn connect_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_uri_trampoline<P: IsA<URIResponse>, F: Fn(&P) + 'static>(
       this: *mut ffi::WebKitURIResponse,
@@ -250,7 +223,7 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::uri\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_uri_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -259,8 +232,4 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
   }
 }
 
-impl fmt::Display for URIResponse {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("URIResponse")
-  }
-}
+impl<O: IsA<URIResponse>> URIResponseExt for O {}

@@ -3,9 +3,9 @@
 // DO NOT EDIT
 
 use crate::CredentialPersistence;
-#[cfg(any(feature = "v2_34", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_34")))]
-use glib::object::IsA;
+#[cfg(feature = "v2_34")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v2_34")))]
+use glib::prelude::*;
 use glib::translate::*;
 
 glib::wrapper! {
@@ -32,8 +32,8 @@ impl Credential {
     }
   }
 
-  #[cfg(any(feature = "v2_34", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_34")))]
+  #[cfg(feature = "v2_34")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_34")))]
   #[doc(alias = "webkit_credential_new_for_certificate")]
   #[doc(alias = "new_for_certificate")]
   pub fn for_certificate(
@@ -49,8 +49,8 @@ impl Credential {
     }
   }
 
-  #[cfg(any(feature = "v2_34", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_34")))]
+  #[cfg(feature = "v2_34")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_34")))]
   #[doc(alias = "webkit_credential_new_for_certificate_pin")]
   #[doc(alias = "new_for_certificate_pin")]
   pub fn for_certificate_pin(pin: &str, persistence: CredentialPersistence) -> Credential {
@@ -63,8 +63,8 @@ impl Credential {
     }
   }
 
-  #[cfg(any(feature = "v2_34", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_34")))]
+  #[cfg(feature = "v2_34")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_34")))]
   #[doc(alias = "webkit_credential_get_certificate")]
   #[doc(alias = "get_certificate")]
   pub fn certificate(&mut self) -> Option<gio::TlsCertificate> {

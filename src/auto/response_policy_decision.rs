@@ -2,17 +2,13 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::PolicyDecision;
-use crate::URIRequest;
-use crate::URIResponse;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
+use crate::{PolicyDecision, URIRequest, URIResponse};
+use glib::{
+  prelude::*,
+  signal::{connect_raw, SignalHandlerId},
+  translate::*,
+};
 use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
 
 glib::wrapper! {
     #[doc(alias = "WebKitResponsePolicyDecision")]
@@ -27,33 +23,16 @@ impl ResponsePolicyDecision {
   pub const NONE: Option<&'static ResponsePolicyDecision> = None;
 }
 
-pub trait ResponsePolicyDecisionExt: 'static {
-  #[doc(alias = "webkit_response_policy_decision_get_request")]
-  #[doc(alias = "get_request")]
-  fn request(&self) -> Option<URIRequest>;
-
-  #[doc(alias = "webkit_response_policy_decision_get_response")]
-  #[doc(alias = "get_response")]
-  fn response(&self) -> Option<URIResponse>;
-
-  #[cfg(any(feature = "v2_40", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
-  #[doc(alias = "webkit_response_policy_decision_is_main_frame_main_resource")]
-  fn is_main_frame_main_resource(&self) -> bool;
-
-  #[cfg(any(feature = "v2_4", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
-  #[doc(alias = "webkit_response_policy_decision_is_mime_type_supported")]
-  fn is_mime_type_supported(&self) -> bool;
-
-  #[doc(alias = "request")]
-  fn connect_request_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-  #[doc(alias = "response")]
-  fn connect_response_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+mod sealed {
+  pub trait Sealed {}
+  impl<T: super::IsA<super::ResponsePolicyDecision>> Sealed for T {}
 }
 
-impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
+pub trait ResponsePolicyDecisionExt:
+  IsA<ResponsePolicyDecision> + sealed::Sealed + 'static
+{
+  #[doc(alias = "webkit_response_policy_decision_get_request")]
+  #[doc(alias = "get_request")]
   fn request(&self) -> Option<URIRequest> {
     unsafe {
       from_glib_none(ffi::webkit_response_policy_decision_get_request(
@@ -62,6 +41,8 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
     }
   }
 
+  #[doc(alias = "webkit_response_policy_decision_get_response")]
+  #[doc(alias = "get_response")]
   fn response(&self) -> Option<URIResponse> {
     unsafe {
       from_glib_none(ffi::webkit_response_policy_decision_get_response(
@@ -70,8 +51,9 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_40", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_40")))]
+  #[cfg(feature = "v2_40")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_40")))]
+  #[doc(alias = "webkit_response_policy_decision_is_main_frame_main_resource")]
   fn is_main_frame_main_resource(&self) -> bool {
     unsafe {
       from_glib(
@@ -82,8 +64,9 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
     }
   }
 
-  #[cfg(any(feature = "v2_4", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_4")))]
+  #[cfg(feature = "v2_4")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_4")))]
+  #[doc(alias = "webkit_response_policy_decision_is_mime_type_supported")]
   fn is_mime_type_supported(&self) -> bool {
     unsafe {
       from_glib(ffi::webkit_response_policy_decision_is_mime_type_supported(
@@ -92,6 +75,7 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
     }
   }
 
+  #[doc(alias = "request")]
   fn connect_request_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_request_trampoline<
       P: IsA<ResponsePolicyDecision>,
@@ -109,7 +93,7 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::request\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_request_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -117,6 +101,7 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
     }
   }
 
+  #[doc(alias = "response")]
   fn connect_response_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn notify_response_trampoline<
       P: IsA<ResponsePolicyDecision>,
@@ -134,7 +119,7 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
       connect_raw(
         self.as_ptr() as *mut _,
         b"notify::response\0".as_ptr() as *const _,
-        Some(transmute::<_, unsafe extern "C" fn()>(
+        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
           notify_response_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -143,8 +128,4 @@ impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {
   }
 }
 
-impl fmt::Display for ResponsePolicyDecision {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("ResponsePolicyDecision")
-  }
-}
+impl<O: IsA<ResponsePolicyDecision>> ResponsePolicyDecisionExt for O {}
