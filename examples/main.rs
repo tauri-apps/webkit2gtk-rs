@@ -71,7 +71,7 @@ fn main() {
 
   window.connect_delete_event(|_, _| {
     gtk::main_quit();
-    glib::Propagation::Stop
+    glib::Propagation::Proceed
   });
 
   gtk::main();
