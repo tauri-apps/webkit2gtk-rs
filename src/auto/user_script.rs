@@ -2,9 +2,8 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::UserContentInjectedFrames;
-use crate::UserScriptInjectionTime;
-use glib::translate::*;
+use crate::{UserContentInjectedFrames,UserScriptInjectionTime};
+use glib::{translate::*};
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -18,48 +17,22 @@ glib::wrapper! {
 }
 
 impl UserScript {
-  #[doc(alias = "webkit_user_script_new")]
-  pub fn new(
-    source: &str,
-    injected_frames: UserContentInjectedFrames,
-    injection_time: UserScriptInjectionTime,
-    allow_list: &[&str],
-    block_list: &[&str],
-  ) -> UserScript {
-    assert_initialized_main_thread!();
-    unsafe {
-      from_glib_full(ffi::webkit_user_script_new(
-        source.to_glib_none().0,
-        injected_frames.into_glib(),
-        injection_time.into_glib(),
-        allow_list.to_glib_none().0,
-        block_list.to_glib_none().0,
-      ))
+    #[doc(alias = "webkit_user_script_new")]
+    pub fn new(source: &str, injected_frames: UserContentInjectedFrames, injection_time: UserScriptInjectionTime, allow_list: &[&str], block_list: &[&str]) -> UserScript {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_full(ffi::webkit_user_script_new(source.to_glib_none().0, injected_frames.into_glib(), injection_time.into_glib(), allow_list.to_glib_none().0, block_list.to_glib_none().0))
+        }
     }
-  }
 
-  #[cfg(any(feature = "v2_22", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_22")))]
-  #[doc(alias = "webkit_user_script_new_for_world")]
-  #[doc(alias = "new_for_world")]
-  pub fn for_world(
-    source: &str,
-    injected_frames: UserContentInjectedFrames,
-    injection_time: UserScriptInjectionTime,
-    world_name: &str,
-    allow_list: &[&str],
-    block_list: &[&str],
-  ) -> UserScript {
-    assert_initialized_main_thread!();
-    unsafe {
-      from_glib_full(ffi::webkit_user_script_new_for_world(
-        source.to_glib_none().0,
-        injected_frames.into_glib(),
-        injection_time.into_glib(),
-        world_name.to_glib_none().0,
-        allow_list.to_glib_none().0,
-        block_list.to_glib_none().0,
-      ))
+    #[cfg(feature = "v2_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v2_22")))]
+    #[doc(alias = "webkit_user_script_new_for_world")]
+    #[doc(alias = "new_for_world")]
+    pub fn for_world(source: &str, injected_frames: UserContentInjectedFrames, injection_time: UserScriptInjectionTime, world_name: &str, allow_list: &[&str], block_list: &[&str]) -> UserScript {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_full(ffi::webkit_user_script_new_for_world(source.to_glib_none().0, injected_frames.into_glib(), injection_time.into_glib(), world_name.to_glib_none().0, allow_list.to_glib_none().0, block_list.to_glib_none().0))
+        }
     }
-  }
 }

@@ -2,9 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use glib::object::IsA;
-use glib::translate::*;
-use std::fmt;
+use glib::{prelude::*,translate::*};
 
 glib::wrapper! {
     #[doc(alias = "WebKitPermissionRequest")]
@@ -16,33 +14,29 @@ glib::wrapper! {
 }
 
 impl PermissionRequest {
-  pub const NONE: Option<&'static PermissionRequest> = None;
+        pub const NONE: Option<&'static PermissionRequest> = None;
+    
 }
 
-pub trait PermissionRequestExt: 'static {
-  #[doc(alias = "webkit_permission_request_allow")]
-  fn allow(&self);
-
-  #[doc(alias = "webkit_permission_request_deny")]
-  fn deny(&self);
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::PermissionRequest>> Sealed for T {}
 }
 
-impl<O: IsA<PermissionRequest>> PermissionRequestExt for O {
-  fn allow(&self) {
-    unsafe {
-      ffi::webkit_permission_request_allow(self.as_ref().to_glib_none().0);
+pub trait PermissionRequestExt: IsA<PermissionRequest> + sealed::Sealed + 'static {
+    #[doc(alias = "webkit_permission_request_allow")]
+    fn allow(&self) {
+        unsafe {
+            ffi::webkit_permission_request_allow(self.as_ref().to_glib_none().0);
+        }
     }
-  }
 
-  fn deny(&self) {
-    unsafe {
-      ffi::webkit_permission_request_deny(self.as_ref().to_glib_none().0);
+    #[doc(alias = "webkit_permission_request_deny")]
+    fn deny(&self) {
+        unsafe {
+            ffi::webkit_permission_request_deny(self.as_ref().to_glib_none().0);
+        }
     }
-  }
 }
 
-impl fmt::Display for PermissionRequest {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    f.write_str("PermissionRequest")
-  }
-}
+impl<O: IsA<PermissionRequest>> PermissionRequestExt for O {}
