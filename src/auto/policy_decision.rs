@@ -4,8 +4,8 @@
 
 #[cfg(feature = "v2_30")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_30")))]
-use crate::{WebsitePolicies};
-use glib::{prelude::*,translate::*};
+use crate::WebsitePolicies;
+use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "WebKitPolicyDecision")]
@@ -17,46 +17,48 @@ glib::wrapper! {
 }
 
 impl PolicyDecision {
-        pub const NONE: Option<&'static PolicyDecision> = None;
-    
+  pub const NONE: Option<&'static PolicyDecision> = None;
 }
 
 mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::PolicyDecision>> Sealed for T {}
+  pub trait Sealed {}
+  impl<T: super::IsA<super::PolicyDecision>> Sealed for T {}
 }
 
 pub trait PolicyDecisionExt: IsA<PolicyDecision> + sealed::Sealed + 'static {
-    #[doc(alias = "webkit_policy_decision_download")]
-    fn download(&self) {
-        unsafe {
-            ffi::webkit_policy_decision_download(self.as_ref().to_glib_none().0);
-        }
+  #[doc(alias = "webkit_policy_decision_download")]
+  fn download(&self) {
+    unsafe {
+      ffi::webkit_policy_decision_download(self.as_ref().to_glib_none().0);
     }
+  }
 
-    #[doc(alias = "webkit_policy_decision_ignore")]
-    fn ignore(&self) {
-        unsafe {
-            ffi::webkit_policy_decision_ignore(self.as_ref().to_glib_none().0);
-        }
+  #[doc(alias = "webkit_policy_decision_ignore")]
+  fn ignore(&self) {
+    unsafe {
+      ffi::webkit_policy_decision_ignore(self.as_ref().to_glib_none().0);
     }
+  }
 
-    #[doc(alias = "webkit_policy_decision_use")]
-    #[doc(alias = "use")]
-    fn use_(&self) {
-        unsafe {
-            ffi::webkit_policy_decision_use(self.as_ref().to_glib_none().0);
-        }
+  #[doc(alias = "webkit_policy_decision_use")]
+  #[doc(alias = "use")]
+  fn use_(&self) {
+    unsafe {
+      ffi::webkit_policy_decision_use(self.as_ref().to_glib_none().0);
     }
+  }
 
-    #[cfg(feature = "v2_30")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v2_30")))]
-    #[doc(alias = "webkit_policy_decision_use_with_policies")]
-    fn use_with_policies(&self, policies: &impl IsA<WebsitePolicies>) {
-        unsafe {
-            ffi::webkit_policy_decision_use_with_policies(self.as_ref().to_glib_none().0, policies.as_ref().to_glib_none().0);
-        }
+  #[cfg(feature = "v2_30")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_30")))]
+  #[doc(alias = "webkit_policy_decision_use_with_policies")]
+  fn use_with_policies(&self, policies: &impl IsA<WebsitePolicies>) {
+    unsafe {
+      ffi::webkit_policy_decision_use_with_policies(
+        self.as_ref().to_glib_none().0,
+        policies.as_ref().to_glib_none().0,
+      );
     }
+  }
 }
 
 impl<O: IsA<PolicyDecision>> PolicyDecisionExt for O {}

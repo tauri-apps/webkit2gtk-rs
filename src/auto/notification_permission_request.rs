@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::{PermissionRequest};
+use crate::PermissionRequest;
 
 glib::wrapper! {
     #[doc(alias = "WebKitNotificationPermissionRequest")]
@@ -14,6 +14,5 @@ glib::wrapper! {
 }
 
 impl NotificationPermissionRequest {
-        pub const NONE: Option<&'static NotificationPermissionRequest> = None;
-    
+  pub const NONE: Option<&'static NotificationPermissionRequest> = None;
 }

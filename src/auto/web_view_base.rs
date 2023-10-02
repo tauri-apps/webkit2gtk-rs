@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-
 glib::wrapper! {
     #[doc(alias = "WebKitWebViewBase")]
     pub struct WebViewBase(Object<ffi::WebKitWebViewBase, ffi::WebKitWebViewBaseClass>) @extends gtk::Container, gtk::Widget, @implements gtk::Buildable;
@@ -13,6 +12,5 @@ glib::wrapper! {
 }
 
 impl WebViewBase {
-        pub const NONE: Option<&'static WebViewBase> = None;
-    
+  pub const NONE: Option<&'static WebViewBase> = None;
 }
