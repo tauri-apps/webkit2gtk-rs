@@ -1,6 +1,6 @@
 [package]
 name = "webkit2gtk"
-version = "1.1.0"
+version = "1.1.1"
 edition = "2021"
 categories = [ "api-bindings", "gui" ]
 description = "Rust bindings for webkit-gtk library"
