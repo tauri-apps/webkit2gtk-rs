@@ -1,5 +1,9 @@
 # Changelog
 
+## \[1.1.1]
+
+- [`e95f84a`](https://github.com/tauri-apps/javascriptcore-rs/commit/e95f84a72bc7e6fc367929fd04f5aa795a5d00df) Lock webkit2gtk version to 1.0.
+
 ## \[1.1.0]
 
 - [`5f8f15f`](https://github.com/tauri-apps/javascriptcore-rs/commit/5f8f15f2303d25083c885c2309e90ad98a8b780e) Update to webkit2gtk v2.40.
