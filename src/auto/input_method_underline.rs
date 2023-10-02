@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use glib::{translate::*};
+use glib::translate::*;
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -16,18 +16,24 @@ glib::wrapper! {
 }
 
 impl InputMethodUnderline {
-    #[doc(alias = "webkit_input_method_underline_new")]
-    pub fn new(start_offset: u32, end_offset: u32) -> InputMethodUnderline {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::webkit_input_method_underline_new(start_offset, end_offset))
-        }
+  #[doc(alias = "webkit_input_method_underline_new")]
+  pub fn new(start_offset: u32, end_offset: u32) -> InputMethodUnderline {
+    assert_initialized_main_thread!();
+    unsafe {
+      from_glib_full(ffi::webkit_input_method_underline_new(
+        start_offset,
+        end_offset,
+      ))
     }
+  }
 
-    #[doc(alias = "webkit_input_method_underline_set_color")]
-    pub fn set_color(&mut self, rgba: Option<&gdk::RGBA>) {
-        unsafe {
-            ffi::webkit_input_method_underline_set_color(self.to_glib_none_mut().0, rgba.to_glib_none().0);
-        }
+  #[doc(alias = "webkit_input_method_underline_set_color")]
+  pub fn set_color(&mut self, rgba: Option<&gdk::RGBA>) {
+    unsafe {
+      ffi::webkit_input_method_underline_set_color(
+        self.to_glib_none_mut().0,
+        rgba.to_glib_none().0,
+      );
     }
+  }
 }
