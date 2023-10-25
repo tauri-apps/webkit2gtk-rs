@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::PermissionRequest;
+use crate::{PermissionRequest};
 
 glib::wrapper! {
     #[doc(alias = "WebKitMediaKeySystemPermissionRequest")]
@@ -14,5 +14,6 @@ glib::wrapper! {
 }
 
 impl MediaKeySystemPermissionRequest {
-  pub const NONE: Option<&'static MediaKeySystemPermissionRequest> = None;
+        pub const NONE: Option<&'static MediaKeySystemPermissionRequest> = None;
+    
 }

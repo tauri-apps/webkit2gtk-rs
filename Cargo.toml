@@ -17,7 +17,6 @@ rustdoc-args = [ "--cfg", "docsrs" ]
 name = "webkit2gtk"
 
 [features]
-dox = [ "ffi/dox", "java_script_core/dox" ]
 v2_2 = [ ]
 v2_4 = [ "v2_2" ]
 v2_6 = [ "v2_4", "ffi/v2_6" ]

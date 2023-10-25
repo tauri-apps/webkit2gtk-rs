@@ -1,6 +1,6 @@
 #![allow(deprecated)]
 #![doc = include_str!("../README.md")]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 pub use ffi;
 
@@ -22,8 +22,8 @@ mod auto;
 // mod web_context;
 mod web_view;
 
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+#[cfg(any(feature = "v2_16", docsrs))]
+#[cfg_attr(docsrs, doc(cfg(feature = "v2_16")))]
 mod website_data_manager;
 
 // pub use credential::*;
@@ -31,8 +31,8 @@ mod website_data_manager;
 // pub use web_context::*;
 pub use web_view::*;
 
-#[cfg(any(feature = "v2_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+#[cfg(any(feature = "v2_16", docsrs))]
+#[cfg_attr(docsrs, doc(cfg(feature = "v2_16")))]
 pub use website_data_manager::*;
 
 pub use crate::auto::builders::*;

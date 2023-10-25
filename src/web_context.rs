@@ -9,8 +9,8 @@ use glib::IsA;
 use super::WebContext;
 
 pub trait WebContextExtManual {
-  #[cfg(any(feature = "v2_16", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+  #[cfg(any(feature = "v2_16", docsrs))]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_16")))]
   #[doc(alias = "webkit_web_context_set_network_proxy_settings")]
   fn set_network_proxy_settings(
     &self,
@@ -23,8 +23,8 @@ impl<O> WebContextExtManual for O
 where
   O: IsA<WebContext>,
 {
-  #[cfg(any(feature = "v2_16", feature = "dox"))]
-  #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_16")))]
+  #[cfg(any(feature = "v2_16", docsrs))]
+  #[cfg_attr(docsrs, doc(cfg(feature = "v2_16")))]
   fn set_network_proxy_settings(
     &self,
     proxy_mode: NetworkProxyMode,
