@@ -9,6 +9,7 @@ links = "web_kit2"
 repository = "https://github.com/tauri-apps/webkit2gtk-rs"
 version = "2.0.1"
 edition = "2018"
+include = ["README.md", "LICENSE", "src/**/*.rs", "build.rs", "CHANGELOG.md"]
 
 [package.metadata.docs.rs]
 rustc-args = [ "--cfg", "docsrs" ]
