@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.platform.os }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
       - name: install stable
         uses: actions-rs/toolchain@v1
         with:
@@ -31,7 +31,7 @@ jobs:
         run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
       - name: Cache cargo registry
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v5
         with:
           path: ~/.cargo/registry
           # Add date to the cache to keep it up to date
@@ -42,7 +42,7 @@ jobs:
             ${{ matrix.platform }}-stable-cargo-registry-
 
       - name: Cache cargo index
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v5
         with:
           path: ~/.cargo/git
           # Add date to the cache to keep it up to date
@@ -53,7 +53,7 @@ jobs:
             ${{ matrix.platform }}-stable-cargo-index-
 
       - name: Cache cargo target
-        uses: actions/cache@v2
+        uses: actions/cache@v5
         with:
           path: target
           # Add date to the cache to keep it up to date
@@ -63,15 +63,11 @@ jobs:
             ${{ matrix.platform }}-stable-cargo-core-${{ hashFiles('Cargo.toml') }}
             ${{ matrix.platform }}-stable-cargo-core-
 
-      - name: Cargo fmt
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+      - name: cargo fmt
+        run: cargo fmt --all -- --check
 
-      - name: build webkit2gtk
+      - name: cargo build
         run: cargo build --target ${{ matrix.platform.target }}
 
-      - name: build and run tests
+      - name: cargo test
         run: cargo test --verbose --target ${{ matrix.platform.target }}
-
