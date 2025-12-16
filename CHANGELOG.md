@@ -1,5 +1,9 @@
 # Changelog
 
+## \[2.0.2]
+
+- [`575debf`](https://github.com/tauri-apps/javascriptcore-rs/commit/575debfdf5ba32634233c139aba3f48273227960) ([#159](https://github.com/tauri-apps/javascriptcore-rs/pull/159)) Exclude development scripts from the published packages
+
 ## \[2.0.1]
 
 - [`74ab5a4`](https://github.com/tauri-apps/javascriptcore-rs/commit/74ab5a403ddfac3ba977cadc499376e1935e6613) Properly replaced dox with docrs.
