@@ -68,5 +68,5 @@ gtk-sys = "^0.19.0"
   version = "2.0.1"
 
 [patch.crates-io]
-javascriptcore-rs = { git = "https://github.com/tauri-apps/javascriptcore-rs.git", branch = "bump-gir" }
-javascriptcore-rs-sys = { git = "https://github.com/tauri-apps/javascriptcore-rs.git", branch = "bump-gir" }
+javascriptcore-rs = { git = "https://github.com/tauri-apps/javascriptcore-rs.git" }
+javascriptcore-rs-sys = { git = "https://github.com/tauri-apps/javascriptcore-rs.git" }
