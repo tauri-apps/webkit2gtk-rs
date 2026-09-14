@@ -91,10 +91,7 @@ glib-sys = "0.22"
 gobject-sys = "0.22"
 cairo-sys-rs = "0.22"
 javascriptcore-rs-sys = "=1.1"
-
-[dependencies.soup]
-package = "soup3-sys"
-version = "0.5"
+soup3-sys = "0.9"
 
 [dev-dependencies]
 shell-words = "1.0.0"
