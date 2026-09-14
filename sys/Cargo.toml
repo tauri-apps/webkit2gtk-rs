@@ -115,7 +115,7 @@ libc = "0.2"
 
   [dependencies.soup]
   package = "soup3-sys"
-  version = "0.5"
+  version = "0.9"
 
 [dev-dependencies]
 shell-words = "1.0.0"
