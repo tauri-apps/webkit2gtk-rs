@@ -12,8 +12,7 @@ edition = "2018"
 include = ["README.md", "LICENSE", "src/**/*.rs", "build.rs", "CHANGELOG.md"]
 
 [package.metadata.docs.rs]
-rustc-args = ["--cfg", "docsrs"]
-rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
+rustdoc-args = ["--generate-link-to-definition"]
 all-features = true
 
 [package.metadata.system-deps.webkit2gtk_4_1]
