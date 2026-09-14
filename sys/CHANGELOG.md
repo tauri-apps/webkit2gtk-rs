@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.0]
+
+- [`41f72cc`](https://github.com/tauri-apps/javascriptcore-rs/commit/41f72cce1257e05ca8650ea0dd59d61e46827203) ([#161](https://github.com/tauri-apps/javascriptcore-rs/pull/161)) Update bitflags dependency version to 2.0.
+    
+    This avoids duplicated dependencies in downstream crates.
+
 ## \[2.0.2]
 
 - [`575debf`](https://github.com/tauri-apps/javascriptcore-rs/commit/575debfdf5ba32634233c139aba3f48273227960) ([#159](https://github.com/tauri-apps/javascriptcore-rs/pull/159)) Exclude development scripts from the published packages
