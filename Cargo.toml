@@ -66,3 +66,7 @@ gtk-sys = "^0.22.0"
   package = "webkit2gtk-sys"
   path = "sys"
   version = "2.0.1"
+
+[patch.crates-io]
+javascriptcore-rs = { git = "https://github.com/tauri-apps/javascriptcore-rs.git", branch = "bump-gir" }
+javascriptcore-rs-sys = { git = "https://github.com/tauri-apps/javascriptcore-rs.git", branch = "bump-gir" }
