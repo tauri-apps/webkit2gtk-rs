@@ -1,6 +1,6 @@
 ---
-"webkit2gtk-rs": patch
-"webkit2gtk-sys": patch
+"webkit2gtk-rs": major
+"webkit2gtk-sys": major
 ---
 
 Update bitflags dependency version to 2.0.
