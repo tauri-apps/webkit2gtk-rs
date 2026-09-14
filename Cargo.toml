@@ -58,7 +58,7 @@ gtk-sys = "^0.19.0"
 
   [dependencies.soup]
   package = "soup3"
-  version = "0.5"
+  version = "0.9"
 
   [dependencies.ffi]
   package = "webkit2gtk-sys"
