@@ -2,6 +2,9 @@ name: test
 
 on: [pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   test:
     strategy:
@@ -14,11 +17,11 @@ jobs:
     runs-on: ${{ matrix.platform.os }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
+
       - name: install stable
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
           target: ${{ matrix.platform.target }}
 
       - name: install webkit2gtk (ubuntu only)
@@ -27,41 +30,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y webkit2gtk-4.1-dev
 
-      - name: Get current date
-        run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-
-      - name: Cache cargo registry
-        uses: actions/cache@v5
-        with:
-          path: ~/.cargo/registry
-          # Add date to the cache to keep it up to date
-          key: ${{ matrix.platform }}-stable-cargo-registry-${{ hashFiles('Cargo.toml') }}-${{ env.CURRENT_DATE }}
-          # Restore from outdated cache for speed
-          restore-keys: |
-            ${{ matrix.platform }}-stable-cargo-registry-${{ hashFiles('Cargo.toml') }}
-            ${{ matrix.platform }}-stable-cargo-registry-
-
-      - name: Cache cargo index
-        uses: actions/cache@v5
-        with:
-          path: ~/.cargo/git
-          # Add date to the cache to keep it up to date
-          key: ${{ matrix.platform }}-stable-cargo-index-${{ hashFiles('Cargo.toml') }}-${{ env.CURRENT_DATE }}
-          # Restore from outdated cache for speed
-          restore-keys: |
-            ${{ matrix.platform }}-stable-cargo-index-${{ hashFiles('Cargo.toml') }}
-            ${{ matrix.platform }}-stable-cargo-index-
-
-      - name: Cache cargo target
-        uses: actions/cache@v5
-        with:
-          path: target
-          # Add date to the cache to keep it up to date
-          key: ${{ matrix.platform }}-stable-cargo-core-${{ hashFiles('Cargo.toml') }}-${{ env.CURRENT_DATE }}
-          # Restore from outdated cache for speed
-          restore-keys: |
-            ${{ matrix.platform }}-stable-cargo-core-${{ hashFiles('Cargo.toml') }}
-            ${{ matrix.platform }}-stable-cargo-core-
+      - uses: Swatinem/rust-cache@v2
 
       - name: cargo fmt
         run: cargo fmt --all -- --check
