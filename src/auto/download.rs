@@ -2,8 +2,9 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::{URIRequest, URIResponse, WebView};
+use crate::{ffi, URIRequest, URIResponse, WebView};
 use glib::{
+  object::ObjectType as _,
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
   translate::*,
@@ -59,16 +60,12 @@ impl DownloadBuilder {
   /// Build the [`Download`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> Download {
+    assert_initialized_main_thread!();
     self.builder.build()
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::Download>> Sealed for T {}
-}
-
-pub trait DownloadExt: IsA<Download> + sealed::Sealed + 'static {
+pub trait DownloadExt: IsA<Download> + 'static {
   #[doc(alias = "webkit_download_cancel")]
   fn cancel(&self) {
     unsafe {
@@ -80,6 +77,7 @@ pub trait DownloadExt: IsA<Download> + sealed::Sealed + 'static {
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_6")))]
   #[doc(alias = "webkit_download_get_allow_overwrite")]
   #[doc(alias = "get_allow_overwrite")]
+  #[doc(alias = "allow-overwrite")]
   fn allows_overwrite(&self) -> bool {
     unsafe {
       from_glib(ffi::webkit_download_get_allow_overwrite(
@@ -106,6 +104,7 @@ pub trait DownloadExt: IsA<Download> + sealed::Sealed + 'static {
 
   #[doc(alias = "webkit_download_get_estimated_progress")]
   #[doc(alias = "get_estimated_progress")]
+  #[doc(alias = "estimated-progress")]
   fn estimated_progress(&self) -> f64 {
     unsafe { ffi::webkit_download_get_estimated_progress(self.as_ref().to_glib_none().0) }
   }
@@ -149,6 +148,7 @@ pub trait DownloadExt: IsA<Download> + sealed::Sealed + 'static {
   #[cfg(feature = "v2_6")]
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_6")))]
   #[doc(alias = "webkit_download_set_allow_overwrite")]
+  #[doc(alias = "allow-overwrite")]
   fn set_allow_overwrite(&self, allowed: bool) {
     unsafe {
       ffi::webkit_download_set_allow_overwrite(self.as_ref().to_glib_none().0, allowed.into_glib());
@@ -172,21 +172,23 @@ pub trait DownloadExt: IsA<Download> + sealed::Sealed + 'static {
       F: Fn(&P, &str) + 'static,
     >(
       this: *mut ffi::WebKitDownload,
-      destination: *mut libc::c_char,
+      destination: *mut std::ffi::c_char,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        Download::from_glib_borrow(this).unsafe_cast_ref(),
-        &glib::GString::from_glib_borrow(destination),
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          Download::from_glib_borrow(this).unsafe_cast_ref(),
+          &glib::GString::from_glib_borrow(destination),
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"created-destination\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"created-destination".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           created_destination_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -204,22 +206,24 @@ pub trait DownloadExt: IsA<Download> + sealed::Sealed + 'static {
       F: Fn(&P, &str) -> bool + 'static,
     >(
       this: *mut ffi::WebKitDownload,
-      suggested_filename: *mut libc::c_char,
+      suggested_filename: *mut std::ffi::c_char,
       f: glib::ffi::gpointer,
     ) -> glib::ffi::gboolean {
-      let f: &F = &*(f as *const F);
-      f(
-        Download::from_glib_borrow(this).unsafe_cast_ref(),
-        &glib::GString::from_glib_borrow(suggested_filename),
-      )
-      .into_glib()
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          Download::from_glib_borrow(this).unsafe_cast_ref(),
+          &glib::GString::from_glib_borrow(suggested_filename),
+        )
+        .into_glib()
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"decide-destination\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"decide-destination".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           decide_destination_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -234,18 +238,20 @@ pub trait DownloadExt: IsA<Download> + sealed::Sealed + 'static {
       error: *mut glib::ffi::GError,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        Download::from_glib_borrow(this).unsafe_cast_ref(),
-        &from_glib_borrow(error),
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          Download::from_glib_borrow(this).unsafe_cast_ref(),
+          &from_glib_borrow(error),
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"failed\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"failed".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           failed_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -259,15 +265,17 @@ pub trait DownloadExt: IsA<Download> + sealed::Sealed + 'static {
       this: *mut ffi::WebKitDownload,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(Download::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(Download::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"finished\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"finished".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           finished_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -282,18 +290,20 @@ pub trait DownloadExt: IsA<Download> + sealed::Sealed + 'static {
       data_length: u64,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        Download::from_glib_borrow(this).unsafe_cast_ref(),
-        data_length,
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          Download::from_glib_borrow(this).unsafe_cast_ref(),
+          data_length,
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"received-data\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"received-data".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           received_data_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -313,15 +323,17 @@ pub trait DownloadExt: IsA<Download> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(Download::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(Download::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::allow-overwrite\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::allow-overwrite".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_allow_overwrite_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -336,15 +348,17 @@ pub trait DownloadExt: IsA<Download> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(Download::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(Download::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::destination\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::destination".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_destination_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -362,15 +376,17 @@ pub trait DownloadExt: IsA<Download> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(Download::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(Download::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::estimated-progress\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::estimated-progress".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_estimated_progress_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -385,15 +401,17 @@ pub trait DownloadExt: IsA<Download> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(Download::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(Download::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::response\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::response".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_response_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

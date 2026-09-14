@@ -2,10 +2,12 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::prelude::*;
 #[cfg(feature = "v2_8")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_8")))]
 use glib::{
+  object::ObjectType as _,
   signal::{connect_raw, SignalHandlerId},
   translate::*,
 };
@@ -62,16 +64,12 @@ impl ColorChooserRequestBuilder {
   /// Build the [`ColorChooserRequest`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> ColorChooserRequest {
+    assert_initialized_main_thread!();
     self.builder.build()
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::ColorChooserRequest>> Sealed for T {}
-}
-
-pub trait ColorChooserRequestExt: IsA<ColorChooserRequest> + sealed::Sealed + 'static {
+pub trait ColorChooserRequestExt: IsA<ColorChooserRequest> + 'static {
   #[cfg(feature = "v2_8")]
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_8")))]
   #[doc(alias = "webkit_color_chooser_request_cancel")]
@@ -123,6 +121,7 @@ pub trait ColorChooserRequestExt: IsA<ColorChooserRequest> + sealed::Sealed + 's
   #[cfg(feature = "v2_8")]
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_8")))]
   #[doc(alias = "webkit_color_chooser_request_set_rgba")]
+  #[doc(alias = "rgba")]
   fn set_rgba(&self, rgba: &gdk::RGBA) {
     unsafe {
       ffi::webkit_color_chooser_request_set_rgba(
@@ -140,15 +139,17 @@ pub trait ColorChooserRequestExt: IsA<ColorChooserRequest> + sealed::Sealed + 's
       this: *mut ffi::WebKitColorChooserRequest,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(ColorChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(ColorChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"finished\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"finished".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           finished_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -168,15 +169,17 @@ pub trait ColorChooserRequestExt: IsA<ColorChooserRequest> + sealed::Sealed + 's
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(ColorChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(ColorChooserRequest::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::rgba\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::rgba".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_rgba_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
