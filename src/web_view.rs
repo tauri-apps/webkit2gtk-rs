@@ -5,7 +5,7 @@ use crate::UserContentManager;
 #[cfg(feature = "v2_6")]
 use crate::WebContext;
 use crate::WebView;
-use glib::IsA;
+use glib::object::IsA;
 
 pub trait WebViewExtManual {
   #[cfg(feature = "v2_6")]
