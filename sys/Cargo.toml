@@ -87,11 +87,11 @@ libc = "0.2"
 
   [dependencies.gtk]
   package = "gtk-sys"
-  version = "0.22"
+  version = "0.19"
 
   [dependencies.gdk]
   package = "gdk-sys"
-  version = "0.22"
+  version = "0.19"
 
   [dependencies.gio]
   package = "gio-sys"
