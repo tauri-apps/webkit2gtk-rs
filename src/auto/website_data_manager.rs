@@ -603,7 +603,7 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + 'static {
   fn set_network_proxy_settings(
     &self,
     proxy_mode: NetworkProxyMode,
-    proxy_settings: Option<&mut NetworkProxySettings>,
+    mut proxy_settings: Option<&mut NetworkProxySettings>,
   ) {
     unsafe {
       ffi::webkit_website_data_manager_set_network_proxy_settings(

@@ -84,9 +84,9 @@ pub trait CookieManagerExt: IsA<CookieManager> + 'static {
     &self,
     cookie: &mut soup::Cookie,
   ) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
-    let cookie = cookie.clone();
+    let mut cookie = cookie.clone();
     Box_::pin(gio::GioFuture::new(self, move |obj, cancellable, send| {
-      obj.add_cookie(&cookie, Some(cancellable), move |res| {
+      obj.add_cookie(&mut cookie, Some(cancellable), move |res| {
         send.resolve(res);
       });
     }))
@@ -159,9 +159,9 @@ pub trait CookieManagerExt: IsA<CookieManager> + 'static {
     &self,
     cookie: &mut soup::Cookie,
   ) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
-    let cookie = cookie.clone();
+    let mut cookie = cookie.clone();
     Box_::pin(gio::GioFuture::new(self, move |obj, cancellable, send| {
-      obj.delete_cookie(&cookie, Some(cancellable), move |res| {
+      obj.delete_cookie(&mut cookie, Some(cancellable), move |res| {
         send.resolve(res);
       });
     }))
