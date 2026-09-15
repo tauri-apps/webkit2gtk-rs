@@ -26,8 +26,8 @@ where
   ) -> Self {
     use glib::{
       object::Cast,
+      prelude::StaticType,
       translate::{FromGlibPtrNone, IntoGlib, ToGlibPtr},
-      StaticType,
     };
     use std::{ffi::CString, ptr};
     assert_initialized_main_thread!();
