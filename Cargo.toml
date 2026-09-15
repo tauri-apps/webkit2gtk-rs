@@ -11,8 +11,6 @@ include = ["README.md", "LICENSE", "src/**/*.rs", "CHANGELOG.md"]
 
 [package.metadata.docs.rs]
 all-features = true
-rustc-args = [ "--cfg", "docsrs" ]
-rustdoc-args = [ "--cfg", "docsrs" ]
 
 [lib]
 name = "webkit2gtk"

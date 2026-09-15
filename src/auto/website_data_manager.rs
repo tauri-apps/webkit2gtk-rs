@@ -3,6 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
+use crate::ffi;
 #[cfg(feature = "v2_30")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_30")))]
 use crate::ITPThirdParty;
@@ -225,16 +226,12 @@ impl WebsiteDataManagerBuilder {
   /// Build the [`WebsiteDataManager`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> WebsiteDataManager {
+    assert_initialized_main_thread!();
     self.builder.build()
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::WebsiteDataManager>> Sealed for T {}
-}
-
-pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + sealed::Sealed + 'static {
+pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + 'static {
   #[cfg(feature = "v2_16")]
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_16")))]
   #[doc(alias = "webkit_website_data_manager_fetch")]
@@ -263,17 +260,20 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + sealed::Sealed + 'sta
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
     ) {
-      let mut error = std::ptr::null_mut();
-      let ret =
-        ffi::webkit_website_data_manager_fetch_finish(_source_object as *mut _, res, &mut error);
-      let result = if error.is_null() {
-        Ok(FromGlibPtrContainer::from_glib_full(ret))
-      } else {
-        Err(from_glib_full(error))
-      };
-      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
-      let callback: P = callback.into_inner();
-      callback(result);
+      unsafe {
+        let mut error = std::ptr::null_mut();
+        let ret =
+          ffi::webkit_website_data_manager_fetch_finish(_source_object as *mut _, res, &mut error);
+        let result = if error.is_null() {
+          Ok(FromGlibPtrContainer::from_glib_full(ret))
+        } else {
+          Err(from_glib_full(error))
+        };
+        let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
+          Box_::from_raw(user_data as *mut _);
+        let callback: P = callback.into_inner();
+        callback(result);
+      }
     }
     let callback = fetch_trampoline::<P>;
     unsafe {
@@ -303,6 +303,7 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + sealed::Sealed + 'sta
 
   #[doc(alias = "webkit_website_data_manager_get_base_cache_directory")]
   #[doc(alias = "get_base_cache_directory")]
+  #[doc(alias = "base-cache-directory")]
   fn base_cache_directory(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_website_data_manager_get_base_cache_directory(
@@ -313,6 +314,7 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + sealed::Sealed + 'sta
 
   #[doc(alias = "webkit_website_data_manager_get_base_data_directory")]
   #[doc(alias = "get_base_data_directory")]
+  #[doc(alias = "base-data-directory")]
   fn base_data_directory(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_website_data_manager_get_base_data_directory(
@@ -337,6 +339,7 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + sealed::Sealed + 'sta
   #[allow(deprecated)]
   #[doc(alias = "webkit_website_data_manager_get_disk_cache_directory")]
   #[doc(alias = "get_disk_cache_directory")]
+  #[doc(alias = "disk-cache-directory")]
   fn disk_cache_directory(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_website_data_manager_get_disk_cache_directory(
@@ -351,6 +354,7 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + sealed::Sealed + 'sta
   #[allow(deprecated)]
   #[doc(alias = "webkit_website_data_manager_get_dom_cache_directory")]
   #[doc(alias = "get_dom_cache_directory")]
+  #[doc(alias = "dom-cache-directory")]
   fn dom_cache_directory(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_website_data_manager_get_dom_cache_directory(
@@ -365,6 +369,7 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + sealed::Sealed + 'sta
   #[allow(deprecated)]
   #[doc(alias = "webkit_website_data_manager_get_hsts_cache_directory")]
   #[doc(alias = "get_hsts_cache_directory")]
+  #[doc(alias = "hsts-cache-directory")]
   fn hsts_cache_directory(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_website_data_manager_get_hsts_cache_directory(
@@ -377,6 +382,7 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + sealed::Sealed + 'sta
   #[allow(deprecated)]
   #[doc(alias = "webkit_website_data_manager_get_indexeddb_directory")]
   #[doc(alias = "get_indexeddb_directory")]
+  #[doc(alias = "indexeddb-directory")]
   fn indexeddb_directory(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_website_data_manager_get_indexeddb_directory(
@@ -391,6 +397,7 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + sealed::Sealed + 'sta
   #[allow(deprecated)]
   #[doc(alias = "webkit_website_data_manager_get_itp_directory")]
   #[doc(alias = "get_itp_directory")]
+  #[doc(alias = "itp-directory")]
   fn itp_directory(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_website_data_manager_get_itp_directory(
@@ -439,20 +446,23 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + sealed::Sealed + 'sta
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
     ) {
-      let mut error = std::ptr::null_mut();
-      let ret = ffi::webkit_website_data_manager_get_itp_summary_finish(
-        _source_object as *mut _,
-        res,
-        &mut error,
-      );
-      let result = if error.is_null() {
-        Ok(FromGlibPtrContainer::from_glib_full(ret))
-      } else {
-        Err(from_glib_full(error))
-      };
-      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
-      let callback: P = callback.into_inner();
-      callback(result);
+      unsafe {
+        let mut error = std::ptr::null_mut();
+        let ret = ffi::webkit_website_data_manager_get_itp_summary_finish(
+          _source_object as *mut _,
+          res,
+          &mut error,
+        );
+        let result = if error.is_null() {
+          Ok(FromGlibPtrContainer::from_glib_full(ret))
+        } else {
+          Err(from_glib_full(error))
+        };
+        let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
+          Box_::from_raw(user_data as *mut _);
+        let callback: P = callback.into_inner();
+        callback(result);
+      }
     }
     let callback = itp_summary_trampoline::<P>;
     unsafe {
@@ -482,6 +492,7 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + sealed::Sealed + 'sta
   #[allow(deprecated)]
   #[doc(alias = "webkit_website_data_manager_get_local_storage_directory")]
   #[doc(alias = "get_local_storage_directory")]
+  #[doc(alias = "local-storage-directory")]
   fn local_storage_directory(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(
@@ -496,6 +507,7 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + sealed::Sealed + 'sta
   #[allow(deprecated)]
   #[doc(alias = "webkit_website_data_manager_get_offline_application_cache_directory")]
   #[doc(alias = "get_offline_application_cache_directory")]
+  #[doc(alias = "offline-application-cache-directory")]
   fn offline_application_cache_directory(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(
@@ -526,6 +538,7 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + sealed::Sealed + 'sta
   #[allow(deprecated)]
   #[doc(alias = "webkit_website_data_manager_get_service_worker_registrations_directory")]
   #[doc(alias = "get_service_worker_registrations_directory")]
+  #[doc(alias = "service-worker-registrations-directory")]
   fn service_worker_registrations_directory(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(
@@ -552,6 +565,7 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + sealed::Sealed + 'sta
   #[allow(deprecated)]
   #[doc(alias = "webkit_website_data_manager_get_websql_directory")]
   #[doc(alias = "get_websql_directory")]
+  #[doc(alias = "websql-directory")]
   fn websql_directory(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_website_data_manager_get_websql_directory(

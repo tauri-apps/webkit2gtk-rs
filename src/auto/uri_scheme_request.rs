@@ -5,7 +5,7 @@
 #[cfg(feature = "v2_36")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_36")))]
 use crate::URISchemeResponse;
-use crate::WebView;
+use crate::{ffi, WebView};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -21,12 +21,7 @@ impl URISchemeRequest {
   pub const NONE: Option<&'static URISchemeRequest> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::URISchemeRequest>> Sealed for T {}
-}
-
-pub trait URISchemeRequestExt: IsA<URISchemeRequest> + sealed::Sealed + 'static {
+pub trait URISchemeRequestExt: IsA<URISchemeRequest> + 'static {
   #[doc(alias = "webkit_uri_scheme_request_finish")]
   fn finish(
     &self,

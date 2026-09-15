@@ -3,7 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::MimeInfo;
+use crate::{ffi, MimeInfo};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -19,12 +19,7 @@ impl Plugin {
   pub const NONE: Option<&'static Plugin> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::Plugin>> Sealed for T {}
-}
-
-pub trait PluginExt: IsA<Plugin> + sealed::Sealed + 'static {
+pub trait PluginExt: IsA<Plugin> + 'static {
   #[cfg_attr(feature = "v2_32", deprecated = "Since 2.32")]
   #[allow(deprecated)]
   #[doc(alias = "webkit_plugin_get_description")]

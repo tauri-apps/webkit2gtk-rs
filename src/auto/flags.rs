@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{bitflags::bitflags, prelude::*, translate::*};
 
 #[cfg(feature = "v2_10")]
@@ -82,7 +83,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for EditorTypingAttributes {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0)) }
   }
 }
 
@@ -180,7 +181,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for FindOptions {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0)) }
   }
 }
 
@@ -276,7 +277,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for HitTestResultContext {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0)) }
   }
 }
 
@@ -386,7 +387,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for InputHints {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0)) }
   }
 }
 
@@ -478,7 +479,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for SnapshotOptions {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0)) }
   }
 }
 
@@ -604,7 +605,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for WebsiteDataTypes {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0)) }
   }
 }
 

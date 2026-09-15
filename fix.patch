@@ -1,0 +1,41 @@
+diff --git a/src/auto/cookie_manager.rs b/src/auto/cookie_manager.rs
+index a06b9b6..20d2ecc 100644
+--- a/src/auto/cookie_manager.rs
++++ b/src/auto/cookie_manager.rs
+@@ -84,9 +84,9 @@ pub trait CookieManagerExt: IsA<CookieManager> + 'static {
+     &self,
+     cookie: &mut soup::Cookie,
+   ) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
+-    let cookie = cookie.clone();
++    let mut cookie = cookie.clone();
+     Box_::pin(gio::GioFuture::new(self, move |obj, cancellable, send| {
+-      obj.add_cookie(&cookie, Some(cancellable), move |res| {
++      obj.add_cookie(&mut cookie, Some(cancellable), move |res| {
+         send.resolve(res);
+       });
+     }))
+@@ -159,9 +159,9 @@ pub trait CookieManagerExt: IsA<CookieManager> + 'static {
+     &self,
+     cookie: &mut soup::Cookie,
+   ) -> Pin<Box_<dyn std::future::Future<Output = Result<(), glib::Error>> + 'static>> {
+-    let cookie = cookie.clone();
++    let mut cookie = cookie.clone();
+     Box_::pin(gio::GioFuture::new(self, move |obj, cancellable, send| {
+-      obj.delete_cookie(&cookie, Some(cancellable), move |res| {
++      obj.delete_cookie(&mut cookie, Some(cancellable), move |res| {
+         send.resolve(res);
+       });
+     }))
+diff --git a/src/auto/website_data_manager.rs b/src/auto/website_data_manager.rs
+index e55ef50..b7ba687 100644
+--- a/src/auto/website_data_manager.rs
++++ b/src/auto/website_data_manager.rs
+@@ -603,7 +603,7 @@ pub trait WebsiteDataManagerExt: IsA<WebsiteDataManager> + 'static {
+   fn set_network_proxy_settings(
+     &self,
+     proxy_mode: NetworkProxyMode,
+-    proxy_settings: Option<&mut NetworkProxySettings>,
++    mut proxy_settings: Option<&mut NetworkProxySettings>,
+   ) {
+     unsafe {
+       ffi::webkit_website_data_manager_set_network_proxy_settings(

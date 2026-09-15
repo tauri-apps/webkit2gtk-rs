@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{prelude::*, translate::*};
 
 #[cfg(feature = "v2_2")]
@@ -130,7 +131,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for AuthenticationScheme {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -246,7 +247,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for AutomationBrowsingContextPresenta
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -364,7 +365,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for AutoplayPolicy {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -468,7 +469,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for CacheModel {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -750,7 +751,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for ContextMenuAction {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -850,7 +851,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for CookieAcceptPolicy {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -946,7 +947,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for CookiePersistentStorage {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -1060,7 +1061,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for CredentialPersistence {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -1149,11 +1150,11 @@ impl glib::error::ErrorDomain for DownloadError {
   fn domain() -> glib::Quark {
     skip_assert_initialized!();
 
-    static QUARK: once_cell::sync::Lazy<glib::ffi::GQuark> =
-      once_cell::sync::Lazy::new(|| unsafe {
-        glib::ffi::g_quark_from_static_string(b"WebKitDownloadError\0".as_ptr() as *const _)
-      });
-    unsafe { from_glib(*QUARK) }
+    static QUARK: ::std::sync::OnceLock<glib::ffi::GQuark> = ::std::sync::OnceLock::new();
+    let quark = *QUARK.get_or_init(|| unsafe {
+      glib::ffi::g_quark_from_static_string(c"WebKitDownloadError".as_ptr())
+    });
+    unsafe { from_glib(quark) }
   }
 
   #[inline]
@@ -1199,7 +1200,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for DownloadError {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -1284,11 +1285,11 @@ impl glib::error::ErrorDomain for FaviconDatabaseError {
   fn domain() -> glib::Quark {
     skip_assert_initialized!();
 
-    static QUARK: once_cell::sync::Lazy<glib::ffi::GQuark> =
-      once_cell::sync::Lazy::new(|| unsafe {
-        glib::ffi::g_quark_from_static_string(b"WebKitFaviconDatabaseError\0".as_ptr() as *const _)
-      });
-    unsafe { from_glib(*QUARK) }
+    static QUARK: ::std::sync::OnceLock<glib::ffi::GQuark> = ::std::sync::OnceLock::new();
+    let quark = *QUARK.get_or_init(|| unsafe {
+      glib::ffi::g_quark_from_static_string(c"WebKitFaviconDatabaseError".as_ptr())
+    });
+    unsafe { from_glib(quark) }
   }
 
   #[inline]
@@ -1334,7 +1335,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for FaviconDatabaseError {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -1448,7 +1449,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for HardwareAccelerationPolicy {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -1582,7 +1583,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for InputPurpose {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -1682,7 +1683,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for InsecureContentEvent {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -1767,11 +1768,11 @@ impl glib::error::ErrorDomain for JavascriptError {
   fn domain() -> glib::Quark {
     skip_assert_initialized!();
 
-    static QUARK: once_cell::sync::Lazy<glib::ffi::GQuark> =
-      once_cell::sync::Lazy::new(|| unsafe {
-        glib::ffi::g_quark_from_static_string(b"WebKitJavascriptError\0".as_ptr() as *const _)
-      });
-    unsafe { from_glib(*QUARK) }
+    static QUARK: ::std::sync::OnceLock<glib::ffi::GQuark> = ::std::sync::OnceLock::new();
+    let quark = *QUARK.get_or_init(|| unsafe {
+      glib::ffi::g_quark_from_static_string(c"WebKitJavascriptError".as_ptr())
+    });
+    unsafe { from_glib(quark) }
   }
 
   #[inline]
@@ -1817,7 +1818,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for JavascriptError {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -1921,7 +1922,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for LoadEvent {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -2035,7 +2036,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for MediaCaptureState {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -2151,7 +2152,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for NavigationType {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -2244,11 +2245,11 @@ impl glib::error::ErrorDomain for NetworkError {
   fn domain() -> glib::Quark {
     skip_assert_initialized!();
 
-    static QUARK: once_cell::sync::Lazy<glib::ffi::GQuark> =
-      once_cell::sync::Lazy::new(|| unsafe {
-        glib::ffi::g_quark_from_static_string(b"WebKitNetworkError\0".as_ptr() as *const _)
-      });
-    unsafe { from_glib(*QUARK) }
+    static QUARK: ::std::sync::OnceLock<glib::ffi::GQuark> = ::std::sync::OnceLock::new();
+    let quark = *QUARK.get_or_init(|| unsafe {
+      glib::ffi::g_quark_from_static_string(c"WebKitNetworkError".as_ptr())
+    });
+    unsafe { from_glib(quark) }
   }
 
   #[inline]
@@ -2295,7 +2296,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for NetworkError {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -2409,7 +2410,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for NetworkProxyMode {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -2510,11 +2511,11 @@ impl glib::error::ErrorDomain for PluginError {
   fn domain() -> glib::Quark {
     skip_assert_initialized!();
 
-    static QUARK: once_cell::sync::Lazy<glib::ffi::GQuark> =
-      once_cell::sync::Lazy::new(|| unsafe {
-        glib::ffi::g_quark_from_static_string(b"WebKitPluginError\0".as_ptr() as *const _)
-      });
-    unsafe { from_glib(*QUARK) }
+    static QUARK: ::std::sync::OnceLock<glib::ffi::GQuark> = ::std::sync::OnceLock::new();
+    let quark = *QUARK.get_or_init(|| unsafe {
+      glib::ffi::g_quark_from_static_string(c"WebKitPluginError".as_ptr())
+    });
+    unsafe { from_glib(quark) }
   }
 
   #[inline]
@@ -2561,7 +2562,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for PluginError {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -2661,7 +2662,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for PolicyDecisionType {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -2758,11 +2759,11 @@ impl glib::error::ErrorDomain for PolicyError {
   fn domain() -> glib::Quark {
     skip_assert_initialized!();
 
-    static QUARK: once_cell::sync::Lazy<glib::ffi::GQuark> =
-      once_cell::sync::Lazy::new(|| unsafe {
-        glib::ffi::g_quark_from_static_string(b"WebKitPolicyError\0".as_ptr() as *const _)
-      });
-    unsafe { from_glib(*QUARK) }
+    static QUARK: ::std::sync::OnceLock<glib::ffi::GQuark> = ::std::sync::OnceLock::new();
+    let quark = *QUARK.get_or_init(|| unsafe {
+      glib::ffi::g_quark_from_static_string(c"WebKitPolicyError".as_ptr())
+    });
+    unsafe { from_glib(quark) }
   }
 
   #[inline]
@@ -2809,7 +2810,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for PolicyError {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -2894,11 +2895,11 @@ impl glib::error::ErrorDomain for PrintError {
   fn domain() -> glib::Quark {
     skip_assert_initialized!();
 
-    static QUARK: once_cell::sync::Lazy<glib::ffi::GQuark> =
-      once_cell::sync::Lazy::new(|| unsafe {
-        glib::ffi::g_quark_from_static_string(b"WebKitPrintError\0".as_ptr() as *const _)
-      });
-    unsafe { from_glib(*QUARK) }
+    static QUARK: ::std::sync::OnceLock<glib::ffi::GQuark> = ::std::sync::OnceLock::new();
+    let quark = *QUARK.get_or_init(|| unsafe {
+      glib::ffi::g_quark_from_static_string(c"WebKitPrintError".as_ptr())
+    });
+    unsafe { from_glib(quark) }
   }
 
   #[inline]
@@ -2944,7 +2945,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for PrintError {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -3040,7 +3041,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for PrintOperationResponse {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -3157,7 +3158,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for ProcessModel {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -3255,7 +3256,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for SaveMode {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -3359,7 +3360,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for ScriptDialogType {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -3436,11 +3437,11 @@ impl glib::error::ErrorDomain for SnapshotError {
   fn domain() -> glib::Quark {
     skip_assert_initialized!();
 
-    static QUARK: once_cell::sync::Lazy<glib::ffi::GQuark> =
-      once_cell::sync::Lazy::new(|| unsafe {
-        glib::ffi::g_quark_from_static_string(b"WebKitSnapshotError\0".as_ptr() as *const _)
-      });
-    unsafe { from_glib(*QUARK) }
+    static QUARK: ::std::sync::OnceLock<glib::ffi::GQuark> = ::std::sync::OnceLock::new();
+    let quark = *QUARK.get_or_init(|| unsafe {
+      glib::ffi::g_quark_from_static_string(c"WebKitSnapshotError".as_ptr())
+    });
+    unsafe { from_glib(quark) }
   }
 
   #[inline]
@@ -3486,7 +3487,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for SnapshotError {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -3582,7 +3583,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for SnapshotRegion {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -3678,7 +3679,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for TLSErrorsPolicy {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -3769,12 +3770,11 @@ impl glib::error::ErrorDomain for UserContentFilterError {
   fn domain() -> glib::Quark {
     skip_assert_initialized!();
 
-    static QUARK: once_cell::sync::Lazy<glib::ffi::GQuark> = once_cell::sync::Lazy::new(
-      || unsafe {
-        glib::ffi::g_quark_from_static_string(b"WebKitUserContentFilterError\0".as_ptr() as *const _)
-      },
-    );
-    unsafe { from_glib(*QUARK) }
+    static QUARK: ::std::sync::OnceLock<glib::ffi::GQuark> = ::std::sync::OnceLock::new();
+    let quark = *QUARK.get_or_init(|| unsafe {
+      glib::ffi::g_quark_from_static_string(c"WebKitUserContentFilterError".as_ptr())
+    });
+    unsafe { from_glib(quark) }
   }
 
   #[inline]
@@ -3828,7 +3828,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for UserContentFilterError {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -3942,7 +3942,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for UserContentInjectedFrames {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -4033,11 +4033,11 @@ impl glib::error::ErrorDomain for UserMessageError {
   fn domain() -> glib::Quark {
     skip_assert_initialized!();
 
-    static QUARK: once_cell::sync::Lazy<glib::ffi::GQuark> =
-      once_cell::sync::Lazy::new(|| unsafe {
-        glib::ffi::g_quark_from_static_string(b"WebKitUserMessageError\0".as_ptr() as *const _)
-      });
-    unsafe { from_glib(*QUARK) }
+    static QUARK: ::std::sync::OnceLock<glib::ffi::GQuark> = ::std::sync::OnceLock::new();
+    let quark = *QUARK.get_or_init(|| unsafe {
+      glib::ffi::g_quark_from_static_string(c"WebKitUserMessageError".as_ptr())
+    });
+    unsafe { from_glib(quark) }
   }
 
   #[inline]
@@ -4091,7 +4091,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for UserMessageError {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -4205,7 +4205,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for UserScriptInjectionTime {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -4319,7 +4319,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for UserStyleLevel {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 
@@ -4437,7 +4437,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for WebProcessTerminationReason {
   #[inline]
   unsafe fn from_value(value: &'a glib::Value) -> Self {
     skip_assert_initialized!();
-    from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
   }
 }
 

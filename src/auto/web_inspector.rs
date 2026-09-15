@@ -2,8 +2,9 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::WebViewBase;
+use crate::{ffi, WebViewBase};
 use glib::{
+  object::ObjectType as _,
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
   translate::*,
@@ -23,12 +24,7 @@ impl WebInspector {
   pub const NONE: Option<&'static WebInspector> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::WebInspector>> Sealed for T {}
-}
-
-pub trait WebInspectorExt: IsA<WebInspector> + sealed::Sealed + 'static {
+pub trait WebInspectorExt: IsA<WebInspector> + 'static {
   #[doc(alias = "webkit_web_inspector_attach")]
   fn attach(&self) {
     unsafe {
@@ -52,6 +48,7 @@ pub trait WebInspectorExt: IsA<WebInspector> + sealed::Sealed + 'static {
 
   #[doc(alias = "webkit_web_inspector_get_attached_height")]
   #[doc(alias = "get_attached_height")]
+  #[doc(alias = "attached-height")]
   fn attached_height(&self) -> u32 {
     unsafe { ffi::webkit_web_inspector_get_attached_height(self.as_ref().to_glib_none().0) }
   }
@@ -60,6 +57,7 @@ pub trait WebInspectorExt: IsA<WebInspector> + sealed::Sealed + 'static {
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_8")))]
   #[doc(alias = "webkit_web_inspector_get_can_attach")]
   #[doc(alias = "get_can_attach")]
+  #[doc(alias = "can-attach")]
   fn can_attach(&self) -> bool {
     unsafe {
       from_glib(ffi::webkit_web_inspector_get_can_attach(
@@ -70,6 +68,7 @@ pub trait WebInspectorExt: IsA<WebInspector> + sealed::Sealed + 'static {
 
   #[doc(alias = "webkit_web_inspector_get_inspected_uri")]
   #[doc(alias = "get_inspected_uri")]
+  #[doc(alias = "inspected-uri")]
   fn inspected_uri(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_web_inspector_get_inspected_uri(
@@ -110,15 +109,17 @@ pub trait WebInspectorExt: IsA<WebInspector> + sealed::Sealed + 'static {
       this: *mut ffi::WebKitWebInspector,
       f: glib::ffi::gpointer,
     ) -> glib::ffi::gboolean {
-      let f: &F = &*(f as *const F);
-      f(WebInspector::from_glib_borrow(this).unsafe_cast_ref()).into_glib()
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(WebInspector::from_glib_borrow(this).unsafe_cast_ref()).into_glib()
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"attach\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"attach".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           attach_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -135,15 +136,17 @@ pub trait WebInspectorExt: IsA<WebInspector> + sealed::Sealed + 'static {
       this: *mut ffi::WebKitWebInspector,
       f: glib::ffi::gpointer,
     ) -> glib::ffi::gboolean {
-      let f: &F = &*(f as *const F);
-      f(WebInspector::from_glib_borrow(this).unsafe_cast_ref()).into_glib()
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(WebInspector::from_glib_borrow(this).unsafe_cast_ref()).into_glib()
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"bring-to-front\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"bring-to-front".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           bring_to_front_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -157,15 +160,17 @@ pub trait WebInspectorExt: IsA<WebInspector> + sealed::Sealed + 'static {
       this: *mut ffi::WebKitWebInspector,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(WebInspector::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(WebInspector::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"closed\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"closed".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           closed_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -179,15 +184,17 @@ pub trait WebInspectorExt: IsA<WebInspector> + sealed::Sealed + 'static {
       this: *mut ffi::WebKitWebInspector,
       f: glib::ffi::gpointer,
     ) -> glib::ffi::gboolean {
-      let f: &F = &*(f as *const F);
-      f(WebInspector::from_glib_borrow(this).unsafe_cast_ref()).into_glib()
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(WebInspector::from_glib_borrow(this).unsafe_cast_ref()).into_glib()
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"detach\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"detach".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           detach_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -204,15 +211,17 @@ pub trait WebInspectorExt: IsA<WebInspector> + sealed::Sealed + 'static {
       this: *mut ffi::WebKitWebInspector,
       f: glib::ffi::gpointer,
     ) -> glib::ffi::gboolean {
-      let f: &F = &*(f as *const F);
-      f(WebInspector::from_glib_borrow(this).unsafe_cast_ref()).into_glib()
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(WebInspector::from_glib_borrow(this).unsafe_cast_ref()).into_glib()
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"open-window\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"open-window".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           open_window_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -230,15 +239,17 @@ pub trait WebInspectorExt: IsA<WebInspector> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(WebInspector::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(WebInspector::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::attached-height\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::attached-height".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_attached_height_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -255,15 +266,17 @@ pub trait WebInspectorExt: IsA<WebInspector> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(WebInspector::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(WebInspector::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::can-attach\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::can-attach".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_can_attach_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -281,15 +294,17 @@ pub trait WebInspectorExt: IsA<WebInspector> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(WebInspector::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(WebInspector::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::inspected-uri\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::inspected-uri".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_inspected_uri_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::PermissionRequest;
+use crate::{ffi, PermissionRequest};
 use glib::{
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
@@ -23,14 +23,7 @@ impl UserMediaPermissionRequest {
   pub const NONE: Option<&'static UserMediaPermissionRequest> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::UserMediaPermissionRequest>> Sealed for T {}
-}
-
-pub trait UserMediaPermissionRequestExt:
-  IsA<UserMediaPermissionRequest> + sealed::Sealed + 'static
-{
+pub trait UserMediaPermissionRequestExt: IsA<UserMediaPermissionRequest> + 'static {
   #[cfg(feature = "v2_8")]
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_8")))]
   #[doc(alias = "is-for-audio-device")]
@@ -57,15 +50,17 @@ pub trait UserMediaPermissionRequestExt:
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(UserMediaPermissionRequest::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(UserMediaPermissionRequest::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::is-for-audio-device\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::is-for-audio-device".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_is_for_audio_device_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -85,15 +80,17 @@ pub trait UserMediaPermissionRequestExt:
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(UserMediaPermissionRequest::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(UserMediaPermissionRequest::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::is-for-video-device\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::is-for-video-device".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_is_for_video_device_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

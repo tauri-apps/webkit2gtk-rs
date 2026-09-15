@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 #[cfg(feature = "v2_22")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_22")))]
 use glib::translate::*;

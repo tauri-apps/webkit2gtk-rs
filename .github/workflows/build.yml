@@ -1,6 +1,10 @@
 name: test
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      - crate
+  pull_request:
 
 permissions:
   contents: read
