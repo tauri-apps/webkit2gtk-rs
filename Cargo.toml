@@ -54,7 +54,7 @@ gtk-sys = "^0.19.0"
 
   [dependencies.java_script_core]
   package = "javascriptcore-rs"
-  version = "=1.1"
+  version = "2"
 
   [dependencies.soup]
   package = "soup3"
@@ -64,7 +64,3 @@ gtk-sys = "^0.19.0"
   package = "webkit2gtk-sys"
   path = "sys"
   version = "2.0.1"
-
-[patch.crates-io]
-javascriptcore-rs = { git = "https://github.com/tauri-apps/javascriptcore-rs.git" }
-javascriptcore-rs-sys = { git = "https://github.com/tauri-apps/javascriptcore-rs.git" }
