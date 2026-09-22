@@ -13,6 +13,9 @@ jobs:
         rust_version: [stable]
         platform:
           - { target: x86_64-unknown-linux-gnu, os: ubuntu-latest }
+        features:
+          - { args: --no-default-features, key: no-default }
+          - { args: --all-features, key: all }
 
     runs-on: ${{ matrix.platform.os }}
 
@@ -31,12 +34,14 @@ jobs:
           sudo apt-get install -y webkit2gtk-4.1-dev
 
       - uses: Swatinem/rust-cache@v2
+        with:
+          save-if: ${{ matrix.features.key == 'all' }}
 
       - name: cargo fmt
         run: cargo fmt --all -- --check
 
       - name: cargo build
-        run: cargo build --target ${{ matrix.platform.target }}
+        run: cargo build --target ${{ matrix.platform.target }} ${{ matrix.features.args }}
 
       - name: cargo test
-        run: cargo test --verbose --target ${{ matrix.platform.target }}
+        run: cargo test --verbose --target ${{ matrix.platform.target }} ${{ matrix.features.args }}

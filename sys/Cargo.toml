@@ -87,35 +87,35 @@ libc = "0.2"
 
   [dependencies.gtk]
   package = "gtk-sys"
-  version = "0.18"
+  version = "0.19"
 
   [dependencies.gdk]
   package = "gdk-sys"
-  version = "0.18"
+  version = "0.19"
 
   [dependencies.gio]
   package = "gio-sys"
-  version = "0.18"
+  version = "0.22"
 
   [dependencies.glib]
   package = "glib-sys"
-  version = "0.18"
+  version = "0.22"
 
   [dependencies.gobject]
   package = "gobject-sys"
-  version = "0.18"
+  version = "0.22"
 
   [dependencies.cairo]
   package = "cairo-sys-rs"
-  version = "0.18"
+  version = "0.22"
 
   [dependencies.java_script_core]
   package = "javascriptcore-rs-sys"
-  version = "=1.1"
+  version = "2"
 
   [dependencies.soup]
   package = "soup3-sys"
-  version = "0.5"
+  version = "0.9"
 
 [dev-dependencies]
 shell-words = "1.0.0"

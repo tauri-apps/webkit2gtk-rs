@@ -4,7 +4,7 @@
 use super::{NetworkProxyMode, NetworkProxySettings};
 #[cfg(feature = "v2_6")]
 use glib::translate::{FromGlibPtrNone, IntoGlib, ToGlibPtr, ToGlibPtrMut};
-use glib::IsA;
+use glib::object::IsA;
 
 use super::WebContext;
 
