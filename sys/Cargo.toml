@@ -111,7 +111,7 @@ libc = "0.2"
 
   [dependencies.java_script_core]
   package = "javascriptcore-rs-sys"
-  version = "=1.1"
+  version = "2"
 
   [dependencies.soup]
   package = "soup3-sys"
