@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
@@ -22,14 +23,10 @@ impl URIResponse {
   pub const NONE: Option<&'static URIResponse> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::URIResponse>> Sealed for T {}
-}
-
-pub trait URIResponseExt: IsA<URIResponse> + sealed::Sealed + 'static {
+pub trait URIResponseExt: IsA<URIResponse> + 'static {
   #[doc(alias = "webkit_uri_response_get_content_length")]
   #[doc(alias = "get_content_length")]
+  #[doc(alias = "content-length")]
   fn content_length(&self) -> u64 {
     unsafe { ffi::webkit_uri_response_get_content_length(self.as_ref().to_glib_none().0) }
   }
@@ -38,6 +35,7 @@ pub trait URIResponseExt: IsA<URIResponse> + sealed::Sealed + 'static {
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_6")))]
   #[doc(alias = "webkit_uri_response_get_http_headers")]
   #[doc(alias = "get_http_headers")]
+  #[doc(alias = "http-headers")]
   fn http_headers(&self) -> Option<soup::MessageHeaders> {
     unsafe {
       from_glib_none(ffi::webkit_uri_response_get_http_headers(
@@ -48,6 +46,7 @@ pub trait URIResponseExt: IsA<URIResponse> + sealed::Sealed + 'static {
 
   #[doc(alias = "webkit_uri_response_get_mime_type")]
   #[doc(alias = "get_mime_type")]
+  #[doc(alias = "mime-type")]
   fn mime_type(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_uri_response_get_mime_type(
@@ -58,12 +57,14 @@ pub trait URIResponseExt: IsA<URIResponse> + sealed::Sealed + 'static {
 
   #[doc(alias = "webkit_uri_response_get_status_code")]
   #[doc(alias = "get_status_code")]
+  #[doc(alias = "status-code")]
   fn status_code(&self) -> u32 {
     unsafe { ffi::webkit_uri_response_get_status_code(self.as_ref().to_glib_none().0) }
   }
 
   #[doc(alias = "webkit_uri_response_get_suggested_filename")]
   #[doc(alias = "get_suggested_filename")]
+  #[doc(alias = "suggested-filename")]
   fn suggested_filename(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_uri_response_get_suggested_filename(
@@ -92,15 +93,17 @@ pub trait URIResponseExt: IsA<URIResponse> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(URIResponse::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(URIResponse::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::content-length\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::content-length".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_content_length_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -120,15 +123,17 @@ pub trait URIResponseExt: IsA<URIResponse> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(URIResponse::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(URIResponse::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::http-headers\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::http-headers".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_http_headers_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -143,15 +148,17 @@ pub trait URIResponseExt: IsA<URIResponse> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(URIResponse::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(URIResponse::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::mime-type\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::mime-type".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_mime_type_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -166,15 +173,17 @@ pub trait URIResponseExt: IsA<URIResponse> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(URIResponse::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(URIResponse::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::status-code\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::status-code".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_status_code_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -192,15 +201,17 @@ pub trait URIResponseExt: IsA<URIResponse> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(URIResponse::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(URIResponse::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::suggested-filename\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::suggested-filename".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_suggested_filename_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -215,15 +226,17 @@ pub trait URIResponseExt: IsA<URIResponse> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(URIResponse::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(URIResponse::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::uri\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::uri".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_uri_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

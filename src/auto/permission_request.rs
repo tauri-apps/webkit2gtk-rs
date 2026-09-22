@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -17,12 +18,7 @@ impl PermissionRequest {
   pub const NONE: Option<&'static PermissionRequest> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::PermissionRequest>> Sealed for T {}
-}
-
-pub trait PermissionRequestExt: IsA<PermissionRequest> + sealed::Sealed + 'static {
+pub trait PermissionRequestExt: IsA<PermissionRequest> + 'static {
   #[doc(alias = "webkit_permission_request_allow")]
   fn allow(&self) {
     unsafe {

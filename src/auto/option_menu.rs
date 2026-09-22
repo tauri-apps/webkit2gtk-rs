@@ -2,8 +2,9 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::OptionMenuItem;
+use crate::{ffi, OptionMenuItem};
 use glib::{
+  object::ObjectType as _,
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
   translate::*,
@@ -23,12 +24,7 @@ impl OptionMenu {
   pub const NONE: Option<&'static OptionMenu> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::OptionMenu>> Sealed for T {}
-}
-
-pub trait OptionMenuExt: IsA<OptionMenu> + sealed::Sealed + 'static {
+pub trait OptionMenuExt: IsA<OptionMenu> + 'static {
   #[doc(alias = "webkit_option_menu_activate_item")]
   fn activate_item(&self, index: u32) {
     unsafe {
@@ -87,15 +83,17 @@ pub trait OptionMenuExt: IsA<OptionMenu> + sealed::Sealed + 'static {
       this: *mut ffi::WebKitOptionMenu,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(OptionMenu::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(OptionMenu::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"close\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"close".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           close_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

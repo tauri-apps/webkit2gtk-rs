@@ -3,6 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
+use crate::ffi;
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -18,12 +19,7 @@ impl FormSubmissionRequest {
   pub const NONE: Option<&'static FormSubmissionRequest> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::FormSubmissionRequest>> Sealed for T {}
-}
-
-pub trait FormSubmissionRequestExt: IsA<FormSubmissionRequest> + sealed::Sealed + 'static {
+pub trait FormSubmissionRequestExt: IsA<FormSubmissionRequest> + 'static {
   //#[cfg_attr(feature = "v2_20", deprecated = "Since 2.20")]
   //#[allow(deprecated)]
   //#[doc(alias = "webkit_form_submission_request_get_text_fields")]

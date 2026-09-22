@@ -3,8 +3,9 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{CookieAcceptPolicy, CookiePersistentStorage};
+use crate::{ffi, CookieAcceptPolicy, CookiePersistentStorage};
 use glib::{
+  object::ObjectType as _,
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
   translate::*,
@@ -24,12 +25,7 @@ impl CookieManager {
   pub const NONE: Option<&'static CookieManager> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::CookieManager>> Sealed for T {}
-}
-
-pub trait CookieManagerExt: IsA<CookieManager> + sealed::Sealed + 'static {
+pub trait CookieManagerExt: IsA<CookieManager> + 'static {
   #[cfg(feature = "v2_20")]
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_20")))]
   #[doc(alias = "webkit_cookie_manager_add_cookie")]
@@ -56,17 +52,19 @@ pub trait CookieManagerExt: IsA<CookieManager> + sealed::Sealed + 'static {
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
     ) {
-      let mut error = std::ptr::null_mut();
-      let _ =
+      unsafe {
+        let mut error = std::ptr::null_mut();
         ffi::webkit_cookie_manager_add_cookie_finish(_source_object as *mut _, res, &mut error);
-      let result = if error.is_null() {
-        Ok(())
-      } else {
-        Err(from_glib_full(error))
-      };
-      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
-      let callback: P = callback.into_inner();
-      callback(result);
+        let result = if error.is_null() {
+          Ok(())
+        } else {
+          Err(from_glib_full(error))
+        };
+        let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
+          Box_::from_raw(user_data as *mut _);
+        let callback: P = callback.into_inner();
+        callback(result);
+      }
     }
     let callback = add_cookie_trampoline::<P>;
     unsafe {
@@ -129,17 +127,19 @@ pub trait CookieManagerExt: IsA<CookieManager> + sealed::Sealed + 'static {
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
     ) {
-      let mut error = std::ptr::null_mut();
-      let _ =
+      unsafe {
+        let mut error = std::ptr::null_mut();
         ffi::webkit_cookie_manager_delete_cookie_finish(_source_object as *mut _, res, &mut error);
-      let result = if error.is_null() {
-        Ok(())
-      } else {
-        Err(from_glib_full(error))
-      };
-      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
-      let callback: P = callback.into_inner();
-      callback(result);
+        let result = if error.is_null() {
+          Ok(())
+        } else {
+          Err(from_glib_full(error))
+        };
+        let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
+          Box_::from_raw(user_data as *mut _);
+        let callback: P = callback.into_inner();
+        callback(result);
+      }
     }
     let callback = delete_cookie_trampoline::<P>;
     unsafe {
@@ -205,20 +205,23 @@ pub trait CookieManagerExt: IsA<CookieManager> + sealed::Sealed + 'static {
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
     ) {
-      let mut error = std::ptr::null_mut();
-      let ret = ffi::webkit_cookie_manager_get_accept_policy_finish(
-        _source_object as *mut _,
-        res,
-        &mut error,
-      );
-      let result = if error.is_null() {
-        Ok(from_glib(ret))
-      } else {
-        Err(from_glib_full(error))
-      };
-      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
-      let callback: P = callback.into_inner();
-      callback(result);
+      unsafe {
+        let mut error = std::ptr::null_mut();
+        let ret = ffi::webkit_cookie_manager_get_accept_policy_finish(
+          _source_object as *mut _,
+          res,
+          &mut error,
+        );
+        let result = if error.is_null() {
+          Ok(from_glib(ret))
+        } else {
+          Err(from_glib_full(error))
+        };
+        let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
+          Box_::from_raw(user_data as *mut _);
+        let callback: P = callback.into_inner();
+        callback(result);
+      }
     }
     let callback = accept_policy_trampoline::<P>;
     unsafe {
@@ -271,17 +274,20 @@ pub trait CookieManagerExt: IsA<CookieManager> + sealed::Sealed + 'static {
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
     ) {
-      let mut error = std::ptr::null_mut();
-      let ret =
-        ffi::webkit_cookie_manager_get_cookies_finish(_source_object as *mut _, res, &mut error);
-      let result = if error.is_null() {
-        Ok(FromGlibPtrContainer::from_glib_full(ret))
-      } else {
-        Err(from_glib_full(error))
-      };
-      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
-      let callback: P = callback.into_inner();
-      callback(result);
+      unsafe {
+        let mut error = std::ptr::null_mut();
+        let ret =
+          ffi::webkit_cookie_manager_get_cookies_finish(_source_object as *mut _, res, &mut error);
+        let result = if error.is_null() {
+          Ok(FromGlibPtrContainer::from_glib_full(ret))
+        } else {
+          Err(from_glib_full(error))
+        };
+        let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
+          Box_::from_raw(user_data as *mut _);
+        let callback: P = callback.into_inner();
+        callback(result);
+      }
     }
     let callback = cookies_trampoline::<P>;
     unsafe {
@@ -338,20 +344,23 @@ pub trait CookieManagerExt: IsA<CookieManager> + sealed::Sealed + 'static {
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
     ) {
-      let mut error = std::ptr::null_mut();
-      let ret = ffi::webkit_cookie_manager_get_domains_with_cookies_finish(
-        _source_object as *mut _,
-        res,
-        &mut error,
-      );
-      let result = if error.is_null() {
-        Ok(FromGlibPtrContainer::from_glib_full(ret))
-      } else {
-        Err(from_glib_full(error))
-      };
-      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
-      let callback: P = callback.into_inner();
-      callback(result);
+      unsafe {
+        let mut error = std::ptr::null_mut();
+        let ret = ffi::webkit_cookie_manager_get_domains_with_cookies_finish(
+          _source_object as *mut _,
+          res,
+          &mut error,
+        );
+        let result = if error.is_null() {
+          Ok(FromGlibPtrContainer::from_glib_full(ret))
+        } else {
+          Err(from_glib_full(error))
+        };
+        let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
+          Box_::from_raw(user_data as *mut _);
+        let callback: P = callback.into_inner();
+        callback(result);
+      }
     }
     let callback = domains_with_cookies_trampoline::<P>;
     unsafe {
@@ -404,15 +413,17 @@ pub trait CookieManagerExt: IsA<CookieManager> + sealed::Sealed + 'static {
       this: *mut ffi::WebKitCookieManager,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(CookieManager::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(CookieManager::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"changed\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"changed".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           changed_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

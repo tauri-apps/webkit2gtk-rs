@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::prelude::*;
 #[cfg(feature = "v2_36")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_36")))]
@@ -85,16 +86,12 @@ impl URISchemeResponseBuilder {
   /// Build the [`URISchemeResponse`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> URISchemeResponse {
+    assert_initialized_main_thread!();
     self.builder.build()
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::URISchemeResponse>> Sealed for T {}
-}
-
-pub trait URISchemeResponseExt: IsA<URISchemeResponse> + sealed::Sealed + 'static {
+pub trait URISchemeResponseExt: IsA<URISchemeResponse> + 'static {
   #[cfg(feature = "v2_36")]
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_36")))]
   #[doc(alias = "webkit_uri_scheme_response_set_content_type")]

@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::PermissionRequest;
+use crate::{ffi, PermissionRequest};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -18,13 +18,8 @@ impl WebsiteDataAccessPermissionRequest {
   pub const NONE: Option<&'static WebsiteDataAccessPermissionRequest> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::WebsiteDataAccessPermissionRequest>> Sealed for T {}
-}
-
 pub trait WebsiteDataAccessPermissionRequestExt:
-  IsA<WebsiteDataAccessPermissionRequest> + sealed::Sealed + 'static
+  IsA<WebsiteDataAccessPermissionRequest> + 'static
 {
   #[doc(alias = "webkit_website_data_access_permission_request_get_current_domain")]
   #[doc(alias = "get_current_domain")]

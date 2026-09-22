@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::ScriptDialogType;
+use crate::{ffi, ScriptDialogType};
 use glib::translate::*;
 
 glib::wrapper! {

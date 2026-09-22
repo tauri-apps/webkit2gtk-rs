@@ -6,7 +6,7 @@
 #[cfg(feature = "v2_6")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_6")))]
 use crate::NavigationAction;
-use crate::{NavigationType, PolicyDecision, URIRequest};
+use crate::{ffi, NavigationType, PolicyDecision, URIRequest};
 use glib::{
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
@@ -27,18 +27,12 @@ impl NavigationPolicyDecision {
   pub const NONE: Option<&'static NavigationPolicyDecision> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::NavigationPolicyDecision>> Sealed for T {}
-}
-
-pub trait NavigationPolicyDecisionExt:
-  IsA<NavigationPolicyDecision> + sealed::Sealed + 'static
-{
+pub trait NavigationPolicyDecisionExt: IsA<NavigationPolicyDecision> + 'static {
   #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[allow(deprecated)]
   #[doc(alias = "webkit_navigation_policy_decision_get_frame_name")]
   #[doc(alias = "get_frame_name")]
+  #[doc(alias = "frame-name")]
   fn frame_name(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_navigation_policy_decision_get_frame_name(
@@ -59,6 +53,7 @@ pub trait NavigationPolicyDecisionExt:
   #[allow(deprecated)]
   #[doc(alias = "webkit_navigation_policy_decision_get_mouse_button")]
   #[doc(alias = "get_mouse_button")]
+  #[doc(alias = "mouse-button")]
   fn mouse_button(&self) -> u32 {
     unsafe {
       ffi::webkit_navigation_policy_decision_get_mouse_button(self.as_ref().to_glib_none().0)
@@ -69,6 +64,7 @@ pub trait NavigationPolicyDecisionExt:
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_6")))]
   #[doc(alias = "webkit_navigation_policy_decision_get_navigation_action")]
   #[doc(alias = "get_navigation_action")]
+  #[doc(alias = "navigation-action")]
   fn navigation_action(&self) -> Option<NavigationAction> {
     unsafe {
       from_glib_none(
@@ -83,6 +79,7 @@ pub trait NavigationPolicyDecisionExt:
   #[allow(deprecated)]
   #[doc(alias = "webkit_navigation_policy_decision_get_navigation_type")]
   #[doc(alias = "get_navigation_type")]
+  #[doc(alias = "navigation-type")]
   fn navigation_type(&self) -> NavigationType {
     unsafe {
       from_glib(ffi::webkit_navigation_policy_decision_get_navigation_type(
@@ -114,15 +111,17 @@ pub trait NavigationPolicyDecisionExt:
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::frame-name\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::frame-name".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_frame_name_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -141,15 +140,17 @@ pub trait NavigationPolicyDecisionExt:
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::modifiers\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::modifiers".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_modifiers_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -168,15 +169,17 @@ pub trait NavigationPolicyDecisionExt:
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::mouse-button\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::mouse-button".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_mouse_button_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -196,15 +199,17 @@ pub trait NavigationPolicyDecisionExt:
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::navigation-action\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::navigation-action".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_navigation_action_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -223,15 +228,17 @@ pub trait NavigationPolicyDecisionExt:
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::navigation-type\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::navigation-type".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_navigation_type_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -250,15 +257,17 @@ pub trait NavigationPolicyDecisionExt:
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(NavigationPolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::request\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::request".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_request_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

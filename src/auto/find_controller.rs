@@ -2,8 +2,9 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::WebView;
+use crate::{ffi, WebView};
 use glib::{
+  object::ObjectType as _,
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
   translate::*,
@@ -57,16 +58,12 @@ impl FindControllerBuilder {
   /// Build the [`FindController`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> FindController {
+    assert_initialized_main_thread!();
     self.builder.build()
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::FindController>> Sealed for T {}
-}
-
-pub trait FindControllerExt: IsA<FindController> + sealed::Sealed + 'static {
+pub trait FindControllerExt: IsA<FindController> + 'static {
   #[doc(alias = "webkit_find_controller_count_matches")]
   fn count_matches(&self, search_text: &str, find_options: u32, max_match_count: u32) {
     unsafe {
@@ -81,6 +78,7 @@ pub trait FindControllerExt: IsA<FindController> + sealed::Sealed + 'static {
 
   #[doc(alias = "webkit_find_controller_get_max_match_count")]
   #[doc(alias = "get_max_match_count")]
+  #[doc(alias = "max-match-count")]
   fn max_match_count(&self) -> u32 {
     unsafe { ffi::webkit_find_controller_get_max_match_count(self.as_ref().to_glib_none().0) }
   }
@@ -103,6 +101,7 @@ pub trait FindControllerExt: IsA<FindController> + sealed::Sealed + 'static {
 
   #[doc(alias = "webkit_find_controller_get_web_view")]
   #[doc(alias = "get_web_view")]
+  #[doc(alias = "web-view")]
   fn web_view(&self) -> Option<WebView> {
     unsafe {
       from_glib_none(ffi::webkit_find_controller_get_web_view(
@@ -155,21 +154,23 @@ pub trait FindControllerExt: IsA<FindController> + sealed::Sealed + 'static {
       F: Fn(&P, u32) + 'static,
     >(
       this: *mut ffi::WebKitFindController,
-      match_count: libc::c_uint,
+      match_count: std::ffi::c_uint,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        FindController::from_glib_borrow(this).unsafe_cast_ref(),
-        match_count,
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          FindController::from_glib_borrow(this).unsafe_cast_ref(),
+          match_count,
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"counted-matches\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"counted-matches".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           counted_matches_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -186,15 +187,17 @@ pub trait FindControllerExt: IsA<FindController> + sealed::Sealed + 'static {
       this: *mut ffi::WebKitFindController,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(FindController::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(FindController::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"failed-to-find-text\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"failed-to-find-text".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           failed_to_find_text_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -206,21 +209,23 @@ pub trait FindControllerExt: IsA<FindController> + sealed::Sealed + 'static {
   fn connect_found_text<F: Fn(&Self, u32) + 'static>(&self, f: F) -> SignalHandlerId {
     unsafe extern "C" fn found_text_trampoline<P: IsA<FindController>, F: Fn(&P, u32) + 'static>(
       this: *mut ffi::WebKitFindController,
-      match_count: libc::c_uint,
+      match_count: std::ffi::c_uint,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        FindController::from_glib_borrow(this).unsafe_cast_ref(),
-        match_count,
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          FindController::from_glib_borrow(this).unsafe_cast_ref(),
+          match_count,
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"found-text\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"found-text".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           found_text_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -238,15 +243,17 @@ pub trait FindControllerExt: IsA<FindController> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(FindController::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(FindController::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::max-match-count\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::max-match-count".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_max_match_count_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -261,15 +268,17 @@ pub trait FindControllerExt: IsA<FindController> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(FindController::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(FindController::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::options\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::options".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_options_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -284,15 +293,17 @@ pub trait FindControllerExt: IsA<FindController> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(FindController::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(FindController::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::text\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::text".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_text_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

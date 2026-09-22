@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 #[cfg(feature = "v2_30")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_30")))]
 use crate::SecurityOrigin;
@@ -12,6 +13,7 @@ use glib::prelude::*;
 #[cfg(feature = "v2_2")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_2")))]
 use glib::{
+  object::ObjectType as _,
   signal::{connect_raw, SignalHandlerId},
   translate::*,
 };
@@ -32,12 +34,7 @@ impl AuthenticationRequest {
   pub const NONE: Option<&'static AuthenticationRequest> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::AuthenticationRequest>> Sealed for T {}
-}
-
-pub trait AuthenticationRequestExt: IsA<AuthenticationRequest> + sealed::Sealed + 'static {
+pub trait AuthenticationRequestExt: IsA<AuthenticationRequest> + 'static {
   #[cfg(feature = "v2_2")]
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_2")))]
   #[doc(alias = "webkit_authentication_request_can_save_credentials")]
@@ -198,18 +195,20 @@ pub trait AuthenticationRequestExt: IsA<AuthenticationRequest> + sealed::Sealed 
       credential: *mut ffi::WebKitCredential,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        AuthenticationRequest::from_glib_borrow(this).unsafe_cast_ref(),
-        &from_glib_borrow(credential),
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          AuthenticationRequest::from_glib_borrow(this).unsafe_cast_ref(),
+          &from_glib_borrow(credential),
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"authenticated\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"authenticated".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           authenticated_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -228,15 +227,17 @@ pub trait AuthenticationRequestExt: IsA<AuthenticationRequest> + sealed::Sealed 
       this: *mut ffi::WebKitAuthenticationRequest,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(AuthenticationRequest::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(AuthenticationRequest::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"cancelled\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"cancelled".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           cancelled_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

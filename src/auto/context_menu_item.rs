@@ -3,7 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{ContextMenu, ContextMenuAction};
+use crate::{ffi, ContextMenu, ContextMenuAction};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -88,12 +88,7 @@ impl ContextMenuItem {
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::ContextMenuItem>> Sealed for T {}
-}
-
-pub trait ContextMenuItemExt: IsA<ContextMenuItem> + sealed::Sealed + 'static {
+pub trait ContextMenuItemExt: IsA<ContextMenuItem> + 'static {
   //#[cfg_attr(feature = "v2_18", deprecated = "Since 2.18")]
   //#[allow(deprecated)]
   //#[doc(alias = "webkit_context_menu_item_get_action")]

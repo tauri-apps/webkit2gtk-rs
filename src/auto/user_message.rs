@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -105,18 +106,15 @@ impl UserMessageBuilder {
   /// Build the [`UserMessage`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> UserMessage {
+    assert_initialized_main_thread!();
     self.builder.build()
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::UserMessage>> Sealed for T {}
-}
-
-pub trait UserMessageExt: IsA<UserMessage> + sealed::Sealed + 'static {
+pub trait UserMessageExt: IsA<UserMessage> + 'static {
   #[doc(alias = "webkit_user_message_get_fd_list")]
   #[doc(alias = "get_fd_list")]
+  #[doc(alias = "fd-list")]
   fn fd_list(&self) -> Option<gio::UnixFDList> {
     unsafe {
       from_glib_none(ffi::webkit_user_message_get_fd_list(

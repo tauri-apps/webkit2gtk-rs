@@ -3,7 +3,9 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
+use crate::ffi;
 use glib::{
+  object::ObjectType as _,
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
   translate::*,
@@ -90,16 +92,12 @@ impl PrintCustomWidgetBuilder {
   /// Build the [`PrintCustomWidget`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> PrintCustomWidget {
+    assert_initialized_main_thread!();
     self.builder.build()
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::PrintCustomWidget>> Sealed for T {}
-}
-
-pub trait PrintCustomWidgetExt: IsA<PrintCustomWidget> + sealed::Sealed + 'static {
+pub trait PrintCustomWidgetExt: IsA<PrintCustomWidget> + 'static {
   #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[allow(deprecated)]
   #[doc(alias = "webkit_print_custom_widget_get_title")]
@@ -133,15 +131,17 @@ pub trait PrintCustomWidgetExt: IsA<PrintCustomWidget> + sealed::Sealed + 'stati
       this: *mut ffi::WebKitPrintCustomWidget,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(PrintCustomWidget::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(PrintCustomWidget::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"apply\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"apply".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           apply_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -166,19 +166,21 @@ pub trait PrintCustomWidgetExt: IsA<PrintCustomWidget> + sealed::Sealed + 'stati
       print_settings: *mut gtk::ffi::GtkPrintSettings,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        PrintCustomWidget::from_glib_borrow(this).unsafe_cast_ref(),
-        &from_glib_borrow(page_setup),
-        &from_glib_borrow(print_settings),
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          PrintCustomWidget::from_glib_borrow(this).unsafe_cast_ref(),
+          &from_glib_borrow(page_setup),
+          &from_glib_borrow(print_settings),
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"update\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"update".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           update_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
