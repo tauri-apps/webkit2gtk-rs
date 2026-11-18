@@ -8,6 +8,7 @@ repository = "https://github.com/tauri-apps/webkit2gtk-rs"
 license = "MIT"
 keywords = [ "webkit", "gtk-rs", "gnome", "GUI" ]
 include = ["README.md", "LICENSE", "src/**/*.rs", "CHANGELOG.md"]
+rust-version = "1.92"
 
 [package.metadata.docs.rs]
 all-features = true
