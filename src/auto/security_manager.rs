@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -17,12 +18,7 @@ impl SecurityManager {
   pub const NONE: Option<&'static SecurityManager> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::SecurityManager>> Sealed for T {}
-}
-
-pub trait SecurityManagerExt: IsA<SecurityManager> + sealed::Sealed + 'static {
+pub trait SecurityManagerExt: IsA<SecurityManager> + 'static {
   #[doc(alias = "webkit_security_manager_register_uri_scheme_as_cors_enabled")]
   fn register_uri_scheme_as_cors_enabled(&self, scheme: &str) {
     unsafe {

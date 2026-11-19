@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 #[cfg(feature = "v2_30")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_30")))]
 use crate::WebsitePolicies;
@@ -20,12 +21,7 @@ impl PolicyDecision {
   pub const NONE: Option<&'static PolicyDecision> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::PolicyDecision>> Sealed for T {}
-}
-
-pub trait PolicyDecisionExt: IsA<PolicyDecision> + sealed::Sealed + 'static {
+pub trait PolicyDecisionExt: IsA<PolicyDecision> + 'static {
   #[doc(alias = "webkit_policy_decision_download")]
   fn download(&self) {
     unsafe {

@@ -2,7 +2,9 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{
+  object::ObjectType as _,
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
   translate::*,
@@ -22,12 +24,7 @@ impl FaviconDatabase {
   pub const NONE: Option<&'static FaviconDatabase> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::FaviconDatabase>> Sealed for T {}
-}
-
-pub trait FaviconDatabaseExt: IsA<FaviconDatabase> + sealed::Sealed + 'static {
+pub trait FaviconDatabaseExt: IsA<FaviconDatabase> + 'static {
   #[doc(alias = "webkit_favicon_database_clear")]
   fn clear(&self) {
     unsafe {
@@ -62,17 +59,23 @@ pub trait FaviconDatabaseExt: IsA<FaviconDatabase> + sealed::Sealed + 'static {
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
     ) {
-      let mut error = std::ptr::null_mut();
-      let ret =
-        ffi::webkit_favicon_database_get_favicon_finish(_source_object as *mut _, res, &mut error);
-      let result = if error.is_null() {
-        Ok(from_glib_full(ret))
-      } else {
-        Err(from_glib_full(error))
-      };
-      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
-      let callback: P = callback.into_inner();
-      callback(result);
+      unsafe {
+        let mut error = std::ptr::null_mut();
+        let ret = ffi::webkit_favicon_database_get_favicon_finish(
+          _source_object as *mut _,
+          res,
+          &mut error,
+        );
+        let result = if error.is_null() {
+          Ok(from_glib_full(ret))
+        } else {
+          Err(from_glib_full(error))
+        };
+        let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
+          Box_::from_raw(user_data as *mut _);
+        let callback: P = callback.into_inner();
+        callback(result);
+      }
     }
     let callback = favicon_trampoline::<P>;
     unsafe {
@@ -117,23 +120,25 @@ pub trait FaviconDatabaseExt: IsA<FaviconDatabase> + sealed::Sealed + 'static {
       F: Fn(&P, &str, &str) + 'static,
     >(
       this: *mut ffi::WebKitFaviconDatabase,
-      page_uri: *mut libc::c_char,
-      favicon_uri: *mut libc::c_char,
+      page_uri: *mut std::ffi::c_char,
+      favicon_uri: *mut std::ffi::c_char,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        FaviconDatabase::from_glib_borrow(this).unsafe_cast_ref(),
-        &glib::GString::from_glib_borrow(page_uri),
-        &glib::GString::from_glib_borrow(favicon_uri),
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          FaviconDatabase::from_glib_borrow(this).unsafe_cast_ref(),
+          &glib::GString::from_glib_borrow(page_uri),
+          &glib::GString::from_glib_borrow(favicon_uri),
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"favicon-changed\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"favicon-changed".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           favicon_changed_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
@@ -68,16 +69,12 @@ impl URIRequestBuilder {
   /// Build the [`URIRequest`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> URIRequest {
+    assert_initialized_main_thread!();
     self.builder.build()
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::URIRequest>> Sealed for T {}
-}
-
-pub trait URIRequestExt: IsA<URIRequest> + sealed::Sealed + 'static {
+pub trait URIRequestExt: IsA<URIRequest> + 'static {
   #[doc(alias = "webkit_uri_request_get_http_headers")]
   #[doc(alias = "get_http_headers")]
   fn http_headers(&self) -> Option<soup::MessageHeaders> {
@@ -111,6 +108,7 @@ pub trait URIRequestExt: IsA<URIRequest> + sealed::Sealed + 'static {
   }
 
   #[doc(alias = "webkit_uri_request_set_uri")]
+  #[doc(alias = "uri")]
   fn set_uri(&self, uri: &str) {
     unsafe {
       ffi::webkit_uri_request_set_uri(self.as_ref().to_glib_none().0, uri.to_glib_none().0);
@@ -124,15 +122,17 @@ pub trait URIRequestExt: IsA<URIRequest> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(URIRequest::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(URIRequest::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::uri\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::uri".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_uri_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

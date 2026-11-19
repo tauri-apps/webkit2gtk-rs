@@ -11,10 +11,23 @@
 )]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
+use cairo_sys as cairo;
+use gdk_sys as gdk;
+use gio_sys as gio;
+use glib_sys as glib;
+use gobject_sys as gobject;
+use gtk_sys as gtk;
+use javascriptcore_rs_sys as java_script_core;
+use soup_sys as soup;
+
+#[cfg(unix)]
 #[allow(unused_imports)]
-use libc::{
+use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
+#[allow(unused_imports)]
+use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
+#[allow(unused_imports)]
+use std::ffi::{
   c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
-  intptr_t, size_t, ssize_t, uintptr_t, FILE,
 };
 
 #[allow(unused_imports)]
@@ -341,6 +354,7 @@ pub type WebKitURISchemeRequestCallback =
 
 // Records
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitApplicationInfo {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -376,12 +390,13 @@ impl ::std::fmt::Debug for WebKitAuthenticationRequestClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitAuthenticationRequestPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitAuthenticationRequestPrivate = *mut _WebKitAuthenticationRequestPrivate;
+pub type WebKitAuthenticationRequestPrivate = _WebKitAuthenticationRequestPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -406,12 +421,13 @@ impl ::std::fmt::Debug for WebKitAutomationSessionClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitAutomationSessionPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitAutomationSessionPrivate = *mut _WebKitAutomationSessionPrivate;
+pub type WebKitAutomationSessionPrivate = _WebKitAutomationSessionPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -458,20 +474,22 @@ impl ::std::fmt::Debug for WebKitBackForwardListItemClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitBackForwardListItemPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitBackForwardListItemPrivate = *mut _WebKitBackForwardListItemPrivate;
+pub type WebKitBackForwardListItemPrivate = _WebKitBackForwardListItemPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitBackForwardListPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitBackForwardListPrivate = *mut _WebKitBackForwardListPrivate;
+pub type WebKitBackForwardListPrivate = _WebKitBackForwardListPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -488,12 +506,13 @@ impl ::std::fmt::Debug for WebKitColorChooserRequestClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitColorChooserRequestPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitColorChooserRequestPrivate = *mut _WebKitColorChooserRequestPrivate;
+pub type WebKitColorChooserRequestPrivate = _WebKitColorChooserRequestPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -540,20 +559,22 @@ impl ::std::fmt::Debug for WebKitContextMenuItemClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitContextMenuItemPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitContextMenuItemPrivate = *mut _WebKitContextMenuItemPrivate;
+pub type WebKitContextMenuItemPrivate = _WebKitContextMenuItemPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitContextMenuPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitContextMenuPrivate = *mut _WebKitContextMenuPrivate;
+pub type WebKitContextMenuPrivate = _WebKitContextMenuPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -578,14 +599,16 @@ impl ::std::fmt::Debug for WebKitCookieManagerClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitCookieManagerPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitCookieManagerPrivate = *mut _WebKitCookieManagerPrivate;
+pub type WebKitCookieManagerPrivate = _WebKitCookieManagerPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitCredential {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -623,12 +646,13 @@ impl ::std::fmt::Debug for WebKitDeviceInfoPermissionRequestClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitDeviceInfoPermissionRequestPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitDeviceInfoPermissionRequestPrivate = *mut _WebKitDeviceInfoPermissionRequestPrivate;
+pub type WebKitDeviceInfoPermissionRequestPrivate = _WebKitDeviceInfoPermissionRequestPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -656,12 +680,13 @@ impl ::std::fmt::Debug for WebKitDownloadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitDownloadPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitDownloadPrivate = *mut _WebKitDownloadPrivate;
+pub type WebKitDownloadPrivate = _WebKitDownloadPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -686,12 +711,13 @@ impl ::std::fmt::Debug for WebKitEditorStateClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitEditorStatePrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitEditorStatePrivate = *mut _WebKitEditorStatePrivate;
+pub type WebKitEditorStatePrivate = _WebKitEditorStatePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -716,12 +742,13 @@ impl ::std::fmt::Debug for WebKitFaviconDatabaseClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitFaviconDatabasePrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitFaviconDatabasePrivate = *mut _WebKitFaviconDatabasePrivate;
+pub type WebKitFaviconDatabasePrivate = _WebKitFaviconDatabasePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -746,12 +773,13 @@ impl ::std::fmt::Debug for WebKitFileChooserRequestClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitFileChooserRequestPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitFileChooserRequestPrivate = *mut _WebKitFileChooserRequestPrivate;
+pub type WebKitFileChooserRequestPrivate = _WebKitFileChooserRequestPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -776,12 +804,13 @@ impl ::std::fmt::Debug for WebKitFindControllerClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitFindControllerPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitFindControllerPrivate = *mut _WebKitFindControllerPrivate;
+pub type WebKitFindControllerPrivate = _WebKitFindControllerPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -806,12 +835,13 @@ impl ::std::fmt::Debug for WebKitFormSubmissionRequestClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitFormSubmissionRequestPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitFormSubmissionRequestPrivate = *mut _WebKitFormSubmissionRequestPrivate;
+pub type WebKitFormSubmissionRequestPrivate = _WebKitFormSubmissionRequestPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -836,12 +866,13 @@ impl ::std::fmt::Debug for WebKitGeolocationManagerClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitGeolocationManagerPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitGeolocationManagerPrivate = *mut _WebKitGeolocationManagerPrivate;
+pub type WebKitGeolocationManagerPrivate = _WebKitGeolocationManagerPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -868,15 +899,16 @@ impl ::std::fmt::Debug for WebKitGeolocationPermissionRequestClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitGeolocationPermissionRequestPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitGeolocationPermissionRequestPrivate =
-  *mut _WebKitGeolocationPermissionRequestPrivate;
+pub type WebKitGeolocationPermissionRequestPrivate = _WebKitGeolocationPermissionRequestPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitGeolocationPosition {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -912,14 +944,16 @@ impl ::std::fmt::Debug for WebKitHitTestResultClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitHitTestResultPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitHitTestResultPrivate = *mut _WebKitHitTestResultPrivate;
+pub type WebKitHitTestResultPrivate = _WebKitHitTestResultPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitITPFirstParty {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -933,6 +967,7 @@ impl ::std::fmt::Debug for WebKitITPFirstParty {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitITPThirdParty {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1014,14 +1049,16 @@ impl ::std::fmt::Debug for WebKitInputMethodContextClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitInputMethodContextPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitInputMethodContextPrivate = *mut _WebKitInputMethodContextPrivate;
+pub type WebKitInputMethodContextPrivate = _WebKitInputMethodContextPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitInputMethodUnderline {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1059,15 +1096,17 @@ impl ::std::fmt::Debug for WebKitInstallMissingMediaPluginsPermissionRequestClas
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitInstallMissingMediaPluginsPermissionRequestPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
 pub type WebKitInstallMissingMediaPluginsPermissionRequestPrivate =
-  *mut _WebKitInstallMissingMediaPluginsPermissionRequestPrivate;
+  _WebKitInstallMissingMediaPluginsPermissionRequestPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitJavascriptResult {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1105,15 +1144,17 @@ impl ::std::fmt::Debug for WebKitMediaKeySystemPermissionRequestClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitMediaKeySystemPermissionRequestPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
 pub type WebKitMediaKeySystemPermissionRequestPrivate =
-  *mut _WebKitMediaKeySystemPermissionRequestPrivate;
+  _WebKitMediaKeySystemPermissionRequestPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitMemoryPressureSettings {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1127,6 +1168,7 @@ impl ::std::fmt::Debug for WebKitMemoryPressureSettings {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitMimeInfo {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1140,6 +1182,7 @@ impl ::std::fmt::Debug for WebKitMimeInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitNavigationAction {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1175,14 +1218,16 @@ impl ::std::fmt::Debug for WebKitNavigationPolicyDecisionClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitNavigationPolicyDecisionPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitNavigationPolicyDecisionPrivate = *mut _WebKitNavigationPolicyDecisionPrivate;
+pub type WebKitNavigationPolicyDecisionPrivate = _WebKitNavigationPolicyDecisionPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitNetworkProxySettings {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1238,21 +1283,22 @@ impl ::std::fmt::Debug for WebKitNotificationPermissionRequestClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitNotificationPermissionRequestPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitNotificationPermissionRequestPrivate =
-  *mut _WebKitNotificationPermissionRequestPrivate;
+pub type WebKitNotificationPermissionRequestPrivate = _WebKitNotificationPermissionRequestPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitNotificationPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitNotificationPrivate = *mut _WebKitNotificationPrivate;
+pub type WebKitNotificationPrivate = _WebKitNotificationPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1277,6 +1323,7 @@ impl ::std::fmt::Debug for WebKitOptionMenuClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitOptionMenuItem {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1290,12 +1337,13 @@ impl ::std::fmt::Debug for WebKitOptionMenuItem {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitOptionMenuPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitOptionMenuPrivate = *mut _WebKitOptionMenuPrivate;
+pub type WebKitOptionMenuPrivate = _WebKitOptionMenuPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1316,6 +1364,7 @@ impl ::std::fmt::Debug for WebKitPermissionRequestIface {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitPermissionStateQuery {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1351,12 +1400,13 @@ impl ::std::fmt::Debug for WebKitPluginClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitPluginPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitPluginPrivate = *mut _WebKitPluginPrivate;
+pub type WebKitPluginPrivate = _WebKitPluginPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1383,13 +1433,13 @@ impl ::std::fmt::Debug for WebKitPointerLockPermissionRequestClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitPointerLockPermissionRequestPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitPointerLockPermissionRequestPrivate =
-  *mut _WebKitPointerLockPermissionRequestPrivate;
+pub type WebKitPointerLockPermissionRequestPrivate = _WebKitPointerLockPermissionRequestPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1414,12 +1464,13 @@ impl ::std::fmt::Debug for WebKitPolicyDecisionClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitPolicyDecisionPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitPolicyDecisionPrivate = *mut _WebKitPolicyDecisionPrivate;
+pub type WebKitPolicyDecisionPrivate = _WebKitPolicyDecisionPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1455,12 +1506,13 @@ impl ::std::fmt::Debug for WebKitPrintCustomWidgetClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitPrintCustomWidgetPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitPrintCustomWidgetPrivate = *mut _WebKitPrintCustomWidgetPrivate;
+pub type WebKitPrintCustomWidgetPrivate = _WebKitPrintCustomWidgetPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1485,12 +1537,13 @@ impl ::std::fmt::Debug for WebKitPrintOperationClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitPrintOperationPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitPrintOperationPrivate = *mut _WebKitPrintOperationPrivate;
+pub type WebKitPrintOperationPrivate = _WebKitPrintOperationPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1515,14 +1568,16 @@ impl ::std::fmt::Debug for WebKitResponsePolicyDecisionClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitResponsePolicyDecisionPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitResponsePolicyDecisionPrivate = *mut _WebKitResponsePolicyDecisionPrivate;
+pub type WebKitResponsePolicyDecisionPrivate = _WebKitResponsePolicyDecisionPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitScriptDialog {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1536,6 +1591,7 @@ impl ::std::fmt::Debug for WebKitScriptDialog {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitScriptMessageReply {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1571,14 +1627,16 @@ impl ::std::fmt::Debug for WebKitSecurityManagerClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitSecurityManagerPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitSecurityManagerPrivate = *mut _WebKitSecurityManagerPrivate;
+pub type WebKitSecurityManagerPrivate = _WebKitSecurityManagerPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitSecurityOrigin {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1614,12 +1672,13 @@ impl ::std::fmt::Debug for WebKitSettingsClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitSettingsPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitSettingsPrivate = *mut _WebKitSettingsPrivate;
+pub type WebKitSettingsPrivate = _WebKitSettingsPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1644,12 +1703,13 @@ impl ::std::fmt::Debug for WebKitURIRequestClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitURIRequestPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitURIRequestPrivate = *mut _WebKitURIRequestPrivate;
+pub type WebKitURIRequestPrivate = _WebKitURIRequestPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1674,12 +1734,13 @@ impl ::std::fmt::Debug for WebKitURIResponseClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitURIResponsePrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitURIResponsePrivate = *mut _WebKitURIResponsePrivate;
+pub type WebKitURIResponsePrivate = _WebKitURIResponsePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1704,12 +1765,13 @@ impl ::std::fmt::Debug for WebKitURISchemeRequestClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitURISchemeRequestPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitURISchemeRequestPrivate = *mut _WebKitURISchemeRequestPrivate;
+pub type WebKitURISchemeRequestPrivate = _WebKitURISchemeRequestPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1734,14 +1796,16 @@ impl ::std::fmt::Debug for WebKitURISchemeResponseClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitURISchemeResponsePrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitURISchemeResponsePrivate = *mut _WebKitURISchemeResponsePrivate;
+pub type WebKitURISchemeResponsePrivate = _WebKitURISchemeResponsePrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitUserContentFilter {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1777,12 +1841,13 @@ impl ::std::fmt::Debug for WebKitUserContentFilterStoreClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitUserContentFilterStorePrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitUserContentFilterStorePrivate = *mut _WebKitUserContentFilterStorePrivate;
+pub type WebKitUserContentFilterStorePrivate = _WebKitUserContentFilterStorePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1807,12 +1872,13 @@ impl ::std::fmt::Debug for WebKitUserContentManagerClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitUserContentManagerPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitUserContentManagerPrivate = *mut _WebKitUserContentManagerPrivate;
+pub type WebKitUserContentManagerPrivate = _WebKitUserContentManagerPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1837,12 +1903,13 @@ impl ::std::fmt::Debug for WebKitUserMediaPermissionRequestClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitUserMediaPermissionRequestPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitUserMediaPermissionRequestPrivate = *mut _WebKitUserMediaPermissionRequestPrivate;
+pub type WebKitUserMediaPermissionRequestPrivate = _WebKitUserMediaPermissionRequestPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1867,14 +1934,16 @@ impl ::std::fmt::Debug for WebKitUserMessageClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitUserMessagePrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitUserMessagePrivate = *mut _WebKitUserMessagePrivate;
+pub type WebKitUserMessagePrivate = _WebKitUserMessagePrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitUserScript {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1888,6 +1957,7 @@ impl ::std::fmt::Debug for WebKitUserScript {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitUserStyleSheet {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1936,12 +2006,13 @@ impl ::std::fmt::Debug for WebKitWebContextClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitWebContextPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitWebContextPrivate = *mut _WebKitWebContextPrivate;
+pub type WebKitWebContextPrivate = _WebKitWebContextPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1966,12 +2037,13 @@ impl ::std::fmt::Debug for WebKitWebInspectorClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitWebInspectorPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitWebInspectorPrivate = *mut _WebKitWebInspectorPrivate;
+pub type WebKitWebInspectorPrivate = _WebKitWebInspectorPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1996,12 +2068,13 @@ impl ::std::fmt::Debug for WebKitWebResourceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitWebResourcePrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitWebResourcePrivate = *mut _WebKitWebResourcePrivate;
+pub type WebKitWebResourcePrivate = _WebKitWebResourcePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2026,12 +2099,13 @@ impl ::std::fmt::Debug for WebKitWebViewBaseClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitWebViewBasePrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitWebViewBasePrivate = *mut _WebKitWebViewBasePrivate;
+pub type WebKitWebViewBasePrivate = _WebKitWebViewBasePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2157,14 +2231,16 @@ impl ::std::fmt::Debug for WebKitWebViewClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitWebViewPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitWebViewPrivate = *mut _WebKitWebViewPrivate;
+pub type WebKitWebViewPrivate = _WebKitWebViewPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitWebViewSessionState {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2178,6 +2254,7 @@ impl ::std::fmt::Debug for WebKitWebViewSessionState {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitWebsiteData {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2215,13 +2292,14 @@ impl ::std::fmt::Debug for WebKitWebsiteDataAccessPermissionRequestClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitWebsiteDataAccessPermissionRequestPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
 pub type WebKitWebsiteDataAccessPermissionRequestPrivate =
-  *mut _WebKitWebsiteDataAccessPermissionRequestPrivate;
+  _WebKitWebsiteDataAccessPermissionRequestPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2246,12 +2324,13 @@ impl ::std::fmt::Debug for WebKitWebsiteDataManagerClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitWebsiteDataManagerPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitWebsiteDataManagerPrivate = *mut _WebKitWebsiteDataManagerPrivate;
+pub type WebKitWebsiteDataManagerPrivate = _WebKitWebsiteDataManagerPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2276,12 +2355,13 @@ impl ::std::fmt::Debug for WebKitWebsitePoliciesClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitWebsitePoliciesPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitWebsitePoliciesPrivate = *mut _WebKitWebsitePoliciesPrivate;
+pub type WebKitWebsitePoliciesPrivate = _WebKitWebsitePoliciesPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2306,12 +2386,13 @@ impl ::std::fmt::Debug for WebKitWindowPropertiesClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _WebKitWindowPropertiesPrivate {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type WebKitWindowPropertiesPrivate = *mut _WebKitWindowPropertiesPrivate;
+pub type WebKitWindowPropertiesPrivate = _WebKitWindowPropertiesPrivate;
 
 // Classes
 #[derive(Copy, Clone)]
@@ -3117,6 +3198,7 @@ impl ::std::fmt::Debug for WebKitWindowProperties {
 
 // Interfaces
 #[repr(C)]
+#[allow(dead_code)]
 pub struct WebKitPermissionRequest {
   _data: [u8; 0],
   _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -3128,9 +3210,7 @@ impl ::std::fmt::Debug for WebKitPermissionRequest {
   }
 }
 
-#[link(name = "webkit2gtk-4.1")]
-#[link(name = "javascriptcoregtk-4.1")]
-extern "C" {
+unsafe extern "C" {
 
   //=========================================================================
   // WebKitAuthenticationScheme

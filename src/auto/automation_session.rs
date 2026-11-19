@@ -2,8 +2,9 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::{ApplicationInfo, WebView};
+use crate::{ffi, ApplicationInfo, WebView};
 use glib::{
+  object::ObjectType as _,
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
   translate::*,
@@ -59,16 +60,12 @@ impl AutomationSessionBuilder {
   /// Build the [`AutomationSession`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> AutomationSession {
+    assert_initialized_main_thread!();
     self.builder.build()
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::AutomationSession>> Sealed for T {}
-}
-
-pub trait AutomationSessionExt: IsA<AutomationSession> + sealed::Sealed + 'static {
+pub trait AutomationSessionExt: IsA<AutomationSession> + 'static {
   #[doc(alias = "webkit_automation_session_get_application_info")]
   #[doc(alias = "get_application_info")]
   fn application_info(&self) -> Option<ApplicationInfo> {
@@ -114,21 +111,25 @@ pub trait AutomationSessionExt: IsA<AutomationSession> + sealed::Sealed + 'stati
       this: *mut ffi::WebKitAutomationSession,
       f: glib::ffi::gpointer,
     ) -> *mut ffi::WebKitWebView {
-      let f: &F = &*(f as *const F);
-      f(AutomationSession::from_glib_borrow(this).unsafe_cast_ref()) /*Not checked*/
-        .to_glib_none()
-        .0
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(AutomationSession::from_glib_borrow(this).unsafe_cast_ref()) /*Not checked*/
+          .to_glib_none()
+          .0
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       let detailed_signal_name = detail.map(|name| format!("create-web-view::{name}\0"));
-      let signal_name: &[u8] = detailed_signal_name
+      let signal_name = detailed_signal_name
         .as_ref()
-        .map_or(&b"create-web-view\0"[..], |n| n.as_bytes());
+        .map_or(c"create-web-view", |n| {
+          std::ffi::CStr::from_bytes_with_nul_unchecked(n.as_bytes())
+        });
       connect_raw(
         self.as_ptr() as *mut _,
-        signal_name.as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        signal_name.as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           create_web_view_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

@@ -25,10 +25,11 @@ use crate::UserMessage;
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_10")))]
 use crate::WebsiteDataManager;
 use crate::{
-  CacheModel, CookieManager, Download, FaviconDatabase, Plugin, SecurityManager, TLSErrorsPolicy,
-  URISchemeRequest,
+  ffi, CacheModel, CookieManager, Download, FaviconDatabase, Plugin, SecurityManager,
+  TLSErrorsPolicy, URISchemeRequest,
 };
 use glib::{
+  object::ObjectType as _,
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
   translate::*,
@@ -191,16 +192,12 @@ impl WebContextBuilder {
   /// Build the [`WebContext`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> WebContext {
+    assert_initialized_main_thread!();
     self.builder.build()
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::WebContext>> Sealed for T {}
-}
-
-pub trait WebContextExt: IsA<WebContext> + sealed::Sealed + 'static {
+pub trait WebContextExt: IsA<WebContext> + 'static {
   #[cfg(feature = "v2_26")]
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_26")))]
   #[doc(alias = "webkit_web_context_add_path_to_sandbox")]
@@ -328,17 +325,20 @@ pub trait WebContextExt: IsA<WebContext> + sealed::Sealed + 'static {
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
     ) {
-      let mut error = std::ptr::null_mut();
-      let ret =
-        ffi::webkit_web_context_get_plugins_finish(_source_object as *mut _, res, &mut error);
-      let result = if error.is_null() {
-        Ok(FromGlibPtrContainer::from_glib_full(ret))
-      } else {
-        Err(from_glib_full(error))
-      };
-      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
-      let callback: P = callback.into_inner();
-      callback(result);
+      unsafe {
+        let mut error = std::ptr::null_mut();
+        let ret =
+          ffi::webkit_web_context_get_plugins_finish(_source_object as *mut _, res, &mut error);
+        let result = if error.is_null() {
+          Ok(FromGlibPtrContainer::from_glib_full(ret))
+        } else {
+          Err(from_glib_full(error))
+        };
+        let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
+          Box_::from_raw(user_data as *mut _);
+        let callback: P = callback.into_inner();
+        callback(result);
+      }
     }
     let callback = plugins_trampoline::<P>;
     unsafe {
@@ -423,6 +423,7 @@ pub trait WebContextExt: IsA<WebContext> + sealed::Sealed + 'static {
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_38")))]
   #[doc(alias = "webkit_web_context_get_time_zone_override")]
   #[doc(alias = "get_time_zone_override")]
+  #[doc(alias = "time-zone-override")]
   fn time_zone_override(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_web_context_get_time_zone_override(
@@ -447,6 +448,7 @@ pub trait WebContextExt: IsA<WebContext> + sealed::Sealed + 'static {
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_30")))]
   #[doc(alias = "webkit_web_context_get_use_system_appearance_for_scrollbars")]
   #[doc(alias = "get_use_system_appearance_for_scrollbars")]
+  #[doc(alias = "use-system-appearance-for-scrollbars")]
   fn uses_system_appearance_for_scrollbars(&self) -> bool {
     unsafe {
       from_glib(
@@ -471,6 +473,7 @@ pub trait WebContextExt: IsA<WebContext> + sealed::Sealed + 'static {
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_10")))]
   #[doc(alias = "webkit_web_context_get_website_data_manager")]
   #[doc(alias = "get_website_data_manager")]
+  #[doc(alias = "website-data-manager")]
   fn website_data_manager(&self) -> Option<WebsiteDataManager> {
     unsafe {
       from_glib_none(ffi::webkit_web_context_get_website_data_manager(
@@ -535,15 +538,19 @@ pub trait WebContextExt: IsA<WebContext> + sealed::Sealed + 'static {
       request: *mut ffi::WebKitURISchemeRequest,
       user_data: glib::ffi::gpointer,
     ) {
-      let request = from_glib_borrow(request);
-      let callback: &P = &*(user_data as *mut _);
-      (*callback)(&request)
+      unsafe {
+        let request = from_glib_borrow(request);
+        let callback = &*(user_data as *mut P);
+        (*callback)(&request)
+      }
     }
     let callback = Some(callback_func::<P> as _);
     unsafe extern "C" fn user_data_destroy_func_func<P: Fn(&URISchemeRequest) + 'static>(
       data: glib::ffi::gpointer,
     ) {
-      let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+      unsafe {
+        let _callback = Box_::from_raw(data as *mut P);
+      }
     }
     let destroy_call4 = Some(user_data_destroy_func_func::<P> as _);
     let super_callback0: Box_<P> = callback_data;
@@ -697,6 +704,7 @@ pub trait WebContextExt: IsA<WebContext> + sealed::Sealed + 'static {
   #[cfg(feature = "v2_30")]
   #[cfg_attr(docsrs, doc(cfg(feature = "v2_30")))]
   #[doc(alias = "webkit_web_context_set_use_system_appearance_for_scrollbars")]
+  #[doc(alias = "use-system-appearance-for-scrollbars")]
   fn set_use_system_appearance_for_scrollbars(&self, enabled: bool) {
     unsafe {
       ffi::webkit_web_context_set_use_system_appearance_for_scrollbars(
@@ -772,18 +780,20 @@ pub trait WebContextExt: IsA<WebContext> + sealed::Sealed + 'static {
       session: *mut ffi::WebKitAutomationSession,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        WebContext::from_glib_borrow(this).unsafe_cast_ref(),
-        &from_glib_borrow(session),
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          WebContext::from_glib_borrow(this).unsafe_cast_ref(),
+          &from_glib_borrow(session),
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"automation-started\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"automation-started".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           automation_started_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -801,18 +811,20 @@ pub trait WebContextExt: IsA<WebContext> + sealed::Sealed + 'static {
       download: *mut ffi::WebKitDownload,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        WebContext::from_glib_borrow(this).unsafe_cast_ref(),
-        &from_glib_borrow(download),
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          WebContext::from_glib_borrow(this).unsafe_cast_ref(),
+          &from_glib_borrow(download),
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"download-started\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"download-started".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           download_started_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -834,15 +846,17 @@ pub trait WebContextExt: IsA<WebContext> + sealed::Sealed + 'static {
       this: *mut ffi::WebKitWebContext,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(WebContext::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(WebContext::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"initialize-notification-permissions\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"initialize-notification-permissions".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           initialize_notification_permissions_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -861,15 +875,17 @@ pub trait WebContextExt: IsA<WebContext> + sealed::Sealed + 'static {
       this: *mut ffi::WebKitWebContext,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(WebContext::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(WebContext::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"initialize-web-extensions\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"initialize-web-extensions".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           initialize_web_extensions_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -892,19 +908,21 @@ pub trait WebContextExt: IsA<WebContext> + sealed::Sealed + 'static {
       message: *mut ffi::WebKitUserMessage,
       f: glib::ffi::gpointer,
     ) -> glib::ffi::gboolean {
-      let f: &F = &*(f as *const F);
-      f(
-        WebContext::from_glib_borrow(this).unsafe_cast_ref(),
-        &from_glib_borrow(message),
-      )
-      .into_glib()
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          WebContext::from_glib_borrow(this).unsafe_cast_ref(),
+          &from_glib_borrow(message),
+        )
+        .into_glib()
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"user-message-received\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"user-message-received".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           user_message_received_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -927,15 +945,17 @@ pub trait WebContextExt: IsA<WebContext> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(WebContext::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(WebContext::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::use-system-appearance-for-scrollbars\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::use-system-appearance-for-scrollbars".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_use_system_appearance_for_scrollbars_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

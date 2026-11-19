@@ -12,8 +12,6 @@ rust-version = "1.92"
 
 [package.metadata.docs.rs]
 all-features = true
-rustc-args = [ "--cfg", "docsrs" ]
-rustdoc-args = [ "--cfg", "docsrs" ]
 
 [lib]
 name = "webkit2gtk"

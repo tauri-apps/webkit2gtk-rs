@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::BackForwardListItem;
+use crate::{ffi, BackForwardListItem};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -18,12 +18,7 @@ impl BackForwardList {
   pub const NONE: Option<&'static BackForwardList> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::BackForwardList>> Sealed for T {}
-}
-
-pub trait BackForwardListExt: IsA<BackForwardList> + sealed::Sealed + 'static {
+pub trait BackForwardListExt: IsA<BackForwardList> + 'static {
   #[doc(alias = "webkit_back_forward_list_get_back_item")]
   #[doc(alias = "get_back_item")]
   fn back_item(&self) -> Option<BackForwardListItem> {

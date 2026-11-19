@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::AutoplayPolicy;
+use crate::{ffi, AutoplayPolicy};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -74,16 +74,12 @@ impl WebsitePoliciesBuilder {
   /// Build the [`WebsitePolicies`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> WebsitePolicies {
+    assert_initialized_main_thread!();
     self.builder.build()
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::WebsitePolicies>> Sealed for T {}
-}
-
-pub trait WebsitePoliciesExt: IsA<WebsitePolicies> + sealed::Sealed + 'static {
+pub trait WebsitePoliciesExt: IsA<WebsitePolicies> + 'static {
   #[doc(alias = "webkit_website_policies_get_autoplay_policy")]
   #[doc(alias = "get_autoplay_policy")]
   fn autoplay_policy(&self) -> AutoplayPolicy {

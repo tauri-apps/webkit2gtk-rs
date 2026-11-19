@@ -5,10 +5,13 @@
 #[cfg(feature = "v2_8")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_8")))]
 use crate::JavascriptResult;
-use crate::{UserScript, UserStyleSheet};
+use crate::{ffi, UserScript, UserStyleSheet};
 #[cfg(feature = "v2_8")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_8")))]
-use glib::signal::{connect_raw, SignalHandlerId};
+use glib::{
+  object::ObjectType as _,
+  signal::{connect_raw, SignalHandlerId},
+};
 use glib::{prelude::*, translate::*};
 #[cfg(feature = "v2_8")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_8")))]
@@ -41,12 +44,7 @@ impl Default for UserContentManager {
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::UserContentManager>> Sealed for T {}
-}
-
-pub trait UserContentManagerExt: IsA<UserContentManager> + sealed::Sealed + 'static {
+pub trait UserContentManagerExt: IsA<UserContentManager> + 'static {
   //#[cfg(feature = "v2_24")]
   //#[cfg_attr(docsrs, doc(cfg(feature = "v2_24")))]
   //#[doc(alias = "webkit_user_content_manager_add_filter")]
@@ -225,22 +223,26 @@ pub trait UserContentManagerExt: IsA<UserContentManager> + sealed::Sealed + 'sta
       value: *mut ffi::WebKitJavascriptResult,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        UserContentManager::from_glib_borrow(this).unsafe_cast_ref(),
-        &from_glib_borrow(value),
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          UserContentManager::from_glib_borrow(this).unsafe_cast_ref(),
+          &from_glib_borrow(value),
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       let detailed_signal_name = detail.map(|name| format!("script-message-received::{name}\0"));
-      let signal_name: &[u8] = detailed_signal_name
+      let signal_name = detailed_signal_name
         .as_ref()
-        .map_or(&b"script-message-received\0"[..], |n| n.as_bytes());
+        .map_or(c"script-message-received", |n| {
+          std::ffi::CStr::from_bytes_with_nul_unchecked(n.as_bytes())
+        });
       connect_raw(
         self.as_ptr() as *mut _,
-        signal_name.as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        signal_name.as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           script_message_received_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

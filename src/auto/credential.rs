@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::CredentialPersistence;
+use crate::{ffi, CredentialPersistence};
 #[cfg(feature = "v2_34")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v2_34")))]
 use glib::prelude::*;

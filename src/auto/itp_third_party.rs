@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::ITPFirstParty;
+use crate::{ffi, ITPFirstParty};
 use glib::translate::*;
 
 glib::wrapper! {

@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::{PolicyDecision, URIRequest, URIResponse};
+use crate::{ffi, PolicyDecision, URIRequest, URIResponse};
 use glib::{
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
@@ -23,14 +23,7 @@ impl ResponsePolicyDecision {
   pub const NONE: Option<&'static ResponsePolicyDecision> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::ResponsePolicyDecision>> Sealed for T {}
-}
-
-pub trait ResponsePolicyDecisionExt:
-  IsA<ResponsePolicyDecision> + sealed::Sealed + 'static
-{
+pub trait ResponsePolicyDecisionExt: IsA<ResponsePolicyDecision> + 'static {
   #[doc(alias = "webkit_response_policy_decision_get_request")]
   #[doc(alias = "get_request")]
   fn request(&self) -> Option<URIRequest> {
@@ -85,15 +78,17 @@ pub trait ResponsePolicyDecisionExt:
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(ResponsePolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(ResponsePolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::request\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::request".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_request_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -111,15 +106,17 @@ pub trait ResponsePolicyDecisionExt:
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(ResponsePolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(ResponsePolicyDecision::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::response\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::response".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_response_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

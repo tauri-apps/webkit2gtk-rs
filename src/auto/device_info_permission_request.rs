@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::PermissionRequest;
+use crate::{ffi, PermissionRequest};
 
 glib::wrapper! {
     #[doc(alias = "WebKitDeviceInfoPermissionRequest")]

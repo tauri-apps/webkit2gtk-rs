@@ -2,8 +2,9 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::{URIRequest, URIResponse};
+use crate::{ffi, URIRequest, URIResponse};
 use glib::{
+  object::ObjectType as _,
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
   translate::*,
@@ -23,12 +24,7 @@ impl WebResource {
   pub const NONE: Option<&'static WebResource> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::WebResource>> Sealed for T {}
-}
-
-pub trait WebResourceExt: IsA<WebResource> + sealed::Sealed + 'static {
+pub trait WebResourceExt: IsA<WebResource> + 'static {
   #[doc(alias = "webkit_web_resource_get_data")]
   #[doc(alias = "get_data")]
   fn data<P: FnOnce(Result<Vec<u8>, glib::Error>) + 'static>(
@@ -53,25 +49,28 @@ pub trait WebResourceExt: IsA<WebResource> + sealed::Sealed + 'static {
       res: *mut gio::ffi::GAsyncResult,
       user_data: glib::ffi::gpointer,
     ) {
-      let mut error = std::ptr::null_mut();
-      let mut length = std::mem::MaybeUninit::uninit();
-      let ret = ffi::webkit_web_resource_get_data_finish(
-        _source_object as *mut _,
-        res,
-        length.as_mut_ptr(),
-        &mut error,
-      );
-      let result = if error.is_null() {
-        Ok(FromGlibContainer::from_glib_full_num(
-          ret,
-          length.assume_init() as _,
-        ))
-      } else {
-        Err(from_glib_full(error))
-      };
-      let callback: Box_<glib::thread_guard::ThreadGuard<P>> = Box_::from_raw(user_data as *mut _);
-      let callback: P = callback.into_inner();
-      callback(result);
+      unsafe {
+        let mut error = std::ptr::null_mut();
+        let mut length = std::mem::MaybeUninit::uninit();
+        let ret = ffi::webkit_web_resource_get_data_finish(
+          _source_object as *mut _,
+          res,
+          length.as_mut_ptr(),
+          &mut error,
+        );
+        let result = if error.is_null() {
+          Ok(FromGlibContainer::from_glib_full_num(
+            ret,
+            length.assume_init() as _,
+          ))
+        } else {
+          Err(from_glib_full(error))
+        };
+        let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
+          Box_::from_raw(user_data as *mut _);
+        let callback: P = callback.into_inner();
+        callback(result);
+      }
     }
     let callback = data_trampoline::<P>;
     unsafe {
@@ -124,18 +123,20 @@ pub trait WebResourceExt: IsA<WebResource> + sealed::Sealed + 'static {
       error: *mut glib::ffi::GError,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        WebResource::from_glib_borrow(this).unsafe_cast_ref(),
-        &from_glib_borrow(error),
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          WebResource::from_glib_borrow(this).unsafe_cast_ref(),
+          &from_glib_borrow(error),
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"failed\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"failed".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           failed_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -161,19 +162,21 @@ pub trait WebResourceExt: IsA<WebResource> + sealed::Sealed + 'static {
       errors: gio::ffi::GTlsCertificateFlags,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        WebResource::from_glib_borrow(this).unsafe_cast_ref(),
-        &from_glib_borrow(certificate),
-        from_glib(errors),
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          WebResource::from_glib_borrow(this).unsafe_cast_ref(),
+          &from_glib_borrow(certificate),
+          from_glib(errors),
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"failed-with-tls-errors\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"failed-with-tls-errors".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           failed_with_tls_errors_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -187,15 +190,17 @@ pub trait WebResourceExt: IsA<WebResource> + sealed::Sealed + 'static {
       this: *mut ffi::WebKitWebResource,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(WebResource::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(WebResource::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"finished\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"finished".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           finished_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -211,18 +216,20 @@ pub trait WebResourceExt: IsA<WebResource> + sealed::Sealed + 'static {
       data_length: u64,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        WebResource::from_glib_borrow(this).unsafe_cast_ref(),
-        data_length,
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          WebResource::from_glib_borrow(this).unsafe_cast_ref(),
+          data_length,
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"received-data\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"received-data".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           received_data_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -244,19 +251,21 @@ pub trait WebResourceExt: IsA<WebResource> + sealed::Sealed + 'static {
       redirected_response: *mut ffi::WebKitURIResponse,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(
-        WebResource::from_glib_borrow(this).unsafe_cast_ref(),
-        &from_glib_borrow(request),
-        &from_glib_borrow(redirected_response),
-      )
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+          WebResource::from_glib_borrow(this).unsafe_cast_ref(),
+          &from_glib_borrow(request),
+          &from_glib_borrow(redirected_response),
+        )
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"sent-request\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"sent-request".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           sent_request_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -271,15 +280,17 @@ pub trait WebResourceExt: IsA<WebResource> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(WebResource::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(WebResource::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::response\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::response".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_response_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),
@@ -294,15 +305,17 @@ pub trait WebResourceExt: IsA<WebResource> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(WebResource::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(WebResource::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::uri\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::uri".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_uri_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

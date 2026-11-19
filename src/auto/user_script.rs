@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::{UserContentInjectedFrames, UserScriptInjectionTime};
+use crate::{ffi, UserContentInjectedFrames, UserScriptInjectionTime};
 use glib::translate::*;
 
 glib::wrapper! {

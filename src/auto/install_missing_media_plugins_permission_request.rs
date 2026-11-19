@@ -3,7 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::PermissionRequest;
+use crate::{ffi, PermissionRequest};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -19,13 +19,8 @@ impl InstallMissingMediaPluginsPermissionRequest {
   pub const NONE: Option<&'static InstallMissingMediaPluginsPermissionRequest> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::InstallMissingMediaPluginsPermissionRequest>> Sealed for T {}
-}
-
 pub trait InstallMissingMediaPluginsPermissionRequestExt:
-  IsA<InstallMissingMediaPluginsPermissionRequest> + sealed::Sealed + 'static
+  IsA<InstallMissingMediaPluginsPermissionRequest> + 'static
 {
   #[cfg_attr(feature = "v2_40", deprecated = "Since 2.40")]
   #[allow(deprecated)]

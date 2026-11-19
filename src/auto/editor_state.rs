@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{
   prelude::*,
   signal::{connect_raw, SignalHandlerId},
@@ -22,14 +23,10 @@ impl EditorState {
   pub const NONE: Option<&'static EditorState> = None;
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::EditorState>> Sealed for T {}
-}
-
-pub trait EditorStateExt: IsA<EditorState> + sealed::Sealed + 'static {
+pub trait EditorStateExt: IsA<EditorState> + 'static {
   #[doc(alias = "webkit_editor_state_get_typing_attributes")]
   #[doc(alias = "get_typing_attributes")]
+  #[doc(alias = "typing-attributes")]
   fn typing_attributes(&self) -> u32 {
     unsafe { ffi::webkit_editor_state_get_typing_attributes(self.as_ref().to_glib_none().0) }
   }
@@ -101,15 +98,17 @@ pub trait EditorStateExt: IsA<EditorState> + sealed::Sealed + 'static {
       _param_spec: glib::ffi::gpointer,
       f: glib::ffi::gpointer,
     ) {
-      let f: &F = &*(f as *const F);
-      f(EditorState::from_glib_borrow(this).unsafe_cast_ref())
+      unsafe {
+        let f: &F = &*(f as *const F);
+        f(EditorState::from_glib_borrow(this).unsafe_cast_ref())
+      }
     }
     unsafe {
       let f: Box_<F> = Box_::new(f);
       connect_raw(
         self.as_ptr() as *mut _,
-        b"notify::typing-attributes\0".as_ptr() as *const _,
-        Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+        c"notify::typing-attributes".as_ptr(),
+        Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
           notify_typing_attributes_trampoline::<Self, F> as *const (),
         )),
         Box_::into_raw(f),

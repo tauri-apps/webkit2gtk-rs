@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -81,16 +82,12 @@ impl HitTestResultBuilder {
   /// Build the [`HitTestResult`].
   #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
   pub fn build(self) -> HitTestResult {
+    assert_initialized_main_thread!();
     self.builder.build()
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::HitTestResult>> Sealed for T {}
-}
-
-pub trait HitTestResultExt: IsA<HitTestResult> + sealed::Sealed + 'static {
+pub trait HitTestResultExt: IsA<HitTestResult> + 'static {
   #[doc(alias = "webkit_hit_test_result_context_is_editable")]
   fn context_is_editable(&self) -> bool {
     unsafe {
@@ -155,6 +152,7 @@ pub trait HitTestResultExt: IsA<HitTestResult> + sealed::Sealed + 'static {
 
   #[doc(alias = "webkit_hit_test_result_get_image_uri")]
   #[doc(alias = "get_image_uri")]
+  #[doc(alias = "image-uri")]
   fn image_uri(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_hit_test_result_get_image_uri(
@@ -165,6 +163,7 @@ pub trait HitTestResultExt: IsA<HitTestResult> + sealed::Sealed + 'static {
 
   #[doc(alias = "webkit_hit_test_result_get_link_label")]
   #[doc(alias = "get_link_label")]
+  #[doc(alias = "link-label")]
   fn link_label(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_hit_test_result_get_link_label(
@@ -175,6 +174,7 @@ pub trait HitTestResultExt: IsA<HitTestResult> + sealed::Sealed + 'static {
 
   #[doc(alias = "webkit_hit_test_result_get_link_title")]
   #[doc(alias = "get_link_title")]
+  #[doc(alias = "link-title")]
   fn link_title(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_hit_test_result_get_link_title(
@@ -185,6 +185,7 @@ pub trait HitTestResultExt: IsA<HitTestResult> + sealed::Sealed + 'static {
 
   #[doc(alias = "webkit_hit_test_result_get_link_uri")]
   #[doc(alias = "get_link_uri")]
+  #[doc(alias = "link-uri")]
   fn link_uri(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_hit_test_result_get_link_uri(
@@ -195,6 +196,7 @@ pub trait HitTestResultExt: IsA<HitTestResult> + sealed::Sealed + 'static {
 
   #[doc(alias = "webkit_hit_test_result_get_media_uri")]
   #[doc(alias = "get_media_uri")]
+  #[doc(alias = "media-uri")]
   fn media_uri(&self) -> Option<glib::GString> {
     unsafe {
       from_glib_none(ffi::webkit_hit_test_result_get_media_uri(

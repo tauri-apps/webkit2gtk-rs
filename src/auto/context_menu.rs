@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/tauri-apps/gir-files)
 // DO NOT EDIT
 
-use crate::ContextMenuItem;
+use crate::{ffi, ContextMenuItem};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -41,12 +41,7 @@ impl Default for ContextMenu {
   }
 }
 
-mod sealed {
-  pub trait Sealed {}
-  impl<T: super::IsA<super::ContextMenu>> Sealed for T {}
-}
-
-pub trait ContextMenuExt: IsA<ContextMenu> + sealed::Sealed + 'static {
+pub trait ContextMenuExt: IsA<ContextMenu> + 'static {
   #[doc(alias = "webkit_context_menu_append")]
   fn append(&self, item: &impl IsA<ContextMenuItem>) {
     unsafe {
