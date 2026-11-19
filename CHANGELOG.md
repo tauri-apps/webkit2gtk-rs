@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.0]
+
+- [`8ddce5d`](https://github.com/tauri-apps/javascriptcore-rs/commit/8ddce5d4629655c9b6abf89ce14e4171402daf29) Bumped `gir` to `ee0e85140a6f` and regenerated bindings.
+- [`1a16ad2`](https://github.com/tauri-apps/javascriptcore-rs/commit/1a16ad2367b5b84eab3e05757d3614551dfa0c1a) Update glib crates to 0.22 and gtk crates to 0.19. Raised MSRV to 1.92.
+- [`41f72cc`](https://github.com/tauri-apps/javascriptcore-rs/commit/41f72cce1257e05ca8650ea0dd59d61e46827203) ([#161](https://github.com/tauri-apps/javascriptcore-rs/pull/161)) Update bitflags dependency version to 2.0.
+    
+    This avoids duplicated dependencies in downstream crates.
+
 ## \[2.0.2]
 
 - [`575debf`](https://github.com/tauri-apps/javascriptcore-rs/commit/575debfdf5ba32634233c139aba3f48273227960) ([#159](https://github.com/tauri-apps/javascriptcore-rs/pull/159)) Exclude development scripts from the published packages
